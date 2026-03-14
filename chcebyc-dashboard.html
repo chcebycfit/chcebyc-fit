@@ -1202,7 +1202,7 @@
                                     <div class="ex-ms">Triceps</div>
                                 </div>
                                 <div class="wc-foot">
-                                    <button class="btn-p">⏱ TRENING W TOKU — 00:34:12</button>
+                                    <button class="btn-p" onclick="showPage('workout')">⏱ TRENING W TOKU — 00:34:12</button>
                                     <button class="btn-o">Zmień</button>
                                 </div>
                             </div>
@@ -1372,7 +1372,7 @@
                                     <div class="ex-ms">Triceps</div>
                                 </div>
                                 <div class="wc-foot">
-                                    <button class="btn-p">⏱ TRENING W TOKU — 00:22:05</button>
+                                    <button class="btn-p" onclick="showPage('workout-client')">⏱ TRENING W TOKU — 00:22:05</button>
                                 </div>
                             </div>
                             <div class="card">
@@ -1555,7 +1555,7 @@
                                     <div class="ex-ms">Triceps</div>
                                 </div>
                                 <div class="wc-foot">
-                                    <button class="btn-p">⏱ TRENING W TOKU — 00:22:05</button>
+                                    <button class="btn-p" onclick="showPage('workout-client')">⏱ TRENING W TOKU — 00:22:05</button>
                                     <button class="btn-o" onclick="showPage('ai')">🤖 AI</button>
                                 </div>
                             </div>
@@ -2130,6 +2130,415 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- ══ SPOLECZNOSC ══ -->
+                <div class="page" id="page-community">
+                    <div style="font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;">
+                        Spolecznosc 
+                        <span style="color:var(--lime)">chceByc.fit</span>
+                    </div>
+
+                    <div class="g2" style="margin-bottom:14px;">
+                        <div class="stat">
+                            <div class="stat-top">
+                                <div class="stat-ico" style="background:var(--lime-ghost)">👥</div>
+                            </div>
+                            <div class="stat-val" style="color:var(--lime)">12 847</div>
+                            <div class="stat-lbl">Uzytkownikow</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-top">
+                                <div class="stat-ico" style="background:var(--blue-ghost)">🔥</div>
+                            </div>
+                            <div class="stat-val" style="color:var(--orange)">847</div>
+                            <div class="stat-lbl">Aktywnych dzis</div>
+                        </div>
+                    </div>
+
+                    <div class="gmain">
+                        <div style="display:flex;flex-direction:column;gap:12px;">
+                            <!-- Composer -->
+                            <div class="card">
+                                <div style="display:flex;gap:10px;align-items:flex-start;">
+                                    <div class="user-av" style="background:linear-gradient(135deg,#7aaa22,#b4f03a);color:#000;flex-shrink:0;">MK</div>
+                                    <textarea style="flex:1;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--white);font-size:12px;font-family:inherit;outline:none;resize:none;height:64px;transition:border-color .2s;" placeholder="Pochwal sie wynikiem, zadaj pytanie, zmotywuj innych..." onfocus="this.style.borderColor='var(--lime)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+                                </div>
+                                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+                                    <div style="display:flex;gap:8px;">
+                                        <button style="background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">📷 Zdjecie</button>
+                                        <button style="background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">🏆 Wynik</button>
+                                    </div>
+                                    <button style="background:var(--lime);border:none;border-radius:7px;padding:6px 16px;color:var(--black);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">Opublikuj</button>
+                                </div>
+                            </div>
+
+                            <!-- Filtry -->
+                            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                                <button style="background:var(--lime-ghost);border:1px solid rgba(180,240,58,.2);color:var(--lime);border-radius:16px;padding:5px 12px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;">Wszystkie</button>
+                                <button style="background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:16px;padding:5px 12px;font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">Znajomi</button>
+                                <button style="background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:16px;padding:5px 12px;font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">Rekordy PR</button>
+                                <button style="background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:16px;padding:5px 12px;font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">Wyzwania</button>
+                            </div>
+
+                            <!-- Feed posts -->
+                            <div class="card" style="padding:0;overflow:hidden;">
+                                <div style="padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:10px;">
+                                    <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#3a7aaa,#4ab0ff);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:900;color:#fff;flex-shrink:0;">PK</div>
+                                    <div style="flex:1;">
+                                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                                            <span style="font-size:12px;font-weight:700;">Piotr K.</span>
+                                            <span class="badge" style="background:var(--gold-ghost);color:var(--gold);border:1px solid rgba(240,200,64,.2);">PR</span>
+                                            <span style="font-size:9px;color:var(--muted);margin-left:auto;">2 min temu</span>
+                                        </div>
+                                        <div style="font-size:12px;color:var(--off);line-height:1.6;margin-bottom:10px;">
+                                            Nowy rekord! 
+                                            <strong style="color:var(--white)">Przysiad 120 kg x 5</strong>
+                                             🎉 Pol roku temu zaczynalem od 60 kg. Nie odpuszczajcie!
+                                        </div>
+                                        <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;gap:16px;margin-bottom:10px;">
+                                            <div style="text-align:center;">
+                                                <div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--gold);">120</div>
+                                                <div style="font-size:9px;color:var(--muted);">kg</div>
+                                            </div>
+                                            <div style="text-align:center;">
+                                                <div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--lime);">x5</div>
+                                                <div style="font-size:9px;color:var(--muted);">powt.</div>
+                                            </div>
+                                            <div style="text-align:center;">
+                                                <div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--blue);">+60</div>
+                                                <div style="font-size:9px;color:var(--muted);">kg vs start</div>
+                                            </div>
+                                        </div>
+                                        <div style="display:flex;gap:8px;">
+                                            <button style="background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;" onmouseover="this.style.color='var(--orange)';this.style.borderColor='rgba(255,140,66,.3)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border2)'">🔥 14</button>
+                                            <button style="background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">💬 3</button>
+                                            <button style="background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">↗ Udostepnij</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:10px;">
+                                    <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#aa3a6a,#ff5599);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:900;color:#fff;flex-shrink:0;">KM</div>
+                                    <div style="flex:1;">
+                                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                                            <span style="font-size:12px;font-weight:700;">Karolina M.</span>
+                                            <span class="badge" style="background:var(--orange-ghost);color:var(--orange);border:1px solid rgba(255,140,66,.2);">🔥 30</span>
+                                            <span style="font-size:9px;color:var(--muted);margin-left:auto;">18 min temu</span>
+                                        </div>
+                                        <div style="font-size:12px;color:var(--off);line-height:1.6;margin-bottom:10px;">30 dni bez przerwy! Kto by pomyslal ze przetrwam caly miesiac 😅 Teraz cel — 60 dni!</div>
+                                        <div style="display:flex;gap:8px;">
+                                            <button style="background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">🔥 28</button>
+                                            <button style="background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">💬 7</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="padding:14px 16px;display:flex;align-items:flex-start;gap:10px;">
+                                    <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#3aaa6a,#44ff88);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:900;color:#000;flex-shrink:0;">TN</div>
+                                    <div style="flex:1;">
+                                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                                            <span style="font-size:12px;font-weight:700;">Tomasz N.</span>
+                                            <span style="font-size:9px;color:var(--muted);margin-left:auto;">1 godz. temu</span>
+                                        </div>
+                                        <div style="font-size:12px;color:var(--off);line-height:1.6;margin-bottom:10px;">Pierwsze podciagniecia w zyciu! 3 sztuki — dla kogokolwiek kto dopiero zaczyna, to nie jest niemozliwe 💪</div>
+                                        <div style="display:flex;gap:8px;">
+                                            <button style="background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">🔥 41</button>
+                                            <button style="background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">💬 12</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Prawa kolumna -->
+                        <div style="display:flex;flex-direction:column;gap:12px;">
+                            <!-- Leaderboard -->
+                            <div class="card">
+                                <div class="ct">Leaderboard — ten miesiac</div>
+                                <div style="display:flex;flex-direction:column;gap:5px;">
+                                    <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:var(--gold-ghost);border:1px solid rgba(240,200,64,.15);border-radius:9px;">
+                                        <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;color:var(--gold);width:20px;">1</div>
+                                        <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#3a7aaa,#4ab0ff);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:#fff;flex-shrink:0;">PK</div>
+                                        <div style="flex:1;font-size:11px;font-weight:600;">Piotr K.</div>
+                                        <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;color:var(--gold);">5 240 XP</div>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:var(--card2);border:1px solid var(--border);border-radius:9px;">
+                                        <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;color:var(--muted);width:20px;">2</div>
+                                        <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#aa3a6a,#ff5599);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:#fff;flex-shrink:0;">KM</div>
+                                        <div style="flex:1;font-size:11px;font-weight:600;">Karolina M.</div>
+                                        <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;color:var(--off);">4 880 XP</div>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:var(--card2);border:1px solid var(--border);border-radius:9px;">
+                                        <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;color:var(--muted);width:20px;">3</div>
+                                        <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7aaa22,#b4f03a);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:#000;flex-shrink:0;">MK</div>
+                                        <div style="flex:1;font-size:11px;font-weight:600;">Maciej K.</div>
+                                        <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;color:var(--lime);">3 420 XP</div>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:var(--card2);border:1px solid var(--border);border-radius:9px;opacity:.6;">
+                                        <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;color:var(--muted);width:20px;">4</div>
+                                        <div style="width:28px;height:28px;border-radius:50%;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:var(--muted);flex-shrink:0;">TN</div>
+                                        <div style="flex:1;font-size:11px;">Tomasz N.</div>
+                                        <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;color:var(--muted);">2 950 XP</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Znajomi online -->
+                            <div class="card">
+                                <div class="ct">
+                                    Znajomi online 
+                                    <span style="color:var(--green);">● 3</span>
+                                </div>
+                                <div style="display:flex;flex-direction:column;gap:7px;">
+                                    <div style="display:flex;align-items:center;gap:8px;">
+                                        <div style="position:relative;">
+                                            <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#3a7aaa,#4ab0ff);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;">PK</div>
+                                            <div style="position:absolute;bottom:0;right:0;width:8px;height:8px;border-radius:50%;background:var(--green);border:1.5px solid var(--card);"></div>
+                                        </div>
+                                        <div style="flex:1;">
+                                            <div style="font-size:11px;font-weight:600;">Piotr K.</div>
+                                            <div style="font-size:9px;color:var(--muted);">Trening nóg · 22 min</div>
+                                        </div>
+                                        <button style="background:none;border:1px solid var(--border2);border-radius:6px;padding:3px 8px;color:var(--muted);font-size:9px;cursor:pointer;font-family:inherit;">Hej 👋</button>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:8px;">
+                                        <div style="position:relative;">
+                                            <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#aa3a6a,#ff5599);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;">KM</div>
+                                            <div style="position:absolute;bottom:0;right:0;width:8px;height:8px;border-radius:50%;background:var(--green);border:1.5px solid var(--card);"></div>
+                                        </div>
+                                        <div style="flex:1;">
+                                            <div style="font-size:11px;font-weight:600;">Karolina M.</div>
+                                            <div style="font-size:9px;color:var(--muted);">Cardio · 5 min temu</div>
+                                        </div>
+                                        <button style="background:none;border:1px solid var(--border2);border-radius:6px;padding:3px 8px;color:var(--muted);font-size:9px;cursor:pointer;font-family:inherit;">Hej 👋</button>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:8px;">
+                                        <div style="position:relative;">
+                                            <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#3aaa6a,#44ff88);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#000;">TN</div>
+                                            <div style="position:absolute;bottom:0;right:0;width:8px;height:8px;border-radius:50%;background:var(--green);border:1.5px solid var(--card);"></div>
+                                        </div>
+                                        <div style="flex:1;">
+                                            <div style="font-size:11px;font-weight:600;">Tomasz N.</div>
+                                            <div style="font-size:9px;color:var(--muted);">Sila · w trakcie</div>
+                                        </div>
+                                        <button style="background:none;border:1px solid var(--border2);border-radius:6px;padding:3px 8px;color:var(--muted);font-size:9px;cursor:pointer;font-family:inherit;">Hej 👋</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Zaproś znajomych -->
+                            <div style="background:var(--lime-ghost);border:1px solid rgba(180,240,58,.15);border-radius:13px;padding:14px;">
+                                <div style="font-size:9px;color:var(--lime);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:7px;">Zapros znajomych</div>
+                                <div style="font-size:12px;color:var(--off);line-height:1.6;font-weight:300;margin-bottom:10px;">Im wiecej osob trenujesz ze znajomymi tym wyzsze wyniki — udowodnione naukowo.</div>
+                                <button style="width:100%;background:var(--lime);border:none;border-radius:8px;padding:9px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;color:var(--black);">Kopiuj link zaproszenia</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══ WYZWANIA ══ -->
+                <div class="page" id="page-challenges">
+                    <div style="font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;">
+                        Wyzwania 
+                        <span style="color:var(--gold)">i odznaki</span>
+                    </div>
+
+                    <!-- XP progress -->
+                    <div class="card" style="margin-bottom:14px;background:linear-gradient(135deg,rgba(74,176,255,.05),var(--card));border-color:rgba(74,176,255,.15);">
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                            <div>
+                                <div style="font-size:9px;color:var(--blue);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;">Poziom</div>
+                                <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--blue);line-height:1;">
+                                    Atleta 
+                                    <span style="color:var(--white);">· Poziom 14</span>
+                                </div>
+                            </div>
+                            <div style="text-align:right;">
+                                <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--lime);">3 420</div>
+                                <div style="font-size:9px;color:var(--muted);">XP zebrane</div>
+                            </div>
+                        </div>
+                        <div style="height:6px;background:var(--border2);border-radius:3px;margin-bottom:6px;">
+                            <div style="height:100%;width:68%;background:linear-gradient(90deg,var(--blue),var(--lime));border-radius:3px;"></div>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);">
+                            <span>Atleta</span>
+                            <span style="color:var(--lime);">1 580 XP do Wojownika</span>
+                        </div>
+                    </div>
+
+                    <div class="gmain">
+                        <div style="display:flex;flex-direction:column;gap:12px;">
+                            <!-- Aktywne wyzwania -->
+                            <div class="card">
+                                <div class="ct">Aktywne wyzwania</div>
+                                <div style="display:flex;flex-direction:column;gap:10px;">
+
+                                    <div style="background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px;">
+                                        <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;">
+                                            <div style="font-size:28px;flex-shrink:0;">🔥</div>
+                                            <div style="flex:1;">
+                                                <div style="font-size:13px;font-weight:700;margin-bottom:2px;">Marzec bez przerwy</div>
+                                                <div style="font-size:10px;color:var(--muted);">Trenuj kazdy dzien przez caly miesiac</div>
+                                            </div>
+                                            <span class="badge" style="background:var(--orange-ghost);color:var(--orange);border:1px solid rgba(255,140,66,.2);flex-shrink:0;">+500 XP</span>
+                                        </div>
+                                        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:5px;">
+                                            <span>Postep</span>
+                                            <span style="color:var(--orange);font-weight:700;">14 / 31 dni</span>
+                                        </div>
+                                        <div style="height:5px;background:var(--border2);border-radius:3px;">
+                                            <div style="height:100%;width:45%;background:var(--orange);border-radius:3px;"></div>
+                                        </div>
+                                        <div style="font-size:9px;color:var(--muted);margin-top:6px;">Konczy sie za 17 dni</div>
+                                    </div>
+
+                                    <div style="background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px;">
+                                        <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;">
+                                            <div style="font-size:28px;flex-shrink:0;">⚡</div>
+                                            <div style="flex:1;">
+                                                <div style="font-size:13px;font-weight:700;margin-bottom:2px;">5 treningow w tygodniu</div>
+                                                <div style="font-size:10px;color:var(--muted);">Przez 4 kolejne tygodnie</div>
+                                            </div>
+                                            <span class="badge" style="background:var(--lime-ghost);color:var(--lime);border:1px solid rgba(180,240,58,.2);flex-shrink:0;">+300 XP</span>
+                                        </div>
+                                        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:5px;">
+                                            <span>Ten tydzien</span>
+                                            <span style="color:var(--lime);font-weight:700;">2 / 5 treningow</span>
+                                        </div>
+                                        <div style="height:5px;background:var(--border2);border-radius:3px;">
+                                            <div style="height:100%;width:40%;background:var(--lime);border-radius:3px;"></div>
+                                        </div>
+                                        <div style="display:flex;gap:5px;margin-top:8px;">
+                                            <div style="width:24px;height:24px;border-radius:6px;background:rgba(180,240,58,.15);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--lime);">✓</div>
+                                            <div style="width:24px;height:24px;border-radius:6px;background:rgba(180,240,58,.15);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--lime);">✓</div>
+                                            <div style="width:24px;height:24px;border-radius:6px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted);">3</div>
+                                            <div style="width:24px;height:24px;border-radius:6px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted);">4</div>
+                                            <div style="width:24px;height:24px;border-radius:6px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted);">5</div>
+                                        </div>
+                                    </div>
+
+                                    <div style="background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px;">
+                                        <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;">
+                                            <div style="font-size:28px;flex-shrink:0;">💪</div>
+                                            <div style="flex:1;">
+                                                <div style="font-size:13px;font-weight:700;margin-bottom:2px;">Wyznanie sily</div>
+                                                <div style="font-size:10px;color:var(--muted);">Pobij swoj rekord w wyciskaniu</div>
+                                            </div>
+                                            <span class="badge" style="background:var(--blue-ghost);color:var(--blue);border:1px solid rgba(74,176,255,.2);flex-shrink:0;">+200 XP</span>
+                                        </div>
+                                        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:5px;">
+                                            <span>Aktualny rekord</span>
+                                            <span style="color:var(--blue);font-weight:700;">82.5 kg</span>
+                                        </div>
+                                        <div style="height:5px;background:var(--border2);border-radius:3px;">
+                                            <div style="height:100%;width:82%;background:var(--blue);border-radius:3px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Prawa kolumna -->
+                        <div style="display:flex;flex-direction:column;gap:12px;">
+                            <!-- Odznaki -->
+                            <div class="card">
+                                <div class="ct">
+                                    Twoje odznaki 
+                                    <span style="color:var(--lime);">8 / 24</span>
+                                </div>
+                                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;">
+                                    <div style="text-align:center;cursor:pointer;" title="Pierwsza seria">
+                                        <div style="width:44px;height:44px;border-radius:12px;background:rgba(180,240,58,.12);border:1px solid rgba(180,240,58,.2);display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 4px;">🌱</div>
+                                        <div style="font-size:8px;color:var(--muted);">Start</div>
+                                    </div>
+                                    <div style="text-align:center;cursor:pointer;">
+                                        <div style="width:44px;height:44px;border-radius:12px;background:rgba(255,140,66,.12);border:1px solid rgba(255,140,66,.2);display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 4px;">🔥</div>
+                                        <div style="font-size:8px;color:var(--muted);">Seria 7</div>
+                                    </div>
+                                    <div style="text-align:center;cursor:pointer;">
+                                        <div style="width:44px;height:44px;border-radius:12px;background:rgba(240,200,64,.12);border:1px solid rgba(240,200,64,.2);display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 4px;">🏆</div>
+                                        <div style="font-size:8px;color:var(--muted);">1. PR</div>
+                                    </div>
+                                    <div style="text-align:center;cursor:pointer;">
+                                        <div style="width:44px;height:44px;border-radius:12px;background:rgba(74,176,255,.12);border:1px solid rgba(74,176,255,.2);display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 4px;">⚡</div>
+                                        <div style="font-size:8px;color:var(--muted);">Lvl 10</div>
+                                    </div>
+                                    <div style="text-align:center;cursor:pointer;">
+                                        <div style="width:44px;height:44px;border-radius:12px;background:rgba(180,240,58,.12);border:1px solid rgba(180,240,58,.2);display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 4px;">💪</div>
+                                        <div style="font-size:8px;color:var(--muted);">100 kg</div>
+                                    </div>
+                                    <div style="text-align:center;cursor:pointer;">
+                                        <div style="width:44px;height:44px;border-radius:12px;background:rgba(196,110,255,.12);border:1px solid rgba(196,110,255,.2);display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 4px;">🧠</div>
+                                        <div style="font-size:8px;color:var(--muted);">AI Fan</div>
+                                    </div>
+                                    <div style="text-align:center;cursor:pointer;">
+                                        <div style="width:44px;height:44px;border-radius:12px;background:rgba(255,85,85,.12);border:1px solid rgba(255,85,85,.2);display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 4px;">❤️</div>
+                                        <div style="font-size:8px;color:var(--muted);">30 dni</div>
+                                    </div>
+                                    <div style="text-align:center;cursor:pointer;">
+                                        <div style="width:44px;height:44px;border-radius:12px;background:rgba(68,255,136,.12);border:1px solid rgba(68,255,136,.2);display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 4px;">🌟</div>
+                                        <div style="font-size:8px;color:var(--muted);">Top 10%</div>
+                                    </div>
+                                    <!-- Zablokowane -->
+                                    <div style="text-align:center;opacity:.3;">
+                                        <div style="width:44px;height:44px;border-radius:12px;background:var(--border2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 4px;">🔒</div>
+                                        <div style="font-size:8px;color:var(--muted);">Seria 30</div>
+                                    </div>
+                                    <div style="text-align:center;opacity:.3;">
+                                        <div style="width:44px;height:44px;border-radius:12px;background:var(--border2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 4px;">🔒</div>
+                                        <div style="font-size:8px;color:var(--muted);">50 trening.</div>
+                                    </div>
+                                    <div style="text-align:center;opacity:.3;">
+                                        <div style="width:44px;height:44px;border-radius:12px;background:var(--border2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 4px;">🔒</div>
+                                        <div style="font-size:8px;color:var(--muted);">PR x5</div>
+                                    </div>
+                                    <div style="text-align:center;opacity:.3;">
+                                        <div style="width:44px;height:44px;border-radius:12px;background:var(--border2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 4px;">🔒</div>
+                                        <div style="font-size:8px;color:var(--muted);">Legenda</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Nadchodzace wyzwania -->
+                            <div class="card">
+                                <div class="ct">Nowe wyzwania</div>
+                                <div style="display:flex;flex-direction:column;gap:7px;">
+                                    <div style="display:flex;align-items:center;gap:8px;padding:9px 10px;background:var(--card2);border:1px solid var(--border);border-radius:9px;">
+                                        <div style="font-size:20px;">🏋️</div>
+                                        <div style="flex:1;">
+                                            <div style="font-size:11px;font-weight:600;">Kwiecien siły</div>
+                                            <div style="font-size:9px;color:var(--muted);">10 treningow siłowych</div>
+                                        </div>
+                                        <button style="background:var(--lime);border:none;border-radius:6px;padding:4px 10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;color:var(--black);cursor:pointer;">Dolacz</button>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:8px;padding:9px 10px;background:var(--card2);border:1px solid var(--border);border-radius:9px;">
+                                        <div style="font-size:20px;">🏃</div>
+                                        <div style="flex:1;">
+                                            <div style="font-size:11px;font-weight:600;">Cardio tydzien</div>
+                                            <div style="font-size:9px;color:var(--muted);">5 sesji cardio w 7 dni</div>
+                                        </div>
+                                        <button style="background:var(--lime);border:none;border-radius:6px;padding:4px 10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;color:var(--black);cursor:pointer;">Dolacz</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══ MARKETPLACE ══ -->
+                <div class="page" id="page-marketplace">
+                    <div style="font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;">
+                        Marketplace 
+                        <span style="color:var(--lime)">planow</span>
+                    </div>
+                    <div class="card" style="text-align:center;padding:40px;">
+                        <div style="font-size:48px;margin-bottom:16px;">🏪</div>
+                        <div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;text-transform:uppercase;margin-bottom:8px;">340+ planow treningowych</div>
+                        <div style="font-size:13px;color:var(--muted);margin-bottom:20px;font-weight:300;">Pełny marketplace z filtrami, recenzjami i profilami trenerow dostepny w osobnym module.</div>
+                        <a href="chcebyc-marketplace.html" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--lime);color:var(--black);text-decoration:none;border-radius:10px;padding:12px 28px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:1.5px;text-transform:uppercase;">Otworz Marketplace →</a>
                     </div>
                 </div>
 
