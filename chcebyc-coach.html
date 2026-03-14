@@ -2868,6 +2868,14 @@
                         </label>
                         <textarea class="form-input" id="addExDesc" placeholder="np. Opis techniki, wskazówki dla klienta, warianty..." style="min-height:80px;resize:vertical;"></textarea>
                     </div>
+                    <div style="margin-bottom:14px;">
+                        <label class="form-label">
+                            Link do filmiku 
+                            <span style="color:var(--muted);font-weight:300;">(opcjonalny — YouTube lub inny)</span>
+                        </label>
+                        <input class="form-input" type="url" id="addExVideo" placeholder="https://youtube.com/watch?v=...">
+                        <div style="font-size:10px;color:var(--muted);margin-top:4px;">Klient zobaczy wbudowany odtwarzacz bezpośrednio w ćwiczeniu.</div>
+                    </div>
                     <div style="margin-bottom:18px;">
                         <label class="form-label">
                             Domyślne serie × powtórzenia 
@@ -3825,7 +3833,8 @@
         cat: 'Inne',
         type: 'Własny',
         desc: '3 rundy: 10 przysiadów + 10 pompek + 10 wiosłowań, przerwa 90s',
-        sets: '3 rundy'
+        sets: '3 rundy',
+        video: ''
     },
     {
         id: 2,
@@ -3833,7 +3842,8 @@
         cat: 'Cardio',
         type: 'Mobilność',
         desc: '5 min dynamiczna rozgrzewka stawów + aktywacja mięśni posturalnych',
-        sets: '1× 5 min'
+        sets: '1× 5 min',
+        video: 'https://www.youtube.com/watch?v=pAplQXk3dkU'
     },
     {
         id: 3,
@@ -3841,7 +3851,8 @@
         cat: 'Core',
         type: 'Izolowane',
         desc: 'Deska boczna z obrotem tułowia — świetna na mięśnie skośne',
-        sets: '3×10'
+        sets: '3×10',
+        video: ''
     },
     ];
     let myExNextId = 4;
@@ -3863,26 +3874,40 @@
         document.getElementById('myExEmpty').style.display = 'none';
 
         document.getElementById('myExList').innerHTML = list.map(e => `
-    <div class="ex-row">
-      <div style="flex:1;">
-        <div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;">
-          <span class="ex-row-name">${
+    <div class="ex-row" style="flex-direction:column;align-items:stretch;">
+      <div style="display:flex;align-items:flex-start;gap:10px;">
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;">
+            <span class="ex-row-name">${
+
 
 
         e.name}</span>
-          <span class="ex-row-cat ex-row-mine">${e.cat}</span>
-          ${e.sets ? `<span style="font-size:10px;color:var(--muted);">${e.sets}</span>` : ''}
-        </div>
-        ${
+            <span class="ex-row-cat ex-row-mine">${e.cat}</span>
+            ${e.sets ? `<span style="font-size:10px;color:var(--muted);">${e.sets}</span>` : ''}
+            ${e.video ? `<span style="font-size:9px;background:rgba(255,85,85,.1);border:1px solid rgba(255,85,85,.2);color:#ff5555;padding:2px 6px;border-radius:4px;font-weight:700;">▶ Video</span>` : ''}
+          </div>
+          ${
         e.desc ? `<div style="font-size:10px;color:var(--muted);font-weight:300;line-height:1.5;">${e.desc}</div>` : ''}
-      </div>
-      <div style="display:flex;gap:5px;flex-shrink:0;">
-        <button class="btn btn-ghost btn-sm" onclick="editMyEx(${
+        </div>
+        <div style="display:flex;gap:5px;flex-shrink:0;">
+          ${
 
-        e.id})">✏️</button>
-        <button class="btn btn-ghost btn-sm" style="color:var(--red);" onclick="deleteMyEx(${e.id})">🗑</button>
+        e.video ? `<button class="btn btn-ghost btn-sm" style="color:#ff5555;" onclick="toggleVideo(${e.id})" id="vid-btn-${e.id}">▶ Podgląd</button>` : ''}
+          <button class="btn btn-ghost btn-sm" onclick="editMyEx(${e.id})">✏️</button>
+          <button class="btn btn-ghost btn-sm" style="color:var(--red);" onclick="deleteMyEx(${e.id})">🗑</button>
+        </div>
+      </div>
+      <div id="vid-${
+
+        e.id}" style="display:none;margin-top:10px;border-radius:10px;overflow:hidden;background:#000;">
+        <div style="position:relative;padding-bottom:56.25%;height:0;">
+          <iframe src="${
+        getYoutubeEmbed(e.video)}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allowfullscreen loading="lazy"></iframe>
+        </div>
       </div>
     </div>`
+
 
         ).join('');
     }
@@ -3921,12 +3946,43 @@
         renderGlobalEx(document.querySelector('#page-exercisedb input[type="text"]')?.value || '', cat);
     }
 
+    function getYoutubeEmbed(url) {
+        if (!url)
+            return '';
+        // Obsługuje: youtube.com/watch?v=ID, youtu.be/ID, youtube.com/shorts/ID, youtube.com/embed/ID
+        const patterns = [
+        /youtube\.com\/watch\?v=([^&]+)/,
+        /youtu\.be\/([^?]+)/,
+        /youtube\.com\/shorts\/([^?]+)/,
+        /youtube\.com\/embed\/([^?]+)/,
+        ];
+        for (const p of patterns) {
+            const m = url.match(p);
+            if (m)
+                return `https://www.youtube.com/embed/${m[1]}`;
+        }
+        // Nie YouTube — spróbuj użyć bezpośrednio
+        return url;
+    }
+
+    function toggleVideo(id) {
+        const vidEl = document.getElementById('vid-' + id);
+        const btn = document.getElementById('vid-btn-' + id);
+        if (!vidEl)
+            return;
+        const isVisible = vidEl.style.display !== 'none';
+        vidEl.style.display = isVisible ? 'none' : 'block';
+        if (btn)
+            btn.textContent = isVisible ? '▶ Podgląd' : '✕ Ukryj';
+    }
+
     function openAddExModal() {
         editingExId = null;
         document.getElementById('addExModalTitle').innerHTML = 'Dodaj <span style="color:var(--lime)">własne ćwiczenie</span>';
         document.getElementById('addExName').value = '';
         document.getElementById('addExDesc').value = '';
         document.getElementById('addExSets').value = '';
+        document.getElementById('addExVideo').value = '';
         openModal('addEx');
     }
 
@@ -3941,6 +3997,7 @@
         document.getElementById('addExType').value = ex.type || 'Własny';
         document.getElementById('addExDesc').value = ex.desc || '';
         document.getElementById('addExSets').value = ex.sets || '';
+        document.getElementById('addExVideo').value = ex.video || '';
         openModal('addEx');
     }
 
@@ -3966,6 +4023,7 @@
             type: document.getElementById('addExType').value,
             desc: document.getElementById('addExDesc').value.trim(),
             sets: document.getElementById('addExSets').value.trim(),
+            video: document.getElementById('addExVideo').value.trim(),
         };
 
         if (editingExId) {
