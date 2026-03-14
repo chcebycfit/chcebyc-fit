@@ -1707,7 +1707,7 @@
                     <!-- Nagłówek z powrotem i timerem -->
                     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
                         <div style="display:flex;align-items:center;gap:12px;">
-                            <button onclick="showPage('dashboard-pro')" style="display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:7px 14px;color:var(--muted);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='var(--border2)';this.style.color='var(--off)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">← Wróć do dashboardu</button>
+                            <button onclick="goBackFromWorkout()" style="display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:7px 14px;color:var(--muted);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='var(--border2)';this.style.color='var(--off)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">← Wróć do dashboardu</button>
                             <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;line-height:1">
                                 Dzień A — 
                                 <span style="color:var(--lime)">Pchanie</span>
@@ -1721,7 +1721,7 @@
                                 <span style="font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;">w toku</span>
                             </div>
                             <!-- Zawieś trening -->
-                            <button onclick="showPage('dashboard-pro')" style="display:flex;align-items:center;gap:6px;background:var(--orange-ghost);border:1px solid rgba(255,140,66,.2);border-radius:8px;padding:7px 14px;color:var(--orange);font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;" title="Timer działa dalej — wrócisz do treningu z dashboardu">⏸ Zawieś trening</button>
+                            <button onclick="goBackFromWorkout()" style="display:flex;align-items:center;gap:6px;background:var(--orange-ghost);border:1px solid rgba(255,140,66,.2);border-radius:8px;padding:7px 14px;color:var(--orange);font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;" title="Timer działa dalej — wrócisz do treningu z dashboardu">⏸ Zawieś trening</button>
                             <!-- Zakończ -->
                             <button onclick="endWorkout()" style="display:flex;align-items:center;gap:6px;background:var(--lime);border:none;border-radius:8px;padding:7px 16px;color:var(--black);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s;">🏁 Zakończ i zapisz</button>
                         </div>
@@ -2376,9 +2376,8 @@
                 el.appendChild(b);
             }
             if (!item.locked) {
+                el.dataset.page = item.id;
                 el.onclick = () => {
-                    nav.querySelectorAll('.ni').forEach(n => n.classList.remove('active'));
-                    el.classList.add('active');
                     showPage(item.id);
                 };
             }
@@ -2406,6 +2405,13 @@
             'workout-client': 'Dziś trenuję'
         };
         document.getElementById('pageTitle').textContent = titles[id] || 'Dashboard';
+        // Aktualizuj aktywną pozycję w menu na podstawie data-page
+        const nav = document.getElementById('sidebarNav');
+        nav.querySelectorAll('.ni').forEach(n => {
+            n.classList.remove('active');
+            if (n.dataset.page === id)
+                n.classList.add('active');
+        });
         if (id === 'workout')
             startWorkoutTimer();
         else if (id === 'workout-client')
@@ -2421,8 +2427,6 @@
         clearInterval(workoutIntervalClient);
         showPage('dashboard-pro');
     }
-
-    // Workout timer — klient trenera
     let workoutSecsClient = 22 * 60 + 5,
         workoutIntervalClient;
     function startWorkoutTimerClient() {
@@ -2440,24 +2444,23 @@
     function goBackFromWorkout() {
         clearInterval(workoutIntervalClient);
         clearInterval(workoutInterval);
-        const mode = document.querySelector('.mode-btn.active')?.id?.replace('btn-', '') || 'pro';
         const dashMap = {
             'pro': 'dashboard-pro',
             'client-free': 'dashboard-client-free',
             'client-pro': 'dashboard-client-pro'
         };
-        showPage(dashMap[mode] || 'dashboard-pro');
+        showPage(dashMap[currentMode] || 'dashboard-pro');
     }
 
     function endWorkoutClient() {
         clearInterval(workoutIntervalClient);
-        const mode = document.querySelector('.mode-btn.active')?.id?.replace('btn-', '') || 'pro';
+        clearInterval(workoutInterval);
         const dashMap = {
             'pro': 'dashboard-pro',
             'client-free': 'dashboard-client-free',
             'client-pro': 'dashboard-client-pro'
         };
-        showPage(dashMap[mode] || 'dashboard-pro');
+        showPage(dashMap[currentMode] || 'dashboard-pro');
     }
     function startWorkoutTimer() {
         clearInterval(workoutInterval);
@@ -2498,12 +2501,6 @@
         const banner = document.getElementById('restBanner');
         if (banner)
             banner.style.display = 'none';
-    }
-
-    function endWorkout() {
-        clearInterval(workoutInterval);
-        clearInterval(restInterval);
-        showPage('dashboard-pro');
     }
 
     setMode('pro');
