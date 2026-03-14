@@ -2141,6 +2141,7 @@
     <!-- /app -->
 
     <script>
+    let currentMode = 'pro';
     const MODES = {
         'pro': {
             userName: 'Maciej K.',
@@ -2328,6 +2329,7 @@
     };
 
     function setMode(mode) {
+        currentMode = mode;
         const cfg = MODES[mode];
         // Buttons
         document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
