@@ -1702,6 +1702,162 @@
                     </div>
                 </div>
 
+                <!-- ══ DZIŚ TRENUJĘ ══ -->
+                <div class="page" id="page-workout">
+                    <!-- Nagłówek z powrotem i timerem -->
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <button onclick="showPage('dashboard-pro')" style="display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:7px 14px;color:var(--muted);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='var(--border2)';this.style.color='var(--off)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">← Wróć do dashboardu</button>
+                            <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;line-height:1">
+                                Dzień A — 
+                                <span style="color:var(--lime)">Pchanie</span>
+                            </div>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                            <!-- Timer aktywny -->
+                            <div style="display:flex;align-items:center;gap:7px;background:rgba(255,85,85,.07);border:1px solid rgba(255,85,85,.2);border-radius:8px;padding:6px 14px;">
+                                <div style="width:6px;height:6px;border-radius:50%;background:var(--red);animation:bpls 1.5s infinite;"></div>
+                                <span style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--red);letter-spacing:1px;" id="workoutTimer">00:34:12</span>
+                                <span style="font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;">w toku</span>
+                            </div>
+                            <!-- Zawieś trening -->
+                            <button onclick="showPage('dashboard-pro')" style="display:flex;align-items:center;gap:6px;background:var(--orange-ghost);border:1px solid rgba(255,140,66,.2);border-radius:8px;padding:7px 14px;color:var(--orange);font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;" title="Timer działa dalej — wrócisz do treningu z dashboardu">⏸ Zawieś trening</button>
+                            <!-- Zakończ -->
+                            <button onclick="endWorkout()" style="display:flex;align-items:center;gap:6px;background:var(--lime);border:none;border-radius:8px;padding:7px 16px;color:var(--black);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s;">🏁 Zakończ i zapisz</button>
+                        </div>
+                    </div>
+
+                    <!-- Pasek postępu treningu -->
+                    <div style="display:flex;gap:4px;margin-bottom:16px;">
+                        <div style="flex:1;height:4px;border-radius:2px;background:var(--lime);"></div>
+                        <div style="flex:1;height:4px;border-radius:2px;background:var(--lime);"></div>
+                        <div style="flex:1;height:4px;border-radius:2px;background:rgba(180,240,58,.4);animation:bpls 1.5s infinite;"></div>
+                        <div style="flex:1;height:4px;border-radius:2px;background:var(--border2);"></div>
+                        <div style="flex:1;height:4px;border-radius:2px;background:var(--border2);"></div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-bottom:18px;letter-spacing:.5px;">
+                        <span>Ćwiczenie 3 z 5</span>
+                        <span>~26 min pozostało</span>
+                    </div>
+
+                    <div class="g2">
+                        <div style="display:flex;flex-direction:column;gap:12px;">
+                            <!-- Aktywne ćwiczenie -->
+                            <div class="card" style="border-color:rgba(180,240,58,.2);background:linear-gradient(135deg,rgba(180,240,58,.05),var(--card));">
+                                <div style="font-size:9px;color:var(--lime);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">Ćwiczenie 3 z 5 · Klatka górna</div>
+                                <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Wyciskanie na skosie</div>
+                                <div style="font-size:11px;color:var(--muted);margin-bottom:16px;">3 serie × 10 powt. · sugerowany ciężar: 70 kg · przerwa: 2 min</div>
+                                <!-- Serie -->
+                                <div style="display:flex;flex-direction:column;gap:7px;">
+                                    <div style="font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px;">Serie</div>
+                                    <!-- Seria 1 — zrobiona -->
+                                    <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:rgba(180,240,58,.06);border:1px solid rgba(180,240,58,.15);border-radius:9px;opacity:.6;">
+                                        <span style="font-size:11px;color:var(--muted);width:50px;">Seria 1</span>
+                                        <input style="width:62px;background:var(--border2);border:1px solid var(--border);border-radius:7px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" value="70" type="number">
+                                        <span style="font-size:10px;color:var(--muted);">kg</span>
+                                        <input style="width:52px;background:var(--border2);border:1px solid var(--border);border-radius:7px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" value="10" type="number">
+                                        <span style="font-size:10px;color:var(--muted);">rep</span>
+                                        <button style="margin-left:auto;width:28px;height:28px;border-radius:7px;background:rgba(180,240,58,.15);border:none;color:var(--lime);cursor:pointer;font-size:13px;">✓</button>
+                                    </div>
+                                    <!-- Seria 2 — zrobiona -->
+                                    <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:rgba(180,240,58,.06);border:1px solid rgba(180,240,58,.15);border-radius:9px;opacity:.6;">
+                                        <span style="font-size:11px;color:var(--muted);width:50px;">Seria 2</span>
+                                        <input style="width:62px;background:var(--border2);border:1px solid var(--border);border-radius:7px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" value="70" type="number">
+                                        <span style="font-size:10px;color:var(--muted);">kg</span>
+                                        <input style="width:52px;background:var(--border2);border:1px solid var(--border);border-radius:7px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" value="10" type="number">
+                                        <span style="font-size:10px;color:var(--muted);">rep</span>
+                                        <button style="margin-left:auto;width:28px;height:28px;border-radius:7px;background:rgba(180,240,58,.15);border:none;color:var(--lime);cursor:pointer;font-size:13px;">✓</button>
+                                    </div>
+                                    <!-- Seria 3 — aktywna -->
+                                    <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:rgba(180,240,58,.04);border:1px solid rgba(180,240,58,.25);border-radius:9px;">
+                                        <span style="font-size:11px;color:var(--lime);width:50px;font-weight:600;">Seria 3</span>
+                                        <input style="width:62px;background:var(--card2);border:1px solid rgba(180,240,58,.3);border-radius:7px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" placeholder="kg" type="number">
+                                        <span style="font-size:10px;color:var(--muted);">kg</span>
+                                        <input style="width:52px;background:var(--card2);border:1px solid rgba(180,240,58,.3);border-radius:7px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" placeholder="rep" type="number">
+                                        <span style="font-size:10px;color:var(--muted);">rep</span>
+                                        <button onclick="startRest()" style="margin-left:auto;width:28px;height:28px;border-radius:7px;background:var(--border2);border:none;color:var(--muted);cursor:pointer;font-size:13px;transition:all .2s;" onmouseover="this.style.background='rgba(180,240,58,.15)';this.style.color='var(--lime)'" onmouseout="this.style.background='var(--border2)';this.style.color='var(--muted)'">○</button>
+                                    </div>
+                                </div>
+                                <!-- Timer odpoczynku -->
+                                <div id="restBanner" style="display:none;margin-top:12px;background:var(--orange-ghost);border:1px solid rgba(255,140,66,.2);border-radius:9px;padding:10px 14px;display:none;align-items:center;gap:10px;">
+                                    <span style="font-size:13px;">⏱</span>
+                                    <span style="font-size:12px;color:var(--orange);">Odpoczynek</span>
+                                    <span style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--orange);" id="restCount">120s</span>
+                                    <button onclick="skipRest()" style="margin-left:auto;background:none;border:1px solid rgba(255,140,66,.2);color:var(--orange);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">Pomiń →</button>
+                                </div>
+                            </div>
+
+                            <!-- Nawigacja między ćwiczeniami -->
+                            <div style="display:flex;gap:8px;">
+                                <button style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--muted);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='var(--border2)';this.style.color='var(--off)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">← Poprzednie</button>
+                                <button style="flex:2;background:var(--lime);border:none;border-radius:8px;padding:10px;color:var(--black);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;">Następne ćwiczenie →</button>
+                            </div>
+
+                            <!-- Następne ćwiczenie podgląd -->
+                            <div class="card" style="opacity:.6;">
+                                <div style="font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">Następne ćwiczenie</div>
+                                <div style="display:flex;align-items:center;gap:10px;">
+                                    <div style="width:28px;height:28px;border-radius:8px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--muted);">4</div>
+                                    <div>
+                                        <div style="font-size:13px;font-weight:600;">Rozpiętki ze sztangielkami</div>
+                                        <div style="font-size:10px;color:var(--muted);">3 × 12 · 18 kg · przerwa 90s</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display:flex;flex-direction:column;gap:12px;">
+                            <!-- Plan całego treningu -->
+                            <div class="card">
+                                <div class="ct">Plan treningu</div>
+                                <div style="display:flex;flex-direction:column;gap:5px;">
+                                    <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:rgba(180,240,58,.06);border:1px solid rgba(180,240,58,.12);border-radius:8px;opacity:.5;">
+                                        <div style="width:18px;height:18px;border-radius:50%;background:rgba(180,240,58,.15);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--lime);flex-shrink:0;">✓</div>
+                                        <span style="font-size:11px;font-weight:600;">Wyciskanie sztangi leżąc</span>
+                                        <span style="margin-left:auto;font-size:10px;color:var(--lime);">4×8</span>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:rgba(180,240,58,.06);border:1px solid rgba(180,240,58,.12);border-radius:8px;opacity:.5;">
+                                        <div style="width:18px;height:18px;border-radius:50%;background:rgba(180,240,58,.15);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--lime);flex-shrink:0;">✓</div>
+                                        <span style="font-size:11px;font-weight:600;">Overhead Press</span>
+                                        <span style="margin-left:auto;font-size:10px;color:var(--lime);">4×8</span>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:rgba(180,240,58,.04);border:1px solid rgba(180,240,58,.25);border-radius:8px;">
+                                        <div style="width:18px;height:18px;border-radius:50%;background:rgba(180,240,58,.2);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--lime);flex-shrink:0;animation:pls 1.5s infinite;">▶</div>
+                                        <span style="font-size:11px;font-weight:600;color:var(--lime);">Wyciskanie na skosie</span>
+                                        <span style="margin-left:auto;font-size:10px;color:var(--lime);">3×10</span>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:var(--card2);border:1px solid var(--border);border-radius:8px;opacity:.5;">
+                                        <div style="width:18px;height:18px;border-radius:50%;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--muted);flex-shrink:0;">4</div>
+                                        <span style="font-size:11px;">Rozpiętki</span>
+                                        <span style="margin-left:auto;font-size:10px;color:var(--muted);">3×12</span>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:var(--card2);border:1px solid var(--border);border-radius:8px;opacity:.5;">
+                                        <div style="width:18px;height:18px;border-radius:50%;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--muted);flex-shrink:0;">5</div>
+                                        <span style="font-size:11px;">Pompki poręcze</span>
+                                        <span style="margin-left:auto;font-size:10px;color:var(--muted);">3×max</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Notatka dla trenera -->
+                            <div class="card">
+                                <div class="ct">Notatka do treningu</div>
+                                <textarea style="width:100%;background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:10px 12px;color:var(--white);font-size:12px;font-family:inherit;outline:none;resize:vertical;min-height:70px;transition:border-color .2s;" placeholder="Jak się czujesz? Co warto zapamiętać? Trener to zobaczy..." onfocus="this.style.borderColor='var(--lime)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+                            </div>
+
+                            <!-- Szybki dostęp AI -->
+                            <div class="card" style="border-color:rgba(180,240,58,.12);">
+                                <div class="ct" style="color:var(--lime)">🤖 AI Coach</div>
+                                <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;">
+                                    <button style="background:var(--lime-ghost);border:1px solid rgba(180,240,58,.15);color:var(--lime);border-radius:12px;padding:4px 9px;font-size:10px;font-weight:600;cursor:pointer;">Boli bark — zmień ćwiczenie</button>
+                                    <button style="background:var(--lime-ghost);border:1px solid rgba(180,240,58,.15);color:var(--lime);border-radius:12px;padding:4px 9px;font-size:10px;font-weight:600;cursor:pointer;">Jak długo odpoczywać?</button>
+                                </div>
+                                <button onclick="showPage('ai')" style="width:100%;background:none;border:1px solid var(--border2);color:var(--muted);border-radius:8px;padding:7px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;" onmouseover="this.style.borderColor='var(--lime)';this.style.color='var(--lime)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">Otwórz pełny AI Coach →</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- ══ AI COACH ══ -->
                 <div class="page" id="page-ai">
                     <div style="margin-bottom:14px;font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;text-transform:uppercase;letter-spacing:.5px">
@@ -2078,6 +2234,60 @@
             'workout': 'Dziś trenuję'
         };
         document.getElementById('pageTitle').textContent = titles[id] || 'Dashboard';
+        if (id === 'workout')
+            startWorkoutTimer();
+        else
+            clearInterval(workoutInterval);
+    }
+
+    // Workout timer
+    let workoutSecs = 34 * 60 + 12,
+        workoutInterval;
+    function startWorkoutTimer() {
+        clearInterval(workoutInterval);
+        workoutInterval = setInterval(() => {
+            workoutSecs++;
+            const m = String(Math.floor(workoutSecs / 60)).padStart(2, '0');
+            const s = String(workoutSecs % 60).padStart(2, '0');
+            const el = document.getElementById('workoutTimer');
+            if (el)
+                el.textContent = m + ':' + s;
+        }, 1000);
+    }
+
+    // Rest timer
+    let restSecs = 0,
+        restInterval;
+    function startRest() {
+        restSecs = 120;
+        const banner = document.getElementById('restBanner');
+        const count = document.getElementById('restCount');
+        if (banner) {
+            banner.style.display = 'flex';
+        }
+        clearInterval(restInterval);
+        restInterval = setInterval(() => {
+            restSecs--;
+            if (count)
+                count.textContent = restSecs + 's';
+            if (restSecs <= 0) {
+                clearInterval(restInterval);
+                if (banner)
+                    banner.style.display = 'none';
+            }
+        }, 1000);
+    }
+    function skipRest() {
+        clearInterval(restInterval);
+        const banner = document.getElementById('restBanner');
+        if (banner)
+            banner.style.display = 'none';
+    }
+
+    function endWorkout() {
+        clearInterval(workoutInterval);
+        clearInterval(restInterval);
+        showPage('dashboard-pro');
     }
 
     setMode('pro');
