@@ -2584,6 +2584,12 @@
                 bs: 'background:var(--lime);color:var(--black)'
             },
             {
+                id: 'calendar',
+                icon: '',
+                label: 'Kalendarz',
+                external: 'chcebyc-calendar.html'
+            },
+            {
                 id: 'progress',
                 icon: '',
                 label: 'Moje postepy'
@@ -2642,6 +2648,12 @@
                 label: 'Dzis trenujesz',
                 badge: 'A',
                 bs: 'background:var(--cyan);color:var(--black)'
+            },
+            {
+                id: 'calendar',
+                icon: '',
+                label: 'Kalendarz',
+                external: 'chcebyc-calendar.html'
             },
             {
                 id: 'messages',
@@ -2705,6 +2717,12 @@
                 label: 'Dzis trenujesz',
                 badge: 'A',
                 bs: 'background:var(--cyan);color:var(--black)'
+            },
+            {
+                id: 'calendar',
+                icon: '',
+                label: 'Kalendarz',
+                external: 'chcebyc-calendar.html'
             },
             {
                 id: 'messages',
@@ -2794,9 +2812,21 @@
             }
             if (!item.locked) {
                 el.dataset.page = item.id;
-                el.onclick = () => {
-                    showPage(item.id);
-                };
+                if (item.external) {
+                    el.onclick = () => {
+                        window.open(item.external, '_blank');
+                    };
+                    el.style.cursor = 'pointer';
+                    // Dodaj ikonke zewnetrznego linku
+                    const ext = document.createElement('span');
+                    ext.style.cssText = 'margin-left:auto;font-size:9px;color:var(--muted2);';
+                    ext.textContent = '↗';
+                    el.appendChild(ext);
+                } else {
+                    el.onclick = () => {
+                        showPage(item.id);
+                    };
+                }
             }
             nav.appendChild(el);
         });
