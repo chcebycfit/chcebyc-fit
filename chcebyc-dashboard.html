@@ -2142,6 +2142,12 @@
 
     <script>
     let currentMode = 'pro';
+    let workoutSecs = 34 * 60 + 12,
+        workoutInterval;
+    let workoutSecsClient = 22 * 60 + 5,
+        workoutIntervalClient;
+    let restSecs = 0,
+        restInterval;
     const MODES = {
         'pro': {
             userName: 'Maciej K.',
@@ -2429,8 +2435,6 @@
         clearInterval(workoutIntervalClient);
         showPage('dashboard-pro');
     }
-    let workoutSecsClient = 22 * 60 + 5,
-        workoutIntervalClient;
     function startWorkoutTimerClient() {
         clearInterval(workoutIntervalClient);
         workoutIntervalClient = setInterval(() => {
@@ -2477,8 +2481,6 @@
     }
 
     // Rest timer
-    let restSecs = 0,
-        restInterval;
     function startRest() {
         restSecs = 120;
         const banner = document.getElementById('restBanner');
