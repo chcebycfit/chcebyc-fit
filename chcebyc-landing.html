@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>chceByc.fit — Pierwsza polska platforma fitness z AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #080c08;
+  --forest: #0d1f0d;
+  --green-dark: #1a3a1a;
+  --green-mid: #2d5a2d;
+  --lime: #a8e63d;
+  --lime-soft: #c5f06a;
+  --lime-dim: #7ab52a;
+  --white: #f4f9f0;
+  --off-white: #d4e8c8;
+  --muted: #6a8060;
+  --card: #111811;
+  --border: #1e2e1e;
+  --border-bright: #2a4a2a;
+  --red: #ff4d4d;
+  --gold: #f0c040;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--black);
+  color: var(--white);
+  overflow-x: hidden;
+  cursor: none;
+}
+/* CUSTOM CURSOR */
+.cursor {
+  width: 12px; height: 12px;
+  background: var(--lime);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s, width 0.2s, height 0.2s, opacity 0.2s;
+  mix-blend-mode: difference;
+}
+.cursor-trail {
+  width: 32px; height: 32px;
+  border: 1px solid var(--lime);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: left 0.12s ease, top 0.12s ease;
+  opacity: 0.4;
+}
+/* NOISE OVERLAY */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+/* TYPOGRAPHY */
+.display { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; text-transform: uppercase; line-height: 0.92; letter-spacing: -0.5px; }
+.display-xl { font-size: clamp(72px, 12vw, 160px); }
+.display-lg { font-size: clamp(48px, 7vw, 96px); }
+.display-md { font-size: clamp(32px, 5vw, 64px); }
+.display-sm { font-size: clamp(22px, 3vw, 38px); }
+.label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; font-weight: 600; color: var(--lime); }
+
+/* LAYOUT */
+.container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+section { position: relative; z-index: 1; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  padding: 20px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(to bottom, var(--black) 0%, transparent 100%);
+  transition: background 0.3s;
+}
+nav.scrolled { background: rgba(8,12,8,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+.nav-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 28px; letter-spacing: 1px; color: var(--white); }
+.nav-logo span { color: var(--lime); }
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a { color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: var(--white); }
+.nav-cta { background: var(--lime); color: var(--black); border: none; padding: 10px 22px; border-radius: 8px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: 1px; cursor: none; transition: all 0.2s; text-transform: uppercase; text-decoration: none; }
+.nav-cta:hover { background: var(--lime-soft); transform: translateY(-1px); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding-bottom: 80px;
+  overflow: hidden;
+  position: relative;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 60% 30%, rgba(26,58,26,0.7) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 20% 80%, rgba(168,230,61,0.06) 0%, transparent 60%),
+    var(--black);
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(168,230,61,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168,230,61,0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse at 60% 40%, black 20%, transparent 70%);
+}
+.hero-number {
+  position: absolute;
+  top: 50%;
+  right: -20px;
+  transform: translateY(-50%);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(300px, 45vw, 600px);
+  font-weight: 900;
+  color: rgba(168,230,61,0.03);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: -20px;
+}
+.hero-content { position: relative; z-index: 2; }
+.hero-eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+.hero-eyebrow-line { width: 40px; height: 1px; background: var(--lime); }
+.hero-title { margin-bottom: 28px; }
+.hero-title .line1 { color: var(--white); display: block; }
+.hero-title .line2 { color: var(--lime); display: block; }
+.hero-title .line3 { color: var(--muted); display: block; font-weight: 700; }
+.hero-sub {
+  max-width: 520px;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--off-white);
+  margin-bottom: 40px;
+  font-weight: 300;
+}
+.hero-sub strong { font-weight: 600; color: var(--lime); }
+.hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.btn-primary {
+  background: var(--lime); color: var(--black);
+  border: none; padding: 16px 36px; border-radius: 10px;
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 18px; letter-spacing: 1.5px;
+  text-transform: uppercase; cursor: none; text-decoration: none;
+  transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px;
+  box-shadow: 0 0 40px rgba(168,230,61,0.25);
+}
+.btn-primary:hover { background: var(--lime-soft); transform: translateY(-2px); box-shadow: 0 0 60px rgba(168,230,61,0.4); }
+.btn-secondary {
+  background: transparent; color: var(--white);
+  border: 1px solid var(--border-bright); padding: 16px 28px; border-radius: 10px;
+  font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 14px;
+  cursor: none; text-decoration: none;
+  transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-secondary:hover { border-color: var(--lime); color: var(--lime); }
+.hero-stats {
+  position: absolute; right: 0; bottom: 80px;
+  display: flex; flex-direction: column; gap: 20px;
+}
+.hero-stat { text-align: right; }
+.hero-stat-num { font-family: 'Barlow Condensed', sans-serif; font-size: 42px; font-weight: 900; color: var(--white); line-height: 1; }
+.hero-stat-num span { color: var(--lime); }
+.hero-stat-label { font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+.hero-scroll {
+  position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  color: var(--muted); font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+}
+.scroll-line {
+  width: 1px; height: 60px;
+  background: linear-gradient(to bottom, var(--lime), transparent);
+  animation: scrollPulse 2s infinite;
+}
+@keyframes scrollPulse { 0%,100%{opacity:0.3;transform:scaleY(1)} 50%{opacity:1;transform:scaleY(1.1)} }
+
+/* TICKER */
+.ticker {
+  background: var(--lime);
+  padding: 14px 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.ticker-inner {
+  display: inline-flex;
+  animation: ticker 25s linear infinite;
+}
+.ticker-item {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700; font-size: 15px; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--black);
+  padding: 0 28px;
+  display: flex; align-items: center; gap: 28px;
+}
+.ticker-dot { width: 5px; height: 5px; background: var(--black); border-radius: 50%; opacity: 0.4; }
+@keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* HOW IT WORKS */
+.how { padding: 140px 0; }
+.section-header { margin-bottom: 80px; }
+.step-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+.step-card {
+  background: var(--card);
+  padding: 48px 40px;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+.step-card:hover { border-color: var(--border-bright); }
+.step-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(168,230,61,0.04), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.step-card:hover::before { opacity: 1; }
+.step-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 120px; font-weight: 900;
+  color: rgba(168,230,61,0.06);
+  position: absolute; top: -20px; right: 20px;
+  line-height: 1;
+  pointer-events: none;
+}
+.step-icon { font-size: 36px; margin-bottom: 20px; display: block; }
+.step-title { font-family: 'Barlow Condensed', sans-serif; font-size: 30px; font-weight: 700; color: var(--white); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+.step-desc { font-size: 14px; line-height: 1.8; color: var(--muted); font-weight: 300; }
+
+/* AI SECTION */
+.ai-section { padding: 140px 0; background: linear-gradient(to bottom, var(--black), var(--forest), var(--black)); }
+.ai-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.ai-chat-demo {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+}
+.ai-chat-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px;
+}
+.ai-avatar { width: 36px; height: 36px; background: var(--lime); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.ai-name { font-size: 14px; font-weight: 600; }
+.ai-status { font-size: 11px; color: var(--lime); display: flex; align-items: center; gap: 5px; }
+.ai-status::before { content: ''; width: 5px; height: 5px; background: var(--lime); border-radius: 50%; display: inline-block; animation: blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.ai-messages { padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+.msg { max-width: 80%; padding: 12px 16px; border-radius: 14px; font-size: 13px; line-height: 1.6; }
+.msg-user { background: var(--lime); color: var(--black); align-self: flex-end; border-radius: 14px 14px 4px 14px; font-weight: 500; }
+.msg-ai { background: #1a2a1a; color: var(--off-white); align-self: flex-start; border-radius: 14px 14px 14px 4px; border: 1px solid var(--border); }
+.msg-ai strong { color: var(--lime); }
+.ai-input-bar { padding: 14px 16px; border-top: 1px solid var(--border); display: flex; gap: 10px; align-items: center; }
+.ai-input { flex: 1; background: #1a2a1a; border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; color: var(--white); font-size: 13px; font-family: inherit; outline: none; }
+.ai-send { background: var(--lime); border: none; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: none; font-size: 14px; }
+
+/* FEATURES */
+.features { padding: 140px 0; }
+.features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; margin-top: 80px; }
+.feat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 48px;
+  position: relative; overflow: hidden;
+  transition: all 0.3s;
+}
+.feat-card.large { grid-column: span 2; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.feat-card:hover { border-color: var(--border-bright); }
+.feat-icon-wrap { width: 56px; height: 56px; background: rgba(168,230,61,0.1); border: 1px solid rgba(168,230,61,0.2); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 24px; }
+.feat-title { font-family: 'Barlow Condensed', sans-serif; font-size: 26px; font-weight: 700; color: var(--white); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+.feat-desc { font-size: 14px; line-height: 1.8; color: var(--muted); font-weight: 300; }
+.feat-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(168,230,61,0.08); border: 1px solid rgba(168,230,61,0.15); color: var(--lime); border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 16px; }
+
+/* SOCIAL PROOF */
+.social { padding: 140px 0; }
+.reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 60px; }
+.review-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px; padding: 28px;
+  transition: border-color 0.3s;
+}
+.review-card:hover { border-color: var(--border-bright); }
+.stars { color: var(--gold); font-size: 14px; margin-bottom: 14px; letter-spacing: 2px; }
+.review-text { font-size: 14px; line-height: 1.8; color: var(--off-white); font-weight: 300; margin-bottom: 20px; font-style: italic; }
+.reviewer { display: flex; align-items: center; gap: 12px; }
+.reviewer-avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.reviewer-name { font-size: 13px; font-weight: 600; }
+.reviewer-meta { font-size: 11px; color: var(--muted); }
+.results-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-top: 60px; }
+.result-block { background: var(--card); border: 1px solid var(--border); padding: 40px 32px; text-align: center; }
+.result-num { font-family: 'Barlow Condensed', sans-serif; font-size: 64px; font-weight: 900; color: var(--lime); line-height: 1; margin-bottom: 8px; }
+.result-label { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+/* PRICING */
+.pricing { padding: 140px 0; }
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 80px; }
+.price-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 48px 40px;
+  position: relative; overflow: hidden;
+  transition: all 0.3s;
+}
+.price-card.featured {
+  border-color: var(--lime);
+  background: linear-gradient(135deg, rgba(168,230,61,0.06), var(--card));
+  z-index: 1;
+  transform: scale(1.02);
+}
+.price-badge { position: absolute; top: 20px; right: 20px; background: var(--lime); color: var(--black); border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.price-plan { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; }
+.price-amount { font-family: 'Barlow Condensed', sans-serif; font-size: 72px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
+.price-amount sup { font-size: 24px; vertical-align: super; }
+.price-amount .currency { color: var(--lime); }
+.price-period { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
+.price-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+.price-features li { font-size: 14px; color: var(--off-white); display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; font-weight: 300; }
+.price-features li::before { content: '✓'; color: var(--lime); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.price-features li.off { color: var(--muted); }
+.price-features li.off::before { content: '×'; color: var(--border-bright); }
+.btn-plan { display: block; text-align: center; padding: 14px; border-radius: 10px; font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; text-decoration: none; transition: all 0.2s; cursor: none; border: none; }
+.btn-plan.primary { background: var(--lime); color: var(--black); box-shadow: 0 0 30px rgba(168,230,61,0.3); }
+.btn-plan.primary:hover { background: var(--lime-soft); }
+.btn-plan.outline { background: transparent; color: var(--white); border: 1px solid var(--border-bright); }
+.btn-plan.outline:hover { border-color: var(--lime); color: var(--lime); }
+
+/* COACHES */
+.coaches { padding: 140px 0; background: var(--forest); }
+.coaches-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 60px; }
+.coach-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden;
+  transition: all 0.3s;
+}
+.coach-card:hover { border-color: var(--border-bright); transform: translateY(-4px); }
+.coach-avatar-wrap { height: 180px; display: flex; align-items: center; justify-content: center; background: var(--green-dark); font-size: 80px; }
+.coach-info { padding: 20px; }
+.coach-name { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.coach-spec { font-size: 12px; color: var(--lime); font-weight: 500; margin-bottom: 10px; }
+.coach-stats { display: flex; gap: 12px; }
+.coach-stat { font-size: 11px; color: var(--muted); }
+.coach-stat strong { color: var(--white); font-weight: 600; }
+
+/* FAQ */
+.faq { padding: 140px 0; }
+.faq-list { max-width: 760px; margin: 60px auto 0; display: flex; flex-direction: column; gap: 2px; }
+.faq-item { background: var(--card); border: 1px solid var(--border); }
+.faq-q {
+  padding: 22px 28px; cursor: none;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 15px; font-weight: 500; color: var(--white);
+  transition: color 0.2s; user-select: none;
+}
+.faq-q:hover { color: var(--lime); }
+.faq-q .faq-icon { font-size: 20px; color: var(--muted); transition: transform 0.3s; flex-shrink: 0; font-family: monospace; font-weight: 300; }
+.faq-a { padding: 0 28px; max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.2s; }
+.faq-a.open { max-height: 200px; padding: 0 28px 22px; }
+.faq-a p { font-size: 14px; line-height: 1.8; color: var(--muted); font-weight: 300; }
+
+/* EMAIL CAPTURE */
+.email-section {
+  padding: 120px 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.email-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 80% at 50% 50%, rgba(26,58,26,0.6), transparent);
+}
+.email-content { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+.email-form { display: flex; gap: 12px; margin-top: 40px; max-width: 480px; margin-left: auto; margin-right: auto; }
+.email-input {
+  flex: 1; background: var(--card); border: 1px solid var(--border-bright);
+  border-radius: 10px; padding: 14px 18px; color: var(--white);
+  font-size: 14px; font-family: inherit; outline: none;
+  transition: border-color 0.2s;
+}
+.email-input:focus { border-color: var(--lime); }
+.email-input::placeholder { color: var(--muted); }
+.email-note { margin-top: 14px; font-size: 12px; color: var(--muted); }
+.email-note a { color: var(--lime); text-decoration: none; }
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 60px 40px 40px;
+}
+.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 60px; }
+.footer-brand p { font-size: 13px; color: var(--muted); line-height: 1.8; margin-top: 12px; max-width: 280px; font-weight: 300; }
+.footer-col h4 { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; color: var(--white); margin-bottom: 20px; }
+.footer-col a { display: block; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 10px; transition: color 0.2s; font-weight: 300; }
+.footer-col a:hover { color: var(--lime); }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 30px; border-top: 1px solid var(--border); }
+.footer-bottom p { font-size: 12px; color: var(--muted); }
+.footer-socials { display: flex; gap: 12px; }
+.social-btn { width: 34px; height: 34px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 15px; color: var(--muted); transition: all 0.2s; }
+.social-btn:hover { border-color: var(--lime); color: var(--lime); }
+
+/* ANIMATIONS */
+@keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+.animate { opacity: 0; animation: fadeUp 0.7s ease forwards; }
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; }
+.delay-6 { animation-delay: 0.6s; }
+
+/* REVEAL ON SCROLL */
+.reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* MOBILE */
+@media (max-width: 900px) {
+  .container { padding: 0 20px; }
+  nav { padding: 16px 20px; }
+  .nav-links { display: none; }
+  .hero { padding-bottom: 60px; }
+  .hero-stats { display: none; }
+  .step-grid, .pricing-grid, .coaches-grid { grid-template-columns: 1fr; }
+  .features-grid { grid-template-columns: 1fr; }
+  .feat-card.large { grid-column: span 1; grid-template-columns: 1fr; gap: 30px; }
+  .reviews-grid { grid-template-columns: 1fr; }
+  .results-strip { grid-template-columns: 1fr 1fr; }
+  .ai-inner { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .email-form { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">chceByc<span>.fit</span></a>
+  <div class="nav-links">
+    <a href="#jak-dziala">Jak działa</a>
+    <a href="#ai">AI Coach</a>
+    <a href="#cennik">Cennik</a>
+    <a href="#trenerzy">Trenerzy</a>
+    <a href="#faq">FAQ</a>
+  </div>
+  <a href="#zapis" class="nav-cta">Zacznij za darmo →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-number">1</div>
+
+  <div class="container hero-content">
+    <div class="hero-eyebrow animate delay-1">
+      <div class="hero-eyebrow-line"></div>
+      <span class="label">Pierwsza polska platforma fitness z AI</span>
+    </div>
+    <h1 class="display display-xl hero-title animate delay-2">
+      <span class="line1">Chcesz być</span>
+      <span class="line2">silniejszy.</span>
+      <span class="line3">To zacznij.</span>
+    </h1>
+    <p class="hero-sub animate delay-3">
+      <strong>AI coach, który zna Twoje cele.</strong> Plany od prawdziwych polskich trenerów. Społeczność, która nie pozwoli Ci odpuścić.
+    </p>
+    <div class="hero-actions animate delay-4">
+      <a href="#zapis" class="btn-primary">🚀 Zacznij za darmo</a>
+      <a href="#jak-dziala" class="btn-secondary">Zobacz jak to działa ↓</a>
+    </div>
+  </div>
+
+  <div class="hero-stats animate delay-5">
+    <div class="hero-stat">
+      <div class="hero-stat-num">12<span>k+</span></div>
+      <div class="hero-stat-label">Aktywnych użytkowników</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">340<span>+</span></div>
+      <div class="hero-stat-label">Planów treningowych</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">98<span>%</span></div>
+      <div class="hero-stat-label">Poleca znajomym</div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <div class="ticker-item">AI Coach 24/7 <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Plany od polskich trenerów <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Śledzenie postępów <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Gamifikacja i wyzwania <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Marketplace planów <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Społeczność fitness <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Spersonalizowany trening <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Mobile first <span class="ticker-dot"></span></div>
+    <!-- duplicate for seamless loop -->
+    <div class="ticker-item">AI Coach 24/7 <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Plany od polskich trenerów <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Śledzenie postępów <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Gamifikacja i wyzwania <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Marketplace planów <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Społeczność fitness <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Spersonalizowany trening <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Mobile first <span class="ticker-dot"></span></div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="jak-dziala">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="label">Jak działa</span>
+      <h2 class="display display-lg" style="margin-top:12px">Trzy kroki<br><span style="color:var(--lime)">do wyniku</span></h2>
+    </div>
+    <div class="step-grid">
+      <div class="step-card reveal">
+        <div class="step-num">1</div>
+        <span class="step-icon">🧬</span>
+        <h3 class="step-title">AI poznaje Ciebie</h3>
+        <p class="step-desc">8 pytań. Cel, poziom, sprzęt, czas, kontuzje. AI tworzy plan skrojony pod Ciebie — nie szablon, nie losowy PDF. Twój plan.</p>
+      </div>
+      <div class="step-card reveal" style="transition-delay:0.1s">
+        <div class="step-num">2</div>
+        <span class="step-icon">🔥</span>
+        <h3 class="step-title">Trenujesz i śledzisz</h3>
+        <p class="step-desc">Aplikacja prowadzi Cię przez każde ćwiczenie. Licznik serii, timer odpoczynku, zapis wyników. AI adaptuje plan co tydzień na podstawie Twoich postępów.</p>
+      </div>
+      <div class="step-card reveal" style="transition-delay:0.2s">
+        <div class="step-num">3</div>
+        <span class="step-icon">🏆</span>
+        <h3 class="step-title">Rośniesz razem ze społecznością</h3>
+        <p class="step-desc">XP, odznaki, wyzwania tygodniowe, leaderboardy. Znajomi widzą Twoje postępy. Nie odpuścisz — bo oni patrzą.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI SECTION -->
+<section class="ai-section" id="ai">
+  <div class="container">
+    <div class="ai-inner">
+      <div class="reveal">
+        <span class="label">AI Coach</span>
+        <h2 class="display display-lg" style="margin-top:12px;margin-bottom:24px">Trener, który<br><span style="color:var(--lime)">nigdy nie śpi</span></h2>
+        <p style="font-size:16px;line-height:1.8;color:var(--muted);font-weight:300;margin-bottom:32px">Nasz AI coach zna Twoją historię treningów, cele i ograniczenia. Dostosowuje plan gdy jesteś zmęczony, wyjaśnia technikę gdy pytasz, motywuje gdy odpuszczasz. Dostępny 24/7 — bez dodatkowych opłat.</p>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:flex-start;gap:14px">
+            <div style="width:8px;height:8px;background:var(--lime);border-radius:50%;flex-shrink:0;margin-top:6px"></div>
+            <div>
+              <strong style="font-size:14px;font-weight:600">Auto-adaptacja planu</strong>
+              <p style="font-size:13px;color:var(--muted);font-weight:300;margin-top:2px">AI modyfikuje intensywność co tydzień na podstawie Twoich wyników i samopoczucia</p>
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:14px">
+            <div style="width:8px;height:8px;background:var(--lime);border-radius:50%;flex-shrink:0;margin-top:6px"></div>
+            <div>
+              <strong style="font-size:14px;font-weight:600">Analiza postępów</strong>
+              <p style="font-size:13px;color:var(--muted);font-weight:300;margin-top:2px">Komentuje Twoje wyniki, wskazuje co idzie świetnie i co wymaga poprawy</p>
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:14px">
+            <div style="width:8px;height:8px;background:var(--lime);border-radius:50%;flex-shrink:0;margin-top:6px"></div>
+            <div>
+              <strong style="font-size:14px;font-weight:600">Żywieniowe wskazówki</strong>
+              <p style="font-size:13px;color:var(--muted);font-weight:300;margin-top:2px">Proste sugestie co jeść przed i po treningu, dopasowane do Twojego celu</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ai-chat-demo reveal" style="transition-delay:0.15s">
+        <div class="ai-chat-header">
+          <div class="ai-avatar">🤖</div>
+          <div>
+            <div class="ai-name">AI Coach · chceByc.fit</div>
+            <div class="ai-status">Online teraz</div>
+          </div>
+        </div>
+        <div class="ai-messages">
+          <div class="msg msg-user">Hej, dzisiaj jestem mega zmęczony po pracy. Co robić?</div>
+          <div class="msg msg-ai">Rozumiem! Widzę, że wczoraj miałeś <strong>ciężki trening nóg</strong> — masz prawo być zmęczony. 💪<br><br>Zamiast planowanego Back Day, proponuję dziś <strong>aktywną regenerację</strong>: 20 min stretch + lekki core. Ciężki trening wróci jutro w lepszej formie.</div>
+          <div class="msg msg-user">Super, a co powinienem zjeść przed tym stretching?</div>
+          <div class="msg msg-ai">Na lekką sesję nie potrzebujesz dużo. Wystarczy <strong>banana lub garść orzechów</strong> ok. 30 min przed. Pamiętaj o nawodnieniu — przy Twoim celu redukcji to kluczowe! 🍌</div>
+        </div>
+        <div class="ai-input-bar">
+          <input class="ai-input" type="text" placeholder="Zapytaj AI coacha...">
+          <button class="ai-send">➤</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="label">Funkcje platformy</span>
+      <h2 class="display display-lg" style="margin-top:12px">Wszystko czego<br><span style="color:var(--lime)">potrzebujesz</span></h2>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card large reveal">
+        <div>
+          <div class="feat-tag">🏪 Marketplace</div>
+          <h3 class="feat-title">Plany od prawdziwych polskich trenerów</h3>
+          <p class="feat-desc">Ponad 340 planów treningowych stworzonych przez zweryfikowanych trenerów personalnych. Filtruj po celu, poziomie, czasie trwania i sprzęcie. Podgląd 3 dni przed zakupem — zero niespodzianek.</p>
+          <div style="margin-top:28px;display:flex;gap:10px;flex-wrap:wrap">
+            <span style="background:rgba(168,230,61,0.08);border:1px solid rgba(168,230,61,0.15);color:var(--lime);border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600">Siłownia</span>
+            <span style="background:rgba(168,230,61,0.08);border:1px solid rgba(168,230,61,0.15);color:var(--lime);border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600">Kalistenika</span>
+            <span style="background:rgba(168,230,61,0.08);border:1px solid rgba(168,230,61,0.15);color:var(--lime);border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600">Dom / bez sprzętu</span>
+            <span style="background:rgba(168,230,61,0.08);border:1px solid rgba(168,230,61,0.15);color:var(--lime);border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600">Cardio</span>
+            <span style="background:rgba(168,230,61,0.08);border:1px solid rgba(168,230,61,0.15);color:var(--lime);border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600">Redukcja</span>
+            <span style="background:rgba(168,230,61,0.08);border:1px solid rgba(168,230,61,0.15);color:var(--lime);border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600">Masa mięśniowa</span>
+          </div>
+        </div>
+        <div style="background:var(--green-dark);border:1px solid var(--border);border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:12px">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">Bestseller tygodnia</div>
+          <div style="display:flex;align-items:center;gap:14px;padding:14px;background:var(--card);border-radius:12px;border:1px solid var(--border)">
+            <div style="font-size:32px">🏆</div>
+            <div>
+              <div style="font-size:14px;font-weight:600">Power Hypertrophy 12 tygodni</div>
+              <div style="font-size:12px;color:var(--lime)">Marcin Kowalski · ⭐ 4.9 (247 ocen)</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:4px">1.2k użytkowników · 3x w tygodniu · Siłownia</div>
+            </div>
+            <div style="margin-left:auto;text-align:right"><div style="font-size:18px;font-weight:700;color:var(--lime)">49 zł</div><div style="font-size:10px;color:var(--muted)">jednorazowo</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:14px;background:var(--card);border-radius:12px;border:1px solid var(--border)">
+            <div style="font-size:32px">🔥</div>
+            <div>
+              <div style="font-size:14px;font-weight:600">HIIT Shred 8 tygodni</div>
+              <div style="font-size:12px;color:var(--lime)">Anna Wiśniewska · ⭐ 4.8 (189 ocen)</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:4px">890 użytkowników · 4x w tygodniu · Dom</div>
+            </div>
+            <div style="margin-left:auto;text-align:right"><div style="font-size:18px;font-weight:700;color:var(--lime)">39 zł</div><div style="font-size:10px;color:var(--muted)">jednorazowo</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:14px;background:var(--card);border-radius:12px;border:1px solid var(--border)">
+            <div style="font-size:32px">💪</div>
+            <div>
+              <div style="font-size:14px;font-weight:600">Beginner Strength Foundation</div>
+              <div style="font-size:12px;color:var(--lime)">Tomasz Nowak · ⭐ 5.0 (312 ocen)</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:4px">2.1k użytkowników · 3x w tygodniu · Siłownia</div>
+            </div>
+            <div style="margin-left:auto;text-align:right"><div style="font-size:18px;font-weight:700;color:var(--lime)">FREE</div><div style="font-size:10px;color:var(--muted)">dla Pro</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:0.1s">
+        <div class="feat-icon-wrap">🏆</div>
+        <h3 class="feat-title">Gamifikacja i wyzwania</h3>
+        <p class="feat-desc">XP za każdy trening. Poziomy od Nowicjusza do Legendy. Tygodniowe wyzwania z nagrodami. Leaderboardy globalne i wśród znajomych. Bo rywalizacja działa.</p>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:0.2s">
+        <div class="feat-icon-wrap">📊</div>
+        <h3 class="feat-title">Śledzenie postępów</h3>
+        <p class="feat-desc">Wykresy siły, masy ciała, objętości treningowej. Historia każdego ćwiczenia. Zdjęcia przed/po. Widzisz czy to działa — bo dane nie kłamią.</p>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:0.1s">
+        <div class="feat-icon-wrap">👥</div>
+        <h3 class="feat-title">Społeczność fitness</h3>
+        <p class="feat-desc">Feed aktywności znajomych. Komentarze, ognie 🔥, motywacja. Znajdź buddiego treningowego. Ludzie wracają na platformę dla ludzi — nie dla contentu.</p>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:0.2s">
+        <div class="feat-icon-wrap">📱</div>
+        <h3 class="feat-title">Aplikacja mobile</h3>
+        <p class="feat-desc">iOS i Android. Zaprojektowana od nowa dla mobile — nie strona webowa wcięta w telefon. Działaj też offline. Push notyfikacje w odpowiednim momencie.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section class="social">
+  <div class="container">
+    <div class="results-strip reveal">
+      <div class="result-block">
+        <div class="result-num">12k</div>
+        <div class="result-label">Aktywnych<br>użytkowników</div>
+      </div>
+      <div class="result-block">
+        <div class="result-num">340+</div>
+        <div class="result-label">Planów treningowych<br>w marketplace</div>
+      </div>
+      <div class="result-block">
+        <div class="result-num">87%</div>
+        <div class="result-label">Użytkowników osiąga<br>cel w 12 tygodni</div>
+      </div>
+      <div class="result-block">
+        <div class="result-num">4.9★</div>
+        <div class="result-label">Średnia ocena<br>w App Store</div>
+      </div>
+    </div>
+
+    <div class="section-header reveal" style="margin-top:100px">
+      <span class="label">Opinie użytkowników</span>
+      <h2 class="display display-lg" style="margin-top:12px">Oni już <span style="color:var(--lime)">są.</span></h2>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="review-text">"W końcu platforma, która rozumie że jestem z Polski i chcę trenować po polsku. AI coach dosłownie zmienił moje podejście do treningów — w 3 miesiące przysiąd z 80 na 115 kg."</p>
+        <div class="reviewer">
+          <div class="reviewer-avatar" style="background:#2d5a2d">🏋️</div>
+          <div>
+            <div class="reviewer-name">Piotr K.</div>
+            <div class="reviewer-meta">Warszawa · używa 4 miesiące · Plan: Power 5x5</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card reveal" style="transition-delay:0.1s">
+        <div class="stars">★★★★★</div>
+        <p class="review-text">"Jako trener personalny zarobiłem na marketplace 4,200 zł w pierwszym miesiącu od opublikowania planu. Platforma robi robotę, ja skupiam się na tworzeniu contentu."</p>
+        <div class="reviewer">
+          <div class="reviewer-avatar" style="background:#1a3a1a">💪</div>
+          <div>
+            <div class="reviewer-name">Marcin T.</div>
+            <div class="reviewer-meta">Kraków · Trener personalny · 3 plany w marketplace</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card reveal" style="transition-delay:0.2s">
+        <div class="stars">★★★★★</div>
+        <p class="review-text">"Schudłam 9 kg w 10 tygodni i pierwszy raz w życiu nie rzuciłam po miesiącu. Wyzwania i leaderboardy z koleżankami robią robotę. Nie możesz odpuścić gdy widzą Twoją serię."</p>
+        <div class="reviewer">
+          <div class="reviewer-avatar" style="background:#0d1f0d">🏃</div>
+          <div>
+            <div class="reviewer-name">Karolina M.</div>
+            <div class="reviewer-meta">Gdańsk · używa 3 miesiące · Seria: 67 dni</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COACHES -->
+<section class="coaches" id="trenerzy">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="label">Dla trenerów</span>
+      <h2 class="display display-lg" style="margin-top:12px">Zarabiaj na<br><span style="color:var(--lime)">swojej wiedzy</span></h2>
+      <p style="max-width:540px;margin-top:20px;font-size:15px;color:var(--muted);line-height:1.8;font-weight:300">Opublikuj plan raz — zarabiaj miesięcznie. 80% przychodu trafia do Ciebie. Panel trenera daje pełną kontrolę nad klientami i wynikami sprzedaży.</p>
+    </div>
+    <div class="coaches-grid">
+      <div class="coach-card reveal">
+        <div class="coach-avatar-wrap">💪</div>
+        <div class="coach-info">
+          <div class="coach-name">Marcin Kowalski</div>
+          <div class="coach-spec">Siła · Powerlifting</div>
+          <div class="coach-stats">
+            <span class="coach-stat"><strong>8</strong> planów</span>
+            <span class="coach-stat"><strong>4.9★</strong></span>
+            <span class="coach-stat"><strong>2.1k</strong> klientów</span>
+          </div>
+        </div>
+      </div>
+      <div class="coach-card reveal" style="transition-delay:0.1s">
+        <div class="coach-avatar-wrap">🏃</div>
+        <div class="coach-info">
+          <div class="coach-name">Anna Wiśniewska</div>
+          <div class="coach-spec">HIIT · Redukcja · Cardio</div>
+          <div class="coach-stats">
+            <span class="coach-stat"><strong>5</strong> planów</span>
+            <span class="coach-stat"><strong>4.8★</strong></span>
+            <span class="coach-stat"><strong>1.4k</strong> klientów</span>
+          </div>
+        </div>
+      </div>
+      <div class="coach-card reveal" style="transition-delay:0.2s">
+        <div class="coach-avatar-wrap">🧘</div>
+        <div class="coach-info">
+          <div class="coach-name">Tomasz Nowak</div>
+          <div class="coach-spec">Kalistenika · Mobilność</div>
+          <div class="coach-stats">
+            <span class="coach-stat"><strong>6</strong> planów</span>
+            <span class="coach-stat"><strong>5.0★</strong></span>
+            <span class="coach-stat"><strong>3.2k</strong> klientów</span>
+          </div>
+        </div>
+      </div>
+      <div class="coach-card reveal" style="transition-delay:0.3s">
+        <div class="coach-avatar-wrap" style="font-size:40px;letter-spacing:-4px">➕</div>
+        <div class="coach-info">
+          <div class="coach-name" style="color:var(--lime)">Dołącz jako<br>trener</div>
+          <div class="coach-spec">Zarabiaj na marketplace</div>
+          <div class="coach-stats">
+            <span class="coach-stat" style="color:var(--lime)">80% prowizji →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="cennik">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="label">Cennik</span>
+      <h2 class="display display-lg" style="margin-top:12px">Proste ceny.<br><span style="color:var(--lime)">Zero niespodzianek.</span></h2>
+      <p style="max-width:560px;margin-top:16px;font-size:15px;color:var(--muted);line-height:1.8;font-weight:300">Dwie ścieżki — jedna dla osób ćwiczących, druga dla trenerów. Każda z osobną wartością i osobną ceną.</p>
+    </div>
+
+    <!-- TOGGLE -->
+    <div style="display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:56px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:5px;width:fit-content;margin-left:auto;margin-right:auto;" class="reveal">
+      <button id="toggleClient" onclick="switchPricing('client')" style="background:var(--lime);color:var(--black);border:none;border-radius:8px;padding:10px 28px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s;">🏃 Ćwiczę</button>
+      <button id="toggleCoach" onclick="switchPricing('coach')" style="background:transparent;color:var(--muted);border:none;border-radius:8px;padding:10px 28px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s;">🎓 Jestem trenerem</button>
+    </div>
+
+    <!-- CLIENT PRICING -->
+    <div id="pricingClient" class="pricing-grid">
+      <div class="price-card reveal">
+        <div class="price-plan">Free</div>
+        <div class="price-amount"><span class="currency">0</span> <sup style="font-size:16px;color:var(--muted)">zł</sup></div>
+        <div class="price-period">na zawsze za darmo</div>
+        <ul class="price-features">
+          <li>Przeglądanie marketplace planów</li>
+          <li>Zakup 1 planu treningowego</li>
+          <li>Baza ćwiczeń z opisami</li>
+          <li>Podstawowy profil i postępy</li>
+          <li class="off">AI Coach 24/7</li>
+          <li class="off">Kontakt z trenerem planu</li>
+          <li class="off">Społeczność i wyzwania</li>
+          <li class="off">Zaawansowane wykresy</li>
+        </ul>
+        <a href="#zapis" class="btn-plan outline">Zacznij za darmo</a>
+      </div>
+      <div class="price-card featured reveal" style="transition-delay:0.1s">
+        <div class="price-badge">Najpopularniejszy</div>
+        <div class="price-plan">Pro</div>
+        <div class="price-amount"><span class="currency">49</span> <sup>zł</sup></div>
+        <div class="price-period">/ miesiąc · lub 349 zł rocznie <span style="color:var(--lime)">(oszczędzasz 239 zł)</span></div>
+        <ul class="price-features">
+          <li><strong>AI Coach 24/7 — bez limitu</strong></li>
+          <li>Pełny dostęp do marketplace</li>
+          <li>Kontakt z trenerem wybranego planu</li>
+          <li>Społeczność i wszystkie wyzwania</li>
+          <li>Zaawansowane wykresy postępów</li>
+          <li>Zdjęcia przed/po (prywatne)</li>
+          <li>Aplikacja mobile iOS + Android</li>
+          <li>Priorytetowe wsparcie</li>
+        </ul>
+        <a href="#zapis" class="btn-plan primary">Zacznij 14 dni za darmo</a>
+      </div>
+      <div class="price-card reveal" style="transition-delay:0.2s">
+        <div class="price-plan" style="color:var(--muted)">Klient trenera</div>
+        <div class="price-amount"><span class="currency" style="font-size:48px">GRATIS</span></div>
+        <div class="price-period">dostęp przez zaproszenie od trenera</div>
+        <ul class="price-features">
+          <li>Plan treningowy od Twojego trenera</li>
+          <li>Śledzenie postępów i serii</li>
+          <li>Komunikacja z trenerem</li>
+          <li>Dostęp do marketplace (przeglądanie)</li>
+          <li class="off">AI Coach (dostępny w planie Pro)</li>
+          <li class="off">Kupowanie planów z marketplace</li>
+        </ul>
+        <a href="#zapis" class="btn-plan outline">Zapytaj swojego trenera →</a>
+      </div>
+    </div>
+
+    <!-- COACH PRICING -->
+    <div id="pricingCoach" class="pricing-grid" style="display:none">
+      <div class="price-card reveal">
+        <div class="price-plan">Starter</div>
+        <div class="price-amount"><span class="currency">49</span> <sup>zł</sup></div>
+        <div class="price-period">/ miesiąc · do 5 klientów</div>
+        <ul class="price-features">
+          <li>Do <strong>5 aktywnych klientów</strong></li>
+          <li>Kreator planów treningowych</li>
+          <li>Panel postępów klientów</li>
+          <li>Chat z podopiecznymi</li>
+          <li>Weryfikacja trenera ✓</li>
+          <li class="off">Marketplace (sprzedaż planów)</li>
+          <li class="off">Analityki biznesowe</li>
+          <li class="off">Nieograniczona liczba klientów</li>
+        </ul>
+        <a href="#zapis" class="btn-plan outline">Zacznij jako trener</a>
+      </div>
+      <div class="price-card featured reveal" style="transition-delay:0.1s">
+        <div class="price-badge">Dla aktywnych trenerów</div>
+        <div class="price-plan">Pro</div>
+        <div class="price-amount"><span class="currency">149</span> <sup>zł</sup></div>
+        <div class="price-period">/ miesiąc · do 20 klientów · lub 999 zł rocznie</div>
+        <ul class="price-features">
+          <li>Do <strong>20 aktywnych klientów</strong></li>
+          <li>Kreator planów treningowych</li>
+          <li>Panel postępów klientów</li>
+          <li>Chat z podopiecznymi</li>
+          <li><strong>Marketplace — sprzedaż planów (80% prowizji)</strong></li>
+          <li>Profil trenera publiczny w marketplace</li>
+          <li>Analityki sprzedaży i klientów</li>
+          <li>Weryfikacja trenera ✓</li>
+        </ul>
+        <a href="#zapis" class="btn-plan primary">Zacznij 14 dni za darmo</a>
+      </div>
+      <div class="price-card reveal" style="transition-delay:0.2s">
+        <div class="price-plan">Business</div>
+        <div class="price-amount"><span class="currency">299</span> <sup>zł</sup></div>
+        <div class="price-period">/ miesiąc · nielimitowani klienci · lub 1 999 zł rocznie</div>
+        <ul class="price-features">
+          <li><strong>Nielimitowana liczba klientów</strong></li>
+          <li>Wszystko z planu Pro</li>
+          <li>Zaawansowane analityki biznesowe</li>
+          <li>Priorytetowe wsparcie techniczne</li>
+          <li>Dedykowany opiekun konta</li>
+          <li>White-label profil trenera</li>
+          <li>API do integracji zewnętrznych</li>
+          <li>Dla studiów i siłowni</li>
+        </ul>
+        <a href="#zapis" class="btn-plan outline">Skontaktuj się z nami →</a>
+      </div>
+    </div>
+
+    <!-- COMPARISON NOTE -->
+    <div class="reveal" style="margin-top:40px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px 32px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+      <div style="font-size:28px">💡</div>
+      <div style="flex:1;min-width:260px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Klient trenera chce AI?</div>
+        <div style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7">Klienci zaproszeni przez trenera mogą samodzielnie wykupić plan Pro (49 zł/mies) i dostać pełny AI Coach — niezależnie od subskrypcji trenera. Każdy płaci za swoją wartość.</div>
+      </div>
+      <a href="#zapis" class="btn-plan primary" style="padding:12px 24px;font-size:15px;white-space:nowrap">Dowiedz się więcej →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="container">
+    <div class="section-header reveal" style="text-align:center">
+      <span class="label">FAQ</span>
+      <h2 class="display display-lg" style="margin-top:12px">Pytania i<br><span style="color:var(--lime)">odpowiedzi</span></h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Jestem trenerem — ile płacą moi klienci?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">
+          <p>Twoi klienci nie płacą nic — dostają dostęp przez Twoje zaproszenie w ramach Twojej subskrypcji. Jeśli któryś z nich zechce mieć AI Coacha, może samodzielnie wykupić plan Pro (39 zł/mies) — to jego decyzja, nie Twój koszt.</p>
+        </div>
+      </div>
+      <div class="faq-item reveal" style="transition-delay:0.05s">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Co daje mi AI Coach w planie Pro?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">
+          <p>AI Coach zna Twój cel, historię treningów, poziom i ograniczenia. Adaptuje plan co tydzień, odpowiada na pytania o technikę 24/7, komentuje Twoje wyniki i daje wskazówki żywieniowe. To jak trener personalny w kieszeni — dostępny zawsze, bez dodatkowych opłat.</p>
+        </div>
+      </div>
+      <div class="faq-item reveal" style="transition-delay:0.1s">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Ile mogę zarobić jako trener na marketplace?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">
+          <p>Tworzysz plan raz — platforma sprzedaje go 24/7. Dostajesz 80% każdej sprzedaży. Nasi najlepsi trenerzy zarabiają 3 000–8 000 zł miesięcznie pasywnie. Marketplace dostępny jest od planu Pro Trenera (149 zł/mies).</p>
+        </div>
+      </div>
+      <div class="faq-item reveal" style="transition-delay:0.15s">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Czy mogę napisać do trenera którego plan kupiłem?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">
+          <p>Tak — w planie Pro możesz napisać do trenera bezpośrednio przez platformę. Wielu klientów zaczyna od zakupu planu w marketplace, a po kilku tygodniach przechodzi na indywidualny trening z tym samym trenerem.</p>
+        </div>
+      </div>
+      <div class="faq-item reveal" style="transition-delay:0.2s">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Czy AI Coach działa po polsku?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">
+          <p>Tak — w 100%. AI Coach mówi po polsku, rozumie polskie realia siłowniowe i odpowiada naturalnie. Zaprojektowaliśmy go od zera z myślą o polskich użytkownikach — nie jest to tłumaczony chatbot.</p>
+        </div>
+      </div>
+      <div class="faq-item reveal" style="transition-delay:0.25s">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Czy trial wymaga karty kredytowej?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">
+          <p>Nie. 14-dniowy trial jest całkowicie bezpłatny i nie wymaga podawania danych karty. Dane płatnicze podajesz dopiero gdy zdecydujesz się zostać po trialu. Zero ryzyka.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EMAIL CAPTURE -->
+<section class="email-section" id="zapis">
+  <div class="email-bg"></div>
+  <div class="email-content">
+    <div class="reveal">
+      <span class="label">Zacznij teraz</span>
+      <h2 class="display display-lg" style="margin-top:16px;margin-bottom:16px">Zostań pierwszym.<br><span style="color:var(--lime)">Lista early access.</span></h2>
+      <p style="font-size:15px;color:var(--muted);line-height:1.8;font-weight:300">Platforma jest w fazie beta. Zapisz się teraz i otrzymaj <strong style="color:var(--white)">3 miesiące Pro w cenie miesiąca</strong> jako early adopter.</p>
+      <div class="email-form">
+        <input class="email-input" type="email" placeholder="twoj@email.pl">
+        <button class="btn-primary" style="white-space:nowrap">Zapisuję się →</button>
+      </div>
+      <p class="email-note">Już <strong style="color:var(--white)">1,847 osób</strong> czeka. Bez spamu. <a href="#">Polityka prywatności</a>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="nav-logo">chceByc<span style="color:var(--lime)">.fit</span></div>
+      <p>Pierwsza polska platforma fitness łącząca AI coach, marketplace planów i społeczność w jednym miejscu.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Platforma</h4>
+      <a href="#">AI Coach</a>
+      <a href="#">Marketplace planów</a>
+      <a href="#">Społeczność</a>
+      <a href="#">Aplikacja mobile</a>
+    </div>
+    <div class="footer-col">
+      <h4>Dla trenerów</h4>
+      <a href="#">Jak zarabiać</a>
+      <a href="#">Panel trenera</a>
+      <a href="#">Zostań partnerem</a>
+      <a href="#">Warunki współpracy</a>
+    </div>
+    <div class="footer-col">
+      <h4>Firma</h4>
+      <a href="#">O nas</a>
+      <a href="#">Blog</a>
+      <a href="#">Kariera</a>
+      <a href="#">Kontakt</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 chceByc.fit · Wszelkie prawa zastrzeżone</p>
+    <div style="display:flex;gap:20px;align-items:center">
+      <a href="#" style="font-size:12px;color:var(--muted);text-decoration:none">Polityka prywatności</a>
+      <a href="#" style="font-size:12px;color:var(--muted);text-decoration:none">Regulamin</a>
+      <div class="footer-socials">
+        <a href="#" class="social-btn">📸</a>
+        <a href="#" class="social-btn">🎵</a>
+        <a href="#" class="social-btn">💼</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// CUSTOM CURSOR
+const cursor = document.getElementById('cursor');
+const trail = document.getElementById('cursorTrail');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+  setTimeout(() => {
+    trail.style.left = e.clientX + 'px';
+    trail.style.top = e.clientY + 'px';
+  }, 80);
+});
+document.querySelectorAll('a, button, .faq-q').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.style.width = '20px'; cursor.style.height = '20px'; });
+  el.addEventListener('mouseleave', () => { cursor.style.width = '12px'; cursor.style.height = '12px'; });
+});
+
+// STICKY NAV
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// SCROLL REVEAL
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => observer.observe(el));
+
+// PRICING TOGGLE
+function switchPricing(type) {
+  const clientGrid = document.getElementById('pricingClient');
+  const coachGrid = document.getElementById('pricingCoach');
+  const btnClient = document.getElementById('toggleClient');
+  const btnCoach = document.getElementById('toggleCoach');
+  if (type === 'client') {
+    clientGrid.style.display = 'grid';
+    coachGrid.style.display = 'none';
+    btnClient.style.background = 'var(--lime)';
+    btnClient.style.color = 'var(--black)';
+    btnCoach.style.background = 'transparent';
+    btnCoach.style.color = 'var(--muted)';
+  } else {
+    clientGrid.style.display = 'none';
+    coachGrid.style.display = 'grid';
+    btnCoach.style.background = 'var(--lime)';
+    btnCoach.style.color = 'var(--black)';
+    btnClient.style.background = 'transparent';
+    btnClient.style.color = 'var(--muted)';
+  }
+}
+
+// FAQ
+function toggleFaq(el) {
+  const answer = el.nextElementSibling;
+  const icon = el.querySelector('.faq-icon');
+  const isOpen = answer.classList.contains('open');
+  document.querySelectorAll('.faq-a.open').forEach(a => { a.classList.remove('open'); a.previousElementSibling.querySelector('.faq-icon').textContent = '+'; });
+  if (!isOpen) { answer.classList.add('open'); icon.textContent = '×'; }
+}
+
+// EMAIL FORM
+document.querySelector('.email-form button').addEventListener('click', function() {
+  const input = document.querySelector('.email-form input');
+  if (input.value.includes('@')) {
+    this.textContent = '✓ Zapisano!';
+    this.style.background = 'var(--green-mid)';
+    this.style.color = 'var(--lime)';
+    input.value = '';
+  } else {
+    input.style.borderColor = 'var(--red)';
+    setTimeout(() => { input.style.borderColor = 'var(--border-bright)'; }, 1500);
+  }
+});
+
+// HERO PARALLAX subtle
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  document.querySelector('.hero-bg').style.transform = `translateY(${y * 0.3}px)`;
+  document.querySelector('.hero-grid').style.transform = `translateY(${y * 0.15}px)`;
+});
+</script>
+</body>
+</html>
