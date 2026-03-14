@@ -3714,115 +3714,199 @@
     });
 
     // ── BAZA CWICZEN ──────────────────────────────────────────────
+    // Globalna baza cwiczen (synchronizowana z panelem admina — filmy dodane przez admina widoczne dla trenera)
     const GLOBAL_EX = [
     {
-        name: 'Wyciskanie sztangi leżąc',
-        cat: 'Klatka'
-    }, {
+        name: 'Wyciskanie sztangi lezac',
+        cat: 'Klatka',
+        video: 'https://www.youtube.com/watch?v=rT7DgCr-3pg',
+        desc: 'Poloz sie na lawce, chwyc sztange na szerokosc ramion. Opusc do klatki, wycisnij do gory.'
+    },
+    {
         name: 'Wyciskanie hantelkami',
-        cat: 'Klatka'
+        cat: 'Klatka',
+        video: '',
+        desc: ''
     },
     {
         name: 'Wyciskanie na skosie',
-        cat: 'Klatka'
-    }, {
-        name: 'Rozpiętki',
-        cat: 'Klatka'
-    }, {
+        cat: 'Klatka',
+        video: '',
+        desc: ''
+    },
+    {
+        name: 'Rozpietki',
+        cat: 'Klatka',
+        video: '',
+        desc: ''
+    },
+    {
         name: 'Pompki',
-        cat: 'Klatka'
+        cat: 'Klatka',
+        video: 'https://www.youtube.com/watch?v=IODxDxX7oi4',
+        desc: 'Dlonie na szerokosci ramion, ciao proste.'
     },
     {
         name: 'Overhead Press',
-        cat: 'Barki'
-    }, {
+        cat: 'Barki',
+        video: 'https://www.youtube.com/watch?v=2yjwXTZQDDI',
+        desc: 'Stoj prosto, sztanga na obojczykach. Wycisnij prosto w gore.'
+    },
+    {
         name: 'Unoszenie boczne',
-        cat: 'Barki'
-    }, {
+        cat: 'Barki',
+        video: '',
+        desc: ''
+    },
+    {
         name: 'Unoszenie przodem',
-        cat: 'Barki'
+        cat: 'Barki',
+        video: '',
+        desc: ''
     },
     {
-        name: 'Martwy ciąg',
-        cat: 'Plecy'
-    }, {
-        name: 'Wiosłowanie sztangą',
-        cat: 'Plecy'
-    }, {
-        name: 'Wiosłowanie hantelkiem',
-        cat: 'Plecy'
+        name: 'Martwy ciag',
+        cat: 'Plecy',
+        video: 'https://www.youtube.com/watch?v=op9kVnSso6Q',
+        desc: 'Stopy na szerokosci bioder, sztanga nad stopami. Chwyc i ciagnij do bioder.'
     },
     {
-        name: 'Podciąganie na drążku',
-        cat: 'Plecy'
-    }, {
-        name: 'Ściąganie linki',
-        cat: 'Plecy'
+        name: 'Wioslowanie sztanga',
+        cat: 'Plecy',
+        video: '',
+        desc: ''
     },
     {
-        name: 'Przysiad ze sztangą',
-        cat: 'Nogi'
-    }, {
+        name: 'Wioslowanie hantelkiem',
+        cat: 'Plecy',
+        video: '',
+        desc: ''
+    },
+    {
+        name: 'Podciaganie na drazku',
+        cat: 'Plecy',
+        video: 'https://www.youtube.com/watch?v=eGo4IYlbE5g',
+        desc: 'Chwyc drazek, podciagnij brade ponad drazek, kontroluj opuszczanie.'
+    },
+    {
+        name: 'Sciaganie linki',
+        cat: 'Plecy',
+        video: '',
+        desc: ''
+    },
+    {
+        name: 'Przysiad ze sztanga',
+        cat: 'Nogi',
+        video: 'https://www.youtube.com/watch?v=ultWZbUMPL8',
+        desc: 'Sztanga na barku. Usiaz do rownoleglego lub nizej, wroc do pionu.'
+    },
+    {
         name: 'Leg Press',
-        cat: 'Nogi'
-    }, {
-        name: 'Wykroki',
-        cat: 'Nogi'
+        cat: 'Nogi',
+        video: '',
+        desc: ''
     },
     {
-        name: 'Rumuński martwy ciąg',
-        cat: 'Nogi'
-    }, {
+        name: 'Wykroki',
+        cat: 'Nogi',
+        video: '',
+        desc: ''
+    },
+    {
+        name: 'Rumunski martwy ciag',
+        cat: 'Nogi',
+        video: 'https://www.youtube.com/watch?v=JCXUYuzwNrM',
+        desc: 'Lekko ugniete kolana, opusc sztange wzzdluz nog.'
+    },
+    {
         name: 'Leg Curl',
-        cat: 'Nogi'
-    }, {
+        cat: 'Nogi',
+        video: '',
+        desc: ''
+    },
+    {
         name: 'Leg Extension',
-        cat: 'Nogi'
+        cat: 'Nogi',
+        video: '',
+        desc: ''
     },
     {
         name: 'Wspinanie na palce',
-        cat: 'Nogi'
-    }, {
+        cat: 'Nogi',
+        video: '',
+        desc: ''
+    },
+    {
         name: 'Biceps curl sztanga',
-        cat: 'Rece'
+        cat: 'Rece',
+        video: '',
+        desc: ''
     },
     {
         name: 'Biceps curl hantelki',
-        cat: 'Rece'
-    }, {
-        name: 'Triceps pushdown',
-        cat: 'Rece'
+        cat: 'Rece',
+        video: '',
+        desc: ''
     },
     {
-        name: 'Pompki na poręczach',
-        cat: 'Rece'
-    }, {
+        name: 'Triceps pushdown',
+        cat: 'Rece',
+        video: '',
+        desc: ''
+    },
+    {
+        name: 'Pompki na poreczach',
+        cat: 'Rece',
+        video: '',
+        desc: ''
+    },
+    {
         name: 'Deska',
-        cat: 'Core'
-    }, {
+        cat: 'Core',
+        video: '',
+        desc: 'Oprzyj sie na przedramionach, utrzymaj proste ciao.'
+    },
+    {
         name: 'Brzuszki',
-        cat: 'Core'
+        cat: 'Core',
+        video: '',
+        desc: ''
     },
     {
         name: 'Russian twist',
-        cat: 'Core'
-    }, {
-        name: 'Wheel rollout',
-        cat: 'Core'
+        cat: 'Core',
+        video: '',
+        desc: ''
     },
     {
-        name: 'Bieg na bieżni',
-        cat: 'Cardio'
-    }, {
+        name: 'Wheel rollout',
+        cat: 'Core',
+        video: '',
+        desc: ''
+    },
+    {
+        name: 'Bieg na biezni',
+        cat: 'Cardio',
+        video: '',
+        desc: ''
+    },
+    {
         name: 'Rower stacjonarny',
-        cat: 'Cardio'
+        cat: 'Cardio',
+        video: '',
+        desc: ''
     },
     {
         name: 'Skakanka',
-        cat: 'Cardio'
-    }, {
+        cat: 'Cardio',
+        video: '',
+        desc: ''
+    },
+    {
         name: 'Burpees',
-        cat: 'Cardio'
+        cat: 'Cardio',
+        video: 'https://www.youtube.com/watch?v=TU8QYVW0gDU',
+        desc: 'Stoj, usiaz, wyrzuc nogi, pompka, wroc, skocz z klasnieciem.'
     },
     ];
 
@@ -3919,11 +4003,38 @@
             return matchCat && matchQ;
         });
 
-        document.getElementById('globalExList').innerHTML = list.map(e => `
-    <div class="ex-row">
-      <span class="ex-row-name">${
+        document.getElementById('globalExList').innerHTML = list.map((e, i) => `
+    <div style="display:flex;flex-direction:column;">
+      <div class="ex-row" style="align-items:center;">
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:7px;">
+            <span class="ex-row-name">${
+
+
+
         e.name}</span>
-      <span class="ex-row-cat ex-row-global">${e.cat}</span>
+            <span class="ex-row-cat ex-row-global">${e.cat}</span>
+            ${e.video ? '<span style="font-size:9px;background:rgba(255,85,85,.1);border:1px solid rgba(255,85,85,.2);color:#ff5555;padding:2px 6px;border-radius:4px;font-weight:700;">▶</span>' : ''}
+          </div>
+          ${
+        e.desc ? `<div style="font-size:10px;color:var(--muted);margin-top:2px;font-weight:300;">${e.desc.slice(0, 70)}${e.desc.length > 70 ? '...' : ''}</div>` : ''}
+        </div>
+        ${
+        e.video ? `<button onclick="toggleGlobalVideo('gv-${i}')" style="background:rgba(255,85,85,.08);border:1px solid rgba(255,85,85,.2);border-radius:6px;padding:3px 9px;color:#ff5555;font-size:9px;font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0;">▶ Film</button>` : ''}
+      </div>
+      ${
+        e.video ? `
+      <div id="gv-${i}" style="display:none;padding:8px 10px 10px;background:var(--card2);border:1px solid var(--border);border-top:none;border-radius:0 0 9px 9px;">
+        <div style="border-radius:8px;overflow:hidden;background:#000;">
+          <div style="position:relative;padding-bottom:56.25%;height:0;">
+            <iframe src="${
+
+        getYoutubeEmbed(e.video)}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allowfullscreen loading="lazy"></iframe>
+          </div>
+        </div>
+      </div>`
+
+        : ''}
     </div>`
         ).join('');
     }
@@ -3944,6 +4055,13 @@
         document.querySelectorAll('#globalCatFilters .ex-filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         renderGlobalEx(document.querySelector('#page-exercisedb input[type="text"]')?.value || '', cat);
+    }
+
+    function toggleGlobalVideo(id) {
+        const el = document.getElementById(id);
+        if (!el)
+            return;
+        el.style.display = el.style.display === 'none' ? 'block' : 'none';
     }
 
     function getYoutubeEmbed(url) {
