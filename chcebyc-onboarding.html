@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>chceByc.fit — Twój plan treningowy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #070b07;
+  --forest: #0c1c0c;
+  --card: #101810;
+  --card2: #141f14;
+  --border: #1c2e1c;
+  --border2: #243824;
+  --lime: #b4f03a;
+  --lime-soft: #ceff6a;
+  --lime-dim: #7aaa22;
+  --lime-ghost: rgba(180,240,58,0.07);
+  --white: #eef8e8;
+  --off: #c8ddb8;
+  --muted: #5a7850;
+  --muted2: #3a5230;
+  --red: #ff5555;
+  --gold: #f0c840;
+  --blue: #4ab0ff;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  background:var(--black);
+  color:var(--white);
+  display:flex;
+  flex-direction:column;
+}
+
+/* PROGRESS BAR TOP */
+.progress-bar-wrap{
+  position:fixed;top:0;left:0;right:0;height:3px;z-index:1000;
+  background:var(--border);
+}
+.progress-bar-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--lime-dim),var(--lime));
+  transition:width 0.5s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 0 12px var(--lime);
+}
+
+/* HEADER */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:900;
+  padding:16px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(7,11,7,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.logo{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:900;font-size:22px;letter-spacing:1px;
+  color:var(--white);
+  text-decoration:none;
+}
+.logo span{color:var(--lime);}
+.step-indicator{
+  display:flex;align-items:center;gap:6px;
+}
+.step-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--border2);
+  transition:all 0.3s;
+}
+.step-dot.active{background:var(--lime);box-shadow:0 0 8px var(--lime);}
+.step-dot.done{background:var(--lime-dim);}
+.skip-btn{
+  background:none;border:1px solid var(--border2);
+  color:var(--muted);border-radius:8px;
+  padding:7px 16px;font-size:12px;font-family:inherit;
+  cursor:pointer;transition:all 0.2s;letter-spacing:0.5px;
+}
+.skip-btn:hover{border-color:var(--muted);color:var(--off);}
+
+/* MAIN CONTAINER */
+.onboarding{
+  flex:1;display:flex;
+  align-items:center;justify-content:center;
+  padding:80px 20px 20px;
+  overflow:hidden;
+  position:relative;
+}
+
+/* BG EFFECTS */
+.bg-glow{
+  position:fixed;
+  border-radius:50%;
+  filter:blur(120px);
+  pointer-events:none;
+  transition:all 1s ease;
+}
+.bg-glow-1{
+  width:600px;height:600px;
+  background:rgba(180,240,58,0.04);
+  top:-200px;right:-100px;
+}
+.bg-glow-2{
+  width:400px;height:400px;
+  background:rgba(180,240,58,0.03);
+  bottom:-100px;left:-100px;
+}
+
+/* SCREEN (each step) */
+.screen{
+  width:100%;max-width:680px;
+  position:absolute;
+  transition:all 0.45s cubic-bezier(.4,0,.2,1);
+  opacity:0;
+  transform:translateX(60px) scale(0.97);
+  pointer-events:none;
+}
+.screen.active{
+  opacity:1;transform:translateX(0) scale(1);
+  pointer-events:all;position:relative;
+}
+.screen.exit{
+  opacity:0;transform:translateX(-60px) scale(0.97);
+  position:absolute;
+}
+
+/* STEP LABEL */
+.step-label{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--lime);font-weight:600;margin-bottom:16px;
+}
+.step-label-line{width:24px;height:1px;background:var(--lime);}
+
+/* QUESTION */
+.question{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(34px,6vw,56px);
+  font-weight:800;text-transform:uppercase;
+  line-height:0.95;letter-spacing:-0.5px;
+  margin-bottom:10px;
+}
+.question-sub{
+  font-size:15px;color:var(--muted);
+  font-weight:300;line-height:1.6;
+  margin-bottom:36px;
+}
+
+/* OPTIONS GRID */
+.options{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:36px;}
+.option{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:16px 22px;
+  cursor:pointer;
+  transition:all 0.2s;
+  display:flex;align-items:center;gap:12px;
+  font-size:14px;font-weight:500;
+  user-select:none;
+  flex:1;min-width:180px;
+}
+.option:hover{border-color:var(--border2);background:var(--card2);}
+.option.selected{
+  border-color:var(--lime);
+  background:var(--lime-ghost);
+  color:var(--lime);
+  box-shadow:0 0 20px rgba(180,240,58,0.1);
+}
+.option-icon{font-size:22px;flex-shrink:0;}
+.option-text{display:flex;flex-direction:column;gap:2px;}
+.option-text span{font-size:11px;color:var(--muted);font-weight:300;}
+.option.selected .option-text span{color:var(--lime-dim);}
+
+/* SLIDER QUESTION */
+.slider-wrap{margin-bottom:36px;}
+.slider-labels{display:flex;justify-content:space-between;margin-bottom:10px;font-size:12px;color:var(--muted);}
+.slider{
+  -webkit-appearance:none;appearance:none;
+  width:100%;height:4px;
+  background:linear-gradient(90deg,var(--lime) var(--val,50%),var(--border2) var(--val,50%));
+  border-radius:2px;outline:none;cursor:pointer;
+}
+.slider::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:22px;height:22px;
+  background:var(--lime);border-radius:50%;
+  box-shadow:0 0 12px rgba(180,240,58,0.5);
+  cursor:pointer;transition:transform 0.15s;
+}
+.slider::-webkit-slider-thumb:hover{transform:scale(1.2);}
+.slider-value{
+  text-align:center;margin-top:14px;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:48px;font-weight:900;color:var(--lime);
+  line-height:1;
+}
+.slider-value span{font-size:20px;color:var(--muted);}
+
+/* INPUT */
+.text-input{
+  width:100%;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:18px 22px;
+  color:var(--white);font-size:16px;font-family:inherit;
+  outline:none;transition:border-color 0.2s;margin-bottom:36px;
+}
+.text-input:focus{border-color:var(--lime);}
+.text-input::placeholder{color:var(--muted);}
+
+/* NAV BUTTONS */
+.nav-row{display:flex;gap:12px;align-items:center;}
+.btn-next{
+  background:var(--lime);color:var(--black);
+  border:none;border-radius:12px;
+  padding:14px 36px;
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;font-size:17px;letter-spacing:1.5px;
+  text-transform:uppercase;cursor:pointer;
+  transition:all 0.2s;
+  box-shadow:0 0 30px rgba(180,240,58,0.2);
+}
+.btn-next:hover{background:var(--lime-soft);transform:translateY(-1px);box-shadow:0 0 50px rgba(180,240,58,0.35);}
+.btn-next:disabled{opacity:0.35;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-back{
+  background:none;border:1px solid var(--border2);
+  color:var(--muted);border-radius:12px;
+  padding:14px 22px;font-family:inherit;
+  font-size:14px;cursor:pointer;transition:all 0.2s;
+}
+.btn-back:hover{border-color:var(--muted);color:var(--off);}
+
+/* ROLE CARDS */
+.role-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:36px;}
+.role-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;padding:32px 28px;
+  cursor:pointer;transition:all 0.25s;
+  text-align:center;
+}
+.role-card:hover{border-color:var(--border2);transform:translateY(-2px);}
+.role-card.selected{
+  border-color:var(--lime);
+  background:var(--lime-ghost);
+  box-shadow:0 0 30px rgba(180,240,58,0.12);
+  transform:translateY(-2px);
+}
+.role-emoji{font-size:52px;margin-bottom:16px;display:block;}
+.role-name{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:24px;font-weight:700;text-transform:uppercase;
+  letter-spacing:1px;margin-bottom:8px;
+  transition:color 0.2s;
+}
+.role-card.selected .role-name{color:var(--lime);}
+.role-desc{font-size:12px;color:var(--muted);line-height:1.6;font-weight:300;}
+
+/* TAGS (multiselect) */
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:36px;}
+.tag{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:30px;padding:10px 18px;
+  font-size:13px;font-weight:500;
+  cursor:pointer;transition:all 0.2s;
+  user-select:none;
+}
+.tag:hover{border-color:var(--border2);}
+.tag.selected{
+  background:var(--lime-ghost);
+  border-color:var(--lime);color:var(--lime);
+}
+
+/* GENERATING SCREEN */
+.generating{
+  width:100%;max-width:680px;
+  text-align:center;
+  display:flex;flex-direction:column;align-items:center;
+  gap:0;
+}
+.gen-orb{
+  width:120px;height:120px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(180,240,58,0.3),rgba(180,240,58,0.05));
+  border:1px solid rgba(180,240,58,0.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:50px;
+  margin:0 auto 32px;
+  animation:orbPulse 2s ease infinite;
+  box-shadow:0 0 60px rgba(180,240,58,0.15);
+}
+@keyframes orbPulse{
+  0%,100%{transform:scale(1);box-shadow:0 0 60px rgba(180,240,58,0.15);}
+  50%{transform:scale(1.06);box-shadow:0 0 100px rgba(180,240,58,0.3);}
+}
+.gen-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:42px;font-weight:900;text-transform:uppercase;
+  letter-spacing:1px;margin-bottom:12px;
+}
+.gen-sub{font-size:15px;color:var(--muted);font-weight:300;margin-bottom:36px;}
+.gen-steps{
+  width:100%;display:flex;flex-direction:column;gap:10px;
+  margin-bottom:36px;
+  text-align:left;
+}
+.gen-step{
+  display:flex;align-items:center;gap:14px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:14px 18px;
+  font-size:13px;font-weight:500;
+  opacity:0.35;
+  transition:all 0.5s;
+}
+.gen-step.active{opacity:1;border-color:var(--border2);}
+.gen-step.done{opacity:1;border-color:rgba(180,240,58,0.3);color:var(--lime);}
+.gen-step-icon{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;flex-shrink:0;
+  transition:all 0.4s;
+}
+.gen-step.active .gen-step-icon{background:var(--border2);animation:spin 1s linear infinite;}
+.gen-step.done .gen-step-icon{background:rgba(180,240,58,0.15);color:var(--lime);}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+/* RESULT SCREEN */
+.result-screen{
+  width:100%;max-width:760px;
+}
+.result-header{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:20px;margin-bottom:28px;
+}
+.result-badge{
+  background:rgba(180,240,58,0.1);
+  border:1px solid rgba(180,240,58,0.25);
+  border-radius:12px;padding:6px 14px;
+  font-size:11px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--lime);
+  white-space:nowrap;margin-top:8px;
+}
+.plan-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(36px,6vw,64px);font-weight:900;
+  text-transform:uppercase;line-height:0.95;
+  letter-spacing:-0.5px;
+}
+.plan-title span{color:var(--lime);}
+.plan-summary{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:10px;margin-bottom:24px;
+}
+.plan-stat{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:16px;text-align:center;
+}
+.plan-stat-val{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:28px;font-weight:900;color:var(--lime);
+  line-height:1;margin-bottom:4px;
+}
+.plan-stat-label{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
+.plan-desc{
+  font-size:14px;line-height:1.8;color:var(--off);
+  font-weight:300;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:20px 22px;
+  margin-bottom:20px;
+  min-height:80px;
+}
+.plan-weeks{display:flex;flex-direction:column;gap:8px;margin-bottom:24px;}
+.week-row{
+  display:flex;align-items:center;gap:12px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:12px 16px;
+  font-size:13px;
+}
+.week-num{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:15px;font-weight:700;color:var(--muted);
+  width:56px;flex-shrink:0;
+  text-transform:uppercase;letter-spacing:1px;
+}
+.week-bar-wrap{flex:1;height:6px;background:var(--border);border-radius:3px;}
+.week-bar{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--lime-dim),var(--lime));transition:width 1s ease;}
+.week-label{font-size:11px;color:var(--muted);width:80px;text-align:right;flex-shrink:0;}
+.result-actions{display:flex;gap:12px;}
+.btn-start{
+  flex:1;background:var(--lime);color:var(--black);
+  border:none;border-radius:12px;padding:16px;
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;font-size:19px;letter-spacing:2px;
+  text-transform:uppercase;cursor:pointer;
+  transition:all 0.2s;
+  box-shadow:0 0 40px rgba(180,240,58,0.25);
+}
+.btn-start:hover{background:var(--lime-soft);transform:translateY(-1px);}
+.btn-regen{
+  background:none;border:1px solid var(--border2);
+  color:var(--muted);border-radius:12px;
+  padding:16px 20px;font-size:20px;
+  cursor:pointer;transition:all 0.2s;
+}
+.btn-regen:hover{border-color:var(--muted);}
+
+/* LOADING DOTS */
+.dots span{
+  display:inline-block;width:6px;height:6px;
+  background:var(--lime);border-radius:50%;
+  margin:0 2px;
+  animation:dotBounce 1.2s ease infinite;
+}
+.dots span:nth-child(2){animation-delay:0.2s;}
+.dots span:nth-child(3){animation-delay:0.4s;}
+@keyframes dotBounce{0%,100%{transform:translateY(0);opacity:0.4}50%{transform:translateY(-6px);opacity:1}}
+
+/* SCROLLABLE RESULT */
+.result-scroll{
+  max-height:calc(100vh - 130px);
+  overflow-y:auto;
+  padding-right:4px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--border2) transparent;
+}
+
+@media(max-width:600px){
+  header{padding:12px 16px;}
+  .onboarding{padding:70px 16px 16px;}
+  .role-cards{grid-template-columns:1fr;}
+  .plan-summary{grid-template-columns:1fr 1fr;}
+  .result-actions{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-glow bg-glow-1" id="bgGlow1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-wrap">
+  <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <a href="#" class="logo">chceByc<span>.fit</span></a>
+  <div class="step-indicator" id="stepIndicator"></div>
+  <button class="skip-btn" id="skipBtn" onclick="skipOnboarding()">Pomiń →</button>
+</header>
+
+<!-- ONBOARDING SCREENS -->
+<div class="onboarding" id="onboarding">
+
+  <!-- SCREEN 0: ROLE -->
+  <div class="screen active" id="screen-0">
+    <div class="step-label"><div class="step-label-line"></div>Krok 1 z 8</div>
+    <h1 class="question">Kim<br><span style="color:var(--lime)">jesteś?</span></h1>
+    <p class="question-sub">Dostosujemy całą platformę do Twojej roli.</p>
+    <div class="role-cards">
+      <div class="role-card" onclick="selectRole('athlete', this)">
+        <span class="role-emoji">🏃</span>
+        <div class="role-name">Ćwiczę sam</div>
+        <div class="role-desc">Szukam planów treningowych, AI coachA i społeczności która mnie zmotywuje</div>
+      </div>
+      <div class="role-card" onclick="selectRole('coach', this)">
+        <span class="role-emoji">🎓</span>
+        <div class="role-name">Jestem trenerem</div>
+        <div class="role-desc">Chcę sprzedawać plany na marketplace i zarządzać klientami w jednym miejscu</div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-next" id="next-0" disabled onclick="nextStep()">Dalej →</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 1: GOAL -->
+  <div class="screen" id="screen-1">
+    <div class="step-label"><div class="step-label-line"></div>Krok 2 z 8</div>
+    <h1 class="question">Jaki masz<br><span style="color:var(--lime)">cel?</span></h1>
+    <p class="question-sub">Wybierz główny priorytet. Możesz go zmienić w każdej chwili.</p>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'goal','muscle')">
+        <span class="option-icon">💪</span>
+        <div class="option-text">Masa mięśniowa<span>Budowanie sylwetki</span></div>
+      </div>
+      <div class="option" onclick="selectOption(this,'goal','strength')">
+        <span class="option-icon">🏋️</span>
+        <div class="option-text">Siła<span>Wyniki na siłowni</span></div>
+      </div>
+      <div class="option" onclick="selectOption(this,'goal','fat')">
+        <span class="option-icon">🔥</span>
+        <div class="option-text">Redukcja tłuszczu<span>Spalanie i rzeźba</span></div>
+      </div>
+      <div class="option" onclick="selectOption(this,'goal','fitness')">
+        <span class="option-icon">⚡</span>
+        <div class="option-text">Ogólna sprawność<span>Kondycja i zdrowie</span></div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="prevStep()">← Wróć</button>
+      <button class="btn-next" id="next-1" disabled onclick="nextStep()">Dalej →</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: LEVEL -->
+  <div class="screen" id="screen-2">
+    <div class="step-label"><div class="step-label-line"></div>Krok 3 z 8</div>
+    <h1 class="question">Twój<br><span style="color:var(--lime)">poziom?</span></h1>
+    <p class="question-sub">Bądź szczery — plan dopasowany do poziomu daje 2x lepsze wyniki.</p>
+    <div class="options" style="flex-direction:column">
+      <div class="option" style="min-width:100%" onclick="selectOption(this,'level','beginner')">
+        <span class="option-icon">🌱</span>
+        <div class="option-text">Początkujący<span>Ćwiczę mniej niż rok lub wracam po przerwie</span></div>
+      </div>
+      <div class="option" style="min-width:100%" onclick="selectOption(this,'level','intermediate')">
+        <span class="option-icon">🔥</span>
+        <div class="option-text">Średniozaawansowany<span>Ćwiczę regularnie od 1–3 lat, znam podstawy techniki</span></div>
+      </div>
+      <div class="option" style="min-width:100%" onclick="selectOption(this,'level','advanced')">
+        <span class="option-icon">⚡</span>
+        <div class="option-text">Zaawansowany<span>Trenuję 3+ lata, śledzę periodyzację i wyniki</span></div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="prevStep()">← Wróć</button>
+      <button class="btn-next" id="next-2" disabled onclick="nextStep()">Dalej →</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: DAYS -->
+  <div class="screen" id="screen-3">
+    <div class="step-label"><div class="step-label-line"></div>Krok 4 z 8</div>
+    <h1 class="question">Ile dni<br><span style="color:var(--lime)">w tygodniu?</span></h1>
+    <p class="question-sub">Ile razy realnie możesz trenować? Lepiej 3x i dowieźć, niż 6x i rzucić.</p>
+    <div class="slider-wrap">
+      <div class="slider-labels"><span>1 dzień</span><span>7 dni</span></div>
+      <input type="range" class="slider" id="daysSlider" min="1" max="7" value="3" oninput="updateSlider(this,'days',1,'dni')">
+      <div class="slider-value" id="daysVal">3 <span>dni</span></div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="prevStep()">← Wróć</button>
+      <button class="btn-next" onclick="nextStep()">Dalej →</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 4: EQUIPMENT -->
+  <div class="screen" id="screen-4">
+    <div class="step-label"><div class="step-label-line"></div>Krok 5 z 8</div>
+    <h1 class="question">Masz<br><span style="color:var(--lime)">sprzęt?</span></h1>
+    <p class="question-sub">Zaznacz wszystko do czego masz dostęp. Możesz wybrać kilka.</p>
+    <div class="tags">
+      <div class="tag" onclick="toggleTag(this,'equipment','gym')">🏋️ Siłownia</div>
+      <div class="tag" onclick="toggleTag(this,'equipment','barbell')">🔩 Sztanga + talerze</div>
+      <div class="tag" onclick="toggleTag(this,'equipment','dumbbells')">💪 Hantle</div>
+      <div class="tag" onclick="toggleTag(this,'equipment','pullbar')">📊 Drążek</div>
+      <div class="tag" onclick="toggleTag(this,'equipment','bands')">🔴 Gumy oporowe</div>
+      <div class="tag" onclick="toggleTag(this,'equipment','rings')">⭕ Ringsy/TRX</div>
+      <div class="tag" onclick="toggleTag(this,'equipment','cardio')">🏃 Sprzęt cardio</div>
+      <div class="tag selected" onclick="toggleTag(this,'equipment','none')">🏠 Bez sprzętu (dom)</div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="prevStep()">← Wróć</button>
+      <button class="btn-next" onclick="nextStep()">Dalej →</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 5: BODY -->
+  <div class="screen" id="screen-5">
+    <div class="step-label"><div class="step-label-line"></div>Krok 6 z 8</div>
+    <h1 class="question">Twoje<br><span style="color:var(--lime)">dane?</span></h1>
+    <p class="question-sub">Potrzebne do obliczenia zapotrzebowania kalorycznego i intensywności treningu. Widoczne tylko dla Ciebie.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+      <div>
+        <label style="font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:8px">Wzrost</label>
+        <div class="slider-wrap" style="margin-bottom:0">
+          <input type="range" class="slider" min="150" max="210" value="178" oninput="updateSlider(this,'height',0,'cm')" style="margin-bottom:8px">
+          <div class="slider-value" id="heightVal" style="font-size:28px">178 <span>cm</span></div>
+        </div>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:8px">Waga</label>
+        <div class="slider-wrap" style="margin-bottom:0">
+          <input type="range" class="slider" min="40" max="150" value="75" oninput="updateSlider(this,'weight',0,'kg')" style="margin-bottom:8px">
+          <div class="slider-value" id="weightVal" style="font-size:28px">75 <span>kg</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:36px">
+      <div>
+        <label style="font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:8px">Wiek</label>
+        <div class="slider-wrap" style="margin-bottom:0">
+          <input type="range" class="slider" min="14" max="70" value="28" oninput="updateSlider(this,'age',0,'lat')">
+          <div class="slider-value" id="ageVal" style="font-size:28px">28 <span>lat</span></div>
+        </div>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:8px">Płeć</label>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <div class="option selected" style="flex:1;justify-content:center;padding:12px" onclick="selectOption(this,'gender','male')">
+            <span>♂ Mężczyzna</span>
+          </div>
+          <div class="option" style="flex:1;justify-content:center;padding:12px" onclick="selectOption(this,'gender','female')">
+            <span>♀ Kobieta</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="prevStep()">← Wróć</button>
+      <button class="btn-next" onclick="nextStep()">Dalej →</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 6: INJURIES -->
+  <div class="screen" id="screen-6">
+    <div class="step-label"><div class="step-label-line"></div>Krok 7 z 8</div>
+    <h1 class="question">Jakieś<br><span style="color:var(--lime)">kontuzje?</span></h1>
+    <p class="question-sub">AI uniknie ćwiczeń które mogą Ci zaszkodzić. Zaznacz co dotyczy lub pomiń.</p>
+    <div class="tags">
+      <div class="tag" onclick="toggleTag(this,'injury','back')">🔴 Kręgosłup / plecy</div>
+      <div class="tag" onclick="toggleTag(this,'injury','knee')">🔴 Kolano</div>
+      <div class="tag" onclick="toggleTag(this,'injury','shoulder')">🔴 Bark</div>
+      <div class="tag" onclick="toggleTag(this,'injury','elbow')">🔴 Łokieć / nadgarstek</div>
+      <div class="tag" onclick="toggleTag(this,'injury','hip')">🔴 Biodro</div>
+      <div class="tag" onclick="toggleTag(this,'injury','neck')">🔴 Szyja / kark</div>
+    </div>
+    <div style="margin-bottom:36px;margin-top:16px">
+      <input class="text-input" type="text" placeholder="Inne uwagi dla AI coachA (np. 'po operacji kolana 2022')..." id="injuryNote" style="margin-bottom:0">
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="prevStep()">← Wróć</button>
+      <button class="btn-next" onclick="nextStep()">Dalej →</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 7: NAME -->
+  <div class="screen" id="screen-7">
+    <div class="step-label"><div class="step-label-line"></div>Krok 8 z 8</div>
+    <h1 class="question">Jak mam<br>do Ciebie<br><span style="color:var(--lime)">mówić?</span></h1>
+    <p class="question-sub">Imię pojawi się w Twoim profilu i w rozmowach z AI coachem.</p>
+    <input class="text-input" type="text" id="nameInput" placeholder="Twoje imię..." oninput="checkName()">
+    <div class="nav-row">
+      <button class="btn-back" onclick="prevStep()">← Wróć</button>
+      <button class="btn-next" id="next-7" disabled onclick="startGenerate()">🚀 Generuj mój plan →</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 8: GENERATING -->
+  <div class="screen" id="screen-8">
+    <div class="generating">
+      <div class="gen-orb">🤖</div>
+      <h2 class="gen-title">AI tworzy<br><span style="color:var(--lime)">Twój plan</span></h2>
+      <p class="gen-sub">Analizuję Twoje dane i buduję spersonalizowany plan treningowy...</p>
+      <div class="gen-steps">
+        <div class="gen-step" id="gstep-0">
+          <div class="gen-step-icon">🧬</div>
+          Analizuję Twój profil i cele
+        </div>
+        <div class="gen-step" id="gstep-1">
+          <div class="gen-step-icon">🏋️</div>
+          Dobieramy ćwiczenia do sprzętu
+        </div>
+        <div class="gen-step" id="gstep-2">
+          <div class="gen-step-icon">📅</div>
+          Buduję harmonogram tygodniowy
+        </div>
+        <div class="gen-step" id="gstep-3">
+          <div class="gen-step-icon">⚡</div>
+          Obliczam intensywność i progresję
+        </div>
+        <div class="gen-step" id="gstep-4">
+          <div class="gen-step-icon">✨</div>
+          Finalizuję plan i wskazówki AI
+        </div>
+      </div>
+      <div class="dots"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
+  <!-- SCREEN 9: RESULT -->
+  <div class="screen" id="screen-9">
+    <div class="result-scroll">
+      <div class="result-screen">
+        <div class="result-header">
+          <div>
+            <div class="step-label"><div class="step-label-line"></div>Twój plan gotowy ✓</div>
+            <h2 class="plan-title" id="planTitle">Ładowanie<br><span>planu...</span></h2>
+          </div>
+          <div class="result-badge" id="planBadge">AI Generated</div>
+        </div>
+        <div class="plan-summary">
+          <div class="plan-stat"><div class="plan-stat-val" id="statWeeks">12</div><div class="plan-stat-label">Tygodni</div></div>
+          <div class="plan-stat"><div class="plan-stat-val" id="statDays">3</div><div class="plan-stat-label">Dni/tydz.</div></div>
+          <div class="plan-stat"><div class="plan-stat-val" id="statLevel">⚡</div><div class="plan-stat-label">Poziom</div></div>
+          <div class="plan-stat"><div class="plan-stat-val" id="statGoal">💪</div><div class="plan-stat-label">Cel</div></div>
+        </div>
+        <div class="plan-desc" id="planDesc">
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="plan-weeks" id="planWeeks">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">Struktura programu</div>
+        </div>
+        <div class="result-actions">
+          <button class="btn-start" onclick="enterApp()">🚀 Zaczynam — do aplikacji →</button>
+          <button class="btn-regen" onclick="regenerate()" title="Wygeneruj inny plan">🔄</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /onboarding -->
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────────
+const state = {
+  role: null, goal: null, level: null, days: 3,
+  equipment: ['none'], gender: 'male',
+  height: 178, weight: 75, age: 28,
+  injuries: [], injuryNote: '', name: ''
+};
+const TOTAL_STEPS = 8;
+let currentStep = 0;
+let isGenerating = false;
+
+// ── STEP DOTS ─────────────────────────────────────────────────────
+function renderDots() {
+  const el = document.getElementById('stepIndicator');
+  el.innerHTML = '';
+  for (let i = 0; i < TOTAL_STEPS; i++) {
+    const d = document.createElement('div');
+    d.className = 'step-dot' + (i === currentStep ? ' active' : i < currentStep ? ' done' : '');
+    el.appendChild(d);
+  }
+  const pct = (currentStep / (TOTAL_STEPS)) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('skipBtn').style.display = currentStep >= 8 ? 'none' : '';
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────
+function nextStep() {
+  const cur = document.getElementById('screen-' + currentStep);
+  cur.className = 'screen exit';
+  setTimeout(() => { cur.className = 'screen'; }, 500);
+  currentStep++;
+  const next = document.getElementById('screen-' + currentStep);
+  next.className = 'screen active';
+  renderDots();
+  // move glow
+  document.getElementById('bgGlow1').style.top = (currentStep * -30) + 'px';
+}
+
+function prevStep() {
+  if (currentStep === 0) return;
+  const cur = document.getElementById('screen-' + currentStep);
+  cur.className = 'screen';
+  cur.style.transform = 'translateX(60px)';
+  currentStep--;
+  const prev = document.getElementById('screen-' + currentStep);
+  prev.className = 'screen active';
+  renderDots();
+}
+
+function skipOnboarding() {
+  currentStep = 7;
+  document.querySelectorAll('.screen').forEach(s => s.className = 'screen');
+  document.getElementById('screen-7').className = 'screen active';
+  renderDots();
+}
+
+// ── SELECTION HELPERS ─────────────────────────────────────────────
+function selectRole(role, el) {
+  const isAlreadySelected = el.classList.contains('selected');
+  document.querySelectorAll('#screen-0 .role-card').forEach(c => c.classList.remove('selected'));
+  if (isAlreadySelected) {
+    state.role = null;
+    document.getElementById('next-0').disabled = true;
+  } else {
+    state.role = role;
+    el.classList.add('selected');
+    document.getElementById('next-0').disabled = false;
+  }
+}
+
+function selectOption(el, key, value) {
+  const isAlreadySelected = el.classList.contains('selected');
+  const container = el.closest('.options, .slider-wrap, div');
+  container.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+
+  if (isAlreadySelected) {
+    // Odznacz — usuń wartość ze stanu
+    state[key] = null;
+    const nextBtn = document.getElementById('next-' + currentStep);
+    if (nextBtn) nextBtn.disabled = true;
+  } else {
+    // Zaznacz nowy kafelek
+    state[key] = value;
+    el.classList.add('selected');
+    const nextBtn = document.getElementById('next-' + currentStep);
+    if (nextBtn) nextBtn.disabled = false;
+  }
+}
+
+function toggleTag(el, key, value) {
+  el.classList.toggle('selected');
+  if (!state[key]) state[key] = [];
+  if (el.classList.contains('selected')) {
+    if (!state[key].includes(value)) state[key].push(value);
+  } else {
+    state[key] = state[key].filter(v => v !== value);
+  }
+}
+
+function updateSlider(el, key, decimals, unit) {
+  const val = parseFloat(el.value);
+  state[key] = val;
+  const pct = ((val - el.min) / (el.max - el.min)) * 100;
+  el.style.setProperty('--val', pct + '%');
+  el.style.background = `linear-gradient(90deg,var(--lime-dim) ${pct}%,var(--border2) ${pct}%)`;
+  const display = document.getElementById(key + 'Val');
+  if (display) display.innerHTML = val.toFixed(decimals) + ' <span>' + unit + '</span>';
+}
+
+function checkName() {
+  const v = document.getElementById('nameInput').value.trim();
+  state.name = v;
+  document.getElementById('next-7').disabled = v.length < 2;
+}
+
+// init sliders
+['daysSlider'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) updateSlider(el, 'days', 0, 'dni');
+});
+
+// ── GENERATE ──────────────────────────────────────────────────────
+async function startGenerate() {
+  state.injuryNote = document.getElementById('injuryNote')?.value || '';
+  // Transition to screen 8
+  const cur = document.getElementById('screen-7');
+  cur.className = 'screen exit';
+  setTimeout(() => cur.className = 'screen', 500);
+  currentStep = 8;
+  const gen = document.getElementById('screen-8');
+  gen.className = 'screen active';
+  renderDots();
+
+  // Animate gen steps
+  const steps = ['gstep-0','gstep-1','gstep-2','gstep-3','gstep-4'];
+  for (let i = 0; i < steps.length; i++) {
+    await delay(i === 0 ? 300 : 600);
+    if (i > 0) {
+      document.getElementById(steps[i-1]).className = 'gen-step done';
+      document.getElementById(steps[i-1]).querySelector('.gen-step-icon').textContent = '✓';
+    }
+    document.getElementById(steps[i]).className = 'gen-step active';
+  }
+
+  // Call Claude API
+  const prompt = buildPrompt();
+  let planData;
+  try {
+    planData = await callClaude(prompt);
+  } catch(e) {
+    planData = getFallbackPlan();
+  }
+
+  await delay(600);
+  document.getElementById(steps[steps.length-1]).className = 'gen-step done';
+  document.getElementById(steps[steps.length-1]).querySelector('.gen-step-icon').textContent = '✓';
+  await delay(500);
+
+  // Show result
+  showResult(planData);
+}
+
+function buildPrompt() {
+  const goalMap = {muscle:'budowanie masy mięśniowej',strength:'zwiększenie siły',fat:'redukcja tłuszczu',fitness:'ogólna sprawność i kondycja'};
+  const levelMap = {beginner:'początkujący',intermediate:'średniozaawansowany',advanced:'zaawansowany'};
+  const equipMap = {gym:'siłownia pełna',barbell:'sztanga z talerzami',dumbbells:'hantle',pullbar:'drążek',bands:'gumy oporowe',rings:'ringsy/TRX',cardio:'sprzęt cardio',none:'bez sprzętu (trening w domu)'};
+  const injMap = {back:'kręgosłup/plecy',knee:'kolano',shoulder:'bark',elbow:'łokieć/nadgarstek',hip:'biodro',neck:'szyja/kark'};
+
+  const eq = (state.equipment||[]).map(e=>equipMap[e]||e).join(', ') || 'bez sprzętu';
+  const inj = (state.injuries||[]).map(i=>injMap[i]||i).join(', ') || 'brak';
+  const injNote = state.injuryNote ? `Dodatkowe uwagi: ${state.injuryNote}` : '';
+
+  return `Jesteś AI coachem fitness platformy chceByc.fit. Stwórz spersonalizowany plan treningowy w formacie JSON.
+
+Dane użytkownika:
+- Imię: ${state.name}
+- Cel: ${goalMap[state.goal]||state.goal}
+- Poziom: ${levelMap[state.level]||state.level}
+- Dni treningowe/tydzień: ${state.days}
+- Dostępny sprzęt: ${eq}
+- Waga: ${state.weight} kg, Wzrost: ${state.height} cm, Wiek: ${state.age} lat
+- Płeć: ${state.gender==='male'?'mężczyzna':'kobieta'}
+- Kontuzje/ograniczenia: ${inj}. ${injNote}
+
+Odpowiedz TYLKO JSON (bez markdown), dokładnie w tej strukturze:
+{
+  "planName": "Krótka, chwytliwa nazwa planu (max 4 słowa)",
+  "planSubtitle": "Podtytuł opisujący cel (max 6 słów)",
+  "weeks": liczba_tygodni_int,
+  "daysPerWeek": ${state.days},
+  "level": "${levelMap[state.level]||state.level}",
+  "goalEmoji": "emoji celu",
+  "description": "3-4 zdania po polsku: co wyróżnia ten plan, dlaczego jest dopasowany do tej osoby, czego może się spodziewać po ${state.days} tygodniach. Pisz do użytkownika bezpośrednio (do ${state.name}). Ciepło, motywacyjnie, konkretnie.",
+  "phases": [
+    {"name": "Nazwa fazy (np. Adaptacja)", "weeks": "1-4", "focus": "Krótki opis fazy", "intensity": 55},
+    {"name": "Nazwa fazy (np. Progresja)", "weeks": "5-8", "focus": "Krótki opis fazy", "intensity": 75},
+    {"name": "Nazwa fazy (np. Szczyt)", "weeks": "9-12", "focus": "Krótki opis fazy", "intensity": 90}
+  ],
+  "coachNote": "Jedna osobista wiadomość od AI coachA do ${state.name} — motywująca, konkretna, odnosząca się do ich sytuacji (kontuzje, sprzęt, cel). Max 2 zdania."
+}`;
+}
+
+async function callClaude(prompt) {
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      messages: [{role:'user', content: prompt}]
+    })
+  });
+  const data = await response.json();
+  const text = data.content?.map(b => b.text||'').join('') || '{}';
+  const clean = text.replace(/```json|```/g,'').trim();
+  return JSON.parse(clean);
+}
+
+function getFallbackPlan() {
+  const goalEmojis = {muscle:'💪',strength:'🏋️',fat:'🔥',fitness:'⚡'};
+  return {
+    planName: "Twój Personalny Plan",
+    planSubtitle: "Zbudowany specjalnie dla Ciebie",
+    weeks: 12,
+    daysPerWeek: state.days,
+    level: state.level || 'średniozaawansowany',
+    goalEmoji: goalEmojis[state.goal] || '💪',
+    description: `${state.name}, Twój plan treningowy jest gotowy! Został stworzony z myślą o Twoim celu i możliwościach. Trenujesz ${state.days} razy w tygodniu — to realistyczny harmonogram, który pozwoli Ci zobaczyć wyniki już po kilku tygodniach. Trzymaj się planu, a rezultaty przyjdą.`,
+    phases: [
+      {name:"Adaptacja", weeks:"1-4", focus:"Budowanie nawyku i techniki", intensity: 55},
+      {name:"Progresja", weeks:"5-8", focus:"Zwiększanie obciążeń i objętości", intensity: 75},
+      {name:"Szczyt", weeks:"9-12", focus:"Maksimum wyników i siły", intensity: 90}
+    ],
+    coachNote: `${state.name}, masz wszystko czego trzeba. Zaufaj procesowi — wyniki przyjdą szybciej niż myślisz! 🚀`
+  };
+}
+
+function showResult(plan) {
+  // Transition
+  const gen = document.getElementById('screen-8');
+  gen.className = 'screen exit';
+  setTimeout(() => gen.className = 'screen', 500);
+  currentStep = 9;
+  const res = document.getElementById('screen-9');
+  res.className = 'screen active';
+  renderDots();
+
+  // Fill data
+  document.getElementById('planTitle').innerHTML =
+    (plan.planName||'Twój Plan').replace(' ', '<br><span style="color:var(--lime)">') + '</span>';
+  document.getElementById('planBadge').textContent = '✓ AI Generated dla ' + (state.name||'Ciebie');
+  document.getElementById('statWeeks').textContent = plan.weeks || 12;
+  document.getElementById('statDays').textContent = (plan.daysPerWeek || state.days) + 'x';
+  document.getElementById('statLevel').textContent =
+    {beginner:'🌱',intermediate:'🔥',advanced:'⚡'}[state.level] || '⚡';
+  document.getElementById('statGoal').textContent = plan.goalEmoji || '💪';
+
+  // Typewriter for description
+  typewrite(document.getElementById('planDesc'), plan.description || '', 18);
+
+  // Phases / weeks bars
+  const weeksEl = document.getElementById('planWeeks');
+  weeksEl.innerHTML = '<div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">Fazy programu</div>';
+  (plan.phases || []).forEach((phase, i) => {
+    const row = document.createElement('div');
+    row.className = 'week-row';
+    row.innerHTML = `
+      <div class="week-num">${phase.weeks||''}</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:600;margin-bottom:4px">${phase.name||''}</div>
+        <div class="week-bar-wrap"><div class="week-bar" style="width:0%" data-width="${phase.intensity||60}%"></div></div>
+      </div>
+      <div class="week-label" style="font-size:10px;color:var(--muted)">${phase.focus||''}</div>
+    `;
+    weeksEl.appendChild(row);
+  });
+
+  // Animate bars
+  setTimeout(() => {
+    document.querySelectorAll('.week-bar[data-width]').forEach(bar => {
+      bar.style.width = bar.dataset.width;
+    });
+  }, 200);
+
+  // Coach note
+  if (plan.coachNote) {
+    const note = document.createElement('div');
+    note.style.cssText = 'background:rgba(180,240,58,0.06);border:1px solid rgba(180,240,58,0.15);border-radius:14px;padding:16px 20px;margin-bottom:20px;display:flex;gap:12px;align-items:flex-start;';
+    note.innerHTML = `
+      <div style="width:32px;height:32px;background:var(--lime);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:1px">🤖</div>
+      <div>
+        <div style="font-size:10px;color:var(--lime);letter-spacing:2px;text-transform:uppercase;font-weight:600;margin-bottom:5px">AI Coach · Wiadomość dla Ciebie</div>
+        <div style="font-size:14px;color:var(--off);line-height:1.6;font-weight:300">${plan.coachNote}</div>
+      </div>`;
+    weeksEl.after(note);
+    note.after(document.querySelector('.result-actions'));
+  }
+}
+
+function typewrite(el, text, speed) {
+  el.textContent = '';
+  let i = 0;
+  const interval = setInterval(() => {
+    el.textContent += text[i] || '';
+    i++;
+    if (i >= text.length) clearInterval(interval);
+  }, speed);
+}
+
+function regenerate() {
+  currentStep = 8;
+  document.querySelectorAll('.screen').forEach(s => s.className = 'screen');
+  document.getElementById('screen-8').className = 'screen active';
+  // Reset gen steps
+  for (let i = 0; i < 5; i++) {
+    const s = document.getElementById('gstep-' + i);
+    s.className = 'gen-step';
+    s.querySelector('.gen-step-icon').textContent = ['🧬','🏋️','📅','⚡','✨'][i];
+  }
+  renderDots();
+  startGenerate();
+}
+
+function enterApp() {
+  // Show a quick celebration then redirect
+  document.body.style.transition = 'opacity 0.5s';
+  document.body.style.opacity = '0';
+  setTimeout(() => {
+    alert('🚀 Witaj na platformie, ' + (state.name||'Atleto') + '! Dashboard wkrótce...');
+    document.body.style.opacity = '1';
+  }, 500);
+}
+
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ── INIT ──────────────────────────────────────────────────────────
+renderDots();
+
+// init slider backgrounds
+document.querySelectorAll('.slider').forEach(sl => {
+  const pct = ((sl.value - sl.min) / (sl.max - sl.min)) * 100;
+  sl.style.background = `linear-gradient(90deg,var(--lime-dim) ${pct}%,var(--border2) ${pct}%)`;
+});
+</script>
+</body>
+</html>
