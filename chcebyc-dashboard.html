@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>chceByc.fit — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black:#070b07; --forest:#0c1c0c; --card:#0f170f; --card2:#131e13; --card3:#172017;
+  --border:#1a2e1a; --border2:#243824; --border3:#2d4a2d;
+  --lime:#b4f03a; --lime-soft:#ceff6a; --lime-dim:#7aaa22; --lime-ghost:rgba(180,240,58,0.07); --lime-glow:rgba(180,240,58,0.15);
+  --white:#eef8e8; --off:#c8ddb8; --muted:#5a7850; --muted2:#3a5230;
+  --red:#ff5555; --red-ghost:rgba(255,85,85,0.1);
+  --gold:#f0c840; --gold-ghost:rgba(240,200,64,0.1);
+  --blue:#4ab0ff; --blue-ghost:rgba(74,176,255,0.1);
+  --orange:#ff8c42; --orange-ghost:rgba(255,140,66,0.1);
+  --sidebar:220px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--black);color:var(--white);display:flex;}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:var(--sidebar);flex-shrink:0;
+  background:var(--forest);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  height:100vh;
+  position:relative;z-index:100;
+}
+.sidebar-logo{
+  padding:24px 20px 20px;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
+}
+.logo-text{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:900;font-size:22px;letter-spacing:0.5px;
+}
+.logo-text span{color:var(--lime);}
+.logo-sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+
+.sidebar-user{
+  padding:16px 20px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+  flex-shrink:0;
+}
+.user-avatar{
+  width:38px;height:38px;border-radius:50%;
+  background:linear-gradient(135deg,var(--lime-dim),var(--lime));
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;flex-shrink:0;
+  font-weight:700;color:var(--black);
+  font-family:'Barlow Condensed',sans-serif;
+}
+.user-name{font-size:13px;font-weight:600;line-height:1.2;}
+.user-level{font-size:10px;color:var(--lime);letter-spacing:1px;text-transform:uppercase;}
+
+.sidebar-nav{flex:1;overflow-y:auto;padding:12px 0;}
+.nav-section-label{
+  font-size:9px;color:var(--muted2);letter-spacing:2.5px;
+  text-transform:uppercase;padding:14px 20px 6px;font-weight:600;
+}
+.nav-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 20px;cursor:pointer;
+  font-size:13px;font-weight:500;color:var(--muted);
+  border-left:2px solid transparent;
+  transition:all 0.2s;position:relative;
+}
+.nav-item:hover{color:var(--off);background:rgba(255,255,255,0.02);}
+.nav-item.active{
+  color:var(--lime);background:var(--lime-ghost);
+  border-left-color:var(--lime);
+}
+.nav-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0;}
+.nav-badge{
+  margin-left:auto;background:var(--red);color:#fff;
+  border-radius:10px;padding:1px 7px;font-size:9px;font-weight:700;
+}
+.nav-badge.green{background:var(--lime);color:var(--black);}
+
+.sidebar-streak{
+  padding:14px 20px;border-top:1px solid var(--border);
+  flex-shrink:0;
+}
+.streak-row{display:flex;align-items:center;gap:8px;}
+.streak-fire{font-size:20px;}
+.streak-num{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:28px;font-weight:900;color:var(--orange);line-height:1;
+}
+.streak-label{font-size:10px;color:var(--muted);line-height:1.3;}
+.streak-dots{display:flex;gap:3px;margin-top:8px;}
+.streak-day{
+  flex:1;height:4px;border-radius:2px;
+  background:var(--border2);
+}
+.streak-day.done{background:var(--orange);}
+.streak-day.today{background:var(--lime);box-shadow:0 0 6px var(--lime);}
+
+/* ── MAIN ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+
+/* TOP BAR */
+.topbar{
+  height:60px;flex-shrink:0;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;
+  background:rgba(7,11,7,0.8);
+  backdrop-filter:blur(10px);
+}
+.topbar-left{display:flex;align-items:center;gap:16px;}
+.page-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:22px;font-weight:700;text-transform:uppercase;
+  letter-spacing:1px;
+}
+.date-badge{
+  font-size:11px;color:var(--muted);
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:8px;padding:4px 10px;letter-spacing:0.5px;
+}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.icon-btn{
+  width:36px;height:36px;border-radius:9px;
+  background:var(--card);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;cursor:pointer;transition:all 0.2s;
+  position:relative;
+}
+.icon-btn:hover{border-color:var(--border2);}
+.notif-dot{
+  position:absolute;top:6px;right:6px;
+  width:6px;height:6px;border-radius:50%;
+  background:var(--red);border:1px solid var(--black);
+}
+.xp-bar-wrap{
+  display:flex;align-items:center;gap:8px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:6px 12px;
+}
+.xp-label{font-size:10px;color:var(--lime);font-weight:600;letter-spacing:1px;text-transform:uppercase;}
+.xp-track{width:80px;height:4px;background:var(--border2);border-radius:2px;}
+.xp-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--lime-dim),var(--lime));width:68%;}
+.xp-num{font-size:11px;color:var(--muted);}
+
+/* CONTENT */
+.content{
+  flex:1;overflow-y:auto;
+  padding:24px 28px;
+  scrollbar-width:thin;scrollbar-color:var(--border2) transparent;
+}
+
+/* PAGE (each tab) */
+.page{display:none;}
+.page.active{display:block;}
+
+/* GRID LAYOUTS */
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.grid-main{display:grid;grid-template-columns:1fr 360px;gap:16px;}
+
+/* CARDS */
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:20px;
+}
+.card-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:14px;font-weight:700;text-transform:uppercase;
+  letter-spacing:1.5px;color:var(--muted);margin-bottom:16px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.card-title span{color:var(--muted);}
+
+/* STAT CARDS */
+.stat-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:18px 20px;
+  display:flex;align-items:center;gap:14px;
+  transition:border-color 0.2s;
+}
+.stat-card:hover{border-color:var(--border2);}
+.stat-icon{
+  width:44px;height:44px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+}
+.stat-body{}
+.stat-val{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:30px;font-weight:900;line-height:1;margin-bottom:2px;
+}
+.stat-label{font-size:11px;color:var(--muted);letter-spacing:0.5px;}
+.stat-delta{font-size:10px;margin-top:2px;}
+.delta-up{color:var(--lime);}
+.delta-down{color:var(--red);}
+
+/* TODAY WORKOUT CARD */
+.workout-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;overflow:hidden;
+}
+.workout-header{
+  padding:20px 20px 16px;
+  background:linear-gradient(135deg,rgba(180,240,58,0.08),transparent);
+  border-bottom:1px solid var(--border);
+}
+.workout-meta{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.workout-tag{
+  font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:3px 9px;border-radius:5px;
+}
+.workout-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:32px;font-weight:900;text-transform:uppercase;
+  letter-spacing:0.5px;line-height:1;margin-bottom:6px;
+}
+.workout-sub{font-size:13px;color:var(--muted);font-weight:300;}
+.exercise-list{padding:4px 0;}
+.exercise-row{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 20px;border-bottom:1px solid var(--border);
+  transition:background 0.15s;cursor:pointer;
+}
+.exercise-row:last-child{border-bottom:none;}
+.exercise-row:hover{background:rgba(255,255,255,0.02);}
+.exercise-row.done{opacity:0.5;}
+.ex-num{
+  width:26px;height:26px;border-radius:50%;
+  background:var(--border2);display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:var(--muted);flex-shrink:0;
+}
+.exercise-row.done .ex-num{background:rgba(180,240,58,0.15);color:var(--lime);}
+.ex-info{flex:1;}
+.ex-name{font-size:13px;font-weight:600;margin-bottom:2px;}
+.ex-sets{font-size:11px;color:var(--muted);}
+.ex-muscle{
+  font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+  padding:2px 7px;background:var(--border2);border-radius:5px;color:var(--muted);
+}
+.workout-footer{
+  padding:16px 20px;
+  border-top:1px solid var(--border);
+  display:flex;gap:10px;
+}
+.btn-primary{
+  flex:1;background:var(--lime);color:var(--black);
+  border:none;border-radius:10px;padding:13px;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:16px;letter-spacing:1.5px;text-transform:uppercase;
+  cursor:pointer;transition:all 0.2s;
+  box-shadow:0 0 20px rgba(180,240,58,0.2);
+}
+.btn-primary:hover{background:var(--lime-soft);transform:translateY(-1px);}
+.btn-primary.active-workout{
+  background:var(--red);color:#fff;
+  box-shadow:0 0 20px rgba(255,85,85,0.3);
+  animation:workoutPulse 2s infinite;
+}
+@keyframes workoutPulse{0%,100%{box-shadow:0 0 20px rgba(255,85,85,0.3)}50%{box-shadow:0 0 40px rgba(255,85,85,0.5)}}
+.btn-outline{
+  background:none;border:1px solid var(--border2);
+  color:var(--muted);border-radius:10px;padding:13px 16px;
+  font-family:inherit;font-size:13px;cursor:pointer;transition:all 0.2s;
+}
+.btn-outline:hover{border-color:var(--muted);color:var(--off);}
+
+/* MINI CHART */
+.mini-chart{width:100%;overflow:visible;}
+
+/* ACTIVITY RINGS */
+.rings-wrap{display:flex;align-items:center;gap:20px;padding:8px 0;}
+.rings-svg{flex-shrink:0;}
+.ring-legend{display:flex;flex-direction:column;gap:10px;}
+.ring-item{display:flex;align-items:center;gap:8px;font-size:12px;}
+.ring-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.ring-item-val{font-weight:700;margin-left:auto;font-size:13px;}
+
+/* FEED */
+.feed{display:flex;flex-direction:column;gap:10px;}
+.feed-item{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:12px 14px;
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:12px;transition:border-color 0.2s;
+}
+.feed-item:hover{border-color:var(--border2);}
+.feed-avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--border2);display:flex;align-items:center;
+  justify-content:center;font-size:15px;flex-shrink:0;
+}
+.feed-content{flex:1;}
+.feed-text{font-size:12px;line-height:1.5;color:var(--off);}
+.feed-text strong{color:var(--white);font-weight:600;}
+.feed-text .accent{color:var(--lime);}
+.feed-time{font-size:10px;color:var(--muted);margin-top:3px;}
+.feed-actions{display:flex;gap:8px;margin-top:6px;}
+.feed-btn{
+  font-size:11px;color:var(--muted);background:none;
+  border:1px solid var(--border2);border-radius:6px;
+  padding:2px 8px;cursor:pointer;transition:all 0.15s;
+}
+.feed-btn:hover{border-color:var(--muted);color:var(--off);}
+
+/* PROGRESS CHARTS */
+.chart-area{position:relative;height:120px;margin:8px 0;}
+.chart-svg{width:100%;height:100%;}
+
+/* LEADERBOARD */
+.lb-list{display:flex;flex-direction:column;gap:6px;}
+.lb-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;background:var(--card2);
+  border:1px solid var(--border);border-radius:10px;
+}
+.lb-rank{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:18px;font-weight:900;width:24px;text-align:center;
+  color:var(--muted);flex-shrink:0;
+}
+.lb-rank.gold{color:var(--gold);}
+.lb-rank.silver{color:#aaa;}
+.lb-rank.bronze{color:var(--orange);}
+.lb-avatar{width:30px;height:30px;border-radius:50%;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.lb-name{flex:1;font-size:13px;font-weight:500;}
+.lb-name span{display:block;font-size:10px;color:var(--muted);font-weight:300;}
+.lb-xp{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--lime);}
+.lb-item.me{border-color:rgba(180,240,58,0.25);background:var(--lime-ghost);}
+
+/* ACTIVE WORKOUT MODAL */
+.workout-modal{
+  display:none;position:fixed;inset:0;z-index:500;
+  background:rgba(7,11,7,0.95);backdrop-filter:blur(20px);
+  flex-direction:column;
+}
+.workout-modal.open{display:flex;}
+.wm-header{
+  padding:20px 28px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.wm-timer{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:48px;font-weight:900;color:var(--lime);
+  line-height:1;letter-spacing:2px;
+}
+.wm-title{font-size:14px;color:var(--muted);margin-top:2px;}
+.wm-close{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:8px 16px;
+  color:var(--muted);font-family:inherit;font-size:13px;cursor:pointer;
+  transition:all 0.2s;
+}
+.wm-close:hover{border-color:var(--red);color:var(--red);}
+.wm-body{flex:1;overflow-y:auto;padding:28px;max-width:700px;margin:0 auto;width:100%;}
+.wm-exercise{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;margin-bottom:16px;overflow:hidden;
+}
+.wm-ex-header{
+  padding:20px;display:flex;align-items:center;gap:14px;
+  border-bottom:1px solid var(--border);
+}
+.wm-ex-num{
+  width:44px;height:44px;border-radius:12px;
+  background:var(--border2);display:flex;align-items:center;justify-content:center;
+  font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;
+  flex-shrink:0;
+}
+.wm-ex-name{font-size:18px;font-weight:700;}
+.wm-ex-meta{font-size:12px;color:var(--muted);margin-top:2px;}
+.wm-sets{padding:16px 20px;display:flex;flex-direction:column;gap:8px;}
+.wm-set-row{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 14px;background:var(--card2);
+  border:1px solid var(--border);border-radius:10px;
+}
+.wm-set-num{font-size:12px;color:var(--muted);width:40px;flex-shrink:0;}
+.wm-input{
+  background:var(--border2);border:1px solid var(--border);
+  border-radius:8px;padding:7px 12px;
+  color:var(--white);font-size:14px;font-weight:600;
+  font-family:inherit;outline:none;width:80px;text-align:center;
+  transition:border-color 0.2s;
+}
+.wm-input:focus{border-color:var(--lime);}
+.wm-input-label{font-size:11px;color:var(--muted);}
+.wm-set-done{
+  margin-left:auto;width:30px;height:30px;border-radius:8px;
+  background:var(--border2);border:none;cursor:pointer;
+  font-size:14px;transition:all 0.2s;
+}
+.wm-set-done.done{background:rgba(180,240,58,0.15);color:var(--lime);}
+.wm-footer{
+  padding:20px 28px;border-top:1px solid var(--border);
+  display:flex;gap:12px;flex-shrink:0;max-width:700px;margin:0 auto;width:100%;
+}
+.rest-timer{
+  background:var(--orange-ghost);border:1px solid rgba(255,140,66,0.25);
+  border-radius:10px;padding:8px 16px;
+  font-size:13px;color:var(--orange);
+  display:flex;align-items:center;gap:8px;
+}
+
+/* AI CHAT */
+.ai-chat-wrap{
+  display:flex;flex-direction:column;height:calc(100vh - 120px);
+}
+.ai-messages{
+  flex:1;overflow-y:auto;padding:16px;
+  display:flex;flex-direction:column;gap:10px;
+  scrollbar-width:thin;scrollbar-color:var(--border2) transparent;
+}
+.msg{max-width:78%;padding:11px 15px;border-radius:14px;font-size:13px;line-height:1.6;}
+.msg-user{
+  background:var(--lime);color:var(--black);
+  align-self:flex-end;border-radius:14px 14px 4px 14px;font-weight:500;
+}
+.msg-ai{
+  background:var(--card2);color:var(--off);
+  align-self:flex-start;border-radius:14px 14px 14px 4px;
+  border:1px solid var(--border);
+}
+.msg-ai strong{color:var(--lime);}
+.msg-ai-wrap{display:flex;gap:8px;align-items:flex-end;}
+.ai-av{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--lime);display:flex;align-items:center;justify-content:center;
+  font-size:13px;flex-shrink:0;
+}
+.ai-input-row{
+  padding:14px 16px;border-top:1px solid var(--border);
+  display:flex;gap:8px;
+}
+.ai-input{
+  flex:1;background:var(--card2);border:1px solid var(--border);
+  border-radius:10px;padding:10px 14px;
+  color:var(--white);font-size:13px;font-family:inherit;
+  outline:none;transition:border-color 0.2s;
+}
+.ai-input:focus{border-color:var(--lime);}
+.ai-send{
+  background:var(--lime);border:none;border-radius:10px;
+  width:38px;height:38px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:15px;transition:all 0.2s;flex-shrink:0;
+}
+.ai-send:hover{background:var(--lime-soft);}
+.ai-quick{display:flex;gap:6px;padding:0 16px 10px;flex-wrap:wrap;}
+.ai-q-btn{
+  background:var(--lime-ghost);border:1px solid rgba(180,240,58,0.15);
+  color:var(--lime);border-radius:20px;padding:5px 12px;
+  font-size:11px;cursor:pointer;transition:all 0.2s;white-space:nowrap;
+}
+.ai-q-btn:hover{background:rgba(180,240,58,0.12);}
+.typing-indicator{display:flex;gap:4px;align-items:center;padding:4px 0;}
+.typing-indicator span{width:6px;height:6px;background:var(--muted);border-radius:50%;animation:typingBounce 1.2s infinite;}
+.typing-indicator span:nth-child(2){animation-delay:.2s;}
+.typing-indicator span:nth-child(3){animation-delay:.4s;}
+@keyframes typingBounce{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-5px);opacity:1}}
+
+/* ANIMATIONS */
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeIn 0.4s ease forwards;}
+
+/* BADGE */
+.badge{
+  display:inline-flex;align-items:center;
+  border-radius:6px;padding:3px 8px;
+  font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+}
+
+/* CHALLENGE CARD */
+.challenge{
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:12px;padding:14px;margin-bottom:8px;
+  display:flex;align-items:center;gap:12px;
+}
+.ch-icon{font-size:24px;flex-shrink:0;}
+.ch-info{flex:1;}
+.ch-name{font-size:13px;font-weight:600;margin-bottom:3px;}
+.ch-prog{font-size:11px;color:var(--muted);}
+.ch-bar-wrap{height:4px;background:var(--border2);border-radius:2px;margin-top:6px;}
+.ch-bar{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--lime-dim),var(--lime));transition:width 1s ease;}
+.ch-reward{font-size:11px;color:var(--gold);flex-shrink:0;font-weight:600;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text">chceByc<span>.fit</span></div>
+    <div class="logo-sub">Platforma fitness</div>
+  </div>
+  <div class="sidebar-user">
+    <div class="user-avatar">MK</div>
+    <div>
+      <div class="user-name">Maciej K.</div>
+      <div class="user-level">⚡ Atleta · Poziom 14</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Główne</div>
+    <div class="nav-item active" onclick="showPage('dashboard',this)">
+      <span class="nav-icon">◈</span>Dashboard
+    </div>
+    <div class="nav-item" onclick="showPage('workout',this)">
+      <span class="nav-icon">🏋️</span>Dziś trenuję
+      <span class="nav-badge green">Dzień 3</span>
+    </div>
+    <div class="nav-item" onclick="showPage('progress',this)">
+      <span class="nav-icon">📊</span>Moje postępy
+    </div>
+    <div class="nav-item" onclick="showPage('plans',this)">
+      <span class="nav-icon">📋</span>Plany treningowe
+    </div>
+    <div class="nav-section-label">Społeczność</div>
+    <div class="nav-item" onclick="showPage('community',this)">
+      <span class="nav-icon">👥</span>Feed społeczności
+      <span class="nav-badge">3</span>
+    </div>
+    <div class="nav-item" onclick="showPage('challenges',this)">
+      <span class="nav-icon">🏆</span>Wyzwania
+    </div>
+    <div class="nav-section-label">AI</div>
+    <div class="nav-item" onclick="showPage('coach',this)">
+      <span class="nav-icon">🤖</span>AI Coach
+    </div>
+    <div class="nav-section-label">Konto</div>
+    <div class="nav-item">
+      <span class="nav-icon">⚙️</span>Ustawienia
+    </div>
+  </nav>
+  <div class="sidebar-streak">
+    <div class="streak-row">
+      <div class="streak-fire">🔥</div>
+      <div>
+        <div class="streak-num" id="streakNum">14</div>
+        <div class="streak-label">dni serii<br>nie przerywaj!</div>
+      </div>
+    </div>
+    <div class="streak-dots" style="margin-top:10px">
+      <div class="streak-day done"></div><div class="streak-day done"></div>
+      <div class="streak-day done"></div><div class="streak-day done"></div>
+      <div class="streak-day done"></div><div class="streak-day done"></div>
+      <div class="streak-day today"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:9px;color:var(--muted2)">
+      <span>Pon</span><span>Wt</span><span>Śr</span><span>Czw</span><span>Pt</span><span>Sob</span><span>Ndz</span>
+    </div>
+  </div>
+</aside>
+
+<!-- ── MAIN ── -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="page-title" id="pageTitle">Dashboard</div>
+      <div class="date-badge">Sobota, 14 marca 2026</div>
+    </div>
+    <div class="topbar-right">
+      <div class="xp-bar-wrap">
+        <span class="xp-label">XP</span>
+        <div class="xp-track"><div class="xp-fill"></div></div>
+        <span class="xp-num">3,420 / 5,000</span>
+      </div>
+      <div class="icon-btn" title="Powiadomienia">🔔<div class="notif-dot"></div></div>
+      <div class="icon-btn" title="Szukaj">🔍</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ── DASHBOARD PAGE ── -->
+    <div class="page active" id="page-dashboard">
+      <!-- Greeting + Stats -->
+      <div style="margin-bottom:20px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:900;text-transform:uppercase;letter-spacing:0.5px;line-height:1;margin-bottom:6px">
+          Hej, Maciej 👋<br><span style="color:var(--lime)">Czas na trening!</span>
+        </div>
+        <div style="font-size:13px;color:var(--muted);font-weight:300">Power Hypertrophy 12W · Tydzień 6/12 · Dzień treningu nr 47</div>
+      </div>
+      <div class="grid-3" style="margin-bottom:16px">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--lime-ghost)">💪</div>
+          <div class="stat-body">
+            <div class="stat-val" style="color:var(--lime)">47</div>
+            <div class="stat-label">Treningów łącznie</div>
+            <div class="stat-delta delta-up">↑ +4 w tym miesiącu</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--orange-ghost)">🔥</div>
+          <div class="stat-body">
+            <div class="stat-val" style="color:var(--orange)">14</div>
+            <div class="stat-label">Dni serii z rzędu</div>
+            <div class="stat-delta delta-up">↑ rekord osobisty!</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--blue-ghost)">⚡</div>
+          <div class="stat-body">
+            <div class="stat-val" style="color:var(--blue)">3,420</div>
+            <div class="stat-label">Punkty XP</div>
+            <div class="stat-delta delta-up">↑ +240 dziś</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-main">
+        <div>
+          <!-- Today Workout -->
+          <div class="workout-card" style="margin-bottom:16px">
+            <div class="workout-header">
+              <div class="workout-meta">
+                <span class="workout-tag badge" style="background:var(--lime-ghost);color:var(--lime);border:1px solid rgba(180,240,58,0.2)">Power Hypertrophy</span>
+                <span class="workout-tag badge" style="background:var(--blue-ghost);color:var(--blue);border:1px solid rgba(74,176,255,0.2)">Dzień A — Pchanie</span>
+                <span class="workout-tag badge" style="background:var(--border2);color:var(--muted)">~60 min</span>
+              </div>
+              <div class="workout-title">Dzisiejszy<br>trening</div>
+              <div class="workout-sub">5 ćwiczeń · 18 serii · Klatka + Barki + Triceps</div>
+            </div>
+            <div class="exercise-list">
+              <div class="exercise-row done" onclick="openWorkout()">
+                <div class="ex-num">✓</div>
+                <div class="ex-info"><div class="ex-name">Wyciskanie sztangi leżąc</div><div class="ex-sets">4 × 8 · ostatnio: 80 kg</div></div>
+                <div class="ex-muscle">Klatka</div>
+              </div>
+              <div class="exercise-row done" onclick="openWorkout()">
+                <div class="ex-num">✓</div>
+                <div class="ex-info"><div class="ex-name">Overhead Press</div><div class="ex-sets">4 × 8 · ostatnio: 55 kg</div></div>
+                <div class="ex-muscle">Barki</div>
+              </div>
+              <div class="exercise-row" onclick="openWorkout()" style="background:rgba(180,240,58,0.03)">
+                <div class="ex-num" style="background:rgba(180,240,58,0.15);color:var(--lime);animation:workoutPulse 2s infinite">3</div>
+                <div class="ex-info"><div class="ex-name" style="color:var(--lime)">Wyciskanie na skosie</div><div class="ex-sets">3 × 10 · 70 kg · w toku...</div></div>
+                <div class="ex-muscle">Klatka</div>
+              </div>
+              <div class="exercise-row" onclick="openWorkout()">
+                <div class="ex-num">4</div>
+                <div class="ex-info"><div class="ex-name">Rozpiętki ze sztangielkami</div><div class="ex-sets">3 × 12 · 18 kg</div></div>
+                <div class="ex-muscle">Klatka</div>
+              </div>
+              <div class="exercise-row" onclick="openWorkout()">
+                <div class="ex-num">5</div>
+                <div class="ex-info"><div class="ex-name">Pompki na poręczach</div><div class="ex-sets">3 × do upadku</div></div>
+                <div class="ex-muscle">Triceps</div>
+              </div>
+            </div>
+            <div class="workout-footer">
+              <button class="btn-primary active-workout" onclick="openWorkout()">⏱ TRENING W TOKU — 00:34:12</button>
+              <button class="btn-outline">Zmień plan</button>
+            </div>
+          </div>
+
+          <!-- Progress Mini Charts -->
+          <div class="card">
+            <div class="card-title">Postępy siły — 6 tygodni <span style="font-size:11px;cursor:pointer;color:var(--lime)" onclick="showPage('progress',document.querySelector('.nav-item:nth-child(4)'))">→ Więcej</span></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+              <div>
+                <div style="font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">Wyciskanie</div>
+                <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--lime)">82.5 <span style="font-size:13px;color:var(--muted)">kg</span></div>
+                <div style="font-size:10px;color:var(--lime)">↑ +12.5 kg / 6 tyg.</div>
+                <svg class="mini-chart" viewBox="0 0 120 40" style="margin-top:6px">
+                  <polyline points="0,35 24,30 48,25 72,20 96,15 120,8" fill="none" stroke="rgba(180,240,58,0.3)" stroke-width="1.5"/>
+                  <polyline points="0,35 24,30 48,25 72,20 96,15 120,8" fill="none" stroke="var(--lime)" stroke-width="1.5" stroke-dasharray="200" stroke-dashoffset="200" style="animation:drawLine 1.5s ease forwards"/>
+                  <circle cx="120" cy="8" r="3" fill="var(--lime)"/>
+                </svg>
+              </div>
+              <div>
+                <div style="font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">Przysiad</div>
+                <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--orange)">107.5 <span style="font-size:13px;color:var(--muted)">kg</span></div>
+                <div style="font-size:10px;color:var(--orange)">↑ +17.5 kg / 6 tyg.</div>
+                <svg class="mini-chart" viewBox="0 0 120 40" style="margin-top:6px">
+                  <polyline points="0,38 24,32 48,26 72,20 96,14 120,6" fill="none" stroke="rgba(255,140,66,0.3)" stroke-width="1.5"/>
+                  <polyline points="0,38 24,32 48,26 72,20 96,14 120,6" fill="none" stroke="var(--orange)" stroke-width="1.5" stroke-dasharray="200" stroke-dashoffset="200" style="animation:drawLine 1.5s 0.3s ease forwards"/>
+                  <circle cx="120" cy="6" r="3" fill="var(--orange)"/>
+                </svg>
+              </div>
+              <div>
+                <div style="font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">Martwy ciąg</div>
+                <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--blue)">132.5 <span style="font-size:13px;color:var(--muted)">kg</span></div>
+                <div style="font-size:10px;color:var(--blue)">↑ +22.5 kg / 6 tyg.</div>
+                <svg class="mini-chart" viewBox="0 0 120 40" style="margin-top:6px">
+                  <polyline points="0,36 24,30 48,22 72,16 96,10 120,4" fill="none" stroke="rgba(74,176,255,0.3)" stroke-width="1.5"/>
+                  <polyline points="0,36 24,30 48,22 72,16 96,10 120,4" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-dasharray="200" stroke-dashoffset="200" style="animation:drawLine 1.5s 0.6s ease forwards"/>
+                  <circle cx="120" cy="4" r="3" fill="var(--blue)"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <!-- Activity Rings -->
+          <div class="card">
+            <div class="card-title">Aktywność — ten tydzień</div>
+            <div class="rings-wrap">
+              <svg class="rings-svg" viewBox="0 0 100 100" width="100" height="100">
+                <!-- Treningi -->
+                <circle cx="50" cy="50" r="42" fill="none" stroke="var(--border2)" stroke-width="7"/>
+                <circle cx="50" cy="50" r="42" fill="none" stroke="var(--lime)" stroke-width="7" stroke-linecap="round" stroke-dasharray="263.9" stroke-dashoffset="79.2" transform="rotate(-90 50 50)" style="animation:ringDraw 1.5s ease forwards"/>
+                <!-- Czas -->
+                <circle cx="50" cy="50" r="32" fill="none" stroke="var(--border2)" stroke-width="7"/>
+                <circle cx="50" cy="50" r="32" fill="none" stroke="var(--orange)" stroke-width="7" stroke-linecap="round" stroke-dasharray="201" stroke-dashoffset="80.4" transform="rotate(-90 50 50)" style="animation:ringDraw 1.5s 0.2s ease forwards"/>
+                <!-- Kcal -->
+                <circle cx="50" cy="50" r="22" fill="none" stroke="var(--border2)" stroke-width="7"/>
+                <circle cx="50" cy="50" r="22" fill="none" stroke="var(--blue)" stroke-width="7" stroke-linecap="round" stroke-dasharray="138.2" stroke-dashoffset="41.5" transform="rotate(-90 50 50)" style="animation:ringDraw 1.5s 0.4s ease forwards"/>
+              </svg>
+              <div class="ring-legend">
+                <div class="ring-item"><div class="ring-dot" style="background:var(--lime)"></div><div><div style="font-size:11px;color:var(--muted)">Treningi</div><div class="ring-item-val" style="color:var(--lime)">3/4</div></div></div>
+                <div class="ring-item"><div class="ring-dot" style="background:var(--orange)"></div><div><div style="font-size:11px;color:var(--muted)">Czas</div><div class="ring-item-val" style="color:var(--orange)">3.4h</div></div></div>
+                <div class="ring-item"><div class="ring-dot" style="background:var(--blue)"></div><div><div style="font-size:11px;color:var(--muted)">Kcal</div><div class="ring-item-val" style="color:var(--blue)">2,840</div></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Community Feed Mini -->
+          <div class="card" style="flex:1">
+            <div class="card-title">Społeczność <span style="font-size:11px;cursor:pointer;color:var(--lime)" onclick="showPage('community',null)">→ Wszystko</span></div>
+            <div class="feed">
+              <div class="feed-item">
+                <div class="feed-avatar">💪</div>
+                <div class="feed-content">
+                  <div class="feed-text"><strong>Piotr K.</strong> właśnie pobił rekord — <span class="accent">przysiad 120 kg!</span> 🎉</div>
+                  <div class="feed-time">2 min temu</div>
+                  <div class="feed-actions">
+                    <button class="feed-btn">🔥 14</button>
+                    <button class="feed-btn">💬 3</button>
+                  </div>
+                </div>
+              </div>
+              <div class="feed-item">
+                <div class="feed-avatar">🏃</div>
+                <div class="feed-content">
+                  <div class="feed-text"><strong>Karolina M.</strong> ukończyła <span class="accent">Dzień 30 HIIT Shred</span> — seria 30 dni!</div>
+                  <div class="feed-time">18 min temu</div>
+                  <div class="feed-actions">
+                    <button class="feed-btn">🔥 28</button>
+                    <button class="feed-btn">💬 7</button>
+                  </div>
+                </div>
+              </div>
+              <div class="feed-item">
+                <div class="feed-avatar">⚡</div>
+                <div class="feed-content">
+                  <div class="feed-text"><strong>Tomasz W.</strong> dołączył do wyzwania <span class="accent">"Marzec bez dnia przerwy"</span></div>
+                  <div class="feed-time">1 godz. temu</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── WORKOUT PAGE ── -->
+    <div class="page" id="page-workout">
+      <div style="margin-bottom:20px;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:900;text-transform:uppercase;letter-spacing:0.5px;line-height:1">Dzień A — <span style="color:var(--lime)">Pchanie</span></div>
+          <div style="font-size:13px;color:var(--muted);margin-top:4px">Power Hypertrophy 12W · Tydzień 6 · 5 ćwiczeń · ~60 min</div>
+        </div>
+        <button class="btn-primary" style="width:auto;padding:12px 28px" onclick="openWorkout()">▶ Rozpocznij trening</button>
+      </div>
+      <div class="grid-2">
+        <div>
+          <div class="card" style="margin-bottom:16px">
+            <div class="card-title">Plan ćwiczeń</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="background:rgba(180,240,58,0.05);border:1px solid rgba(180,240,58,0.15);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px">
+                <div style="width:36px;height:36px;border-radius:10px;background:rgba(180,240,58,0.15);display:flex;align-items:center;justify-content:center;font-size:16px">1</div>
+                <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--lime)">Wyciskanie sztangi leżąc</div><div style="font-size:11px;color:var(--muted);margin-top:2px">4 serie × 8 powt. · 3–4 min przerwy · Klatka piersiowa</div></div>
+                <span style="font-size:11px;color:var(--lime);font-weight:600">80 kg PR</span>
+              </div>
+              <div style="background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px">
+                <div style="width:36px;height:36px;border-radius:10px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:16px">2</div>
+                <div style="flex:1"><div style="font-size:14px;font-weight:600">Overhead Press</div><div style="font-size:11px;color:var(--muted);margin-top:2px">4 serie × 8 powt. · 3 min przerwy · Barki</div></div>
+                <span style="font-size:11px;color:var(--muted)">55 kg</span>
+              </div>
+              <div style="background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px">
+                <div style="width:36px;height:36px;border-radius:10px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:16px">3</div>
+                <div style="flex:1"><div style="font-size:14px;font-weight:600">Wyciskanie na skosie</div><div style="font-size:11px;color:var(--muted);margin-top:2px">3 serie × 10 powt. · 2 min przerwy · Klatka górna</div></div>
+                <span style="font-size:11px;color:var(--muted)">70 kg</span>
+              </div>
+              <div style="background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px">
+                <div style="width:36px;height:36px;border-radius:10px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:16px">4</div>
+                <div style="flex:1"><div style="font-size:14px;font-weight:600">Rozpiętki ze sztangielkami</div><div style="font-size:11px;color:var(--muted);margin-top:2px">3 serie × 12 powt. · 90 sek. przerwy · Klatka</div></div>
+                <span style="font-size:11px;color:var(--muted)">18 kg</span>
+              </div>
+              <div style="background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px">
+                <div style="width:36px;height:36px;border-radius:10px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:16px">5</div>
+                <div style="flex:1"><div style="font-size:14px;font-weight:600">Pompki na poręczach</div><div style="font-size:11px;color:var(--muted);margin-top:2px">3 serie × do upadku · 2 min przerwy · Triceps</div></div>
+                <span style="font-size:11px;color:var(--muted)">BW</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:16px">
+            <div class="card-title">Poprzednie wykonania</div>
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+              <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span style="color:var(--muted)">Wt 10 mar</span><span>Wyciskanie <strong style="color:var(--lime)">77.5 kg × 8</strong></span></div>
+              <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span style="color:var(--muted)">Śr 5 mar</span><span>Wyciskanie <strong>75 kg × 8</strong></span></div>
+              <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span style="color:var(--muted)">Nd 1 mar</span><span>Wyciskanie <strong>72.5 kg × 8</strong></span></div>
+              <div style="display:flex;justify-content:space-between;padding:8px 0"><span style="color:var(--muted)">Śr 26 lut</span><span>Wyciskanie <strong>70 kg × 8</strong></span></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Wskazówka AI Coacha</div>
+            <div style="display:flex;gap:10px">
+              <div style="width:32px;height:32px;border-radius:50%;background:var(--lime);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">🤖</div>
+              <div style="font-size:13px;color:var(--off);line-height:1.7;font-weight:300">Maciej, w tym tygodniu Twoje wyciskanie rośnie świetnie — <strong style="color:var(--lime)">+2.5 kg co trening</strong>. Dziś możesz spróbować 82.5 kg. Jeśli zrobisz wszystkie 8 powtórzeń, w środę idź na 85. Pamiętaj o rozgrzewce łokci! 💪</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PROGRESS PAGE ── -->
+    <div class="page" id="page-progress">
+      <div style="margin-bottom:20px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:900;text-transform:uppercase;letter-spacing:0.5px;line-height:1;margin-bottom:6px">Twoje <span style="color:var(--lime)">postępy</span></div>
+        <div style="font-size:13px;color:var(--muted)">Ostatnie 12 tygodni · Program Power Hypertrophy</div>
+      </div>
+      <div class="grid-3" style="margin-bottom:16px">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--lime-ghost)">⬆️</div>
+          <div class="stat-body"><div class="stat-val" style="color:var(--lime)">+22.5</div><div class="stat-label">kg na wyciskaniu (+38%)</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--red-ghost)">⬇️</div>
+          <div class="stat-body"><div class="stat-val" style="color:var(--red)">-4.2</div><div class="stat-label">kg masy ciała (cel: -8)</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--gold-ghost)">🏆</div>
+          <div class="stat-body"><div class="stat-val" style="color:var(--gold)">8</div><div class="stat-label">Rekordów osobistych</div></div>
+        </div>
+      </div>
+      <div class="grid-2" style="margin-bottom:16px">
+        <div class="card">
+          <div class="card-title">Siła — wielki trójbój</div>
+          <svg viewBox="0 0 400 150" style="width:100%;overflow:visible">
+            <defs>
+              <linearGradient id="lg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--lime)" stop-opacity=".15"/><stop offset="100%" stop-color="var(--lime)" stop-opacity="0"/></linearGradient>
+              <linearGradient id="lg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--orange)" stop-opacity=".15"/><stop offset="100%" stop-color="var(--orange)" stop-opacity="0"/></linearGradient>
+              <linearGradient id="lg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--blue)" stop-opacity=".15"/><stop offset="100%" stop-color="var(--blue)" stop-opacity="0"/></linearGradient>
+            </defs>
+            <!-- Grid lines -->
+            <line x1="0" y1="30" x2="400" y2="30" stroke="var(--border)" stroke-width="1"/>
+            <line x1="0" y1="70" x2="400" y2="70" stroke="var(--border)" stroke-width="1"/>
+            <line x1="0" y1="110" x2="400" y2="110" stroke="var(--border)" stroke-width="1"/>
+            <!-- Bench -->
+            <polyline points="0,120 67,110 133,100 200,88 267,75 333,60 400,45" fill="none" stroke="var(--lime)" stroke-width="2" stroke-linecap="round"/>
+            <!-- Squat -->
+            <polyline points="0,115 67,102 133,90 200,76 267,60 333,45 400,28" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"/>
+            <!-- Deadlift -->
+            <polyline points="0,110 67,95 133,80 200,65 267,50 333,35 400,18" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"/>
+            <!-- Labels -->
+            <text x="4" y="148" fill="var(--muted)" font-size="9" font-family="'Plus Jakarta Sans'">T1</text>
+            <text x="60" y="148" fill="var(--muted)" font-size="9" font-family="'Plus Jakarta Sans'">T2</text>
+            <text x="126" y="148" fill="var(--muted)" font-size="9" font-family="'Plus Jakarta Sans'">T3</text>
+            <text x="193" y="148" fill="var(--muted)" font-size="9" font-family="'Plus Jakarta Sans'">T4</text>
+            <text x="260" y="148" fill="var(--muted)" font-size="9" font-family="'Plus Jakarta Sans'">T5</text>
+            <text x="326" y="148" fill="var(--muted)" font-size="9" font-family="'Plus Jakarta Sans'">T6</text>
+            <text x="393" y="148" fill="var(--muted)" font-size="9" font-family="'Plus Jakarta Sans'">T7</text>
+          </svg>
+          <div style="display:flex;gap:14px;margin-top:6px">
+            <div style="display:flex;align-items:center;gap:5px;font-size:11px"><div style="width:10px;height:3px;background:var(--lime);border-radius:2px"></div>Wyciskanie</div>
+            <div style="display:flex;align-items:center;gap:5px;font-size:11px"><div style="width:10px;height:3px;background:var(--orange);border-radius:2px"></div>Przysiad</div>
+            <div style="display:flex;align-items:center;gap:5px;font-size:11px"><div style="width:10px;height:3px;background:var(--blue);border-radius:2px"></div>Martwy ciąg</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Masa ciała</div>
+          <svg viewBox="0 0 400 150" style="width:100%;overflow:visible">
+            <line x1="0" y1="30" x2="400" y2="30" stroke="var(--border)" stroke-width="1"/>
+            <line x1="0" y1="70" x2="400" y2="70" stroke="var(--border)" stroke-width="1"/>
+            <line x1="0" y1="110" x2="400" y2="110" stroke="var(--border)" stroke-width="1"/>
+            <polyline points="0,40 57,46 114,52 171,60 228,68 285,74 342,80 400,84" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="400" cy="84" r="4" fill="var(--blue)"/>
+            <text x="4" y="148" fill="var(--muted)" font-size="9" font-family="'Plus Jakarta Sans'">80.2</text>
+            <text x="377" y="148" fill="var(--blue)" font-size="9" font-family="'Plus Jakarta Sans'" font-weight="700">76.0</text>
+          </svg>
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-top:4px">
+            <span style="color:var(--muted)">Start: 80.2 kg</span>
+            <span style="color:var(--blue)">Teraz: 76.0 kg <strong style="color:var(--lime)">(-4.2 kg)</strong></span>
+            <span style="color:var(--muted)">Cel: 72 kg</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Rekordy osobiste — ostatnie</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+          <div style="background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center">
+            <div style="font-size:22px;margin-bottom:6px">🏋️</div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--gold)">82.5 kg</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">Wyciskanie</div>
+            <div style="font-size:10px;color:var(--gold);margin-top:4px">3 dni temu</div>
+          </div>
+          <div style="background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center">
+            <div style="font-size:22px;margin-bottom:6px">🦵</div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--gold)">110 kg</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">Przysiad</div>
+            <div style="font-size:10px;color:var(--gold);margin-top:4px">7 dni temu</div>
+          </div>
+          <div style="background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center">
+            <div style="font-size:22px;margin-bottom:6px">💪</div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--gold)">135 kg</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">Martwy ciąg</div>
+            <div style="font-size:10px;color:var(--gold);margin-top:4px">10 dni temu</div>
+          </div>
+          <div style="background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center">
+            <div style="font-size:22px;margin-bottom:6px">🔥</div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--orange)">14 dni</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">Seria bez przerwy</div>
+            <div style="font-size:10px;color:var(--orange);margin-top:4px">Aktywny!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── COMMUNITY PAGE ── -->
+    <div class="page" id="page-community">
+      <div style="margin-bottom:20px;font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:900;text-transform:uppercase;letter-spacing:0.5px;line-height:1">
+        Społeczność <span style="color:var(--lime)">chceByc.fit</span>
+      </div>
+      <div class="grid-main">
+        <div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:16px;display:flex;gap:10px;align-items:center">
+            <div class="user-avatar" style="width:36px;height:36px;font-size:14px">MK</div>
+            <div style="flex:1;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--muted);cursor:text">Podziel się swoim dzisiejszym treningiem...</div>
+            <button class="btn-primary" style="width:auto;padding:9px 18px;font-size:13px">Dodaj</button>
+          </div>
+          <div class="feed" id="communityFeed">
+            <div class="feed-item fade-in">
+              <div class="feed-avatar" style="background:rgba(180,240,58,0.1)">💪</div>
+              <div class="feed-content">
+                <div class="feed-text"><strong>Piotr K.</strong> pobił rekord — <span class="accent">przysiad 120 kg × 5 powt.!</span> 🎉 Tydzień 8 programu siłowego robi robotę!</div>
+                <div class="feed-time">2 min temu · Power 5×5</div>
+                <div class="feed-actions">
+                  <button class="feed-btn" onclick="this.textContent=this.textContent.includes('15')?'🔥 14':'🔥 15'">🔥 14</button>
+                  <button class="feed-btn">💬 3</button>
+                  <button class="feed-btn">🏆 Brawo!</button>
+                </div>
+              </div>
+            </div>
+            <div class="feed-item fade-in" style="animation-delay:0.1s">
+              <div class="feed-avatar" style="background:rgba(255,85,85,0.1)">🏃</div>
+              <div class="feed-content">
+                <div class="feed-text"><strong>Karolina M.</strong> ukończyła <span class="accent">Dzień 30 programu HIIT Shred</span> — <strong>-6 kg, -8 cm w talii</strong>! 30-dniowa seria! 🏆</div>
+                <div class="feed-time">18 min temu · HIIT Shred 8W</div>
+                <div class="feed-actions">
+                  <button class="feed-btn">🔥 28</button>
+                  <button class="feed-btn">💬 7</button>
+                  <button class="feed-btn">🏆 Brawo!</button>
+                </div>
+              </div>
+            </div>
+            <div class="feed-item fade-in" style="animation-delay:0.2s">
+              <div class="feed-avatar" style="background:rgba(74,176,255,0.1)">⚡</div>
+              <div class="feed-content">
+                <div class="feed-text"><strong>Ty</strong> ukończyłeś trening nr <span class="accent">47</span> — <strong>Dzień A: Pchanie</strong> · 3 ćwiczenia z 5 · Trening w toku!</div>
+                <div class="feed-time">34 min temu · Power Hypertrophy 12W</div>
+                <div class="feed-actions">
+                  <button class="feed-btn">🔥 5</button>
+                  <button class="feed-btn">💬 1</button>
+                </div>
+              </div>
+            </div>
+            <div class="feed-item fade-in" style="animation-delay:0.3s">
+              <div class="feed-avatar">🧘</div>
+              <div class="feed-content">
+                <div class="feed-text"><strong>Marek S.</strong> opublikował nowe zdjęcie postępu — <span class="accent">3 miesiące Full Body Beginner</span>. Transformacja robi wrażenie!</div>
+                <div class="feed-time">2 godz. temu</div>
+                <div class="feed-actions">
+                  <button class="feed-btn">🔥 42</button>
+                  <button class="feed-btn">💬 12</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="card">
+            <div class="card-title">🏆 Leaderboard — ten tydzień</div>
+            <div class="lb-list">
+              <div class="lb-item"><div class="lb-rank gold">1</div><div class="lb-avatar">🏋️</div><div class="lb-name">Piotr K.<span>14 treningów</span></div><div class="lb-xp">8,420</div></div>
+              <div class="lb-item"><div class="lb-rank silver">2</div><div class="lb-avatar">🏃</div><div class="lb-name">Karolina M.<span>12 treningów</span></div><div class="lb-xp">7,180</div></div>
+              <div class="lb-item me"><div class="lb-rank bronze">3</div><div class="user-avatar" style="width:30px;height:30px;font-size:12px">MK</div><div class="lb-name" style="color:var(--lime)">Ty — Maciej K.<span>10 treningów</span></div><div class="lb-xp" style="color:var(--lime)">3,420</div></div>
+              <div class="lb-item"><div class="lb-rank" style="color:var(--muted)">4</div><div class="lb-avatar">⚡</div><div class="lb-name">Tomasz W.<span>9 treningów</span></div><div class="lb-xp">2,980</div></div>
+              <div class="lb-item"><div class="lb-rank" style="color:var(--muted)">5</div><div class="lb-avatar">🧘</div><div class="lb-name">Marek S.<span>8 treningów</span></div><div class="lb-xp">2,640</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Znajomi online</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;gap:8px;padding:6px 0">
+                <div style="position:relative"><div class="lb-avatar">💪</div><div style="position:absolute;bottom:0;right:0;width:8px;height:8px;border-radius:50%;background:var(--lime);border:1px solid var(--card)"></div></div>
+                <div style="flex:1;font-size:12px"><strong>Piotr K.</strong><div style="color:var(--muted);font-size:10px">Trwa trening · 45 min</div></div>
+                <button class="feed-btn">🔥</button>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:6px 0">
+                <div style="position:relative"><div class="lb-avatar">🏃</div><div style="position:absolute;bottom:0;right:0;width:8px;height:8px;border-radius:50%;background:var(--lime);border:1px solid var(--card)"></div></div>
+                <div style="flex:1;font-size:12px"><strong>Karolina M.</strong><div style="color:var(--muted);font-size:10px">Właśnie skończyła</div></div>
+                <button class="feed-btn">💬</button>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:6px 0">
+                <div style="position:relative"><div class="lb-avatar">⚡</div><div style="position:absolute;bottom:0;right:0;width:8px;height:8px;border-radius:50%;background:var(--muted2);border:1px solid var(--card)"></div></div>
+                <div style="flex:1;font-size:12px"><strong>Tomasz W.</strong><div style="color:var(--muted);font-size:10px">Nieaktywny · 2h</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CHALLENGES PAGE ── -->
+    <div class="page" id="page-challenges">
+      <div style="margin-bottom:20px;font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:900;text-transform:uppercase;letter-spacing:0.5px;line-height:1">
+        Wyzwania <span style="color:var(--lime)">i misje</span>
+      </div>
+      <div class="grid-2">
+        <div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">Aktywne wyzwania</div>
+          <div class="challenge">
+            <div class="ch-icon">🔥</div>
+            <div class="ch-info">
+              <div class="ch-name">Marzec bez dnia przerwy</div>
+              <div class="ch-prog">14/31 dni · 1,204 uczestników</div>
+              <div class="ch-bar-wrap"><div class="ch-bar" style="width:45%"></div></div>
+            </div>
+            <div class="ch-reward">🏆 500 XP</div>
+          </div>
+          <div class="challenge">
+            <div class="ch-icon">💪</div>
+            <div class="ch-info">
+              <div class="ch-name">Wyciskanie 100 kg Challenge</div>
+              <div class="ch-prog">82.5 / 100 kg · w trakcie</div>
+              <div class="ch-bar-wrap"><div class="ch-bar" style="width:82.5%"></div></div>
+            </div>
+            <div class="ch-reward">🥇 Odznaka</div>
+          </div>
+          <div class="challenge">
+            <div class="ch-icon">⚡</div>
+            <div class="ch-info">
+              <div class="ch-name">5 treningów w tym tygodniu</div>
+              <div class="ch-prog">3/5 treningów · kończy się w niedzielę</div>
+              <div class="ch-bar-wrap"><div class="ch-bar" style="width:60%"></div></div>
+            </div>
+            <div class="ch-reward">🎯 250 XP</div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin:20px 0 12px">Dostępne wyzwania</div>
+          <div class="challenge" style="opacity:0.7">
+            <div class="ch-icon">🏃</div>
+            <div class="ch-info">
+              <div class="ch-name">10,000 spalonych kcal</div>
+              <div class="ch-prog">Miesięczne · 3,840 uczestników</div>
+            </div>
+            <button class="btn-outline" style="padding:6px 12px;font-size:11px">Dołącz</button>
+          </div>
+          <div class="challenge" style="opacity:0.7">
+            <div class="ch-icon">🦵</div>
+            <div class="ch-info">
+              <div class="ch-name">Przysiad 1.5× waga ciała</div>
+              <div class="ch-prog">Osiągnięcie · Twój: 110 / cel: 114 kg</div>
+            </div>
+            <button class="btn-outline" style="padding:6px 12px;font-size:11px">Dołącz</button>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">Twoje odznaki</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px">
+            <div style="text-align:center;padding:14px;background:var(--card2);border:1px solid var(--border);border-radius:12px">
+              <div style="font-size:28px;margin-bottom:6px">🔥</div>
+              <div style="font-size:10px;color:var(--muted)">7-dniowa seria</div>
+            </div>
+            <div style="text-align:center;padding:14px;background:var(--card2);border:1px solid var(--border);border-radius:12px">
+              <div style="font-size:28px;margin-bottom:6px">💪</div>
+              <div style="font-size:10px;color:var(--muted)">Pierwszy PR</div>
+            </div>
+            <div style="text-align:center;padding:14px;background:var(--card2);border:1px solid var(--border);border-radius:12px">
+              <div style="font-size:28px;margin-bottom:6px">🏆</div>
+              <div style="font-size:10px;color:var(--muted)">Top 10 tygodnia</div>
+            </div>
+            <div style="text-align:center;padding:14px;background:rgba(180,240,58,0.05);border:1px solid rgba(180,240,58,0.2);border-radius:12px">
+              <div style="font-size:28px;margin-bottom:6px">⚡</div>
+              <div style="font-size:10px;color:var(--lime)">Atleta Lvl 14</div>
+            </div>
+            <div style="text-align:center;padding:14px;background:var(--card2);border:1px solid var(--border);border-radius:12px;opacity:0.4">
+              <div style="font-size:28px;margin-bottom:6px">🥇</div>
+              <div style="font-size:10px;color:var(--muted)">100 treningów</div>
+            </div>
+            <div style="text-align:center;padding:14px;background:var(--card2);border:1px solid var(--border);border-radius:12px;opacity:0.4">
+              <div style="font-size:28px;margin-bottom:6px">🌟</div>
+              <div style="font-size:10px;color:var(--muted)">30-dniowa seria</div>
+            </div>
+            <div style="text-align:center;padding:14px;background:var(--card2);border:1px solid var(--border);border-radius:12px;opacity:0.4">
+              <div style="font-size:28px;margin-bottom:6px">💯</div>
+              <div style="font-size:10px;color:var(--muted)">Bench 100 kg</div>
+            </div>
+            <div style="text-align:center;padding:14px;background:var(--card2);border:1px solid var(--border);border-radius:12px;opacity:0.4">
+              <div style="font-size:28px;margin-bottom:6px">👑</div>
+              <div style="font-size:10px;color:var(--muted)">Legenda</div>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">Poziom XP</div>
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+              <div><div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--blue)">Poziom 14</div><div style="font-size:12px;color:var(--muted)">Atleta</div></div>
+              <div style="text-align:right"><div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--lime)">Poziom 15</div><div style="font-size:12px;color:var(--muted)">Wojownik</div></div>
+            </div>
+            <div style="height:8px;background:var(--border2);border-radius:4px;margin-bottom:8px">
+              <div style="height:100%;width:68%;background:linear-gradient(90deg,var(--lime-dim),var(--lime));border-radius:4px;box-shadow:0 0 10px rgba(180,240,58,0.3)"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted)">
+              <span>3,420 XP</span><span style="color:var(--lime)">1,580 XP do Wojownika</span><span>5,000 XP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PLANS PAGE ── -->
+    <div class="page" id="page-plans">
+      <div style="margin-bottom:20px;display:flex;align-items:center;justify-content:space-between">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:900;text-transform:uppercase;letter-spacing:0.5px;line-height:1">Plany <span style="color:var(--lime)">treningowe</span></div>
+        <button class="btn-primary" style="width:auto;padding:11px 22px;font-size:14px">🏪 Marketplace →</button>
+      </div>
+      <div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">Aktywny plan</div>
+      <div class="card" style="margin-bottom:20px;background:linear-gradient(135deg,rgba(180,240,58,0.08),var(--card));border-color:rgba(180,240,58,0.2)">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:16px">
+            <div style="font-size:44px">⚡</div>
+            <div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:var(--lime)">Power Hypertrophy 12 Tygodni</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:2px">Marcin Kowalski · ⭐ 4.9 · 3× tyg. · Siłownia · Tydzień 6/12</div>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div style="height:6px;width:140px;background:var(--border2);border-radius:3px;margin-bottom:6px"><div style="height:100%;width:50%;background:var(--lime);border-radius:3px"></div></div>
+            <div style="font-size:11px;color:var(--muted)">50% ukończono</div>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">Zakupione plany</div>
+      <div class="grid-2">
+        <div class="card" style="display:flex;gap:14px;align-items:center">
+          <div style="font-size:36px">🌱</div>
+          <div style="flex:1">
+            <div style="font-size:15px;font-weight:600;margin-bottom:4px">Full Body Beginner</div>
+            <div style="font-size:11px;color:var(--muted)">Tomasz Nowak · 12 tygodni · 3×/tydz.</div>
+          </div>
+          <button class="btn-outline" style="padding:8px 14px;font-size:12px">Aktywuj</button>
+        </div>
+        <div class="card" style="display:flex;gap:14px;align-items:center">
+          <div style="font-size:36px">🔥</div>
+          <div style="flex:1">
+            <div style="font-size:15px;font-weight:600;margin-bottom:4px">HIIT Shred 8 Tygodni</div>
+            <div style="font-size:11px;color:var(--muted)">Anna Wiśniewska · 8 tygodni · 4×/tydz.</div>
+          </div>
+          <button class="btn-outline" style="padding:8px 14px;font-size:12px">Aktywuj</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── COACH PAGE ── -->
+    <div class="page" id="page-coach">
+      <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:900;text-transform:uppercase;letter-spacing:0.5px;line-height:1">AI <span style="color:var(--lime)">Coach</span></div>
+          <div style="font-size:13px;color:var(--muted);margin-top:4px">Twój personalny trener AI · dostępny 24/7</div>
+        </div>
+        <div style="background:rgba(180,240,58,0.06);border:1px solid rgba(180,240,58,0.15);border-radius:12px;padding:8px 16px;display:flex;align-items:center;gap:8px">
+          <div style="width:6px;height:6px;border-radius:50%;background:var(--lime);animation:workoutPulse 1.5s infinite"></div>
+          <span style="font-size:12px;color:var(--lime);font-weight:600">Online · Zna Twój profil</span>
+        </div>
+      </div>
+      <div class="card" style="height:calc(100vh - 200px);display:flex;flex-direction:column;padding:0;overflow:hidden">
+        <div class="ai-messages" id="aiMessages">
+          <div style="height:8px"></div>
+          <div class="msg-ai-wrap">
+            <div class="ai-av">🤖</div>
+            <div class="msg msg-ai">Cześć <strong>Maciej!</strong> 👋 Widzę że jesteś w połowie programu <strong>Power Hypertrophy</strong> — tydzień 6/12. Dziś jest <strong>Dzień A: Pchanie</strong> i trening już w toku! 💪<br><br>W czym mogę pomóc?</div>
+          </div>
+        </div>
+        <div class="ai-quick" id="aiQuick">
+          <button class="ai-q-btn" onclick="sendQuick(this)">Jak poprawić technikę wyciskania?</button>
+          <button class="ai-q-btn" onclick="sendQuick(this)">Co jeść po dzisiejszym treningu?</button>
+          <button class="ai-q-btn" onclick="sendQuick(this)">Boli mnie bark — co robić?</button>
+          <button class="ai-q-btn" onclick="sendQuick(this)">Oceń moje postępy</button>
+        </div>
+        <div class="ai-input-row">
+          <input class="ai-input" id="aiInput" type="text" placeholder="Zapytaj AI coacha..." onkeydown="if(event.key==='Enter')sendAI()">
+          <button class="ai-send" onclick="sendAI()">➤</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ── ACTIVE WORKOUT MODAL ── -->
+<div class="workout-modal" id="workoutModal">
+  <div class="wm-header">
+    <div>
+      <div class="wm-timer" id="wmTimer">00:34:18</div>
+      <div class="wm-title">Dzień A — Pchanie · Power Hypertrophy 12W</div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <div class="rest-timer" id="restTimer" style="display:none">⏱ Odpoczynek: <strong id="restCountdown">90s</strong></div>
+      <button class="wm-close" onclick="closeWorkout()">Zakończ trening ✓</button>
+    </div>
+  </div>
+  <div class="wm-body">
+    <div class="wm-exercise">
+      <div class="wm-ex-header">
+        <div class="wm-ex-num" style="background:rgba(180,240,58,0.15);color:var(--lime)">3</div>
+        <div>
+          <div class="wm-ex-name">Wyciskanie na skosie</div>
+          <div class="wm-ex-meta">Klatka górna · 3 serie × 10 powt. · 2 min przerwy · sugerowany ciężar: 70 kg</div>
+        </div>
+      </div>
+      <div class="wm-sets">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">Seria</div>
+        <div class="wm-set-row">
+          <div class="wm-set-num">Seria 1</div>
+          <input class="wm-input" type="number" value="70" placeholder="kg">
+          <div class="wm-input-label">kg</div>
+          <input class="wm-input" type="number" value="10" placeholder="reps">
+          <div class="wm-input-label">powt.</div>
+          <button class="wm-set-done done" onclick="toggleSet(this)">✓</button>
+        </div>
+        <div class="wm-set-row">
+          <div class="wm-set-num">Seria 2</div>
+          <input class="wm-input" type="number" value="70" placeholder="kg">
+          <div class="wm-input-label">kg</div>
+          <input class="wm-input" type="number" value="10" placeholder="reps">
+          <div class="wm-input-label">powt.</div>
+          <button class="wm-set-done done" onclick="toggleSet(this)">✓</button>
+        </div>
+        <div class="wm-set-row" style="border-color:rgba(180,240,58,0.2);background:rgba(180,240,58,0.03)">
+          <div class="wm-set-num" style="color:var(--lime)">Seria 3</div>
+          <input class="wm-input" type="number" placeholder="kg" style="border-color:rgba(180,240,58,0.3)">
+          <div class="wm-input-label">kg</div>
+          <input class="wm-input" type="number" placeholder="reps" style="border-color:rgba(180,240,58,0.3)">
+          <div class="wm-input-label">powt.</div>
+          <button class="wm-set-done" onclick="toggleSet(this);startRest(120)">✓</button>
+        </div>
+      </div>
+    </div>
+    <div class="wm-exercise" style="opacity:0.4">
+      <div class="wm-ex-header">
+        <div class="wm-ex-num">4</div>
+        <div><div class="wm-ex-name">Rozpiętki ze sztangielkami</div><div class="wm-ex-meta">Klatka · 3 × 12 · 90s przerwy · 18 kg</div></div>
+      </div>
+    </div>
+    <div class="wm-exercise" style="opacity:0.4">
+      <div class="wm-ex-header">
+        <div class="wm-ex-num">5</div>
+        <div><div class="wm-ex-name">Pompki na poręczach</div><div class="wm-ex-meta">Triceps · 3 × do upadku · 2 min przerwy</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="wm-footer">
+    <button class="btn-primary" style="flex:1" onclick="closeWorkout()">🏁 Zakończ i zapisz trening</button>
+    <button class="btn-outline">⏭ Pomiń ćwiczenie</button>
+    <button class="btn-outline" onclick="showPage('coach',null);closeWorkout()">🤖 Zapytaj AI</button>
+  </div>
+</div>
+
+<style>
+@keyframes drawLine{to{stroke-dashoffset:0}}
+@keyframes ringDraw{from{stroke-dashoffset:300}to{stroke-dashoffset:var(--end-offset,79.2)}}
+</style>
+
+<script>
+// ── NAVIGATION ─────────────────────────────────────────────────
+const pageTitles = {
+  dashboard:'Dashboard',workout:'Dziś trenuję',progress:'Moje postępy',
+  plans:'Plany treningowe',community:'Społeczność',challenges:'Wyzwania',coach:'AI Coach'
+};
+function showPage(id, navEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id)?.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (navEl) navEl.classList.add('active');
+  document.getElementById('pageTitle').textContent = pageTitles[id] || id;
+}
+
+// ── WORKOUT MODAL ──────────────────────────────────────────────
+let workoutInterval, wmSeconds = 34*60+12;
+let restInterval, restSeconds = 0;
+
+function openWorkout() {
+  document.getElementById('workoutModal').classList.add('open');
+  clearInterval(workoutInterval);
+  workoutInterval = setInterval(() => {
+    wmSeconds++;
+    const m = String(Math.floor(wmSeconds/60)).padStart(2,'0');
+    const s = String(wmSeconds%60).padStart(2,'0');
+    document.getElementById('wmTimer').textContent = m+':'+s;
+    // Update dashboard button too
+    const dbBtn = document.querySelector('.btn-primary.active-workout');
+    if(dbBtn) dbBtn.textContent = '⏱ TRENING W TOKU — '+m+':'+s;
+  }, 1000);
+}
+
+function closeWorkout() {
+  document.getElementById('workoutModal').classList.remove('open');
+  clearInterval(workoutInterval);
+  clearInterval(restInterval);
+  document.getElementById('restTimer').style.display = 'none';
+}
+
+function toggleSet(btn) {
+  btn.classList.toggle('done');
+  btn.textContent = btn.classList.contains('done') ? '✓' : '○';
+}
+
+function startRest(secs) {
+  restSeconds = secs;
+  const el = document.getElementById('restTimer');
+  const cd = document.getElementById('restCountdown');
+  el.style.display = 'flex';
+  clearInterval(restInterval);
+  restInterval = setInterval(() => {
+    restSeconds--;
+    cd.textContent = restSeconds + 's';
+    if(restSeconds <= 0) {
+      clearInterval(restInterval);
+      el.style.display = 'none';
+    }
+  }, 1000);
+}
+
+// ── AI COACH ──────────────────────────────────────────────────
+let aiLoading = false;
+const aiHistory = [
+  {role:'assistant', content:'Cześć Maciej! 👋 Widzę że jesteś w połowie programu Power Hypertrophy — tydzień 6/12. Dziś jest Dzień A: Pchanie i trening już w toku! 💪\n\nW czym mogę pomóc?'}
+];
+
+function sendQuick(btn) {
+  document.getElementById('aiInput').value = btn.textContent;
+  document.getElementById('aiQuick').style.display = 'none';
+  sendAI();
+}
+
+async function sendAI() {
+  if (aiLoading) return;
+  const input = document.getElementById('aiInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  aiLoading = true;
+
+  appendMsg('user', msg);
+  aiHistory.push({role:'user', content:msg});
+
+  // Typing indicator
+  const typingId = 'typing_' + Date.now();
+  const messagesEl = document.getElementById('aiMessages');
+  const typingEl = document.createElement('div');
+  typingEl.id = typingId;
+  typingEl.className = 'msg-ai-wrap';
+  typingEl.innerHTML = '<div class="ai-av">🤖</div><div class="msg msg-ai"><div class="typing-indicator"><span></span><span></span><span></span></div></div>';
+  messagesEl.appendChild(typingEl);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:`Jesteś AI coachem fitness platformy chceByc.fit. Rozmawiasz z Maciejem K., poziom 14 (Atleta).
+Profil: cel — masa mięśniowa i redukcja tkanki tłuszczowej, średniozaawansowany, 3× tyg., siłownia pełna, waga 76 kg, wzrost 178 cm, 28 lat, mężczyzna, brak kontuzji.
+Aktywny plan: Power Hypertrophy 12W (tydzień 6/12). Dzisiejszy trening: Dzień A (Pchanie) — wyciskanie sztangi, OHP, wyciskanie na skosie, rozpiętki, pompki. Trening w toku 34 min.
+Wyniki: Wyciskanie 82.5 kg (PR), Przysiad 110 kg, Martwy ciąg 135 kg.
+Odpowiadaj po polsku. Krótko (2-3 zdania). Konkretnie i motywująco. Używaj danych użytkownika. Czasem emoji.`,
+        messages: aiHistory.map(m => ({role:m.role, content:m.content}))
+      })
+    });
+    const data = await resp.json();
+    const text = data.content?.map(b=>b.text||'').join('') || 'Przepraszam, spróbuj ponownie.';
+    document.getElementById(typingId)?.remove();
+    appendMsg('ai', text);
+    aiHistory.push({role:'assistant', content:text});
+  } catch(e) {
+    document.getElementById(typingId)?.remove();
+    appendMsg('ai', 'Błąd połączenia. Sprawdź internet i spróbuj ponownie.');
+  }
+  aiLoading = false;
+}
+
+function appendMsg(role, text) {
+  const el = document.getElementById('aiMessages');
+  const wrap = document.createElement('div');
+  if (role === 'user') {
+    wrap.className = 'msg msg-user fade-in';
+    wrap.style.alignSelf = 'flex-end';
+    wrap.textContent = text;
+    el.appendChild(wrap);
+  } else {
+    wrap.className = 'msg-ai-wrap fade-in';
+    wrap.innerHTML = `<div class="ai-av">🤖</div><div class="msg msg-ai">${text.replace(/\*\*(.*?)\*\*/g,'<strong style="color:var(--lime)">$1</strong>').replace(/\n/g,'<br>')}</div>`;
+    el.appendChild(wrap);
+  }
+  el.scrollTop = el.scrollHeight;
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+// Animate rings on load
+document.querySelectorAll('.rings-svg circle[stroke-dashoffset]').forEach((c,i) => {
+  const endOffsets = [79.2, 80.4, 41.5];
+  c.style.setProperty('--end-offset', endOffsets[i] || 79.2);
+});
+</script>
+</body>
+</html>

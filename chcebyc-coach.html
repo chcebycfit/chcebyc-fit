@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>chceByc.fit — Panel Trenera</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black:#07090a; --dark:#0c1117; --card:#111820; --card2:#151f28; --card3:#1a2535;
+  --border:#1e2d3d; --border2:#263850; --border3:#2e4560;
+  --cyan:#3af0d4; --cyan-soft:#6bffea; --cyan-dim:#20a890; --cyan-ghost:rgba(58,240,212,0.07); --cyan-glow:rgba(58,240,212,0.15);
+  --white:#e8f4f8; --off:#b8d4e0; --muted:#4a6a7a; --muted2:#2e4a5a;
+  --gold:#f0c840; --gold-ghost:rgba(240,200,64,0.1);
+  --green:#4af090; --green-ghost:rgba(74,240,144,0.1);
+  --red:#ff5566; --red-ghost:rgba(255,85,102,0.1);
+  --blue:#4ab0ff; --blue-ghost:rgba(74,176,255,0.1);
+  --orange:#ff9f4a; --orange-ghost:rgba(255,159,74,0.1);
+  --purple:#b86eff; --purple-ghost:rgba(184,110,255,0.1);
+  --sidebar:240px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--black);color:var(--white);display:flex;}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:var(--sidebar);flex-shrink:0;
+  background:var(--dark);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;height:100vh;
+  position:relative;z-index:100;
+}
+.sidebar-logo{padding:22px 20px 18px;border-bottom:1px solid var(--border);}
+.logo-text{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;letter-spacing:0.5px;}
+.logo-text span{color:var(--cyan);}
+.logo-role{display:inline-flex;align-items:center;gap:5px;background:var(--cyan-ghost);border:1px solid rgba(58,240,212,0.2);border-radius:5px;padding:2px 8px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);margin-top:6px;}
+
+.coach-profile{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.coach-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--cyan-dim),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:var(--black);font-family:'Barlow Condensed',sans-serif;flex-shrink:0;}
+.coach-name{font-size:13px;font-weight:600;line-height:1.3;}
+.coach-verified{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--cyan);margin-top:1px;}
+
+.sidebar-nav{flex:1;overflow-y:auto;padding:10px 0;scrollbar-width:none;}
+.sidebar-nav::-webkit-scrollbar{display:none;}
+.nav-section{font-size:9px;color:var(--muted2);letter-spacing:2.5px;text-transform:uppercase;padding:14px 20px 5px;font-weight:700;}
+.nav-item{display:flex;align-items:center;gap:11px;padding:9px 20px;cursor:pointer;font-size:13px;font-weight:500;color:var(--muted);border-left:2px solid transparent;transition:all 0.2s;user-select:none;}
+.nav-item:hover{color:var(--off);background:rgba(255,255,255,0.02);}
+.nav-item.active{color:var(--cyan);background:var(--cyan-ghost);border-left-color:var(--cyan);}
+.nav-icon{font-size:15px;width:18px;text-align:center;flex-shrink:0;}
+.nav-badge{margin-left:auto;background:var(--red);color:#fff;border-radius:8px;padding:1px 7px;font-size:9px;font-weight:700;}
+.nav-badge.cyan{background:var(--cyan);color:var(--black);}
+.nav-badge.gold{background:var(--gold);color:var(--black);}
+
+.sidebar-revenue{padding:16px 20px;border-top:1px solid var(--border);}
+.rev-label{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+.rev-amount{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;color:var(--green);line-height:1;}
+.rev-period{font-size:10px;color:var(--muted);margin-top:2px;}
+.rev-bar{height:3px;background:var(--border2);border-radius:2px;margin-top:10px;}
+.rev-bar-fill{height:100%;background:linear-gradient(90deg,var(--cyan-dim),var(--green));border-radius:2px;width:62%;}
+
+/* ── TOPBAR ── */
+.topbar{height:58px;flex-shrink:0;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(7,9,10,0.8);backdrop-filter:blur(12px);}
+.topbar-left{display:flex;align-items:center;gap:14px;}
+.page-title{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;text-transform:uppercase;letter-spacing:1px;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.icon-btn{width:34px;height:34px;border-radius:8px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;transition:all 0.2s;position:relative;}
+.icon-btn:hover{border-color:var(--border2);}
+.notif-dot{position:absolute;top:5px;right:5px;width:6px;height:6px;border-radius:50%;background:var(--red);border:1px solid var(--black);}
+.status-pill{display:flex;align-items:center;gap:7px;background:var(--green-ghost);border:1px solid rgba(74,240,144,0.2);border-radius:8px;padding:5px 12px;font-size:11px;color:var(--green);font-weight:600;}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── LAYOUT ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.content{flex:1;overflow-y:auto;padding:24px 28px;scrollbar-width:thin;scrollbar-color:var(--border2) transparent;}
+.page{display:none;animation:fadeIn .35s ease;}
+.page.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── GRID ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.gmain{display:grid;grid-template-columns:1fr 340px;gap:16px;}
+
+/* ── CARDS ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;}
+.card-sm{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.card-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
+
+/* ── STAT CARD ── */
+.stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;transition:border-color .2s;}
+.stat:hover{border-color:var(--border2);}
+.stat-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
+.stat-icon{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.stat-delta{font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;}
+.stat-val{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:900;line-height:1;margin-bottom:3px;}
+.stat-label{font-size:11px;color:var(--muted);}
+
+/* ── BADGE ── */
+.badge{display:inline-flex;align-items:center;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:7px;border-radius:10px;padding:10px 20px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border:none;text-decoration:none;}
+.btn-cyan{background:var(--cyan);color:var(--black);box-shadow:0 0 20px rgba(58,240,212,.2);}
+.btn-cyan:hover{background:var(--cyan-soft);transform:translateY(-1px);box-shadow:0 0 35px rgba(58,240,212,.3);}
+.btn-outline{background:none;border:1px solid var(--border2);color:var(--muted);}
+.btn-outline:hover{border-color:var(--muted);color:var(--off);}
+.btn-ghost{background:none;border:1px solid var(--border);color:var(--muted);font-size:12px;padding:7px 14px;}
+.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan);}
+.btn-sm{padding:7px 14px;font-size:12px;}
+.btn-danger{background:var(--red-ghost);border:1px solid rgba(255,85,102,.2);color:var(--red);}
+.btn-danger:hover{background:rgba(255,85,102,.15);}
+
+/* ── CLIENT ROW ── */
+.client-row{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card2);border:1px solid var(--border);border-radius:12px;transition:border-color .2s;cursor:pointer;}
+.client-row:hover{border-color:var(--border2);}
+.cl-avatar{width:38px;height:38px;border-radius:50%;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;position:relative;}
+.cl-online{position:absolute;bottom:0;right:0;width:9px;height:9px;border-radius:50%;background:var(--green);border:1.5px solid var(--card);}
+.cl-name{font-size:13px;font-weight:600;line-height:1.3;}
+.cl-meta{font-size:11px;color:var(--muted);}
+.cl-prog-wrap{flex:1;max-width:120px;}
+.cl-prog-label{font-size:10px;color:var(--muted);margin-bottom:4px;display:flex;justify-content:space-between;}
+.cl-prog-bar{height:4px;background:var(--border2);border-radius:2px;}
+.cl-prog-fill{height:100%;border-radius:2px;transition:width 1s;}
+.cl-streak{font-size:11px;color:var(--orange);font-weight:700;flex-shrink:0;}
+.cl-actions{display:flex;gap:6px;flex-shrink:0;}
+
+/* ── PLAN CARD ── */
+.plan-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .25s;}
+.plan-card:hover{border-color:var(--border2);transform:translateY(-2px);}
+.plan-card-head{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.plan-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;}
+.plan-body{padding:16px 18px;}
+.plan-stat-row{display:flex;gap:14px;margin-bottom:12px;}
+.plan-stat{font-size:11px;color:var(--muted);}
+.plan-stat strong{color:var(--white);font-weight:700;display:block;font-size:16px;font-family:'Barlow Condensed',sans-serif;}
+.plan-bar{height:3px;background:var(--border2);border-radius:2px;margin-bottom:10px;}
+.plan-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--cyan-dim),var(--cyan));}
+.plan-footer{padding:12px 18px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+
+/* ── MESSAGE ── */
+.msg-row{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:var(--card2);border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:border-color .2s;}
+.msg-row:hover{border-color:var(--border2);}
+.msg-row.unread{border-color:rgba(58,240,212,.2);background:rgba(58,240,212,.03);}
+.msg-av{width:36px;height:36px;border-radius:50%;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.msg-name{font-size:13px;font-weight:600;}
+.msg-preview{font-size:12px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;}
+.msg-time{font-size:10px;color:var(--muted);margin-left:auto;flex-shrink:0;}
+.msg-unread-dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);flex-shrink:0;margin-top:4px;}
+
+/* ── PLAN BUILDER ── */
+.builder-wrap{display:grid;grid-template-columns:1fr 380px;gap:20px;height:calc(100vh - 150px);}
+.builder-left{display:flex;flex-direction:column;gap:14px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border2) transparent;}
+.builder-right{display:flex;flex-direction:column;gap:14px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border2) transparent;}
+.day-block{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.day-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(58,240,212,.03);}
+.day-name{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--cyan);}
+.day-exercises{padding:10px;}
+.ex-item{display:flex;align-items:center;gap:10px;padding:9px 10px;background:var(--card2);border:1px solid var(--border);border-radius:9px;margin-bottom:6px;cursor:grab;}
+.ex-item:active{cursor:grabbing;opacity:.7;}
+.ex-drag{color:var(--muted);font-size:14px;cursor:grab;}
+.ex-name-sm{font-size:13px;font-weight:500;}
+.ex-sets-sm{font-size:11px;color:var(--muted);}
+.ex-remove{margin-left:auto;width:24px;height:24px;border-radius:6px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.ex-remove:hover{background:var(--red-ghost);color:var(--red);}
+.add-ex-btn{width:100%;padding:9px;background:none;border:1px dashed var(--border2);border-radius:9px;color:var(--muted);font-size:12px;cursor:pointer;transition:all .2s;font-family:inherit;}
+.add-ex-btn:hover{border-color:var(--cyan);color:var(--cyan);}
+
+/* ── FORM ELEMENTS ── */
+.form-group{margin-bottom:14px;}
+.form-label{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:6px;font-weight:600;}
+.form-input{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--white);font-size:13px;font-family:inherit;outline:none;transition:border-color .2s;}
+.form-input:focus{border-color:var(--cyan);}
+.form-input::placeholder{color:var(--muted);}
+.form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%234a6a7a'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;}
+textarea.form-input{resize:vertical;min-height:80px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* ── ANALYTICS ── */
+.chart-box{height:160px;position:relative;}
+.chart-svg{width:100%;height:100%;overflow:visible;}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:800;background:rgba(7,9,10,.85);backdrop-filter:blur(12px);align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--card);border:1px solid var(--border2);border-radius:20px;padding:28px;width:480px;max-width:95vw;max-height:90vh;overflow-y:auto;}
+.modal-title{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;margin-bottom:20px;}
+.modal-close{float:right;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:4px;}
+.modal-close:hover{color:var(--red);}
+
+/* ── AI HELPER ── */
+.ai-chip{display:flex;align-items:center;gap:8px;background:var(--cyan-ghost);border:1px solid rgba(58,240,212,.15);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--off);line-height:1.5;}
+.ai-chip .ai-ico{font-size:18px;flex-shrink:0;}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text">chceByc<span>.fit</span></div>
+    <div class="logo-role">🎓 Panel Trenera</div>
+  </div>
+  <div class="coach-profile">
+    <div class="coach-avatar">MK</div>
+    <div>
+      <div class="coach-name">Marcin Kowalski</div>
+      <div class="coach-verified">✓ Trener zweryfikowany</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Przegląd</div>
+    <div class="nav-item active" onclick="show('overview',this)"><span class="nav-icon">◈</span>Dashboard</div>
+    <div class="nav-item" onclick="show('analytics',this)"><span class="nav-icon">📊</span>Analityka <span class="nav-badge gold">Nowe</span></div>
+    <div class="nav-section">Klienci</div>
+    <div class="nav-item" onclick="show('clients',this)"><span class="nav-icon">👥</span>Moi klienci <span style="margin-left:auto;font-size:10px;color:var(--cyan)">24</span></div>
+    <div class="nav-item" onclick="show('messages',this)"><span class="nav-icon">💬</span>Wiadomości <span class="nav-badge">5</span></div>
+    <div class="nav-section">Plany</div>
+    <div class="nav-item" onclick="show('plans',this)"><span class="nav-icon">📋</span>Moje plany</div>
+    <div class="nav-item" onclick="show('builder',this)"><span class="nav-icon">✏️</span>Kreator planu <span class="nav-badge cyan">AI</span></div>
+    <div class="nav-section">Sprzedaż</div>
+    <div class="nav-item" onclick="show('sales',this)"><span class="nav-icon">💰</span>Przychody</div>
+    <div class="nav-item" onclick="show('reviews',this)"><span class="nav-icon">⭐</span>Opinie</div>
+    <div class="nav-section">Konto</div>
+    <div class="nav-item"><span class="nav-icon">👤</span>Profil publiczny</div>
+    <div class="nav-item"><span class="nav-icon">⚙️</span>Ustawienia</div>
+  </nav>
+  <div class="sidebar-revenue">
+    <div class="rev-label">Przychód — Marzec</div>
+    <div class="rev-amount">6 840 <span style="font-size:14px;color:var(--muted)">zł</span></div>
+    <div class="rev-period">↑ +18% vs luty · cel: 10 000 zł</div>
+    <div class="rev-bar"><div class="rev-bar-fill"></div></div>
+  </div>
+</aside>
+
+<!-- ── MAIN ── -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="page-title" id="pageTitle">Dashboard</div>
+      <div class="status-pill"><div class="status-dot"></div>8 planów aktywnych</div>
+    </div>
+    <div class="topbar-right">
+      <button class="btn btn-cyan btn-sm" onclick="show('builder',document.querySelector('.nav-item:nth-child(10)'))">✏️ Nowy plan</button>
+      <div class="icon-btn">🔔<div class="notif-dot"></div></div>
+      <div class="icon-btn">⚙️</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ══ OVERVIEW ══ -->
+    <div class="page active" id="page-overview">
+      <div style="margin-bottom:20px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;line-height:1">
+          Dzień dobry, <span style="color:var(--cyan)">Marcin!</span>
+        </div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px">Sobota 14 marca 2026 · 5 nowych wiadomości · 3 klientów trenuje teraz</div>
+      </div>
+
+      <!-- Stats row -->
+      <div class="g4" style="margin-bottom:16px">
+        <div class="stat">
+          <div class="stat-top">
+            <div class="stat-icon" style="background:var(--green-ghost)">💰</div>
+            <span class="stat-delta" style="background:var(--green-ghost);color:var(--green)">↑ +18%</span>
+          </div>
+          <div class="stat-val" style="color:var(--green)">6 840</div>
+          <div class="stat-label">Przychód w marcu (zł)</div>
+        </div>
+        <div class="stat">
+          <div class="stat-top">
+            <div class="stat-icon" style="background:var(--cyan-ghost)">👥</div>
+            <span class="stat-delta" style="background:var(--cyan-ghost);color:var(--cyan)">↑ +4</span>
+          </div>
+          <div class="stat-val" style="color:var(--cyan)">24</div>
+          <div class="stat-label">Aktywnych klientów</div>
+        </div>
+        <div class="stat">
+          <div class="stat-top">
+            <div class="stat-icon" style="background:var(--gold-ghost)">⭐</div>
+            <span class="stat-delta" style="background:var(--gold-ghost);color:var(--gold)">4.9</span>
+          </div>
+          <div class="stat-val" style="color:var(--gold)">247</div>
+          <div class="stat-label">Łącznych opinii</div>
+        </div>
+        <div class="stat">
+          <div class="stat-top">
+            <div class="stat-icon" style="background:var(--purple-ghost)">📋</div>
+            <span class="stat-delta" style="background:var(--purple-ghost);color:var(--purple)">↑ +31</span>
+          </div>
+          <div class="stat-val" style="color:var(--purple)">1 204</div>
+          <div class="stat-label">Sprzedanych planów</div>
+        </div>
+      </div>
+
+      <div class="gmain">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <!-- Revenue chart -->
+          <div class="card">
+            <div class="card-title">Przychód miesięczny — 2026 <span style="color:var(--cyan);cursor:pointer" onclick="show('sales',null)">→ Szczegóły</span></div>
+            <svg class="chart-svg" style="height:140px" viewBox="0 0 600 140">
+              <defs>
+                <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="var(--cyan)" stop-opacity=".2"/>
+                  <stop offset="100%" stop-color="var(--cyan)" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <!-- grid -->
+              <line x1="0" y1="20" x2="600" y2="20" stroke="var(--border)" stroke-width="1"/>
+              <line x1="0" y1="60" x2="600" y2="60" stroke="var(--border)" stroke-width="1"/>
+              <line x1="0" y1="100" x2="600" y2="100" stroke="var(--border)" stroke-width="1"/>
+              <!-- area -->
+              <path d="M0,120 L75,100 L150,85 L225,95 L300,70 L375,55 L450,40 L525,28 L600,28 L600,130 L0,130 Z" fill="url(#revGrad)"/>
+              <!-- line -->
+              <polyline points="0,120 75,100 150,85 225,95 300,70 375,55 450,40 525,28 600,28" fill="none" stroke="var(--cyan)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- dots -->
+              <circle cx="525" cy="28" r="4" fill="var(--cyan)"/>
+              <circle cx="600" cy="28" r="5" fill="var(--cyan)" stroke="var(--black)" stroke-width="2"/>
+              <!-- x labels -->
+              <text x="0" y="135" fill="var(--muted)" font-size="9" font-family="'Plus Jakarta Sans'">Lip</text>
+              <text x="75" y="135" fill="var(--muted)" font-size="9" font-family="'Plus Jakarta Sans'">Sie</text>
+              <text x="148" y="135" fill="var(--muted)" font-size="9" font-family="'Plus Jakarta Sans'">Wrz</text>
+              <text x="222" y="135" fill="var(--muted)" font-size="9" font-family="'Plus Jakarta Sans'">Paź</text>
+              <text x="297" y="135" fill="var(--muted)" font-size="9" font-family="'Plus Jakarta Sans'">Lis</text>
+              <text x="371" y="135" fill="var(--muted)" font-size="9" font-family="'Plus Jakarta Sans'">Gru</text>
+              <text x="445" y="135" fill="var(--muted)" font-size="9" font-family="'Plus Jakarta Sans'">Sty</text>
+              <text x="519" y="135" fill="var(--muted)" font-size="9" font-family="'Plus Jakarta Sans'">Lut</text>
+              <text x="585" y="135" fill="var(--cyan)" font-size="9" font-family="'Plus Jakarta Sans'" font-weight="700">Mar</text>
+            </svg>
+            <div style="display:flex;gap:20px;margin-top:8px">
+              <div><div style="font-size:10px;color:var(--muted)">Ten miesiąc</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--green)">6 840 zł</div></div>
+              <div><div style="font-size:10px;color:var(--muted)">Poprzedni</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--off)">5 790 zł</div></div>
+              <div><div style="font-size:10px;color:var(--muted)">Łącznie YTD</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--cyan)">18 420 zł</div></div>
+              <div style="margin-left:auto;text-align:right"><div style="font-size:10px;color:var(--muted)">Twój udział</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--cyan)">80%</div></div>
+            </div>
+          </div>
+
+          <!-- Active clients preview -->
+          <div class="card">
+            <div class="card-title">Klienci trenujący teraz <span style="color:var(--cyan);cursor:pointer" onclick="show('clients',null)">→ Wszyscy (24)</span></div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div class="client-row">
+                <div class="cl-avatar">🏋️<div class="cl-online"></div></div>
+                <div>
+                  <div class="cl-name">Piotr Kwiatkowski</div>
+                  <div class="cl-meta">Power Hypertrophy · Tydzień 8 · <span style="color:var(--green)">Trening w toku 42 min</span></div>
+                </div>
+                <div class="cl-prog-wrap">
+                  <div class="cl-prog-label"><span>Postęp</span><span style="color:var(--cyan)">67%</span></div>
+                  <div class="cl-prog-bar"><div class="cl-prog-fill" style="width:67%;background:var(--cyan)"></div></div>
+                </div>
+                <span class="cl-streak">🔥 21 dni</span>
+                <div class="cl-actions"><button class="btn btn-ghost btn-sm">💬</button></div>
+              </div>
+              <div class="client-row">
+                <div class="cl-avatar">🏃<div class="cl-online"></div></div>
+                <div>
+                  <div class="cl-name">Karolina Mazur</div>
+                  <div class="cl-meta">HIIT Shred 8W · Tydzień 4 · <span style="color:var(--green)">Cardio – 18 min</span></div>
+                </div>
+                <div class="cl-prog-wrap">
+                  <div class="cl-prog-label"><span>Postęp</span><span style="color:var(--orange)">50%</span></div>
+                  <div class="cl-prog-bar"><div class="cl-prog-fill" style="width:50%;background:var(--orange)"></div></div>
+                </div>
+                <span class="cl-streak">🔥 14 dni</span>
+                <div class="cl-actions"><button class="btn btn-ghost btn-sm">💬</button></div>
+              </div>
+              <div class="client-row">
+                <div class="cl-avatar">⚡<div class="cl-online"></div></div>
+                <div>
+                  <div class="cl-name">Tomasz Wiśniewski</div>
+                  <div class="cl-meta">Beginner Strength · Tydzień 2 · <span style="color:var(--green)">Rozgrzewka</span></div>
+                </div>
+                <div class="cl-prog-wrap">
+                  <div class="cl-prog-label"><span>Postęp</span><span style="color:var(--green)">17%</span></div>
+                  <div class="cl-prog-bar"><div class="cl-prog-fill" style="width:17%;background:var(--green)"></div></div>
+                </div>
+                <span class="cl-streak">🔥 5 dni</span>
+                <div class="cl-actions"><button class="btn btn-ghost btn-sm">💬</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right column -->
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <!-- Top plans -->
+          <div class="card">
+            <div class="card-title">Bestsellery planów</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--card2);border:1px solid var(--border);border-radius:10px">
+                <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--gold);width:28px">1</div>
+                <div style="flex:1">
+                  <div style="font-size:13px;font-weight:600">Power Hypertrophy 12W</div>
+                  <div style="font-size:11px;color:var(--muted);margin-top:1px">⭐ 4.9 · 487 sprzedaży</div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;color:var(--green)">2 340 zł</div>
+                  <div style="font-size:9px;color:var(--muted)">ten miesiąc</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--card2);border:1px solid var(--border);border-radius:10px">
+                <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--muted);width:28px">2</div>
+                <div style="flex:1">
+                  <div style="font-size:13px;font-weight:600">Beginner Strength 8W</div>
+                  <div style="font-size:11px;color:var(--muted);margin-top:1px">⭐ 5.0 · 312 sprzedaży</div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;color:var(--green)">1 840 zł</div>
+                  <div style="font-size:9px;color:var(--muted)">ten miesiąc</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--card2);border:1px solid var(--border);border-radius:10px">
+                <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--orange);width:28px">3</div>
+                <div style="flex:1">
+                  <div style="font-size:13px;font-weight:600">Advanced Push Pull Legs</div>
+                  <div style="font-size:11px;color:var(--muted);margin-top:1px">⭐ 4.8 · 198 sprzedaży</div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;color:var(--green)">2 660 zł</div>
+                  <div style="font-size:9px;color:var(--muted)">ten miesiąc</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick messages -->
+          <div class="card">
+            <div class="card-title">Nieprzeczytane <span class="badge" style="background:var(--red-ghost);color:var(--red)">5</span></div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div class="msg-row unread" onclick="show('messages',null)">
+                <div class="msg-av">🏋️</div>
+                <div style="flex:1;min-width:0">
+                  <div class="msg-name">Piotr K.</div>
+                  <div class="msg-preview">Hej, dziś zrobiłem 82.5 kg na wyciskaniu — rekord!</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+                  <div class="msg-time">2 min</div>
+                  <div class="msg-unread-dot"></div>
+                </div>
+              </div>
+              <div class="msg-row unread" onclick="show('messages',null)">
+                <div class="msg-av">🏃</div>
+                <div style="flex:1;min-width:0">
+                  <div class="msg-name">Karolina M.</div>
+                  <div class="msg-preview">Kiedy możesz dodać trening mobilności?</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+                  <div class="msg-time">1 godz.</div>
+                  <div class="msg-unread-dot"></div>
+                </div>
+              </div>
+              <div class="msg-row" onclick="show('messages',null)">
+                <div class="msg-av">⚡</div>
+                <div style="flex:1;min-width:0">
+                  <div class="msg-name">Tomasz W.</div>
+                  <div class="msg-preview">Dziękuję za wskazówki do przysiadów!</div>
+                </div>
+                <div class="msg-time">3 godz.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI tip -->
+          <div class="ai-chip">
+            <div class="ai-ico">🤖</div>
+            <div><strong style="color:var(--cyan)">AI sugestia:</strong> Karolina M. nie wykonała 3 treningów z rzędu. Warto wysłać wiadomość motywacyjną — klientki z personalizowanym check-inem mają 3× wyższą retencję.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ CLIENTS ══ -->
+    <div class="page" id="page-clients">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;line-height:1">Moi <span style="color:var(--cyan)">klienci</span></div>
+        <div style="display:flex;gap:10px">
+          <input class="form-input" style="width:220px" placeholder="🔍 Szukaj klienta...">
+          <button class="btn btn-cyan" onclick="openModal('addClient')">+ Dodaj klienta</button>
+        </div>
+      </div>
+      <div class="g3" style="margin-bottom:14px">
+        <div class="stat"><div class="stat-top"><div class="stat-icon" style="background:var(--cyan-ghost)">👥</div><span class="stat-delta" style="background:var(--cyan-ghost);color:var(--cyan)">+4 ten mies.</span></div><div class="stat-val" style="color:var(--cyan)">24</div><div class="stat-label">Aktywni klienci</div></div>
+        <div class="stat"><div class="stat-top"><div class="stat-icon" style="background:var(--green-ghost)">📈</div><span class="stat-delta" style="background:var(--green-ghost);color:var(--green)">87%</span></div><div class="stat-val" style="color:var(--green)">21</div><div class="stat-label">Osiąga cel w planie</div></div>
+        <div class="stat"><div class="stat-top"><div class="stat-icon" style="background:var(--orange-ghost)">🔥</div><span class="stat-delta" style="background:var(--orange-ghost);color:var(--orange)">śr. 12</span></div><div class="stat-val" style="color:var(--orange)">283</div><div class="stat-label">Łącznych dni serii</div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="client-row" onclick="openModal('clientDetail')">
+          <div class="cl-avatar" style="background:rgba(58,240,212,.1)">💪<div class="cl-online"></div></div>
+          <div style="min-width:160px"><div class="cl-name">Piotr Kwiatkowski</div><div class="cl-meta">od 3 miesięcy · Power Hypertrophy</div></div>
+          <div class="cl-prog-wrap" style="max-width:160px">
+            <div class="cl-prog-label"><span>Tydzień 8/12</span><span style="color:var(--cyan)">67%</span></div>
+            <div class="cl-prog-bar"><div class="cl-prog-fill" style="width:67%;background:var(--cyan)"></div></div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);min-width:120px">Wyciskanie: <strong style="color:var(--white)">82.5 kg</strong> ↑</div>
+          <span class="cl-streak">🔥 21</span>
+          <span class="badge" style="background:var(--green-ghost);color:var(--green)">Na celu</span>
+          <div class="cl-actions"><button class="btn btn-ghost btn-sm">💬</button><button class="btn btn-ghost btn-sm">📊</button></div>
+        </div>
+        <div class="client-row" onclick="openModal('clientDetail')">
+          <div class="cl-avatar" style="background:rgba(255,159,74,.1)">🏃<div class="cl-online"></div></div>
+          <div style="min-width:160px"><div class="cl-name">Karolina Mazur</div><div class="cl-meta">od 2 miesięcy · HIIT Shred 8W</div></div>
+          <div class="cl-prog-wrap" style="max-width:160px">
+            <div class="cl-prog-label"><span>Tydzień 4/8</span><span style="color:var(--orange)">50%</span></div>
+            <div class="cl-prog-bar"><div class="cl-prog-fill" style="width:50%;background:var(--orange)"></div></div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);min-width:120px">Waga: <strong style="color:var(--white)">-3.2 kg</strong> ↓</div>
+          <span class="cl-streak">🔥 14</span>
+          <span class="badge" style="background:var(--orange-ghost);color:var(--orange)">Wymaga uwagi</span>
+          <div class="cl-actions"><button class="btn btn-ghost btn-sm">💬</button><button class="btn btn-ghost btn-sm">📊</button></div>
+        </div>
+        <div class="client-row" onclick="openModal('clientDetail')">
+          <div class="cl-avatar" style="background:rgba(74,240,144,.1)">⚡<div class="cl-online"></div></div>
+          <div style="min-width:160px"><div class="cl-name">Tomasz Wiśniewski</div><div class="cl-meta">od 3 tygodni · Beginner Strength</div></div>
+          <div class="cl-prog-wrap" style="max-width:160px">
+            <div class="cl-prog-label"><span>Tydzień 2/12</span><span style="color:var(--green)">17%</span></div>
+            <div class="cl-prog-bar"><div class="cl-prog-fill" style="width:17%;background:var(--green)"></div></div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);min-width:120px">Technika: <strong style="color:var(--green)">Dobra</strong></div>
+          <span class="cl-streak">🔥 5</span>
+          <span class="badge" style="background:var(--green-ghost);color:var(--green)">Na celu</span>
+          <div class="cl-actions"><button class="btn btn-ghost btn-sm">💬</button><button class="btn btn-ghost btn-sm">📊</button></div>
+        </div>
+        <div class="client-row">
+          <div class="cl-avatar" style="background:rgba(184,110,255,.1)">🧘</div>
+          <div style="min-width:160px"><div class="cl-name">Agnieszka Nowak</div><div class="cl-meta">od 5 miesięcy · Push Pull Legs</div></div>
+          <div class="cl-prog-wrap" style="max-width:160px">
+            <div class="cl-prog-label"><span>Tydzień 10/12</span><span style="color:var(--purple)">83%</span></div>
+            <div class="cl-prog-bar"><div class="cl-prog-fill" style="width:83%;background:var(--purple)"></div></div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);min-width:120px">Siła: <strong style="color:var(--white)">+28%</strong> ↑</div>
+          <span class="cl-streak">🔥 34</span>
+          <span class="badge" style="background:var(--green-ghost);color:var(--green)">Na celu</span>
+          <div class="cl-actions"><button class="btn btn-ghost btn-sm">💬</button><button class="btn btn-ghost btn-sm">📊</button></div>
+        </div>
+        <div class="client-row" style="opacity:.6">
+          <div class="cl-avatar">😴</div>
+          <div style="min-width:160px"><div class="cl-name">Marek Dąbrowski</div><div class="cl-meta">od 6 tygodni · Full Body 3×</div></div>
+          <div class="cl-prog-wrap" style="max-width:160px">
+            <div class="cl-prog-label"><span>Tydzień 3/12</span><span style="color:var(--red)">25%</span></div>
+            <div class="cl-prog-bar"><div class="cl-prog-fill" style="width:25%;background:var(--red)"></div></div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);min-width:120px">Nieaktywny: <strong style="color:var(--red)">5 dni</strong></div>
+          <span class="cl-streak" style="color:var(--muted)">💤 —</span>
+          <span class="badge" style="background:var(--red-ghost);color:var(--red)">Nieaktywny</span>
+          <div class="cl-actions"><button class="btn btn-danger btn-sm">📨 Motywuj</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ MESSAGES ══ -->
+    <div class="page" id="page-messages">
+      <div style="margin-bottom:20px;font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;line-height:1">
+        Wiadomości <span style="color:var(--cyan)">od klientów</span>
+      </div>
+      <div class="g2">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="msg-row unread" style="cursor:default">
+            <div class="msg-av" style="background:rgba(58,240,212,.1)">🏋️</div>
+            <div style="flex:1">
+              <div style="display:flex;justify-content:space-between"><div class="msg-name">Piotr Kwiatkowski</div><div class="msg-time">2 min temu</div></div>
+              <div style="font-size:13px;color:var(--off);margin-top:6px;line-height:1.6">Hej Marcin! Dzisiaj przeszedłem wyciskanie 82.5 kg × 8 powtórzeń — to mój nowy rekord! 🎉 Następny trening spróbuję 85 kg.</div>
+              <div style="display:flex;gap:8px;margin-top:10px">
+                <button class="btn btn-cyan btn-sm" onclick="openReply('Piotr')">Odpowiedz</button>
+                <button class="btn btn-ghost btn-sm">👀 Profil</button>
+                <button class="btn btn-ghost btn-sm">📊 Wyniki</button>
+              </div>
+            </div>
+          </div>
+          <div class="msg-row unread" style="cursor:default">
+            <div class="msg-av" style="background:rgba(255,159,74,.1)">🏃</div>
+            <div style="flex:1">
+              <div style="display:flex;justify-content:space-between"><div class="msg-name">Karolina Mazur</div><div class="msg-time">1 godz. temu</div></div>
+              <div style="font-size:13px;color:var(--off);margin-top:6px;line-height:1.6">Hej! Chciałam zapytać, czy możesz dodać do mojego planu jakieś ćwiczenia na mobilność bioder? Czuję duży dyskomfort po cardio.</div>
+              <div style="display:flex;gap:8px;margin-top:10px">
+                <button class="btn btn-cyan btn-sm" onclick="openReply('Karolina')">Odpowiedz</button>
+                <button class="btn btn-ghost btn-sm" onclick="show('builder',null)">✏️ Edytuj plan</button>
+              </div>
+            </div>
+          </div>
+          <div class="msg-row" style="cursor:default">
+            <div class="msg-av">⚡</div>
+            <div style="flex:1">
+              <div style="display:flex;justify-content:space-between"><div class="msg-name">Tomasz Wiśniewski</div><div class="msg-time">3 godz. temu</div></div>
+              <div style="font-size:13px;color:var(--off);margin-top:6px;line-height:1.6">Dziękuję za wczorajsze wskazówki dotyczące techniki przysiadu! Dziś poczułem ogromną różnicę — plecy już nie bolą. Jesteś najlepszy! 💪</div>
+              <div style="display:flex;gap:8px;margin-top:10px">
+                <button class="btn btn-cyan btn-sm" onclick="openReply('Tomasz')">Odpowiedz</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="ai-chip" style="margin-bottom:12px">
+            <div class="ai-ico">🤖</div>
+            <div><strong style="color:var(--cyan)">AI Draft:</strong> Kliknij "Odpowiedz", a AI przygotuje szkic odpowiedzi dla klienta na podstawie jego postępów.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Szybkie odpowiedzi</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <button class="btn btn-ghost" style="text-align:left;justify-content:flex-start;font-size:12px">🎉 Gratulacje z powodu rekordu!</button>
+              <button class="btn btn-ghost" style="text-align:left;justify-content:flex-start;font-size:12px">💪 Świetna robota, trzymaj tak!</button>
+              <button class="btn btn-ghost" style="text-align:left;justify-content:flex-start;font-size:12px">📋 Zaktualizowałem Twój plan</button>
+              <button class="btn btn-ghost" style="text-align:left;justify-content:flex-start;font-size:12px">🤔 Napisz mi więcej szczegółów</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PLANS ══ -->
+    <div class="page" id="page-plans">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;line-height:1">Moje <span style="color:var(--cyan)">plany</span></div>
+        <button class="btn btn-cyan" onclick="show('builder',document.querySelector('.nav-item:nth-child(10)'))">✏️ Stwórz nowy plan</button>
+      </div>
+      <div class="g3">
+        <div class="plan-card">
+          <div class="plan-card-head">
+            <div>
+              <div class="plan-title">Power Hypertrophy 12W</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px">Siła · Masa · Siłownia · 3×/tydz</div>
+            </div>
+            <span class="badge" style="background:var(--green-ghost);color:var(--green)">Aktywny</span>
+          </div>
+          <div class="plan-body">
+            <div class="plan-stat-row">
+              <div class="plan-stat"><strong>487</strong>Sprzedaży</div>
+              <div class="plan-stat"><strong style="color:var(--gold)">4.9 ⭐</strong>Ocena</div>
+              <div class="plan-stat"><strong style="color:var(--green)">2 340 zł</strong>Ten mies.</div>
+            </div>
+            <div class="plan-bar"><div class="plan-bar-fill" style="width:87%"></div></div>
+            <div style="font-size:10px;color:var(--muted)">87% klientów kończy plan · Ostatnia aktualizacja: 7 dni temu</div>
+          </div>
+          <div class="plan-footer">
+            <div style="display:flex;gap:6px">
+              <button class="btn btn-ghost btn-sm" onclick="show('builder',null)">✏️ Edytuj</button>
+              <button class="btn btn-ghost btn-sm">📊 Wyniki</button>
+            </div>
+            <span style="font-size:12px;color:var(--cyan)">49 zł / plan</span>
+          </div>
+        </div>
+        <div class="plan-card">
+          <div class="plan-card-head">
+            <div>
+              <div class="plan-title">Beginner Strength 8W</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px">Siła · Fundament · Siłownia · 3×/tydz</div>
+            </div>
+            <span class="badge" style="background:var(--green-ghost);color:var(--green)">Aktywny</span>
+          </div>
+          <div class="plan-body">
+            <div class="plan-stat-row">
+              <div class="plan-stat"><strong>312</strong>Sprzedaży</div>
+              <div class="plan-stat"><strong style="color:var(--gold)">5.0 ⭐</strong>Ocena</div>
+              <div class="plan-stat"><strong style="color:var(--green)">1 840 zł</strong>Ten mies.</div>
+            </div>
+            <div class="plan-bar"><div class="plan-bar-fill" style="width:95%"></div></div>
+            <div style="font-size:10px;color:var(--muted)">95% klientów kończy plan · Bestseller kategorii</div>
+          </div>
+          <div class="plan-footer">
+            <div style="display:flex;gap:6px">
+              <button class="btn btn-ghost btn-sm">✏️ Edytuj</button>
+              <button class="btn btn-ghost btn-sm">📊 Wyniki</button>
+            </div>
+            <span style="font-size:12px;color:var(--cyan)">FREE dla Pro</span>
+          </div>
+        </div>
+        <div class="plan-card" style="border-style:dashed;opacity:.6;cursor:pointer" onclick="show('builder',null)">
+          <div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;gap:14px">
+            <div style="font-size:40px">✏️</div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;text-transform:uppercase;color:var(--cyan)">Nowy plan</div>
+            <div style="font-size:12px;color:var(--muted)">Kreator z pomocą AI — stwórz i opublikuj w marketplace w 10 minut</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ BUILDER ══ -->
+    <div class="page" id="page-builder">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;line-height:1">Kreator <span style="color:var(--cyan)">planu</span></div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-outline" onclick="generateWithAI()">🤖 Generuj z AI</button>
+          <button class="btn btn-cyan">💾 Zapisz i opublikuj</button>
+        </div>
+      </div>
+      <div class="builder-wrap">
+        <div class="builder-left">
+          <!-- Meta -->
+          <div class="card">
+            <div class="card-title">Informacje o planie</div>
+            <div class="form-row">
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Nazwa planu</label>
+                <input class="form-input" type="text" placeholder="np. Power Hypertrophy 12W" value="Nowy Plan Siłowy">
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Kategoria</label>
+                <select class="form-input form-select">
+                  <option>Siła</option><option>Masa mięśniowa</option><option>Redukcja</option><option>Kondycja</option><option>Kalistenika</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row" style="margin-top:12px">
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Czas trwania</label>
+                <select class="form-input form-select"><option>8 tygodni</option><option selected>12 tygodni</option><option>16 tygodni</option></select>
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Dni / tydzień</label>
+                <select class="form-input form-select"><option>2×</option><option selected>3×</option><option>4×</option><option>5×</option><option>6×</option></select>
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Cena (zł)</label>
+                <input class="form-input" type="number" value="49" min="0">
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Poziom</label>
+                <select class="form-input form-select"><option>Początkujący</option><option selected>Średni</option><option>Zaawansowany</option></select>
+              </div>
+            </div>
+            <div style="margin-top:12px">
+              <label class="form-label">Opis planu</label>
+              <textarea class="form-input" placeholder="Opisz plan — co wyróżnia go od innych, kto skorzysta, jakich wyników można się spodziewać...">12-tygodniowy program budowania siły i masy mięśniowej oparty na progresywnym przeciążeniu.</textarea>
+            </div>
+          </div>
+          <!-- Days -->
+          <div class="day-block">
+            <div class="day-head">
+              <div class="day-name">Poniedziałek — Push</div>
+              <button class="btn btn-ghost btn-sm">+ Ćwiczenie</button>
+            </div>
+            <div class="day-exercises">
+              <div class="ex-item"><span class="ex-drag">⠿</span><div style="flex:1"><div class="ex-name-sm">Wyciskanie sztangi leżąc</div><div class="ex-sets-sm">4 × 8 · 80 kg · 3 min przerwy</div></div><span class="badge" style="background:var(--cyan-ghost);color:var(--cyan);font-size:9px">Klatka</span><button class="ex-remove">×</button></div>
+              <div class="ex-item"><span class="ex-drag">⠿</span><div style="flex:1"><div class="ex-name-sm">Overhead Press</div><div class="ex-sets-sm">4 × 8 · 55 kg · 3 min</div></div><span class="badge" style="background:var(--blue-ghost);color:var(--blue);font-size:9px">Barki</span><button class="ex-remove">×</button></div>
+              <div class="ex-item"><span class="ex-drag">⠿</span><div style="flex:1"><div class="ex-name-sm">Wyciskanie na skosie</div><div class="ex-sets-sm">3 × 10 · 70 kg · 2 min</div></div><span class="badge" style="background:var(--cyan-ghost);color:var(--cyan);font-size:9px">Klatka</span><button class="ex-remove">×</button></div>
+              <button class="add-ex-btn">+ Dodaj ćwiczenie</button>
+            </div>
+          </div>
+          <div class="day-block">
+            <div class="day-head">
+              <div class="day-name">Środa — Pull</div>
+              <button class="btn btn-ghost btn-sm">+ Ćwiczenie</button>
+            </div>
+            <div class="day-exercises">
+              <div class="ex-item"><span class="ex-drag">⠿</span><div style="flex:1"><div class="ex-name-sm">Martwy ciąg</div><div class="ex-sets-sm">4 × 5 · 135 kg · 4 min</div></div><span class="badge" style="background:var(--orange-ghost);color:var(--orange);font-size:9px">Plecy</span><button class="ex-remove">×</button></div>
+              <div class="ex-item"><span class="ex-drag">⠿</span><div style="flex:1"><div class="ex-name-sm">Podciąganie na drążku</div><div class="ex-sets-sm">4 × 8 · BW · 2 min</div></div><span class="badge" style="background:var(--orange-ghost);color:var(--orange);font-size:9px">Plecy</span><button class="ex-remove">×</button></div>
+              <button class="add-ex-btn">+ Dodaj ćwiczenie</button>
+            </div>
+          </div>
+          <div class="day-block">
+            <div class="day-head">
+              <div class="day-name">Piątek — Nogi</div>
+              <button class="btn btn-ghost btn-sm">+ Ćwiczenie</button>
+            </div>
+            <div class="day-exercises">
+              <div class="ex-item"><span class="ex-drag">⠿</span><div style="flex:1"><div class="ex-name-sm">Przysiad ze sztangą</div><div class="ex-sets-sm">4 × 8 · 100 kg · 3 min</div></div><span class="badge" style="background:var(--purple-ghost);color:var(--purple);font-size:9px">Nogi</span><button class="ex-remove">×</button></div>
+              <div class="ex-item"><span class="ex-drag">⠿</span><div style="flex:1"><div class="ex-name-sm">Leg Press</div><div class="ex-sets-sm">3 × 12 · 160 kg · 2 min</div></div><span class="badge" style="background:var(--purple-ghost);color:var(--purple);font-size:9px">Nogi</span><button class="ex-remove">×</button></div>
+              <button class="add-ex-btn">+ Dodaj ćwiczenie</button>
+            </div>
+          </div>
+        </div>
+        <div class="builder-right">
+          <!-- AI assistant -->
+          <div class="card" style="border-color:rgba(58,240,212,.2);background:rgba(58,240,212,.03)">
+            <div class="card-title" style="color:var(--cyan)">🤖 Asystent AI <span style="font-size:9px;color:var(--muted)">Powered by Claude</span></div>
+            <div id="builderAiMessages" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;min-height:60px">
+              <div class="ai-chip" style="margin-bottom:0">
+                <div class="ai-ico">🤖</div>
+                <div style="font-size:12px">Cześć! Mogę pomóc Ci stworzyć plan. Opisz cel klientów, poziom i dostępny sprzęt — wygeneruję układ ćwiczeń.</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+              <button class="btn btn-ghost" style="font-size:11px;padding:5px 10px" onclick="askBuilderAI('Dodaj ćwiczenia na barki do Push dnia')">+ Barki do Push</button>
+              <button class="btn btn-ghost" style="font-size:11px;padding:5px 10px" onclick="askBuilderAI('Jakie ćwiczenia na core dodać?')">+ Core</button>
+              <button class="btn btn-ghost" style="font-size:11px;padding:5px 10px" onclick="askBuilderAI('Oceń ten plan pod kątem objętości i progresji')">Oceń plan</button>
+            </div>
+            <div style="display:flex;gap:6px">
+              <input class="form-input" id="builderAiInput" type="text" placeholder="Pytanie do AI..." style="font-size:12px;padding:8px 12px" onkeydown="if(event.key==='Enter')askBuilderAI()">
+              <button class="btn btn-cyan btn-sm" onclick="askBuilderAI()" style="flex-shrink:0">➤</button>
+            </div>
+          </div>
+          <!-- Preview stats -->
+          <div class="card">
+            <div class="card-title">Podgląd planu</div>
+            <div class="g2" style="gap:10px">
+              <div class="card-sm" style="text-align:center">
+                <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--cyan)">9</div>
+                <div style="font-size:10px;color:var(--muted)">Ćwiczeń / tydz.</div>
+              </div>
+              <div class="card-sm" style="text-align:center">
+                <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--cyan)">33</div>
+                <div style="font-size:10px;color:var(--muted)">Serii / tydz.</div>
+              </div>
+              <div class="card-sm" style="text-align:center">
+                <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--orange)">~65 min</div>
+                <div style="font-size:10px;color:var(--muted)">Śr. trening</div>
+              </div>
+              <div class="card-sm" style="text-align:center">
+                <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--green)">Średni</div>
+                <div style="font-size:10px;color:var(--muted)">Poziom</div>
+              </div>
+            </div>
+            <div style="margin-top:12px">
+              <div style="font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:1.5px;text-transform:uppercase">Rozkład partii mięśniowych</div>
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <div style="display:flex;align-items:center;gap:8px;font-size:11px"><span style="color:var(--muted);width:60px">Klatka</span><div style="flex:1;height:4px;background:var(--border2);border-radius:2px"><div style="height:100%;width:28%;background:var(--cyan);border-radius:2px"></div></div><span style="color:var(--cyan)">28%</span></div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:11px"><span style="color:var(--muted);width:60px">Plecy</span><div style="flex:1;height:4px;background:var(--border2);border-radius:2px"><div style="height:100%;width:24%;background:var(--orange);border-radius:2px"></div></div><span style="color:var(--orange)">24%</span></div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:11px"><span style="color:var(--muted);width:60px">Nogi</span><div style="flex:1;height:4px;background:var(--border2);border-radius:2px"><div style="height:100%;width:24%;background:var(--purple);border-radius:2px"></div></div><span style="color:var(--purple)">24%</span></div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:11px"><span style="color:var(--muted);width:60px">Barki</span><div style="flex:1;height:4px;background:var(--border2);border-radius:2px"><div style="height:100%;width:14%;background:var(--blue);border-radius:2px"></div></div><span style="color:var(--blue)">14%</span></div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:11px"><span style="color:var(--muted);width:60px">Ręce</span><div style="flex:1;height:4px;background:var(--border2);border-radius:2px"><div style="height:100%;width:10%;background:var(--green);border-radius:2px"></div></div><span style="color:var(--green)">10%</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Marketplace — Podgląd</div>
+            <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px">
+              <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px">
+                <div style="font-size:28px">⚡</div>
+                <div><div style="font-size:14px;font-weight:700">Nowy Plan Siłowy</div><div style="font-size:11px;color:var(--muted)">Marcin Kowalski · Średniozaawansowany</div></div>
+                <div style="margin-left:auto;font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--cyan)">49 zł</div>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <span class="badge" style="background:var(--cyan-ghost);color:var(--cyan)">Siła</span>
+                <span class="badge" style="background:var(--border2);color:var(--muted)">12 tygodni</span>
+                <span class="badge" style="background:var(--border2);color:var(--muted)">3×/tydz.</span>
+                <span class="badge" style="background:var(--border2);color:var(--muted)">Siłownia</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SALES ══ -->
+    <div class="page" id="page-sales">
+      <div style="margin-bottom:20px;font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;line-height:1">
+        Przychody <span style="color:var(--cyan)">i sprzedaż</span>
+      </div>
+      <div class="g4" style="margin-bottom:16px">
+        <div class="stat"><div class="stat-top"><div class="stat-icon" style="background:var(--green-ghost)">💰</div></div><div class="stat-val" style="color:var(--green)">18 420</div><div class="stat-label">Przychód YTD (zł)</div></div>
+        <div class="stat"><div class="stat-top"><div class="stat-icon" style="background:var(--cyan-ghost)">📋</div></div><div class="stat-val" style="color:var(--cyan)">1 204</div><div class="stat-label">Sprzedanych planów</div></div>
+        <div class="stat"><div class="stat-top"><div class="stat-icon" style="background:var(--gold-ghost)">💵</div></div><div class="stat-val" style="color:var(--gold)">49</div><div class="stat-label">Śr. wartość (zł)</div></div>
+        <div class="stat"><div class="stat-top"><div class="stat-icon" style="background:var(--purple-ghost)">📈</div></div><div class="stat-val" style="color:var(--purple)">+34%</div><div class="stat-label">Wzrost vs rok temu</div></div>
+      </div>
+      <div class="g2">
+        <div class="card">
+          <div class="card-title">Historia transakcji — ostatnie</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:10px;font-size:12px">
+              <span style="color:var(--muted);width:80px">przed chwilą</span>
+              <span style="flex:1">Power Hypertrophy 12W</span>
+              <span style="color:var(--green);font-weight:700;font-family:'Barlow Condensed',sans-serif;font-size:16px">+39,20 zł</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:10px;font-size:12px">
+              <span style="color:var(--muted);width:80px">12 min temu</span>
+              <span style="flex:1">Beginner Strength 8W</span>
+              <span style="color:var(--green);font-weight:700;font-family:'Barlow Condensed',sans-serif;font-size:16px">FREE</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:10px;font-size:12px">
+              <span style="color:var(--muted);width:80px">1 godz. temu</span>
+              <span style="flex:1">Advanced Push Pull Legs</span>
+              <span style="color:var(--green);font-weight:700;font-family:'Barlow Condensed',sans-serif;font-size:16px">+107,20 zł</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:10px;font-size:12px">
+              <span style="color:var(--muted);width:80px">2 godz. temu</span>
+              <span style="flex:1">Power Hypertrophy 12W</span>
+              <span style="color:var(--green);font-weight:700;font-family:'Barlow Condensed',sans-serif;font-size:16px">+39,20 zł</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:10px;font-size:12px">
+              <span style="color:var(--muted);width:80px">3 godz. temu</span>
+              <span style="flex:1">Beginner Strength 8W</span>
+              <span style="color:var(--green);font-weight:700;font-family:'Barlow Condensed',sans-serif;font-size:16px">FREE</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Podział przychodów</div>
+          <svg viewBox="0 0 200 200" width="160" height="160" style="display:block;margin:0 auto">
+            <circle cx="100" cy="100" r="70" fill="none" stroke="var(--border2)" stroke-width="28"/>
+            <circle cx="100" cy="100" r="70" fill="none" stroke="var(--cyan)" stroke-width="28" stroke-dasharray="439.82" stroke-dashoffset="0" transform="rotate(-90 100 100)" opacity=".9"/>
+            <circle cx="100" cy="100" r="70" fill="none" stroke="var(--orange)" stroke-width="28" stroke-dasharray="439.82" stroke-dashoffset="307" transform="rotate(-90 100 100)"/>
+            <circle cx="100" cy="100" r="70" fill="none" stroke="var(--purple)" stroke-width="28" stroke-dasharray="439.82" stroke-dashoffset="395" transform="rotate(-90 100 100)"/>
+            <text x="100" y="96" text-anchor="middle" fill="var(--white)" font-size="18" font-family="'Barlow Condensed'" font-weight="900">6 840</text>
+            <text x="100" y="112" text-anchor="middle" fill="var(--muted)" font-size="10" font-family="'Plus Jakarta Sans'">zł — marzec</text>
+          </svg>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+            <div style="display:flex;align-items:center;gap:8px;font-size:12px"><div style="width:10px;height:10px;border-radius:50%;background:var(--cyan)"></div><span style="flex:1">Power Hypertrophy</span><span style="color:var(--cyan);font-weight:600">2 340 zł</span></div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:12px"><div style="width:10px;height:10px;border-radius:50%;background:var(--orange)"></div><span style="flex:1">Advanced PPL</span><span style="color:var(--orange);font-weight:600">2 660 zł</span></div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:12px"><div style="width:10px;height:10px;border-radius:50%;background:var(--purple)"></div><span style="flex:1">Beginner Strength</span><span style="color:var(--purple);font-weight:600">1 840 zł</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ REVIEWS ══ -->
+    <div class="page" id="page-reviews">
+      <div style="margin-bottom:20px;font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;line-height:1">
+        Opinie <span style="color:var(--cyan)">klientów</span>
+      </div>
+      <div class="g4" style="margin-bottom:16px">
+        <div class="stat"><div class="stat-top"><div class="stat-icon" style="background:var(--gold-ghost)">⭐</div></div><div class="stat-val" style="color:var(--gold)">4.9</div><div class="stat-label">Średnia ocena</div></div>
+        <div class="stat"><div class="stat-top"><div class="stat-icon" style="background:var(--cyan-ghost)">📝</div></div><div class="stat-val" style="color:var(--cyan)">247</div><div class="stat-label">Łącznych opinii</div></div>
+        <div class="stat"><div class="stat-top"><div class="stat-icon" style="background:var(--green-ghost)">😊</div></div><div class="stat-val" style="color:var(--green)">98%</div><div class="stat-label">Poleca znajomym</div></div>
+        <div class="stat"><div class="stat-top"><div class="stat-icon" style="background:var(--orange-ghost)">🔄</div></div><div class="stat-val" style="color:var(--orange)">67%</div><div class="stat-label">Wraca na kolejny plan</div></div>
+      </div>
+      <div class="g3">
+        <div class="card"><div style="color:var(--gold);font-size:14px;margin-bottom:10px">★★★★★</div><p style="font-size:13px;color:var(--off);line-height:1.7;font-weight:300;margin-bottom:14px">"Najlepszy plan na którym byłem. W 12 tygodni przysiąd z 80 do 115 kg. Marcin dostępny zawsze gdy potrzebujesz pomocy. Polecam 100%!"</p><div style="display:flex;align-items:center;gap:10px"><div class="msg-av">💪</div><div><div style="font-size:12px;font-weight:600">Piotr K.</div><div style="font-size:10px;color:var(--muted)">Power Hypertrophy · 3 dni temu</div></div></div></div>
+        <div class="card"><div style="color:var(--gold);font-size:14px;margin-bottom:10px">★★★★★</div><p style="font-size:13px;color:var(--off);line-height:1.7;font-weight:300;margin-bottom:14px">"Pierwszy plan który skończyłam w całości! Czytelny, progresywny, z sensem. Schudłam 6 kg i czuję się niesamowicie silna. Dziękuję!"</p><div style="display:flex;align-items:center;gap:10px"><div class="msg-av">🏃</div><div><div style="font-size:12px;font-weight:600">Karolina M.</div><div style="font-size:10px;color:var(--muted)">HIIT Shred · tydzień temu</div></div></div></div>
+        <div class="card"><div style="color:var(--gold);font-size:14px;margin-bottom:10px">★★★★★</div><p style="font-size:13px;color:var(--off);line-height:1.7;font-weight:300;margin-bottom:14px">"Jako początkujący bałem się że plan będzie za trudny. Zaskoczenie — jest idealnie skonstruowany, krok po kroku. Bardzo polecam!"</p><div style="display:flex;align-items:center;gap:10px"><div class="msg-av">⚡</div><div><div style="font-size:12px;font-weight:600">Tomasz W.</div><div style="font-size:10px;color:var(--muted)">Beginner Strength · 2 tygodnie temu</div></div></div></div>
+      </div>
+    </div>
+
+    <!-- ══ ANALYTICS ══ -->
+    <div class="page" id="page-analytics">
+      <div style="margin-bottom:20px;font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;line-height:1">
+        Analityka <span style="color:var(--cyan)">biznesu</span>
+      </div>
+      <div class="g4" style="margin-bottom:16px">
+        <div class="stat"><div class="stat-top"><div class="stat-icon" style="background:var(--cyan-ghost)">👁️</div><span class="stat-delta" style="background:var(--cyan-ghost);color:var(--cyan)">+24%</span></div><div class="stat-val" style="color:var(--cyan)">3 840</div><div class="stat-label">Wyświetleń profilu</div></div>
+        <div class="stat"><div class="stat-top"><div class="stat-icon" style="background:var(--green-ghost)">🛒</div><span class="stat-delta" style="background:var(--green-ghost);color:var(--green)">8.2%</span></div><div class="stat-val" style="color:var(--green)">315</div><div class="stat-label">Konwersja → zakup</div></div>
+        <div class="stat"><div class="stat-top"><div class="stat-icon" style="background:var(--orange-ghost)">⏱️</div><span class="stat-delta" style="background:var(--orange-ghost);color:var(--orange)">+11 dni</span></div><div class="stat-val" style="color:var(--orange)">47</div><div class="stat-label">Śr. dni z planem</div></div>
+        <div class="stat"><div class="stat-top"><div class="stat-icon" style="background:var(--purple-ghost)">🔁</div><span class="stat-delta" style="background:var(--purple-ghost);color:var(--purple)">+8%</span></div><div class="stat-val" style="color:var(--purple)">67%</div><div class="stat-label">Retencja klientów</div></div>
+      </div>
+      <div class="g2">
+        <div class="card">
+          <div class="card-title">Najlepsze źródła klientów</div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+            <div style="display:flex;align-items:center;gap:10px;font-size:12px"><span style="width:100px;color:var(--muted)">Marketplace</span><div style="flex:1;height:6px;background:var(--border2);border-radius:3px"><div style="height:100%;width:58%;background:var(--cyan);border-radius:3px"></div></div><span style="color:var(--cyan);width:35px;text-align:right;font-weight:600">58%</span></div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:12px"><span style="width:100px;color:var(--muted)">Polecenia</span><div style="flex:1;height:6px;background:var(--border2);border-radius:3px"><div style="height:100%;width:22%;background:var(--green);border-radius:3px"></div></div><span style="color:var(--green);width:35px;text-align:right;font-weight:600">22%</span></div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:12px"><span style="width:100px;color:var(--muted)">Instagram</span><div style="flex:1;height:6px;background:var(--border2);border-radius:3px"><div style="height:100%;width:13%;background:var(--purple);border-radius:3px"></div></div><span style="color:var(--purple);width:35px;text-align:right;font-weight:600">13%</span></div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:12px"><span style="width:100px;color:var(--muted)">Google SEO</span><div style="flex:1;height:6px;background:var(--border2);border-radius:3px"><div style="height:100%;width:7%;background:var(--orange);border-radius:3px"></div></div><span style="color:var(--orange);width:35px;text-align:right;font-weight:600">7%</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">AI rekomendacja wzrostu</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div class="ai-chip"><div class="ai-ico">🤖</div><div style="font-size:12px"><strong style="color:var(--cyan)">Wysoki potencjał:</strong> Twój plan dla kobiet ma 3× wyższą konwersję. Stwórz dedykowany plan "Women's Strength" — szacowany dodatkowy przychód: <strong>+2 400 zł/mies.</strong></div></div>
+            <div class="ai-chip"><div class="ai-ico">💡</div><div style="font-size:12px"><strong style="color:var(--cyan)">Retencja:</strong> Klienci którzy dostają wiadomość w 3. dniu zostają 2× dłużej. Ustaw automatyczny check-in — 47 klientów jeszcze go nie ma.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ── REPLY MODAL ── -->
+<div class="modal-overlay" id="modal-reply">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('reply')">×</button>
+    <div class="modal-title">Odpowiedź dla <span style="color:var(--cyan)" id="replyTo">klienta</span></div>
+    <div id="aiDraftWrap" style="margin-bottom:14px">
+      <div class="ai-chip" style="margin-bottom:10px"><div class="ai-ico">🤖</div><div style="font-size:12px" id="aiDraftText">Generuję szkic odpowiedzi...</div></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Twoja wiadomość</label>
+      <textarea class="form-input" id="replyText" style="min-height:120px"></textarea>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn btn-outline" onclick="closeModal('reply')">Anuluj</button>
+      <button class="btn btn-cyan">Wyślij wiadomość ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── CLIENT DETAIL MODAL ── -->
+<div class="modal-overlay" id="modal-clientDetail">
+  <div class="modal" style="width:560px">
+    <button class="modal-close" onclick="closeModal('clientDetail')">×</button>
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+      <div class="cl-avatar" style="width:52px;height:52px;font-size:24px;background:rgba(58,240,212,.1)">💪</div>
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;text-transform:uppercase">Piotr Kwiatkowski</div>
+        <div style="font-size:12px;color:var(--muted)">Klient od 3 miesięcy · Power Hypertrophy 12W · 🔥 21 dni serii</div>
+      </div>
+      <span class="badge" style="background:var(--green-ghost);color:var(--green);margin-left:auto">Na celu</span>
+    </div>
+    <div class="g2" style="margin-bottom:16px">
+      <div class="card-sm" style="text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--cyan)">67%</div><div style="font-size:10px;color:var(--muted)">Ukończono plan</div></div>
+      <div class="card-sm" style="text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--green)">+12.5 kg</div><div style="font-size:10px;color:var(--muted)">Wzrost wyciskania</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">Ostatnie wyniki</div>
+    <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:16px;font-size:12px">
+      <div style="display:flex;justify-content:space-between;padding:7px 10px;background:var(--card2);border-radius:8px"><span style="color:var(--muted)">Wyciskanie</span><strong style="color:var(--green)">82.5 kg ↑ PR!</strong></div>
+      <div style="display:flex;justify-content:space-between;padding:7px 10px;background:var(--card2);border-radius:8px"><span style="color:var(--muted)">Przysiad</span><strong>110 kg ↑</strong></div>
+      <div style="display:flex;justify-content:space-between;padding:7px 10px;background:var(--card2);border-radius:8px"><span style="color:var(--muted)">Martwy ciąg</span><strong>130 kg ↑</strong></div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-cyan" style="flex:1" onclick="openReply('Piotr');closeModal('clientDetail')">💬 Wyślij wiadomość</button>
+      <button class="btn btn-outline" onclick="closeModal('clientDetail')">Zamknij</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── NAV ───────────────────────────────────────────────────────
+const titles={overview:'Dashboard',clients:'Klienci',messages:'Wiadomości',plans:'Moje plany',builder:'Kreator planu',sales:'Przychody',reviews:'Opinie',analytics:'Analityka'};
+function show(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const page=document.getElementById('page-'+id);
+  if(page)page.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(el)el.classList.add('active');
+  else{
+    document.querySelectorAll('.nav-item').forEach(n=>{
+      if(n.textContent.toLowerCase().includes(id.toLowerCase().slice(0,5)))n.classList.add('active');
+    });
+  }
+  document.getElementById('pageTitle').textContent=titles[id]||id;
+}
+
+// ── MODALS ────────────────────────────────────────────────────
+function openModal(id){document.getElementById('modal-'+id).classList.add('open');}
+function closeModal(id){document.getElementById('modal-'+id).classList.remove('open');}
+
+async function openReply(name){
+  document.getElementById('replyTo').textContent=name;
+  document.getElementById('replyText').value='';
+  document.getElementById('aiDraftText').textContent='Generuję szkic odpowiedzi...';
+  openModal('reply');
+  // Generate AI draft
+  const context={
+    'Piotr':'pobił rekord wyciskania 82.5 kg, jest w tygodniu 8/12 programu Power Hypertrophy, seria 21 dni',
+    'Karolina':'pyta o ćwiczenia na mobilność bioder po cardio, jest w tygodniu 4/8 HIIT Shred, -3.2 kg',
+    'Tomasz':'podziękował za wskazówki do przysiadu, jest tydzień 2/12 Beginner Strength, seria 5 dni'
+  };
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:300,
+        messages:[{role:'user',content:`Jesteś trenerem personalnym Marcinem Kowalskim na platformie chceByc.fit. Napisz krótką, ciepłą odpowiedź (2-3 zdania po polsku) do klienta ${name}, który: ${context[name]||'pisze do Ciebie'}. Odpowiedź powinna być motywująca, konkretna i profesjonalna. Bez powitania i podpisu.`}]
+      })
+    });
+    const data=await resp.json();
+    const text=data.content?.map(b=>b.text||'').join('')||'Świetna robota! Trzymaj tak.';
+    document.getElementById('aiDraftText').innerHTML='<strong style="color:var(--cyan)">AI szkic:</strong> '+text;
+    document.getElementById('replyText').value=text;
+  }catch(e){
+    document.getElementById('aiDraftText').textContent='Nie udało się wygenerować szkicu.';
+  }
+}
+
+// ── BUILDER AI ────────────────────────────────────────────────
+let builderAiHistory=[];
+async function askBuilderAI(preset){
+  const input=document.getElementById('builderAiInput');
+  const msg=preset||input.value.trim();
+  if(!msg)return;
+  input.value='';
+  const wrap=document.getElementById('builderAiMessages');
+  // user msg
+  const u=document.createElement('div');
+  u.style.cssText='font-size:12px;background:var(--card3);border:1px solid var(--border2);border-radius:8px;padding:8px 10px;color:var(--off);text-align:right';
+  u.textContent=msg;
+  wrap.appendChild(u);
+  builderAiHistory.push({role:'user',content:msg});
+  // loading
+  const loading=document.createElement('div');
+  loading.className='ai-chip';
+  loading.innerHTML='<div class="ai-ico">🤖</div><div style="font-size:12px;color:var(--muted)">Myślę...</div>';
+  wrap.appendChild(loading);
+  wrap.scrollTop=wrap.scrollHeight;
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:400,
+        system:'Jesteś asystentem AI dla trenera personalnego budującego plan treningowy na platformie chceByc.fit. Odpowiadaj po polsku, krótko (2-4 zdania), konkretnie i praktycznie. Plan który trener tworzy: Push/Pull/Nogi, 3 dni/tydz, poziom średniozaawansowany, siłownia pełna.',
+        messages:builderAiHistory
+      })
+    });
+    const data=await resp.json();
+    const text=data.content?.map(b=>b.text||'').join('')||'Nie udało się.';
+    loading.remove();
+    builderAiHistory.push({role:'assistant',content:text});
+    const a=document.createElement('div');
+    a.className='ai-chip';
+    a.innerHTML=`<div class="ai-ico">🤖</div><div style="font-size:12px">${text}</div>`;
+    wrap.appendChild(a);
+    wrap.scrollTop=wrap.scrollHeight;
+  }catch(e){
+    loading.remove();
+    const a=document.createElement('div');
+    a.className='ai-chip';
+    a.innerHTML='<div class="ai-ico">🤖</div><div style="font-size:12px;color:var(--red)">Błąd połączenia.</div>';
+    wrap.appendChild(a);
+  }
+}
+
+function generateWithAI(){
+  document.getElementById('builderAiInput').value='Oceń ten plan i zaproponuj ulepszenia na podstawie najnowszej wiedzy o hipertrofii';
+  askBuilderAI();
+}
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
+});
+</script>
+</body>
+</html>

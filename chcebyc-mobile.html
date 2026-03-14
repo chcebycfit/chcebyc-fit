@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>chceByc.fit — Aplikacja Mobilna</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black:#070b07; --forest:#0c1a0c; --card:#101810; --card2:#141f14; --card3:#192419;
+  --border:#1c2e1c; --border2:#243824; --border3:#2e4a2e;
+  --lime:#b4f03a; --lime-soft:#ceff6a; --lime-dim:#7aaa22; --lime-ghost:rgba(180,240,58,.08);
+  --white:#eef8e8; --off:#c8ddb8; --muted:#5a7850; --muted2:#3a5230;
+  --red:#ff5555; --gold:#f0c840; --blue:#4ab0ff; --orange:#ff8c42; --purple:#c46eff;
+  --green:#44ff88;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  background:#0a0f0a;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:40px 20px 60px;
+  color:var(--white);
+}
+
+/* ── PAGE HEADER ── */
+.page-header{text-align:center;margin-bottom:48px;}
+.page-header h1{font-family:'Barlow Condensed',sans-serif;font-size:56px;font-weight:900;text-transform:uppercase;letter-spacing:-1px;line-height:.9;margin-bottom:10px;}
+.page-header p{font-size:15px;color:var(--muted);font-weight:300;}
+.screen-tabs{display:flex;gap:6px;justify-content:center;margin-top:20px;flex-wrap:wrap;}
+.stab{padding:8px 18px;border-radius:20px;font-size:12px;font-weight:600;border:1px solid var(--border2);background:var(--card);color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;}
+.stab:hover{border-color:var(--border3);color:var(--off);}
+.stab.active{background:var(--lime-ghost);border-color:rgba(180,240,58,.3);color:var(--lime);}
+
+/* ── PHONE FRAME ── */
+.phone-scene{
+  display:flex;gap:48px;align-items:flex-start;
+  justify-content:center;flex-wrap:wrap;
+  max-width:1200px;width:100%;
+}
+.phone-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;}
+.phone-label{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-weight:600;}
+.phone{
+  width:375px;
+  background:var(--black);
+  border-radius:48px;
+  border:2px solid #2a3a2a;
+  box-shadow:
+    0 0 0 1px #1a2a1a,
+    0 40px 80px rgba(0,0,0,.7),
+    0 0 60px rgba(180,240,58,.04);
+  overflow:hidden;
+  position:relative;
+}
+.phone-notch{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:120px;height:32px;
+  background:var(--black);
+  border-radius:0 0 20px 20px;
+  z-index:100;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.notch-cam{width:10px;height:10px;border-radius:50%;background:#1a2a1a;border:1px solid #2a3a2a;}
+.notch-speaker{width:36px;height:4px;border-radius:2px;background:#1a2a1a;}
+.phone-screen{
+  height:812px;
+  overflow:hidden;
+  position:relative;
+}
+
+/* ── SCREENS ── */
+.screen{
+  position:absolute;inset:0;
+  display:none;flex-direction:column;
+  background:var(--black);
+  transition:opacity .3s;
+}
+.screen.active{display:flex;}
+
+/* STATUS BAR */
+.status-bar{
+  height:44px;display:flex;align-items:flex-end;justify-content:space-between;
+  padding:0 24px 6px;flex-shrink:0;
+  font-size:12px;font-weight:600;color:var(--white);
+}
+.status-time{font-size:15px;font-weight:700;}
+.status-icons{display:flex;gap:5px;align-items:center;font-size:11px;}
+
+/* SAFE AREA / HOME INDICATOR */
+.home-indicator{
+  height:34px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.home-bar{width:120px;height:4px;background:rgba(255,255,255,.2);border-radius:2px;}
+
+/* BOTTOM NAV */
+.bottom-nav{
+  height:70px;background:rgba(7,11,7,.95);
+  backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-around;
+  padding:0 8px;padding-bottom:2px;
+  flex-shrink:0;
+}
+.nav-btn{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:6px 16px;border-radius:12px;cursor:pointer;
+  transition:all .2s;border:none;background:none;
+}
+.nav-btn.active{background:var(--lime-ghost);}
+.nav-icon{font-size:20px;}
+.nav-txt{font-size:9px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);}
+.nav-btn.active .nav-txt{color:var(--lime);}
+
+/* SCROLL AREA */
+.scroll{flex:1;overflow-y:auto;scrollbar-width:none;}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* ── SHARED COMPONENTS ── */
+.screen-header{
+  padding:12px 20px 14px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.sh-title{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;line-height:1;}
+.sh-icon{width:36px;height:36px;border-radius:10px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.section-label{font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);padding:0 20px;margin-bottom:8px;}
+.badge{display:inline-flex;align-items:center;border-radius:5px;padding:2px 7px;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+
+/* ── ONBOARDING SCREEN ── */
+.ob-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 30%,rgba(26,58,26,.9),var(--black));
+}
+.ob-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(180,240,58,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(180,240,58,.04) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:radial-gradient(ellipse at 50% 40%,black 30%,transparent 80%);
+}
+.ob-content{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;padding:20px;}
+.ob-logo{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;color:var(--white);}
+.ob-logo span{color:var(--lime);}
+.ob-hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:16px;}
+.ob-emoji{font-size:80px;filter:drop-shadow(0 0 30px rgba(180,240,58,.3));}
+.ob-title{font-family:'Barlow Condensed',sans-serif;font-size:44px;font-weight:900;text-transform:uppercase;line-height:.92;letter-spacing:-.5px;}
+.ob-sub{font-size:14px;color:var(--muted);line-height:1.6;font-weight:300;max-width:260px;}
+.ob-actions{display:flex;flex-direction:column;gap:10px;padding-bottom:20px;}
+.btn-full{width:100%;padding:15px;border-radius:14px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border:none;transition:all .2s;}
+.btn-lime-full{background:var(--lime);color:var(--black);box-shadow:0 0 30px rgba(180,240,58,.25);}
+.btn-outline-full{background:none;border:1px solid var(--border2);color:var(--muted);}
+
+/* ── DASHBOARD SCREEN ── */
+.greeting-band{
+  padding:4px 20px 16px;
+}
+.greeting{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;line-height:1;margin-bottom:2px;}
+.greeting span{color:var(--lime);}
+.greeting-sub{font-size:12px;color:var(--muted);}
+
+/* Streak pill */
+.streak-pill{
+  margin:0 20px 16px;
+  background:linear-gradient(135deg,rgba(255,140,66,.1),rgba(255,140,66,.05));
+  border:1px solid rgba(255,140,66,.2);
+  border-radius:14px;padding:12px 16px;
+  display:flex;align-items:center;gap:12px;
+}
+.streak-num-big{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:900;color:var(--orange);line-height:1;}
+.streak-days-row{display:flex;gap:4px;margin-top:6px;}
+.streak-d{width:24px;height:4px;border-radius:2px;background:var(--border2);}
+.streak-d.done{background:var(--orange);}
+.streak-d.today{background:var(--lime);}
+
+/* Today card */
+.today-card{
+  margin:0 20px 14px;
+  background:linear-gradient(135deg,rgba(180,240,58,.08),var(--card));
+  border:1px solid rgba(180,240,58,.2);
+  border-radius:20px;overflow:hidden;
+}
+.tc-head{padding:14px 16px 10px;border-bottom:1px solid var(--border);}
+.tc-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--lime);margin-bottom:4px;}
+.tc-title{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;line-height:1;}
+.tc-meta{font-size:11px;color:var(--muted);margin-top:3px;}
+.tc-exercises{padding:8px 0;}
+.tc-ex{display:flex;align-items:center;gap:10px;padding:8px 16px;}
+.tc-ex-num{width:22px;height:22px;border-radius:50%;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--muted);flex-shrink:0;}
+.tc-ex-num.done{background:rgba(180,240,58,.15);color:var(--lime);}
+.tc-ex-num.active{background:rgba(180,240,58,.25);color:var(--lime);animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(180,240,58,.4)}50%{box-shadow:0 0 0 6px rgba(180,240,58,0)}}
+.tc-ex-name{font-size:13px;font-weight:500;flex:1;}
+.tc-ex-sets{font-size:11px;color:var(--muted);}
+.tc-btn{margin:10px 16px 14px;display:block;text-align:center;padding:13px;background:var(--lime);color:var(--black);border-radius:12px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border:none;width:calc(100% - 32px);box-shadow:0 0 20px rgba(180,240,58,.2);}
+
+/* Mini stats row */
+.mini-stats{display:flex;gap:10px;padding:0 20px;margin-bottom:14px;}
+.mini-stat{flex:1;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;}
+.ms-val{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;line-height:1;margin-bottom:2px;}
+.ms-label{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+
+/* XP bar */
+.xp-card{
+  margin:0 20px 14px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:12px 14px;
+}
+.xp-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.xp-level{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;color:var(--blue);}
+.xp-next{font-size:10px;color:var(--muted);}
+.xp-bar{height:5px;background:var(--border2);border-radius:3px;}
+.xp-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--blue),var(--lime));width:68%;}
+
+/* ── ACTIVE WORKOUT ── */
+.aw-header{
+  padding:12px 20px;
+  background:rgba(255,85,85,.05);
+  border-bottom:1px solid rgba(255,85,85,.15);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.aw-timer{font-family:'Barlow Condensed',sans-serif;font-size:42px;font-weight:900;color:var(--red);line-height:1;letter-spacing:2px;}
+.aw-timer-label{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:1px;}
+.aw-end{background:none;border:1px solid rgba(255,85,85,.3);color:var(--red);border-radius:9px;padding:7px 14px;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;}
+.aw-progress{
+  display:flex;gap:3px;padding:8px 20px;flex-shrink:0;
+}
+.aw-prog-seg{flex:1;height:3px;border-radius:2px;background:var(--border2);}
+.aw-prog-seg.done{background:var(--lime);}
+.aw-prog-seg.active{background:var(--red);}
+.aw-exercise-card{
+  margin:12px 20px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:18px;overflow:hidden;
+}
+.aw-ex-head{
+  padding:16px;
+  background:linear-gradient(135deg,rgba(255,85,85,.06),transparent);
+  border-bottom:1px solid var(--border);
+}
+.aw-ex-num{font-size:10px;color:var(--red);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+.aw-ex-name{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;line-height:1;margin-bottom:4px;}
+.aw-ex-meta{font-size:11px;color:var(--muted);}
+.aw-sets{padding:12px 16px;display:flex;flex-direction:column;gap:8px;}
+.aw-set-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:10px;}
+.aw-set-num{font-size:11px;color:var(--muted);width:42px;flex-shrink:0;}
+.aw-set-input{background:var(--border2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--white);font-size:14px;font-weight:600;font-family:inherit;outline:none;width:64px;text-align:center;}
+.aw-set-input:focus{border-color:var(--lime);}
+.aw-set-lbl{font-size:10px;color:var(--muted);}
+.aw-set-check{width:28px;height:28px;border-radius:8px;background:var(--border2);border:none;cursor:pointer;font-size:12px;margin-left:auto;transition:all .2s;}
+.aw-set-check.done{background:rgba(180,240,58,.15);color:var(--lime);}
+.rest-banner{
+  margin:0 20px;
+  background:rgba(255,140,66,.08);border:1px solid rgba(255,140,66,.2);
+  border-radius:12px;padding:12px 16px;
+  display:flex;align-items:center;gap:10px;
+  font-size:13px;color:var(--orange);
+}
+.rest-time{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--orange);}
+
+/* ── PROGRESS SCREEN ── */
+.prog-hero{
+  margin:0 20px 14px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:18px;padding:16px;
+}
+.prog-title{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;}
+.prog-week-dots{display:flex;gap:6px;margin-bottom:12px;}
+.pwd{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
+.pwd.done{background:rgba(180,240,58,.15);color:var(--lime);}
+.pwd.today{background:var(--lime);color:var(--black);}
+.pwd.empty{background:var(--border2);color:var(--muted);}
+.pwd-label{font-size:8px;color:var(--muted);text-align:center;margin-top:2px;}
+.week-wrap{display:flex;flex-direction:column;gap:4px;}
+
+.stat-row-2{display:flex;gap:10px;margin:0 20px 12px;}
+.sr2-card{flex:1;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;}
+.sr2-val{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;line-height:1;margin-bottom:2px;}
+.sr2-lbl{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+.sr2-delta{font-size:10px;margin-top:3px;}
+
+.chart-card{margin:0 20px 12px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;}
+.chart-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+
+/* ── AI COACH SCREEN ── */
+.ai-header{
+  padding:10px 20px 12px;
+  display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.ai-av{width:40px;height:40px;border-radius:50%;background:var(--lime);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.ai-name-block{}
+.ai-coach-name{font-size:14px;font-weight:700;}
+.ai-status{font-size:10px;color:var(--lime);display:flex;align-items:center;gap:4px;}
+.ai-status::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--lime);display:inline-block;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.ai-messages{padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
+.msg{padding:10px 13px;border-radius:14px;font-size:13px;line-height:1.5;max-width:82%;}
+.msg-ai{background:var(--card2);border:1px solid var(--border);color:var(--off);align-self:flex-start;border-radius:14px 14px 14px 4px;}
+.msg-ai strong{color:var(--lime);}
+.msg-user{background:var(--lime);color:var(--black);align-self:flex-end;font-weight:500;border-radius:14px 14px 4px 14px;}
+.ai-quick-chips{display:flex;gap:6px;padding:0 16px 10px;overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap;}
+.ai-quick-chips::-webkit-scrollbar{display:none;}
+.ai-chip{background:var(--lime-ghost);border:1px solid rgba(180,240,58,.15);color:var(--lime);border-radius:20px;padding:6px 12px;font-size:11px;font-weight:600;white-space:nowrap;cursor:pointer;flex-shrink:0;}
+.ai-input-bar{
+  display:flex;gap:8px;padding:10px 14px;
+  border-top:1px solid var(--border);flex-shrink:0;
+}
+.ai-input{flex:1;background:var(--card2);border:1px solid var(--border);border-radius:22px;padding:9px 14px;color:var(--white);font-size:13px;font-family:inherit;outline:none;}
+.ai-input:focus{border-color:var(--lime);}
+.ai-send{width:36px;height:36px;border-radius:50%;background:var(--lime);border:none;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;flex-shrink:0;}
+
+/* ── MARKETPLACE SCREEN ── */
+.mkt-search{
+  margin:0 20px 14px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:10px 14px;
+  display:flex;align-items:center;gap:8px;
+  color:var(--muted);font-size:13px;
+}
+.mkt-cats{display:flex;gap:8px;padding:0 20px 14px;overflow-x:auto;scrollbar-width:none;}
+.mkt-cats::-webkit-scrollbar{display:none;}
+.mkt-cat{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:11px;font-weight:600;white-space:nowrap;color:var(--muted);flex-shrink:0;cursor:pointer;}
+.mkt-cat.active{background:var(--lime-ghost);border-color:rgba(180,240,58,.3);color:var(--lime);}
+.mkt-card{
+  margin:0 20px 10px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;overflow:hidden;cursor:pointer;
+  transition:border-color .2s;
+}
+.mkt-card-thumb{height:120px;display:flex;align-items:center;justify-content:center;font-size:54px;position:relative;}
+.mkt-card-badge{position:absolute;top:8px;left:8px;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 7px;border-radius:4px;}
+.mkt-card-rating{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);border-radius:5px;padding:2px 7px;font-size:10px;font-weight:700;color:var(--gold);}
+.mkt-card-body{padding:12px 14px;}
+.mkt-card-trainer{font-size:10px;color:var(--muted);margin-bottom:4px;display:flex;align-items:center;gap:4px;}
+.mkt-card-title{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;line-height:1.05;margin-bottom:6px;}
+.mkt-card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border);}
+.mkt-price{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--lime);}
+.mkt-btn{background:var(--lime);color:var(--black);border:none;border-radius:8px;padding:6px 14px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;}
+
+/* ── PROFILE SCREEN ── */
+.profile-hero{
+  padding:16px 20px;display:flex;align-items:center;gap:14px;
+  border-bottom:1px solid var(--border);margin-bottom:14px;
+}
+.profile-av{
+  width:60px;height:60px;border-radius:50%;
+  background:linear-gradient(135deg,var(--lime-dim),var(--lime));
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;font-weight:900;color:var(--black);
+  font-family:'Barlow Condensed',sans-serif;flex-shrink:0;
+  box-shadow:0 0 20px rgba(180,240,58,.2);
+}
+.profile-name{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;line-height:1;}
+.profile-level{font-size:11px;color:var(--lime);font-weight:600;margin-top:2px;}
+.profile-plan{font-size:10px;color:var(--muted);margin-top:2px;}
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 20px;margin-bottom:14px;}
+.ps{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;}
+.ps-val{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--lime);line-height:1;margin-bottom:2px;}
+.ps-lbl{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+.menu-item{display:flex;align-items:center;gap:12px;padding:13px 20px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .15s;}
+.menu-item:hover{background:rgba(255,255,255,.02);}
+.menu-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.menu-label{font-size:13px;font-weight:500;flex:1;}
+.menu-arrow{font-size:12px;color:var(--muted);}
+.menu-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;margin-left:auto;}
+
+/* ── INFO PANEL ── */
+.info-panel{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;padding:28px;max-width:380px;
+  display:flex;flex-direction:column;gap:14px;
+}
+.ip-title{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.ip-sub{font-size:13px;color:var(--muted);line-height:1.6;font-weight:300;}
+.flow-step{display:flex;gap:12px;align-items:flex-start;}
+.flow-num{width:28px;height:28px;border-radius:50%;background:var(--lime-ghost);border:1px solid rgba(180,240,58,.2);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;color:var(--lime);flex-shrink:0;}
+.flow-text{font-size:13px;color:var(--off);line-height:1.6;font-weight:300;padding-top:3px;}
+.flow-text strong{color:var(--white);font-weight:600;}
+.spec-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);}
+.spec-row:last-child{border-bottom:none;}
+.spec-icon{font-size:16px;width:20px;text-align:center;}
+.spec-text{font-size:12px;color:var(--off);flex:1;}
+.spec-val{font-size:11px;color:var(--lime);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>chceByc<span style="color:var(--lime)">.fit</span></h1>
+  <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:8px">Aplikacja Mobilna — Szkic UX</div>
+  <p>Kluczowe ekrany · iOS + Android · Mobile-first design</p>
+  <div class="screen-tabs">
+    <button class="stab active" onclick="switchScreen('onboarding',this)">🚀 Onboarding</button>
+    <button class="stab" onclick="switchScreen('dashboard',this)">🏠 Dashboard</button>
+    <button class="stab" onclick="switchScreen('workout',this)">💪 Trening</button>
+    <button class="stab" onclick="switchScreen('progress',this)">📊 Postępy</button>
+    <button class="stab" onclick="switchScreen('ai',this)">🤖 AI Coach</button>
+    <button class="stab" onclick="switchScreen('marketplace',this)">🏪 Marketplace</button>
+    <button class="stab" onclick="switchScreen('profile',this)">👤 Profil</button>
+  </div>
+</div>
+
+<div class="phone-scene">
+
+  <!-- ── PHONE ── -->
+  <div class="phone-wrap">
+    <div class="phone-label">chceByc.fit · iOS / Android</div>
+    <div class="phone">
+      <div class="phone-notch">
+        <div class="notch-cam"></div>
+        <div class="notch-speaker"></div>
+        <div class="notch-cam"></div>
+      </div>
+      <div class="phone-screen">
+
+        <!-- ONBOARDING -->
+        <div class="screen active" id="screen-onboarding">
+          <div class="ob-bg"></div>
+          <div class="ob-grid"></div>
+          <div class="ob-content">
+            <div class="status-bar" style="position:relative;z-index:1">
+              <div class="status-time">9:41</div>
+              <div class="status-icons">📶 🔋</div>
+            </div>
+            <div class="ob-logo">chceByc<span>.fit</span></div>
+            <div class="ob-hero">
+              <div class="ob-emoji">⚡</div>
+              <div class="ob-title">Chcesz być<br><span style="color:var(--lime)">silniejszy?</span></div>
+              <div class="ob-sub">AI coach, plany od polskich trenerów i społeczność która nie pozwoli Ci odpuścić.</div>
+              <div style="display:flex;gap:20px;margin-top:4px">
+                <div style="text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--lime)">12k+</div><div style="font-size:9px;color:var(--muted)">Użytkowników</div></div>
+                <div style="text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--lime)">340+</div><div style="font-size:9px;color:var(--muted)">Planów</div></div>
+                <div style="text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--lime)">4.9★</div><div style="font-size:9px;color:var(--muted)">Ocena</div></div>
+              </div>
+            </div>
+            <div class="ob-actions">
+              <button class="btn-full btn-lime-full" onclick="switchScreen('dashboard',null)">🚀 Zacznij za darmo</button>
+              <button class="btn-full btn-outline-full">Mam już konto — zaloguj się</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DASHBOARD -->
+        <div class="screen" id="screen-dashboard">
+          <div class="status-bar"><div class="status-time">9:41</div><div class="status-icons">📶 🔋</div></div>
+          <div class="scroll">
+            <div class="greeting-band">
+              <div class="greeting">Hej, <span>Maciej!</span> 👋</div>
+              <div class="greeting-sub">Power Hypertrophy 12W · Tydzień 6 · Dzień nr 47</div>
+            </div>
+
+            <div class="streak-pill">
+              <div style="font-size:28px">🔥</div>
+              <div>
+                <div style="font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">Seria bez przerwy</div>
+                <div class="streak-num-big">14 dni</div>
+                <div class="streak-days-row">
+                  <div class="streak-d done"></div><div class="streak-d done"></div><div class="streak-d done"></div>
+                  <div class="streak-d done"></div><div class="streak-d done"></div><div class="streak-d done"></div>
+                  <div class="streak-d today"></div>
+                </div>
+              </div>
+              <div style="margin-left:auto;font-size:10px;color:var(--muted)">🏆 Rekord!</div>
+            </div>
+
+            <div class="today-card">
+              <div class="tc-head">
+                <div class="tc-label">Dzisiejszy trening</div>
+                <div class="tc-title">Dzień A — Pchanie</div>
+                <div class="tc-meta">5 ćwiczeń · ~60 min · Klatka + Barki + Triceps</div>
+              </div>
+              <div class="tc-exercises">
+                <div class="tc-ex"><div class="tc-ex-num done">✓</div><div class="tc-ex-name">Wyciskanie sztangi</div><div class="tc-ex-sets">4×8</div></div>
+                <div class="tc-ex"><div class="tc-ex-num done">✓</div><div class="tc-ex-name">Overhead Press</div><div class="tc-ex-sets">4×8</div></div>
+                <div class="tc-ex"><div class="tc-ex-num active">3</div><div class="tc-ex-name" style="color:var(--lime)">Wyciskanie skos</div><div class="tc-ex-sets" style="color:var(--lime)">w toku</div></div>
+                <div class="tc-ex"><div class="tc-ex-num">4</div><div class="tc-ex-name">Rozpiętki</div><div class="tc-ex-sets">3×12</div></div>
+                <div class="tc-ex"><div class="tc-ex-num">5</div><div class="tc-ex-name">Pompki poręcze</div><div class="tc-ex-sets">3×max</div></div>
+              </div>
+              <button class="tc-btn" onclick="switchScreen('workout',null)">⏱ WZNÓW TRENING — 00:34:18</button>
+            </div>
+
+            <div class="mini-stats">
+              <div class="mini-stat">
+                <div class="ms-val" style="color:var(--lime)">47</div>
+                <div class="ms-label">Treningów</div>
+              </div>
+              <div class="mini-stat">
+                <div class="ms-val" style="color:var(--blue)">3 420</div>
+                <div class="ms-label">XP</div>
+              </div>
+              <div class="mini-stat">
+                <div class="ms-val" style="color:var(--orange)">🔥14</div>
+                <div class="ms-label">Seria</div>
+              </div>
+            </div>
+
+            <div class="xp-card">
+              <div class="xp-row">
+                <div class="xp-level">⚡ Atleta · Poziom 14</div>
+                <div class="xp-next">1 580 XP do Wojownika</div>
+              </div>
+              <div class="xp-bar"><div class="xp-fill"></div></div>
+            </div>
+
+            <div class="section-label">Aktywność znajomych</div>
+            <div style="padding:0 20px;display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+              <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:10px">
+                <div style="font-size:20px">💪</div>
+                <div style="flex:1"><div style="font-size:12px;font-weight:600">Piotr K.</div><div style="font-size:10px;color:var(--muted)">Pobił rekord — przysiad 120 kg!</div></div>
+                <button style="background:none;border:1px solid var(--border2);border-radius:8px;padding:4px 8px;color:var(--muted);font-size:11px;cursor:pointer">🔥 14</button>
+              </div>
+              <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:10px">
+                <div style="font-size:20px">🏃</div>
+                <div style="flex:1"><div style="font-size:12px;font-weight:600">Karolina M.</div><div style="font-size:10px;color:var(--muted)">Ukończyła Dzień 30 · seria 30 dni!</div></div>
+                <button style="background:none;border:1px solid var(--border2);border-radius:8px;padding:4px 8px;color:var(--muted);font-size:11px;cursor:pointer">🔥 28</button>
+              </div>
+            </div>
+          </div>
+          <div class="bottom-nav">
+            <button class="nav-btn active"><div class="nav-icon">🏠</div><div class="nav-txt">Home</div></button>
+            <button class="nav-btn" onclick="switchScreen('workout',null)"><div class="nav-icon">💪</div><div class="nav-txt">Trening</div></button>
+            <button class="nav-btn" onclick="switchScreen('marketplace',null)"><div class="nav-icon">🏪</div><div class="nav-txt">Plany</div></button>
+            <button class="nav-btn" onclick="switchScreen('ai',null)"><div class="nav-icon">🤖</div><div class="nav-txt">AI Coach</div></button>
+            <button class="nav-btn" onclick="switchScreen('profile',null)"><div class="nav-icon">👤</div><div class="nav-txt">Profil</div></button>
+          </div>
+        </div>
+
+        <!-- WORKOUT -->
+        <div class="screen" id="screen-workout">
+          <div class="status-bar" style="background:rgba(255,85,85,.04)"><div class="status-time" style="color:var(--red)">9:41</div><div class="status-icons">📶 🔋</div></div>
+          <div class="aw-header">
+            <div>
+              <div class="aw-timer" id="timerDisplay">00:34:22</div>
+              <div class="aw-timer-label">Trening w toku</div>
+            </div>
+            <button class="aw-end" onclick="switchScreen('dashboard',null)">Zakończ ✓</button>
+          </div>
+          <div class="aw-progress">
+            <div class="aw-prog-seg done"></div>
+            <div class="aw-prog-seg done"></div>
+            <div class="aw-prog-seg active"></div>
+            <div class="aw-prog-seg"></div>
+            <div class="aw-prog-seg"></div>
+          </div>
+          <div class="scroll">
+            <div style="padding:4px 20px 8px;display:flex;justify-content:space-between;align-items:center">
+              <div style="font-size:11px;color:var(--muted)">Ćwiczenie <strong style="color:var(--white)">3 z 5</strong></div>
+              <div style="font-size:11px;color:var(--muted)">Pozostało ~26 min</div>
+            </div>
+            <div class="aw-exercise-card">
+              <div class="aw-ex-head">
+                <div class="aw-ex-num">Ćwiczenie 3 · Klatka górna</div>
+                <div class="aw-ex-name">Wyciskanie na skosie</div>
+                <div class="aw-ex-meta">3 serie × 10 powt. · Sugerowany ciężar: 70 kg</div>
+              </div>
+              <div class="aw-sets">
+                <div style="font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase">Serie</div>
+                <div class="aw-set-row">
+                  <div class="aw-set-num">Seria 1</div>
+                  <input class="aw-set-input" type="number" value="70">
+                  <div class="aw-set-lbl">kg</div>
+                  <input class="aw-set-input" type="number" value="10">
+                  <div class="aw-set-lbl">rep</div>
+                  <button class="aw-set-check done" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'✓':'○'">✓</button>
+                </div>
+                <div class="aw-set-row">
+                  <div class="aw-set-num">Seria 2</div>
+                  <input class="aw-set-input" type="number" value="70">
+                  <div class="aw-set-lbl">kg</div>
+                  <input class="aw-set-input" type="number" value="10">
+                  <div class="aw-set-lbl">rep</div>
+                  <button class="aw-set-check done">✓</button>
+                </div>
+                <div class="aw-set-row" style="border-color:rgba(180,240,58,.2)">
+                  <div class="aw-set-num" style="color:var(--lime)">Seria 3</div>
+                  <input class="aw-set-input" type="number" placeholder="kg" style="border-color:rgba(180,240,58,.3)">
+                  <div class="aw-set-lbl">kg</div>
+                  <input class="aw-set-input" type="number" placeholder="rep" style="border-color:rgba(180,240,58,.3)">
+                  <div class="aw-set-lbl">rep</div>
+                  <button class="aw-set-check" onclick="startRestTimer(this)">○</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="rest-banner" id="restBanner" style="display:none">
+              <div>⏱</div>
+              <div style="flex:1"><div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:1px">Odpoczynek</div></div>
+              <div class="rest-time" id="restTime">120s</div>
+            </div>
+
+            <div style="padding:12px 20px;display:flex;gap:8px">
+              <button style="flex:1;background:var(--lime);color:var(--black);border:none;border-radius:12px;padding:13px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer">Dalej →</button>
+              <button style="background:var(--card);border:1px solid var(--border2);color:var(--muted);border-radius:12px;padding:13px 14px;font-size:18px;cursor:pointer">🤖</button>
+            </div>
+
+            <div style="margin:0 20px 20px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px">
+              <div style="font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">Następne ćwiczenie</div>
+              <div style="display:flex;align-items:center;gap:10px;opacity:.6">
+                <div style="width:28px;height:28px;border-radius:8px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:13px">4</div>
+                <div>
+                  <div style="font-size:13px;font-weight:600">Rozpiętki ze sztangielkami</div>
+                  <div style="font-size:10px;color:var(--muted)">3 × 12 · 90s przerwy</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bottom-nav">
+            <button class="nav-btn" onclick="switchScreen('dashboard',null)"><div class="nav-icon">🏠</div><div class="nav-txt">Home</div></button>
+            <button class="nav-btn active"><div class="nav-icon">💪</div><div class="nav-txt">Trening</div></button>
+            <button class="nav-btn" onclick="switchScreen('marketplace',null)"><div class="nav-icon">🏪</div><div class="nav-txt">Plany</div></button>
+            <button class="nav-btn" onclick="switchScreen('ai',null)"><div class="nav-icon">🤖</div><div class="nav-txt">AI Coach</div></button>
+            <button class="nav-btn" onclick="switchScreen('profile',null)"><div class="nav-icon">👤</div><div class="nav-txt">Profil</div></button>
+          </div>
+        </div>
+
+        <!-- PROGRESS -->
+        <div class="screen" id="screen-progress">
+          <div class="status-bar"><div class="status-time">9:41</div><div class="status-icons">📶 🔋</div></div>
+          <div class="screen-header">
+            <div class="sh-title">Postępy</div>
+            <div class="sh-icon">📅</div>
+          </div>
+          <div class="scroll">
+            <div class="prog-hero">
+              <div class="prog-title">Aktywność — ten tydzień</div>
+              <div style="display:flex;gap:8px">
+                <div class="week-wrap"><div class="pwd done">✓</div><div class="pwd-label">Pon</div></div>
+                <div class="week-wrap"><div class="pwd done">✓</div><div class="pwd-label">Wt</div></div>
+                <div class="week-wrap"><div class="pwd done">✓</div><div class="pwd-label">Śr</div></div>
+                <div class="week-wrap"><div class="pwd empty">—</div><div class="pwd-label">Czw</div></div>
+                <div class="week-wrap"><div class="pwd today">▶</div><div class="pwd-label">Pt</div></div>
+                <div class="week-wrap"><div class="pwd empty">—</div><div class="pwd-label">Sob</div></div>
+                <div class="week-wrap"><div class="pwd empty">—</div><div class="pwd-label">Ndz</div></div>
+              </div>
+            </div>
+
+            <div class="stat-row-2">
+              <div class="sr2-card">
+                <div class="sr2-val" style="color:var(--lime)">82.5 kg</div>
+                <div class="sr2-lbl">Wyciskanie</div>
+                <div class="sr2-delta" style="color:var(--lime)">↑ +12.5 kg / 6 tyg.</div>
+              </div>
+              <div class="sr2-card">
+                <div class="sr2-val" style="color:var(--blue)">76.0 kg</div>
+                <div class="sr2-lbl">Masa ciała</div>
+                <div class="sr2-delta" style="color:var(--lime)">↓ -4.2 kg</div>
+              </div>
+            </div>
+
+            <div class="chart-card">
+              <div class="chart-title">Siła — 6 tygodni</div>
+              <svg viewBox="0 0 320 80" style="width:100%;overflow:visible">
+                <line x1="0" y1="20" x2="320" y2="20" stroke="var(--border)" stroke-width="1"/>
+                <line x1="0" y1="50" x2="320" y2="50" stroke="var(--border)" stroke-width="1"/>
+                <!-- Bench -->
+                <polyline points="0,70 64,62 128,54 192,44 256,34 320,22" fill="none" stroke="var(--lime)" stroke-width="2" stroke-linecap="round"/>
+                <!-- Squat -->
+                <polyline points="0,68 64,58 128,48 192,36 256,26 320,16" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"/>
+                <!-- Deadlift -->
+                <polyline points="0,65 64,53 128,42 192,30 256,20 320,10" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="320" cy="22" r="3" fill="var(--lime)"/>
+                <circle cx="320" cy="16" r="3" fill="var(--orange)"/>
+                <circle cx="320" cy="10" r="3" fill="var(--blue)"/>
+              </svg>
+              <div style="display:flex;gap:12px;margin-top:6px">
+                <div style="display:flex;align-items:center;gap:4px;font-size:10px"><div style="width:8px;height:3px;background:var(--lime);border-radius:2px"></div>Wyciskanie</div>
+                <div style="display:flex;align-items:center;gap:4px;font-size:10px"><div style="width:8px;height:3px;background:var(--orange);border-radius:2px"></div>Przysiad</div>
+                <div style="display:flex;align-items:center;gap:4px;font-size:10px"><div style="width:8px;height:3px;background:var(--blue);border-radius:2px"></div>Martwy</div>
+              </div>
+            </div>
+
+            <div class="section-label">Rekordy osobiste</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 20px;margin-bottom:16px">
+              <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center"><div style="font-size:20px;margin-bottom:4px">🏋️</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--gold)">82.5 kg</div><div style="font-size:9px;color:var(--muted)">Wyciskanie</div></div>
+              <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center"><div style="font-size:20px;margin-bottom:4px">🦵</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--gold)">110 kg</div><div style="font-size:9px;color:var(--muted)">Przysiad</div></div>
+              <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center"><div style="font-size:20px;margin-bottom:4px">💪</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--gold)">135 kg</div><div style="font-size:9px;color:var(--muted)">Martwy ciąg</div></div>
+              <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center"><div style="font-size:20px;margin-bottom:4px">🔥</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--orange)">14 dni</div><div style="font-size:9px;color:var(--muted)">Seria</div></div>
+            </div>
+          </div>
+          <div class="bottom-nav">
+            <button class="nav-btn" onclick="switchScreen('dashboard',null)"><div class="nav-icon">🏠</div><div class="nav-txt">Home</div></button>
+            <button class="nav-btn active"><div class="nav-icon">💪</div><div class="nav-txt">Trening</div></button>
+            <button class="nav-btn" onclick="switchScreen('marketplace',null)"><div class="nav-icon">🏪</div><div class="nav-txt">Plany</div></button>
+            <button class="nav-btn" onclick="switchScreen('ai',null)"><div class="nav-icon">🤖</div><div class="nav-txt">AI Coach</div></button>
+            <button class="nav-btn" onclick="switchScreen('profile',null)"><div class="nav-icon">👤</div><div class="nav-txt">Profil</div></button>
+          </div>
+        </div>
+
+        <!-- AI COACH -->
+        <div class="screen" id="screen-ai">
+          <div class="status-bar"><div class="status-time">9:41</div><div class="status-icons">📶 🔋</div></div>
+          <div class="ai-header">
+            <div class="ai-av">🤖</div>
+            <div class="ai-name-block">
+              <div class="ai-coach-name">AI Coach · chceByc.fit</div>
+              <div class="ai-status">Online · zna Twój profil</div>
+            </div>
+          </div>
+          <div class="scroll">
+            <div class="ai-messages">
+              <div class="msg msg-ai">Hej <strong>Maciej!</strong> 💪 Widzę że jesteś w trakcie treningu — <strong>Dzień A: Pchanie</strong>, ćwiczenie 3 z 5. Jak idzie wyciskanie na skosie?</div>
+              <div class="msg msg-user">Trochę ciężko, barki mnie bolą przy ostatniej serii</div>
+              <div class="msg msg-ai">Rozumiem! Ból barku przy wyciskaniu może oznaczać przeciążenie <strong>stożka rotatorów</strong>. Kilka wskazówek: łokcie lekko do przodu (nie prostopadle), zmniejsz ciężar o 10% i skup na technice. Jeśli ból wraca — odpuść tę serię.</div>
+            </div>
+          </div>
+          <div class="ai-quick-chips">
+            <div class="ai-chip">Zmień ćwiczenie</div>
+            <div class="ai-chip">Co jeść po treningu?</div>
+            <div class="ai-chip">Rozgrzewka barków</div>
+            <div class="ai-chip">Oceń mój plan</div>
+          </div>
+          <div class="ai-input-bar">
+            <input class="ai-input" type="text" placeholder="Zapytaj AI coacha...">
+            <button class="ai-send">➤</button>
+          </div>
+          <div class="bottom-nav">
+            <button class="nav-btn" onclick="switchScreen('dashboard',null)"><div class="nav-icon">🏠</div><div class="nav-txt">Home</div></button>
+            <button class="nav-btn" onclick="switchScreen('workout',null)"><div class="nav-icon">💪</div><div class="nav-txt">Trening</div></button>
+            <button class="nav-btn" onclick="switchScreen('marketplace',null)"><div class="nav-icon">🏪</div><div class="nav-txt">Plany</div></button>
+            <button class="nav-btn active"><div class="nav-icon">🤖</div><div class="nav-txt">AI Coach</div></button>
+            <button class="nav-btn" onclick="switchScreen('profile',null)"><div class="nav-icon">👤</div><div class="nav-txt">Profil</div></button>
+          </div>
+        </div>
+
+        <!-- MARKETPLACE -->
+        <div class="screen" id="screen-marketplace">
+          <div class="status-bar"><div class="status-time">9:41</div><div class="status-icons">📶 🔋</div></div>
+          <div class="screen-header">
+            <div class="sh-title">Marketplace</div>
+            <div class="sh-icon">🔍</div>
+          </div>
+          <div class="mkt-search">🔍 Szukaj planów i trenerów...</div>
+          <div class="mkt-cats">
+            <div class="mkt-cat active">Wszystkie</div>
+            <div class="mkt-cat">💪 Siła</div>
+            <div class="mkt-cat">🔥 Redukcja</div>
+            <div class="mkt-cat">🏋️ Masa</div>
+            <div class="mkt-cat">⚡ Kondycja</div>
+            <div class="mkt-cat">🤸 Kalistenika</div>
+          </div>
+          <div class="scroll">
+            <div class="section-label">🔥 Bestsellery</div>
+            <div class="mkt-card">
+              <div class="mkt-card-thumb" style="background:linear-gradient(135deg,#1a3a10,#0d2008)">
+                <div class="mkt-card-badge" style="background:var(--lime);color:var(--black)">BESTSELLER</div>
+                <div class="mkt-card-rating">★ 4.9</div>
+                <span>⚡</span>
+              </div>
+              <div class="mkt-card-body">
+                <div class="mkt-card-trainer">💪 Marcin Kowalski <span style="color:var(--lime)">✓</span> · Siłownia</div>
+                <div class="mkt-card-title">Power Hypertrophy 12W</div>
+                <div style="display:flex;gap:6px;margin-bottom:8px">
+                  <span class="badge" style="background:var(--lime-ghost);color:var(--lime);border:1px solid rgba(180,240,58,.15)">Średni</span>
+                  <span class="badge" style="background:var(--card2);color:var(--muted)">12 tyg.</span>
+                  <span class="badge" style="background:var(--card2);color:var(--muted)">3×/tydz.</span>
+                </div>
+                <div class="mkt-card-footer">
+                  <div><div class="mkt-price">49 <span style="font-size:12px">zł</span></div><div style="font-size:9px;color:var(--muted)">247 opinii · 487 kupujących</div></div>
+                  <button class="mkt-btn">Kup</button>
+                </div>
+              </div>
+            </div>
+            <div class="mkt-card">
+              <div class="mkt-card-thumb" style="background:linear-gradient(135deg,#3a1510,#200a08)">
+                <div class="mkt-card-badge" style="background:var(--orange);color:var(--black)">DOM</div>
+                <div class="mkt-card-rating">★ 4.8</div>
+                <span>🔥</span>
+              </div>
+              <div class="mkt-card-body">
+                <div class="mkt-card-trainer">🏃 Anna Wiśniewska <span style="color:var(--lime)">✓</span> · Dom</div>
+                <div class="mkt-card-title">HIIT Shred 8W</div>
+                <div style="display:flex;gap:6px;margin-bottom:8px">
+                  <span class="badge" style="background:var(--lime-ghost);color:var(--lime);border:1px solid rgba(180,240,58,.15)">Średni</span>
+                  <span class="badge" style="background:var(--card2);color:var(--muted)">8 tyg.</span>
+                  <span class="badge" style="background:var(--card2);color:var(--muted)">4×/tydz.</span>
+                </div>
+                <div class="mkt-card-footer">
+                  <div><div class="mkt-price">39 <span style="font-size:12px">zł</span></div><div style="font-size:9px;color:var(--muted)">189 opinii · 892 kupujących</div></div>
+                  <button class="mkt-btn">Kup</button>
+                </div>
+              </div>
+            </div>
+            <div class="mkt-card">
+              <div class="mkt-card-thumb" style="background:linear-gradient(135deg,#0d2a1a,#081a10)">
+                <div class="mkt-card-badge" style="background:var(--green);color:var(--black)">FREE</div>
+                <div class="mkt-card-rating">★ 5.0</div>
+                <span>🌱</span>
+              </div>
+              <div class="mkt-card-body">
+                <div class="mkt-card-trainer">⚡ Tomasz Nowak <span style="color:var(--lime)">✓</span> · Siłownia</div>
+                <div class="mkt-card-title">Beginner Strength Foundation</div>
+                <div style="display:flex;gap:6px;margin-bottom:8px">
+                  <span class="badge" style="background:var(--green-ghost);color:var(--green);border:1px solid rgba(68,255,136,.15)">Początkujący</span>
+                  <span class="badge" style="background:var(--card2);color:var(--muted)">12 tyg.</span>
+                </div>
+                <div class="mkt-card-footer">
+                  <div><div class="mkt-price" style="color:var(--green)">FREE</div><div style="font-size:9px;color:var(--muted)">312 opinii · 2 100 pobrań</div></div>
+                  <button class="mkt-btn" style="background:var(--green)">Pobierz</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bottom-nav">
+            <button class="nav-btn" onclick="switchScreen('dashboard',null)"><div class="nav-icon">🏠</div><div class="nav-txt">Home</div></button>
+            <button class="nav-btn" onclick="switchScreen('workout',null)"><div class="nav-icon">💪</div><div class="nav-txt">Trening</div></button>
+            <button class="nav-btn active"><div class="nav-icon">🏪</div><div class="nav-txt">Plany</div></button>
+            <button class="nav-btn" onclick="switchScreen('ai',null)"><div class="nav-icon">🤖</div><div class="nav-txt">AI Coach</div></button>
+            <button class="nav-btn" onclick="switchScreen('profile',null)"><div class="nav-icon">👤</div><div class="nav-txt">Profil</div></button>
+          </div>
+        </div>
+
+        <!-- PROFILE -->
+        <div class="screen" id="screen-profile">
+          <div class="status-bar"><div class="status-time">9:41</div><div class="status-icons">📶 🔋</div></div>
+          <div class="scroll">
+            <div class="profile-hero">
+              <div class="profile-av">MK</div>
+              <div>
+                <div class="profile-name">Maciej K.</div>
+                <div class="profile-level">⚡ Atleta · Poziom 14</div>
+                <div class="profile-plan">Plan Pro · odnowienie 14 kwi 2026</div>
+              </div>
+            </div>
+            <div class="profile-stats">
+              <div class="ps"><div class="ps-val">47</div><div class="ps-lbl">Treningów</div></div>
+              <div class="ps"><div class="ps-val" style="color:var(--orange)">🔥14</div><div class="ps-lbl">Seria</div></div>
+              <div class="ps"><div class="ps-val" style="color:var(--gold)">8</div><div class="ps-lbl">PR</div></div>
+            </div>
+            <div style="padding:0 20px;margin-bottom:6px">
+              <div style="height:6px;background:var(--border2);border-radius:3px;margin-bottom:5px"><div style="height:100%;width:68%;background:linear-gradient(90deg,var(--blue),var(--lime));border-radius:3px"></div></div>
+              <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted)"><span>Poziom 14 — Atleta</span><span style="color:var(--lime)">1 580 XP do Wojownika</span></div>
+            </div>
+            <div style="height:1px;background:var(--border);margin:10px 0"></div>
+            <div class="menu-item">
+              <div class="menu-icon" style="background:var(--lime-ghost)">📋</div>
+              <div class="menu-label">Moje plany treningowe</div>
+              <span class="menu-badge" style="background:var(--cyan-ghost);color:var(--blue)">3</span>
+              <div class="menu-arrow">›</div>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon" style="background:var(--orange-ghost)">🏆</div>
+              <div class="menu-label">Wyzwania i odznaki</div>
+              <span class="menu-badge" style="background:var(--orange-ghost);color:var(--orange)">2 aktywne</span>
+              <div class="menu-arrow">›</div>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon" style="background:var(--purple-ghost)">📸</div>
+              <div class="menu-label">Zdjęcia przed/po</div>
+              <div class="menu-arrow">›</div>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon" style="background:var(--blue-ghost)">💳</div>
+              <div class="menu-label">Subskrypcja Pro</div>
+              <span class="menu-badge" style="background:var(--lime-ghost);color:var(--lime)">Aktywna</span>
+              <div class="menu-arrow">›</div>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon" style="background:var(--card2)">⚙️</div>
+              <div class="menu-label">Ustawienia konta</div>
+              <div class="menu-arrow">›</div>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon" style="background:var(--red-ghost)">🚪</div>
+              <div class="menu-label" style="color:var(--red)">Wyloguj się</div>
+            </div>
+          </div>
+          <div class="bottom-nav">
+            <button class="nav-btn" onclick="switchScreen('dashboard',null)"><div class="nav-icon">🏠</div><div class="nav-txt">Home</div></button>
+            <button class="nav-btn" onclick="switchScreen('workout',null)"><div class="nav-icon">💪</div><div class="nav-txt">Trening</div></button>
+            <button class="nav-btn" onclick="switchScreen('marketplace',null)"><div class="nav-icon">🏪</div><div class="nav-txt">Plany</div></button>
+            <button class="nav-btn" onclick="switchScreen('ai',null)"><div class="nav-icon">🤖</div><div class="nav-txt">AI Coach</div></button>
+            <button class="nav-btn active"><div class="nav-icon">👤</div><div class="nav-txt">Profil</div></button>
+          </div>
+        </div>
+
+      </div><!-- /phone-screen -->
+      <div class="home-indicator"><div class="home-bar"></div></div>
+    </div><!-- /phone -->
+  </div><!-- /phone-wrap -->
+
+  <!-- ── INFO PANEL ── -->
+  <div class="info-panel">
+    <div>
+      <div class="ip-title">Specyfikacja aplikacji</div>
+      <div class="ip-sub">Kluczowe decyzje UX i techniczne dla iOS + Android</div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div class="spec-row"><span class="spec-icon">📱</span><span class="spec-text">Platforma</span><span class="spec-val">React Native + Expo</span></div>
+      <div class="spec-row"><span class="spec-icon">🎨</span><span class="spec-text">UI Framework</span><span class="spec-val">NativeWind (Tailwind)</span></div>
+      <div class="spec-row"><span class="spec-icon">💾</span><span class="spec-text">Backend</span><span class="spec-val">Supabase</span></div>
+      <div class="spec-row"><span class="spec-icon">🔔</span><span class="spec-text">Push notif.</span><span class="spec-val">Expo + OneSignal</span></div>
+      <div class="spec-row"><span class="spec-icon">💳</span><span class="spec-text">Płatności</span><span class="spec-val">Stripe + RevenueCat</span></div>
+      <div class="spec-row"><span class="spec-icon">🤖</span><span class="spec-text">AI Coach</span><span class="spec-val">Anthropic Claude API</span></div>
+      <div class="spec-row"><span class="spec-icon">📊</span><span class="spec-text">Analityki</span><span class="spec-val">Mixpanel + Sentry</span></div>
+      <div class="spec-row"><span class="spec-icon">🌐</span><span class="spec-text">Offline</span><span class="spec-val">Tryb offline dla aktywnych planów</span></div>
+    </div>
+
+    <div style="height:1px;background:var(--border)"></div>
+
+    <div>
+      <div style="font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;font-weight:700">7 ekranów aplikacji</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="flow-step"><div class="flow-num">1</div><div class="flow-text"><strong>Onboarding</strong> — hero screen, rejestracja lub logowanie, quiz AI do wyboru planu</div></div>
+        <div class="flow-step"><div class="flow-num">2</div><div class="flow-text"><strong>Dashboard</strong> — dzienny trening, streak, aktywność znajomych, szybki dostęp do AI</div></div>
+        <div class="flow-step"><div class="flow-num">3</div><div class="flow-text"><strong>Aktywny trening</strong> — timer, logger serii, timer odpoczynku, podgląd następnego ćwiczenia</div></div>
+        <div class="flow-step"><div class="flow-num">4</div><div class="flow-text"><strong>Postępy</strong> — wykresy siły, aktywność tygodniowa, rekordy osobiste, masa ciała</div></div>
+        <div class="flow-step"><div class="flow-num">5</div><div class="flow-text"><strong>AI Coach</strong> — czat z Claude, kontekst profilu, szybkie pytania, adaptacja planu</div></div>
+        <div class="flow-step"><div class="flow-num">6</div><div class="flow-text"><strong>Marketplace</strong> — przeglądanie i zakup planów, filtrowanie, profile trenerów</div></div>
+        <div class="flow-step"><div class="flow-num">7</div><div class="flow-text"><strong>Profil</strong> — XP, odznaki, subskrypcja, zdjęcia, ustawienia konta</div></div>
+      </div>
+    </div>
+
+    <div style="height:1px;background:var(--border)"></div>
+
+    <div>
+      <div style="font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;font-weight:700">Push notyfikacje</div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--off)">
+        <div style="display:flex;gap:8px"><span>🔥</span><span>Przypomnienie o treningu (np. "Hej, nie odpuść serii!")</span></div>
+        <div style="display:flex;gap:8px"><span>🏆</span><span>Nowa odznaka lub awans poziomu</span></div>
+        <div style="display:flex;gap:8px"><span>💪</span><span>Znajomy pobił rekord ("Piotr właśnie zrobił 120 kg!")</span></div>
+        <div style="display:flex;gap:8px"><span>🤖</span><span>Weekly check-in od AI Coacha</span></div>
+        <div style="display:flex;gap:8px"><span>🛒</span><span>Nowy plan trenera którego obserwujesz</span></div>
+      </div>
+    </div>
+
+    <div style="background:var(--lime-ghost);border:1px solid rgba(180,240,58,.15);border-radius:12px;padding:14px">
+      <div style="font-size:10px;color:var(--lime);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">Timeline mobile</div>
+      <div style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--muted)">
+        <div><strong style="color:var(--white)">Faza 1</strong> — Web app (responsive) · już teraz</div>
+        <div><strong style="color:var(--white)">Faza 2</strong> — React Native MVP · miesiąc 4-6</div>
+        <div><strong style="color:var(--white)">Faza 3</strong> — iOS + Android App Store · miesiąc 7</div>
+        <div><strong style="color:var(--white)">Faza 4</strong> — Widget, Apple Watch · rok 2</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /phone-scene -->
+
+<script>
+function switchScreen(id, tabEl) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id)?.classList.add('active');
+  if (tabEl) {
+    document.querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
+    tabEl.classList.add('active');
+  } else {
+    // Update tabs
+    const map = {onboarding:0,dashboard:1,workout:2,progress:3,ai:4,marketplace:5,profile:6};
+    document.querySelectorAll('.stab').forEach((t,i) => t.classList.toggle('active', i === map[id]));
+  }
+}
+
+// Workout timer
+let workoutSecs = 34*60 + 22;
+setInterval(() => {
+  workoutSecs++;
+  const m = String(Math.floor(workoutSecs/60)).padStart(2,'0');
+  const s = String(workoutSecs%60).padStart(2,'0');
+  const el = document.getElementById('timerDisplay');
+  if(el) el.textContent = m+':'+s;
+}, 1000);
+
+// Rest timer
+let restSecs = 0, restInterval;
+function startRestTimer(btn) {
+  btn.classList.add('done');
+  btn.textContent = '✓';
+  restSecs = 120;
+  const banner = document.getElementById('restBanner');
+  const time = document.getElementById('restTime');
+  if(banner) banner.style.display = 'flex';
+  clearInterval(restInterval);
+  restInterval = setInterval(() => {
+    restSecs--;
+    if(time) time.textContent = restSecs + 's';
+    if(restSecs <= 0) {
+      clearInterval(restInterval);
+      if(banner) banner.style.display = 'none';
+    }
+  }, 1000);
+}
+</script>
+</body>
+</html>
