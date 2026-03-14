@@ -1038,6 +1038,70 @@
         background: var(--border2);
         border-radius: 2px;
     }
+
+    .ex-filter-btn {
+        background: var(--card2);
+        border: 1px solid var(--border);
+        border-radius: 5px;
+        padding: 3px 9px;
+        font-size: 10px;
+        font-weight: 600;
+        color: var(--muted);
+        cursor: pointer;
+        font-family: inherit;
+        transition: all .2s;
+    }
+
+    .ex-filter-btn:hover {
+        border-color: var(--border2);
+        color: var(--off);
+    }
+
+    .ex-filter-btn.active {
+        background: var(--lime-ghost);
+        border-color: rgba(180, 240, 58, .3);
+        color: var(--lime);
+    }
+
+    .ex-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 10px 12px;
+        background: var(--card2);
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        transition: border-color .2s;
+    }
+
+    .ex-row:hover {
+        border-color: var(--border2);
+    }
+
+    .ex-row-name {
+        font-size: 12px;
+        font-weight: 600;
+        flex: 1;
+    }
+
+    .ex-row-cat {
+        font-size: 9px;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 4px;
+        flex-shrink: 0;
+    }
+
+    .ex-row-mine {
+        background: var(--lime-ghost);
+        border: 1px solid rgba(180, 240, 58, .2);
+        color: var(--lime);
+    }
+
+    .ex-row-global {
+        background: var(--border2);
+        color: var(--muted);
+    }
     </style>
 </head>
 <body>
@@ -1094,6 +1158,10 @@
                 <span class="nav-icon">✏️</span>
                 Kreator planu 
                 <span class="nav-badge cyan">AI</span>
+            </div>
+            <div class="nav-item" onclick="show('exercisedb',this)">
+                <span class="nav-icon">🏋️</span>
+                Baza ćwiczeń
             </div>
             <div class="nav-item" onclick="show('quizcreator',this)">
                 <span class="nav-icon">📝</span>
@@ -2658,6 +2726,162 @@
                 </div>
             </div>
 
+            <!-- ══ BAZA CWICZEN ══ -->
+            <div class="page" id="page-exercisedb">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+                    <div>
+                        <div style="font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;line-height:1;">
+                            Baza 
+                            <span style="color:var(--cyan)">ćwiczeń</span>
+                        </div>
+                        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Globalna biblioteka + Twoje własne ćwiczenia</div>
+                    </div>
+                    <button class="btn btn-cyan" onclick="openAddExModal()">+ Dodaj własne ćwiczenie</button>
+                </div>
+
+                <!-- Stats -->
+                <div class="g3" style="margin-bottom:20px;">
+                    <div class="stat">
+                        <div class="stat-top">
+                            <div class="stat-icon" style="background:var(--cyan-ghost)">🌍</div>
+                        </div>
+                        <div class="stat-val" style="color:var(--cyan)">32</div>
+                        <div class="stat-label">Globalne ćwiczenia</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-top">
+                            <div class="stat-icon" style="background:var(--lime-ghost)">⭐</div>
+                            <span class="stat-delta" style="background:var(--lime-ghost);color:var(--lime)" id="myExCount">3</span>
+                        </div>
+                        <div class="stat-val" style="color:var(--lime)" id="myExCountBig">3</div>
+                        <div class="stat-label">Twoje ćwiczenia</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-top">
+                            <div class="stat-icon" style="background:var(--gold-ghost)">📋</div>
+                        </div>
+                        <div class="stat-val" style="color:var(--gold)">35</div>
+                        <div class="stat-label">Razem w bazie</div>
+                    </div>
+                </div>
+
+                <div class="g2">
+                    <!-- LEWA: Twoje ćwiczenia -->
+                    <div style="display:flex;flex-direction:column;gap:14px;">
+                        <div class="card">
+                            <div class="card-title" style="display:flex;align-items:center;justify-content:space-between;">
+                                <span>
+                                    Moje ćwiczenia 
+                                    <span style="color:var(--lime);font-size:12px;font-weight:400;" id="myExLabel">(3)</span>
+                                </span>
+                                <button class="btn btn-cyan btn-sm" onclick="openAddExModal()">+ Dodaj</button>
+                            </div>
+                            <!-- Filtry -->
+                            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;" id="myExCatFilters">
+                                <button class="ex-filter-btn active" onclick="filterMyEx('',this)">Wszystkie</button>
+                                <button class="ex-filter-btn" onclick="filterMyEx('Klatka',this)">Klatka</button>
+                                <button class="ex-filter-btn" onclick="filterMyEx('Plecy',this)">Plecy</button>
+                                <button class="ex-filter-btn" onclick="filterMyEx('Nogi',this)">Nogi</button>
+                                <button class="ex-filter-btn" onclick="filterMyEx('Barki',this)">Barki</button>
+                                <button class="ex-filter-btn" onclick="filterMyEx('Rece',this)">Ręce</button>
+                                <button class="ex-filter-btn" onclick="filterMyEx('Core',this)">Core</button>
+                                <button class="ex-filter-btn" onclick="filterMyEx('Cardio',this)">Cardio</button>
+                                <button class="ex-filter-btn" onclick="filterMyEx('Inne',this)">Inne</button>
+                            </div>
+                            <div id="myExList" style="display:flex;flex-direction:column;gap:6px;"></div>
+                            <div id="myExEmpty" style="display:none;text-align:center;padding:24px;color:var(--muted);font-size:12px;">
+
+                                              Nie masz jeszcze własnych ćwiczeń.
+                                <br>
+                                Kliknij "+ Dodaj" żeby stworzyć pierwsze.
+                                            
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PRAWA: Globalna baza -->
+                    <div style="display:flex;flex-direction:column;gap:14px;">
+                        <div class="card">
+                            <div class="card-title">
+                                Globalna baza 
+                                <span style="color:var(--muted);font-size:12px;font-weight:400;">(tylko podgląd)</span>
+                            </div>
+                            <input class="form-input" type="text" placeholder="🔍 Szukaj w globalnej bazie..." oninput="filterGlobalEx(this.value)" style="margin-bottom:12px;">
+                            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;" id="globalCatFilters">
+                                <button class="ex-filter-btn active" onclick="filterGlobalCat('',this)">Wszystkie</button>
+                                <button class="ex-filter-btn" onclick="filterGlobalCat('Klatka',this)">Klatka</button>
+                                <button class="ex-filter-btn" onclick="filterGlobalCat('Plecy',this)">Plecy</button>
+                                <button class="ex-filter-btn" onclick="filterGlobalCat('Nogi',this)">Nogi</button>
+                                <button class="ex-filter-btn" onclick="filterGlobalCat('Barki',this)">Barki</button>
+                                <button class="ex-filter-btn" onclick="filterGlobalCat('Rece',this)">Ręce</button>
+                                <button class="ex-filter-btn" onclick="filterGlobalCat('Core',this)">Core</button>
+                                <button class="ex-filter-btn" onclick="filterGlobalCat('Cardio',this)">Cardio</button>
+                            </div>
+                            <div id="globalExList" style="display:flex;flex-direction:column;gap:5px;max-height:420px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border2) transparent;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ══ MODAL: DODAJ/EDYTUJ WŁASNE ĆWICZENIE ══ -->
+            <div class="modal-overlay" id="modal-addEx">
+                <div class="modal" style="width:500px;">
+                    <button class="modal-close" onclick="closeModal('addEx')">×</button>
+                    <div class="modal-title" id="addExModalTitle">
+                        Dodaj 
+                        <span style="color:var(--lime)">własne ćwiczenie</span>
+                    </div>
+                    <div style="margin-bottom:14px;">
+                        <label class="form-label">Nazwa ćwiczenia</label>
+                        <input class="form-input" type="text" id="addExName" placeholder="np. Circuit siłowy Marcina">
+                    </div>
+                    <div class="form-row" style="margin-bottom:14px;">
+                        <div>
+                            <label class="form-label">Kategoria</label>
+                            <select class="form-input form-select" id="addExCat">
+                                <option>Klatka</option>
+                                <option>Plecy</option>
+                                <option>Nogi</option>
+                                <option>Barki</option>
+                                <option>Rece</option>
+                                <option>Core</option>
+                                <option>Cardio</option>
+                                <option>Inne</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-label">Typ</label>
+                            <select class="form-input form-select" id="addExType">
+                                <option>Siłowe</option>
+                                <option>Izolowane</option>
+                                <option>Wielostawowe</option>
+                                <option>Cardio</option>
+                                <option>Mobilność</option>
+                                <option>Własny</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="margin-bottom:14px;">
+                        <label class="form-label">
+                            Opis / instrukcja 
+                            <span style="color:var(--muted);font-weight:300;">(opcjonalny)</span>
+                        </label>
+                        <textarea class="form-input" id="addExDesc" placeholder="np. Opis techniki, wskazówki dla klienta, warianty..." style="min-height:80px;resize:vertical;"></textarea>
+                    </div>
+                    <div style="margin-bottom:18px;">
+                        <label class="form-label">
+                            Domyślne serie × powtórzenia 
+                            <span style="color:var(--muted);font-weight:300;">(opcjonalne)</span>
+                        </label>
+                        <input class="form-input" type="text" id="addExSets" placeholder="np. 4×8, 3×12, 5×5">
+                    </div>
+                    <div style="display:flex;gap:10px;">
+                        <button class="btn btn-outline" style="flex:1" onclick="closeModal('addEx')">Anuluj</button>
+                        <button class="btn btn-cyan" style="flex:2" onclick="saveMyExercise()">Zapisz ćwiczenie →</button>
+                    </div>
+                </div>
+            </div>
+
         </div>
         <!-- /content -->
     </div>
@@ -2748,6 +2972,7 @@
         messages: 'Wiadomości',
         plans: 'Moje plany',
         builder: 'Kreator planu',
+        exercisedb: 'Baza ćwiczeń',
         quizcreator: 'Quiz onboardingowy',
         sales: 'Przychody',
         reviews: 'Opinie',
@@ -3479,6 +3704,292 @@
         if (e.target === document.getElementById('modal-assignPlan'))
             closeModal('assignPlan');
     });
+
+    // ── BAZA CWICZEN ──────────────────────────────────────────────
+    const GLOBAL_EX = [
+    {
+        name: 'Wyciskanie sztangi leżąc',
+        cat: 'Klatka'
+    }, {
+        name: 'Wyciskanie hantelkami',
+        cat: 'Klatka'
+    },
+    {
+        name: 'Wyciskanie na skosie',
+        cat: 'Klatka'
+    }, {
+        name: 'Rozpiętki',
+        cat: 'Klatka'
+    }, {
+        name: 'Pompki',
+        cat: 'Klatka'
+    },
+    {
+        name: 'Overhead Press',
+        cat: 'Barki'
+    }, {
+        name: 'Unoszenie boczne',
+        cat: 'Barki'
+    }, {
+        name: 'Unoszenie przodem',
+        cat: 'Barki'
+    },
+    {
+        name: 'Martwy ciąg',
+        cat: 'Plecy'
+    }, {
+        name: 'Wiosłowanie sztangą',
+        cat: 'Plecy'
+    }, {
+        name: 'Wiosłowanie hantelkiem',
+        cat: 'Plecy'
+    },
+    {
+        name: 'Podciąganie na drążku',
+        cat: 'Plecy'
+    }, {
+        name: 'Ściąganie linki',
+        cat: 'Plecy'
+    },
+    {
+        name: 'Przysiad ze sztangą',
+        cat: 'Nogi'
+    }, {
+        name: 'Leg Press',
+        cat: 'Nogi'
+    }, {
+        name: 'Wykroki',
+        cat: 'Nogi'
+    },
+    {
+        name: 'Rumuński martwy ciąg',
+        cat: 'Nogi'
+    }, {
+        name: 'Leg Curl',
+        cat: 'Nogi'
+    }, {
+        name: 'Leg Extension',
+        cat: 'Nogi'
+    },
+    {
+        name: 'Wspinanie na palce',
+        cat: 'Nogi'
+    }, {
+        name: 'Biceps curl sztanga',
+        cat: 'Rece'
+    },
+    {
+        name: 'Biceps curl hantelki',
+        cat: 'Rece'
+    }, {
+        name: 'Triceps pushdown',
+        cat: 'Rece'
+    },
+    {
+        name: 'Pompki na poręczach',
+        cat: 'Rece'
+    }, {
+        name: 'Deska',
+        cat: 'Core'
+    }, {
+        name: 'Brzuszki',
+        cat: 'Core'
+    },
+    {
+        name: 'Russian twist',
+        cat: 'Core'
+    }, {
+        name: 'Wheel rollout',
+        cat: 'Core'
+    },
+    {
+        name: 'Bieg na bieżni',
+        cat: 'Cardio'
+    }, {
+        name: 'Rower stacjonarny',
+        cat: 'Cardio'
+    },
+    {
+        name: 'Skakanka',
+        cat: 'Cardio'
+    }, {
+        name: 'Burpees',
+        cat: 'Cardio'
+    },
+    ];
+
+    let MY_EX = [
+    {
+        id: 1,
+        name: 'Circuit siłowy Marcina',
+        cat: 'Inne',
+        type: 'Własny',
+        desc: '3 rundy: 10 przysiadów + 10 pompek + 10 wiosłowań, przerwa 90s',
+        sets: '3 rundy'
+    },
+    {
+        id: 2,
+        name: 'Protokół rozgrzewki RTG',
+        cat: 'Cardio',
+        type: 'Mobilność',
+        desc: '5 min dynamiczna rozgrzewka stawów + aktywacja mięśni posturalnych',
+        sets: '1× 5 min'
+    },
+    {
+        id: 3,
+        name: 'Deska boczna z rotacją',
+        cat: 'Core',
+        type: 'Izolowane',
+        desc: 'Deska boczna z obrotem tułowia — świetna na mięśnie skośne',
+        sets: '3×10'
+    },
+    ];
+    let myExNextId = 4;
+    let myExCatFilter = '';
+    let globalCatFilter = '';
+    let editingExId = null;
+
+    function renderMyEx() {
+        const list = MY_EX.filter(e => !myExCatFilter || e.cat === myExCatFilter);
+        document.getElementById('myExCountBig').textContent = MY_EX.length;
+        document.getElementById('myExCount').textContent = MY_EX.length;
+        document.getElementById('myExLabel').textContent = '(' + MY_EX.length + ')';
+
+        if (!list.length) {
+            document.getElementById('myExList').innerHTML = '';
+            document.getElementById('myExEmpty').style.display = 'block';
+            return;
+        }
+        document.getElementById('myExEmpty').style.display = 'none';
+
+        document.getElementById('myExList').innerHTML = list.map(e => `
+    <div class="ex-row">
+      <div style="flex:1;">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;">
+          <span class="ex-row-name">${
+
+
+        e.name}</span>
+          <span class="ex-row-cat ex-row-mine">${e.cat}</span>
+          ${e.sets ? `<span style="font-size:10px;color:var(--muted);">${e.sets}</span>` : ''}
+        </div>
+        ${
+        e.desc ? `<div style="font-size:10px;color:var(--muted);font-weight:300;line-height:1.5;">${e.desc}</div>` : ''}
+      </div>
+      <div style="display:flex;gap:5px;flex-shrink:0;">
+        <button class="btn btn-ghost btn-sm" onclick="editMyEx(${
+
+        e.id})">✏️</button>
+        <button class="btn btn-ghost btn-sm" style="color:var(--red);" onclick="deleteMyEx(${e.id})">🗑</button>
+      </div>
+    </div>`
+
+        ).join('');
+    }
+
+    function renderGlobalEx(query, cat) {
+        let list = GLOBAL_EX.filter(e => {
+            const matchCat = !cat || e.cat === cat;
+            const matchQ = !query || e.name.toLowerCase().includes(query.toLowerCase());
+            return matchCat && matchQ;
+        });
+
+        document.getElementById('globalExList').innerHTML = list.map(e => `
+    <div class="ex-row">
+      <span class="ex-row-name">${
+        e.name}</span>
+      <span class="ex-row-cat ex-row-global">${e.cat}</span>
+    </div>`
+        ).join('');
+    }
+
+    function filterMyEx(cat, btn) {
+        myExCatFilter = cat;
+        document.querySelectorAll('#myExCatFilters .ex-filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderMyEx();
+    }
+
+    function filterGlobalEx(query) {
+        renderGlobalEx(query, globalCatFilter);
+    }
+
+    function filterGlobalCat(cat, btn) {
+        globalCatFilter = cat;
+        document.querySelectorAll('#globalCatFilters .ex-filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderGlobalEx(document.querySelector('#page-exercisedb input[type="text"]')?.value || '', cat);
+    }
+
+    function openAddExModal() {
+        editingExId = null;
+        document.getElementById('addExModalTitle').innerHTML = 'Dodaj <span style="color:var(--lime)">własne ćwiczenie</span>';
+        document.getElementById('addExName').value = '';
+        document.getElementById('addExDesc').value = '';
+        document.getElementById('addExSets').value = '';
+        openModal('addEx');
+    }
+
+    function editMyEx(id) {
+        const ex = MY_EX.find(e => e.id === id);
+        if (!ex)
+            return;
+        editingExId = id;
+        document.getElementById('addExModalTitle').innerHTML = 'Edytuj <span style="color:var(--cyan)">ćwiczenie</span>';
+        document.getElementById('addExName').value = ex.name;
+        document.getElementById('addExCat').value = ex.cat;
+        document.getElementById('addExType').value = ex.type || 'Własny';
+        document.getElementById('addExDesc').value = ex.desc || '';
+        document.getElementById('addExSets').value = ex.sets || '';
+        openModal('addEx');
+    }
+
+    function deleteMyEx(id) {
+        if (!confirm('Usunąć to ćwiczenie z Twojej bazy?'))
+            return;
+        MY_EX = MY_EX.filter(e => e.id !== id);
+        renderMyEx();
+    }
+
+    function saveMyExercise() {
+        const name = document.getElementById('addExName').value.trim();
+        if (!name) {
+            document.getElementById('addExName').style.borderColor = 'var(--red)';
+            return;
+        }
+        document.getElementById('addExName').style.borderColor = '';
+
+        const ex = {
+            id: editingExId || myExNextId++,
+            name,
+            cat: document.getElementById('addExCat').value,
+            type: document.getElementById('addExType').value,
+            desc: document.getElementById('addExDesc').value.trim(),
+            sets: document.getElementById('addExSets').value.trim(),
+        };
+
+        if (editingExId) {
+            const idx = MY_EX.findIndex(e => e.id === editingExId);
+            if (idx >= 0)
+                MY_EX[idx] = ex;
+        } else {
+            MY_EX.push(ex);
+        }
+
+        closeModal('addEx');
+        renderMyEx();
+    }
+
+    // Init bazy po załadowaniu
+    document.addEventListener('DOMContentLoaded', () => {
+        renderMyEx();
+        renderGlobalEx('', '');
+    });
+    // Inicjalizuj też od razu (na wypadek gdyby DOMContentLoaded już minął)
+    setTimeout(() => {
+        renderMyEx();
+        renderGlobalEx('', '');
+    }, 100);
     </script>
 </body>
 </html>
