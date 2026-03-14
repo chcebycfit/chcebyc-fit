@@ -775,19 +775,35 @@ function skipOnboarding() {
 
 // ── SELECTION HELPERS ─────────────────────────────────────────────
 function selectRole(role, el) {
-  state.role = role;
+  const isAlreadySelected = el.classList.contains('selected');
   document.querySelectorAll('#screen-0 .role-card').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
-  document.getElementById('next-0').disabled = false;
+  if (isAlreadySelected) {
+    state.role = null;
+    document.getElementById('next-0').disabled = true;
+  } else {
+    state.role = role;
+    el.classList.add('selected');
+    document.getElementById('next-0').disabled = false;
+  }
 }
 
 function selectOption(el, key, value) {
-  state[key] = value;
+  const isAlreadySelected = el.classList.contains('selected');
   const container = el.closest('.options, .slider-wrap, div');
   container.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
-  el.classList.add('selected');
-  const nextBtn = document.getElementById('next-' + currentStep);
-  if (nextBtn) nextBtn.disabled = false;
+
+  if (isAlreadySelected) {
+    // Odznacz — usuń wartość ze stanu
+    state[key] = null;
+    const nextBtn = document.getElementById('next-' + currentStep);
+    if (nextBtn) nextBtn.disabled = true;
+  } else {
+    // Zaznacz nowy kafelek
+    state[key] = value;
+    el.classList.add('selected');
+    const nextBtn = document.getElementById('next-' + currentStep);
+    if (nextBtn) nextBtn.disabled = false;
+  }
 }
 
 function toggleTag(el, key, value) {
