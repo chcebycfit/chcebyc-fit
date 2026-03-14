@@ -234,6 +234,16 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--black);color:va
 ::-webkit-scrollbar{width:3px;height:3px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.ex-cat-btn{background:var(--card2);border:1px solid var(--border);border-radius:5px;padding:3px 9px;font-size:10px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;transition:all .2s;}
+.ex-cat-btn:hover{border-color:var(--border2);color:var(--off);}
+.ex-cat-btn.active{background:var(--lime-ghost);border-color:rgba(180,240,58,.3);color:var(--lime);}
+.ex-result{display:flex;align-items:center;gap:9px;padding:8px 10px;background:var(--card);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s;}
+.ex-result:hover{border-color:var(--border2);background:var(--card2);}
+.ex-result-name{font-size:12px;font-weight:600;flex:1;}
+.ex-result-cat{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:var(--border2);color:var(--muted);}
+.ex-result-mine{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:var(--cyan-ghost);color:var(--cyan);}
+.ex-freeform{background:var(--card2);border:1px solid rgba(180,240,58,.15);border-left:3px solid var(--lime);border-radius:9px;padding:10px 12px;margin-bottom:6px;position:relative;}
+.ex-freeform-label{font-size:9px;color:var(--lime);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;}
 </style>
 </head>
 <body>
@@ -365,24 +375,43 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--black);color:va
         </div>
       </div>
       <div class="form-group" style="margin-top:12px;">
-        <label class="form-label">Ćwiczenia <span style="color:var(--muted2);font-weight:300;">(opcjonalne)</span></label>
-        <div class="ex-add-row" id="exList">
-          <div class="ex-add-item">
-            <input class="form-input" style="flex:2;padding:6px 9px;font-size:12px;" placeholder="Nazwa ćwiczenia..." value="Wyciskanie sztangi leżąc">
-            <input class="form-input" style="flex:1;padding:6px 9px;font-size:12px;" placeholder="Serie×powt." value="4×8">
-            <button class="ex-remove" onclick="this.parentElement.remove()">×</button>
-          </div>
-          <div class="ex-add-item">
-            <input class="form-input" style="flex:2;padding:6px 9px;font-size:12px;" placeholder="Nazwa ćwiczenia..." value="Overhead Press">
-            <input class="form-input" style="flex:1;padding:6px 9px;font-size:12px;" placeholder="Serie×powt." value="4×8">
-            <button class="ex-remove" onclick="this.parentElement.remove()">×</button>
-          </div>
+        <label class="form-label">Cwiczenia <span style="color:var(--muted2);font-weight:300;">(opcjonalne)</span></label>
+        <div class="ex-add-row" id="exList"></div>
+        <!-- Przyciski dodawania -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px;">
+          <button onclick="openExSearch()" style="background:var(--cyan-ghost);border:1px dashed rgba(58,240,212,.3);border-radius:7px;padding:8px;color:var(--cyan);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;" onmouseover="this.style.background='rgba(58,240,212,.12)'" onmouseout="this.style.background='var(--cyan-ghost)'">🔍 Szukaj w bazie</button>
+          <button onclick="addFreeformRow()" style="background:var(--lime-ghost);border:1px dashed rgba(180,240,58,.3);border-radius:7px;padding:8px;color:var(--lime);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;" onmouseover="this.style.background='rgba(180,240,58,.12)'" onmouseout="this.style.background='var(--lime-ghost)'">📝 Dodaj blok tekstowy</button>
         </div>
-        <button onclick="addExerciseRow()" style="margin-top:7px;width:100%;background:none;border:1px dashed var(--border2);border-radius:7px;padding:7px;color:var(--muted);font-size:11px;cursor:pointer;font-family:inherit;transition:all .2s;" onmouseover="this.style.borderColor='var(--border3)'" onmouseout="this.style.borderColor='var(--border2)'">+ Dodaj ćwiczenie</button>
       </div>
+
+      <!-- Wyszukiwarka cwiczen (inline) -->
+      <div id="exSearchPanel" style="display:none;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div style="font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;font-weight:700;">Baza cwiczen</div>
+          <button onclick="closeExSearch()" style="background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:2px;">×</button>
+        </div>
+        <input class="form-input" id="exSearchInput" type="text" placeholder="Szukaj cwiczenia... (np. wyciskanie, przysiad)" oninput="filterExercises(this.value)" style="margin-bottom:10px;">
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;" id="exCatFilters">
+          <button class="ex-cat-btn active" onclick="filterByCat('',this)">Wszystkie</button>
+          <button class="ex-cat-btn" onclick="filterByCat('Klatka',this)">Klatka</button>
+          <button class="ex-cat-btn" onclick="filterByCat('Plecy',this)">Plecy</button>
+          <button class="ex-cat-btn" onclick="filterByCat('Nogi',this)">Nogi</button>
+          <button class="ex-cat-btn" onclick="filterByCat('Barki',this)">Barki</button>
+          <button class="ex-cat-btn" onclick="filterByCat('Rece',this)">Rece</button>
+          <button class="ex-cat-btn" onclick="filterByCat('Core',this)">Core</button>
+          <button class="ex-cat-btn" onclick="filterByCat('Cardio',this)">Cardio</button>
+          <button class="ex-cat-btn" onclick="filterByCat('Moje',this)" style="border-color:rgba(58,240,212,.3);color:var(--cyan);">Moje</button>
+        </div>
+        <div id="exSearchResults" style="display:flex;flex-direction:column;gap:4px;max-height:180px;overflow-y:auto;scrollbar-width:thin;"></div>
+        <!-- Nie znalazlem - dodaj do bazy -->
+        <div id="exAddToDb" style="display:none;margin-top:8px;padding:8px 10px;background:var(--lime-ghost);border:1px dashed rgba(180,240,58,.3);border-radius:8px;font-size:11px;color:var(--lime);cursor:pointer;" onclick="saveNewExercise()">
+          + Zapisz "<span id="exAddName"></span>" do mojej bazy
+        </div>
+      </div>
+
       <div class="form-group">
         <label class="form-label">Notatka dla klienta <span style="color:var(--muted2);font-weight:300;">(opcjonalna)</span></label>
-        <textarea class="form-input form-textarea" id="addNote" placeholder="np. Skupiaj się na technice, nie forsuj ciężaru..."></textarea>
+        <textarea class="form-input form-textarea" id="addNote" placeholder="np. Skupiaj sie na technice, nie forsuj ciezaru..."></textarea>
       </div>
     </div>
     <div class="modal-foot">
@@ -865,24 +894,177 @@ function openAddModal(dateString) {
   const d = dateString ? parseDate(dateString) : today;
   document.getElementById('addDate').value = dateString || dateStr(today);
 
-  document.getElementById('exList').innerHTML = `
-    <div class="ex-add-item">
-      <input class="form-input" style="flex:2;padding:6px 9px;font-size:12px;" placeholder="Nazwa cwiczenia...">
-      <input class="form-input" style="flex:1;padding:6px 9px;font-size:12px;" placeholder="Serie×powt.">
-      <button class="ex-remove" onclick="this.parentElement.remove()">×</button>
-    </div>`;
+  document.getElementById('exList').innerHTML = '';
+  closeExSearch();
 
   openOverlay('add');
 }
 
-function addExerciseRow() {
+// ── BAZA CWICZEN ──────────────────────────────────────────────
+const GLOBAL_EXERCISES = [
+  {name:'Wyciskanie sztangi leżąc', cat:'Klatka'},
+  {name:'Wyciskanie hantelkami', cat:'Klatka'},
+  {name:'Wyciskanie na skosie', cat:'Klatka'},
+  {name:'Rozpietki', cat:'Klatka'},
+  {name:'Pompki', cat:'Klatka'},
+  {name:'Overhead Press', cat:'Barki'},
+  {name:'Unoszenie boczne', cat:'Barki'},
+  {name:'Unoszenie przodem', cat:'Barki'},
+  {name:'Martwy ciag', cat:'Plecy'},
+  {name:'Wioslowanie sztanga', cat:'Plecy'},
+  {name:'Wioslowanie hantelkiem', cat:'Plecy'},
+  {name:'Podciaganie na drazku', cat:'Plecy'},
+  {name:'Sciaganie linki', cat:'Plecy'},
+  {name:'Przysiad ze sztanga', cat:'Nogi'},
+  {name:'Leg Press', cat:'Nogi'},
+  {name:'Wykroki', cat:'Nogi'},
+  {name:'Rumunski martwy ciag', cat:'Nogi'},
+  {name:'Leg Curl', cat:'Nogi'},
+  {name:'Leg Extension', cat:'Nogi'},
+  {name:'Wspinanie na palce', cat:'Nogi'},
+  {name:'Biceps curl sztanga', cat:'Rece'},
+  {name:'Biceps curl hantelki', cat:'Rece'},
+  {name:'Triceps pushdown', cat:'Rece'},
+  {name:'Pompki na porecach', cat:'Rece'},
+  {name:'Deska', cat:'Core'},
+  {name:'Brzuszki', cat:'Core'},
+  {name:'Russian twist', cat:'Core'},
+  {name:'Wheel rollout', cat:'Core'},
+  {name:'Bieg na biezni', cat:'Cardio'},
+  {name:'Rower stacjonarny', cat:'Cardio'},
+  {name:'Skakanka', cat:'Cardio'},
+  {name:'Burpees', cat:'Cardio'},
+  {name:'Jumping jacks', cat:'Cardio'},
+];
+
+// Prywatna baza trenera (zapisywana w pamieci sesji)
+let myExercises = [
+  {name:'Circuit siłowy Marcina', cat:'Moje', mine:true},
+  {name:'Protokol rozgrzewki RTG', cat:'Moje', mine:true},
+];
+
+let currentCatFilter = '';
+let exSearchOpen = false;
+
+function getAllExercises() {
+  return [...GLOBAL_EXERCISES, ...myExercises];
+}
+
+// ── EXERCISE SEARCH ───────────────────────────────────────────
+function openExSearch() {
+  exSearchOpen = true;
+  document.getElementById('exSearchPanel').style.display = 'block';
+  document.getElementById('exSearchInput').value = '';
+  document.getElementById('exAddToDb').style.display = 'none';
+  filterExercises('');
+  document.getElementById('exSearchInput').focus();
+}
+
+function closeExSearch() {
+  exSearchOpen = false;
+  document.getElementById('exSearchPanel').style.display = 'none';
+}
+
+function filterByCat(cat, btn) {
+  currentCatFilter = cat;
+  document.querySelectorAll('.ex-cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterExercises(document.getElementById('exSearchInput').value);
+}
+
+function filterExercises(query) {
+  const q = query.toLowerCase().trim();
+  let results = getAllExercises().filter(e => {
+    const matchCat = !currentCatFilter || e.cat === currentCatFilter;
+    const matchQ = !q || e.name.toLowerCase().includes(q);
+    return matchCat && matchQ;
+  });
+
+  const html = results.slice(0,12).map(e => `
+    <div class="ex-result" onclick="addExFromDb('${e.name.replace(/'/g,"\\'")}','${e.cat}')">
+      <div class="ex-result-name">${e.name}</div>
+      ${e.mine ? '<span class="ex-result-mine">Moje</span>' : `<span class="ex-result-cat">${e.cat}</span>`}
+    </div>`).join('');
+
+  document.getElementById('exSearchResults').innerHTML = html || `<div style="font-size:11px;color:var(--muted);padding:8px;">Brak wynikow. Mozesz zapisac to cwiczenie do swojej bazy.</div>`;
+
+  // Pokaz opcje "Zapisz do bazy" gdy nie znaleziono i cos wpisano
+  const addEl = document.getElementById('exAddToDb');
+  if (q && results.length === 0) {
+    addEl.style.display = 'block';
+    document.getElementById('exAddName').textContent = query;
+  } else {
+    addEl.style.display = 'none';
+  }
+}
+
+function addExFromDb(name, cat) {
   const row = document.createElement('div');
   row.className = 'ex-add-item';
+  row.dataset.type = 'exercise';
   row.innerHTML = `
-    <input class="form-input" style="flex:2;padding:6px 9px;font-size:12px;" placeholder="Nazwa cwiczenia...">
-    <input class="form-input" style="flex:1;padding:6px 9px;font-size:12px;" placeholder="Serie×powt.">
+    <span style="font-size:11px;background:var(--border2);color:var(--muted);padding:2px 6px;border-radius:4px;flex-shrink:0;">${cat}</span>
+    <input class="form-input" style="flex:2;padding:6px 9px;font-size:12px;" value="${name}" placeholder="Nazwa cwiczenia...">
+    <input class="form-input" style="flex:1;padding:6px 9px;font-size:12px;" placeholder="Serie×powt." value="">
     <button class="ex-remove" onclick="this.parentElement.remove()">×</button>`;
   document.getElementById('exList').appendChild(row);
+  closeExSearch();
+}
+
+function saveNewExercise() {
+  const name = document.getElementById('exSearchInput').value.trim();
+  if (!name) return;
+  myExercises.push({name, cat:'Moje', mine:true});
+  showToast(`"${name}" zapisano do Twojej bazy cwiczen!`);
+  addExFromDb(name, 'Moje');
+  closeExSearch();
+}
+
+// ── FREEFORM BLOCK ────────────────────────────────────────────
+function addFreeformRow() {
+  const row = document.createElement('div');
+  row.className = 'ex-freeform';
+  row.dataset.type = 'freeform';
+  row.innerHTML = `
+    <div class="ex-freeform-label">Blok tekstowy / workout kondycyjny</div>
+    <textarea class="form-input" style="min-height:72px;resize:vertical;font-size:12px;line-height:1.6;background:transparent;border-color:rgba(180,240,58,.15);" placeholder="np. Rozgrzewka kondycyjna:\n5 min skip, 3x (10 burpees + 10 jumping jacks + 30s deska)\nPrzerwa 90s miedzy rundami"></textarea>
+    <button onclick="this.parentElement.remove()" style="position:absolute;top:8px;right:8px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;">×</button>`;
+  document.getElementById('exList').appendChild(row);
+}
+
+// ── SAVE/LOAD EXERCISES ───────────────────────────────────────
+function getExercisesFromList() {
+  const items = [];
+  document.querySelectorAll('#exList > *').forEach(row => {
+    if (row.dataset.type === 'freeform') {
+      const text = row.querySelector('textarea')?.value?.trim();
+      if (text) items.push({name: text, sets: '', freeform: true});
+    } else {
+      const inputs = row.querySelectorAll('input');
+      const name = inputs[0]?.value?.trim() || inputs[1]?.value?.trim() || '';
+      const sets = inputs[inputs.length-1]?.value?.trim() || '';
+      if (name) items.push({name, sets, freeform: false});
+    }
+  });
+  return items;
+}
+
+function renderExercisesInList(exercises) {
+  document.getElementById('exList').innerHTML = exercises.map(e => {
+    if (e.freeform) {
+      return `<div class="ex-freeform" data-type="freeform">
+        <div class="ex-freeform-label">Blok tekstowy</div>
+        <textarea class="form-input" style="min-height:72px;resize:vertical;font-size:12px;line-height:1.6;background:transparent;border-color:rgba(180,240,58,.15);">${e.name}</textarea>
+        <button onclick="this.parentElement.remove()" style="position:absolute;top:8px;right:8px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;">×</button>
+      </div>`;
+    } else {
+      return `<div class="ex-add-item" data-type="exercise">
+        <input class="form-input" style="flex:2;padding:6px 9px;font-size:12px;" value="${e.name}">
+        <input class="form-input" style="flex:1;padding:6px 9px;font-size:12px;" value="${e.sets}">
+        <button class="ex-remove" onclick="this.parentElement.remove()">×</button>
+      </div>`;
+    }
+  }).join('');
 }
 
 function saveWorkout() {
@@ -890,10 +1072,7 @@ function saveWorkout() {
   if (!name) { document.getElementById('addName').style.borderColor = 'var(--red)'; return; }
   document.getElementById('addName').style.borderColor = '';
 
-  const exercises = Array.from(document.querySelectorAll('#exList .ex-add-item')).map(row => {
-    const inputs = row.querySelectorAll('input');
-    return {name: inputs[0].value.trim(), sets: inputs[1].value.trim()};
-  }).filter(e => e.name);
+  const exercises = getExercisesFromList();
 
   if (editingWorkoutId) {
     const w = workouts.find(w => w.id === editingWorkoutId);
@@ -906,6 +1085,7 @@ function saveWorkout() {
       w.note = document.getElementById('addNote').value;
     }
     showToast('Trening zaktualizowany!');
+
   } else {
     workouts.push({
       id: nextId++,
@@ -992,14 +1172,8 @@ function openEdit(id) {
   document.getElementById('addDate').value = w.date;
   document.getElementById('addNote').value = w.note || '';
   document.getElementById('saveWorkoutBtn').textContent = 'Zapisz zmiany →';
-
-  document.getElementById('exList').innerHTML = w.exercises.map(e => `
-    <div class="ex-add-item">
-      <input class="form-input" style="flex:2;padding:6px 9px;font-size:12px;" value="${e.name}">
-      <input class="form-input" style="flex:1;padding:6px 9px;font-size:12px;" value="${e.sets}">
-      <button class="ex-remove" onclick="this.parentElement.remove()">×</button>
-    </div>`).join('');
-
+  renderExercisesInList(w.exercises);
+  closeExSearch();
   openOverlay('add');
 }
 
