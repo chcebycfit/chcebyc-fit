@@ -1858,6 +1858,163 @@
                     </div>
                 </div>
 
+                <!-- ══ DZIŚ TRENUJĘ — KLIENT TRENERA ══ -->
+                <div class="page" id="page-workout-client">
+                    <!-- Nagłówek z powrotem i timerem -->
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <button onclick="goBackFromWorkout()" style="display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:7px 14px;color:var(--muted);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='var(--border2)';this.style.color='var(--off)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">← Wróć do dashboardu</button>
+                            <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;line-height:1;">
+                                Dzień A — 
+                                <span style="color:var(--cyan)">Pchanie</span>
+                            </div>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                            <div style="display:flex;align-items:center;gap:7px;background:rgba(255,85,85,.07);border:1px solid rgba(255,85,85,.2);border-radius:8px;padding:6px 14px;">
+                                <div style="width:6px;height:6px;border-radius:50%;background:var(--red);animation:bpls 1.5s infinite;"></div>
+                                <span style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--red);letter-spacing:1px;" id="workoutTimerClient">00:22:05</span>
+                                <span style="font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;">w toku</span>
+                            </div>
+                            <button onclick="goBackFromWorkout()" style="display:flex;align-items:center;gap:6px;background:var(--orange-ghost);border:1px solid rgba(255,140,66,.2);border-radius:8px;padding:7px 14px;color:var(--orange);font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;" title="Timer działa dalej w tle">⏸ Zawieś trening</button>
+                            <button onclick="endWorkoutClient()" style="display:flex;align-items:center;gap:6px;background:var(--lime);border:none;border-radius:8px;padding:7px 16px;color:var(--black);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">🏁 Zakończ i zapisz</button>
+                        </div>
+                    </div>
+
+                    <!-- Info od trenera -->
+                    <div style="background:var(--cyan-ghost);border:1px solid rgba(58,240,212,.15);border-radius:10px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;font-size:11px;color:var(--off);">
+                        <span style="font-size:16px;flex-shrink:0;">💬</span>
+                        <span>
+                            <strong style="color:var(--cyan)">Marcin:</strong>
+                             "Dziś skupiamy się na technice wyciskania — nie forsuj ciężaru, ważna jest jakość ruchu."
+                        </span>
+                    </div>
+
+                    <!-- Pasek postępu -->
+                    <div style="display:flex;gap:4px;margin-bottom:16px;">
+                        <div style="flex:1;height:4px;border-radius:2px;background:var(--cyan);"></div>
+                        <div style="flex:1;height:4px;border-radius:2px;background:rgba(58,240,212,.4);animation:bpls 1.5s infinite;"></div>
+                        <div style="flex:1;height:4px;border-radius:2px;background:var(--border2);"></div>
+                        <div style="flex:1;height:4px;border-radius:2px;background:var(--border2);"></div>
+                        <div style="flex:1;height:4px;border-radius:2px;background:var(--border2);"></div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-bottom:18px;letter-spacing:.5px;">
+                        <span>Ćwiczenie 2 z 5</span>
+                        <span>~38 min pozostało</span>
+                    </div>
+
+                    <div class="g2">
+                        <div style="display:flex;flex-direction:column;gap:12px;">
+                            <!-- Aktywne ćwiczenie -->
+                            <div class="card" style="border-color:rgba(58,240,212,.2);background:linear-gradient(135deg,rgba(58,240,212,.04),var(--card));">
+                                <div style="font-size:9px;color:var(--cyan);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">Ćwiczenie 2 z 5 · Barki</div>
+                                <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Overhead Press</div>
+                                <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">4 serie × 8 powt. · ciężar zalecany przez trenera: 50 kg · przerwa: 3 min</div>
+                                <!-- Wskazówka trenera -->
+                                <div style="font-size:10px;color:var(--cyan);background:rgba(58,240,212,.06);border-left:2px solid var(--cyan);padding:6px 10px;border-radius:0 6px 6px 0;margin-bottom:14px;">💡 Wskazówka trenera: Napnij core przez cały ruch, nie wyginaj kręgosłupa.</div>
+                                <!-- Serie -->
+                                <div style="display:flex;flex-direction:column;gap:7px;">
+                                    <div style="font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px;">Serie</div>
+                                    <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:rgba(58,240,212,.05);border:1px solid rgba(58,240,212,.15);border-radius:9px;opacity:.6;">
+                                        <span style="font-size:11px;color:var(--muted);width:50px;">Seria 1</span>
+                                        <input style="width:62px;background:var(--border2);border:1px solid var(--border);border-radius:7px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" value="50" type="number">
+                                        <span style="font-size:10px;color:var(--muted);">kg</span>
+                                        <input style="width:52px;background:var(--border2);border:1px solid var(--border);border-radius:7px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" value="8" type="number">
+                                        <span style="font-size:10px;color:var(--muted);">rep</span>
+                                        <button style="margin-left:auto;width:28px;height:28px;border-radius:7px;background:rgba(58,240,212,.15);border:none;color:var(--cyan);cursor:pointer;font-size:13px;">✓</button>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:rgba(58,240,212,.04);border:1px solid rgba(58,240,212,.25);border-radius:9px;">
+                                        <span style="font-size:11px;color:var(--cyan);width:50px;font-weight:600;">Seria 2</span>
+                                        <input style="width:62px;background:var(--card2);border:1px solid rgba(58,240,212,.3);border-radius:7px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" placeholder="kg" type="number">
+                                        <span style="font-size:10px;color:var(--muted);">kg</span>
+                                        <input style="width:52px;background:var(--card2);border:1px solid rgba(58,240,212,.3);border-radius:7px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" placeholder="rep" type="number">
+                                        <span style="font-size:10px;color:var(--muted);">rep</span>
+                                        <button style="margin-left:auto;width:28px;height:28px;border-radius:7px;background:var(--border2);border:none;color:var(--muted);cursor:pointer;font-size:13px;">○</button>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--card2);border:1px solid var(--border);border-radius:9px;opacity:.5;">
+                                        <span style="font-size:11px;color:var(--muted);width:50px;">Seria 3</span>
+                                        <span style="font-size:11px;color:var(--muted);">50 kg × 8 rep</span>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--card2);border:1px solid var(--border);border-radius:9px;opacity:.5;">
+                                        <span style="font-size:11px;color:var(--muted);width:50px;">Seria 4</span>
+                                        <span style="font-size:11px;color:var(--muted);">50 kg × 8 rep</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Nawigacja -->
+                            <div style="display:flex;gap:8px;">
+                                <button style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--muted);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='var(--border2)';this.style.color='var(--off)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">← Poprzednie</button>
+                                <button style="flex:2;background:var(--cyan);border:none;border-radius:8px;padding:10px;color:var(--black);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;">Następne →</button>
+                            </div>
+
+                            <!-- Następne ćwiczenie -->
+                            <div class="card" style="opacity:.6;">
+                                <div style="font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">Następne ćwiczenie</div>
+                                <div style="display:flex;align-items:center;gap:10px;">
+                                    <div style="width:28px;height:28px;border-radius:8px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--muted);">3</div>
+                                    <div>
+                                        <div style="font-size:13px;font-weight:600;">Wyciskanie na skosie</div>
+                                        <div style="font-size:10px;color:var(--muted);">3 × 10 · 60 kg · przerwa 2 min</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display:flex;flex-direction:column;gap:12px;">
+                            <!-- Plan treningu od trenera -->
+                            <div class="card">
+                                <div class="ct">
+                                    Plan od 
+                                    <span style="color:var(--cyan)">Marcina</span>
+                                </div>
+                                <div style="display:flex;flex-direction:column;gap:5px;">
+                                    <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:rgba(58,240,212,.05);border:1px solid rgba(58,240,212,.12);border-radius:8px;opacity:.5;">
+                                        <div style="width:18px;height:18px;border-radius:50%;background:rgba(58,240,212,.15);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--cyan);flex-shrink:0;">✓</div>
+                                        <span style="font-size:11px;font-weight:600;">Wyciskanie sztangi</span>
+                                        <span style="margin-left:auto;font-size:10px;color:var(--cyan);">4×8</span>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:rgba(58,240,212,.04);border:1px solid rgba(58,240,212,.25);border-radius:8px;">
+                                        <div style="width:18px;height:18px;border-radius:50%;background:rgba(58,240,212,.2);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--cyan);flex-shrink:0;animation:pls 1.5s infinite;">▶</div>
+                                        <span style="font-size:11px;font-weight:600;color:var(--cyan);">Overhead Press</span>
+                                        <span style="margin-left:auto;font-size:10px;color:var(--cyan);">4×8</span>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:var(--card2);border:1px solid var(--border);border-radius:8px;opacity:.5;">
+                                        <div style="width:18px;height:18px;border-radius:50%;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--muted);flex-shrink:0;">3</div>
+                                        <span style="font-size:11px;">Wyciskanie na skosie</span>
+                                        <span style="margin-left:auto;font-size:10px;color:var(--muted);">3×10</span>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:var(--card2);border:1px solid var(--border);border-radius:8px;opacity:.5;">
+                                        <div style="width:18px;height:18px;border-radius:50%;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--muted);flex-shrink:0;">4</div>
+                                        <span style="font-size:11px;">Rozpiętki</span>
+                                        <span style="margin-left:auto;font-size:10px;color:var(--muted);">3×12</span>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:var(--card2);border:1px solid var(--border);border-radius:8px;opacity:.5;">
+                                        <div style="width:18px;height:18px;border-radius:50%;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--muted);flex-shrink:0;">5</div>
+                                        <span style="font-size:11px;">Pompki poręcze</span>
+                                        <span style="margin-left:auto;font-size:10px;color:var(--muted);">3×max</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Notatka do trenera -->
+                            <div class="card">
+                                <div class="ct">
+                                    Notatka dla 
+                                    <span style="color:var(--cyan)">trenera</span>
+                                </div>
+                                <textarea style="width:100%;background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:10px 12px;color:var(--white);font-size:12px;font-family:inherit;outline:none;resize:vertical;min-height:70px;transition:border-color .2s;" placeholder="Jak się czujesz? Boli coś? Co było łatwe/trudne? Trener to zobaczy po treningu..." onfocus="this.style.borderColor='var(--cyan)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+                            </div>
+
+                            <!-- Chat z trenerem zamiast "zmień plan" -->
+                            <div class="card" style="border-color:rgba(58,240,212,.12);">
+                                <div class="ct" style="color:var(--cyan);">Masz problem z ćwiczeniem?</div>
+                                <div style="font-size:11px;color:var(--muted);margin-bottom:10px;font-weight:300;">Napisz do trenera — odpowie po treningu lub zaproponuje zamiennik.</div>
+                                <button onclick="showPage('messages')" style="width:100%;background:rgba(58,240,212,.08);border:1px solid rgba(58,240,212,.15);color:var(--cyan);border-radius:8px;padding:8px;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;" onmouseover="this.style.background='rgba(58,240,212,.14)'" onmouseout="this.style.background='rgba(58,240,212,.08)'">💬 Napisz do trenera →</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- ══ AI COACH ══ -->
                 <div class="page" id="page-ai">
                     <div style="margin-bottom:14px;font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;text-transform:uppercase;letter-spacing:.5px">
@@ -2064,6 +2221,13 @@
                 active: true
             },
             {
+                id: 'workout-client',
+                icon: '💪',
+                label: 'Dziś trenuję',
+                badge: 'A',
+                bs: 'background:var(--cyan);color:var(--black)'
+            },
+            {
                 id: 'messages',
                 icon: '💬',
                 label: 'Chat z trenerem',
@@ -2118,6 +2282,13 @@
                 icon: '◈',
                 label: 'Dashboard',
                 active: true
+            },
+            {
+                id: 'workout-client',
+                icon: '💪',
+                label: 'Dziś trenuję',
+                badge: 'A',
+                bs: 'background:var(--cyan);color:var(--black)'
             },
             {
                 id: 'messages',
@@ -2231,18 +2402,63 @@
             'marketplace': 'Marketplace',
             'challenges': 'Wyzwania',
             'community': 'Społeczność',
-            'workout': 'Dziś trenuję'
+            'workout': 'Dziś trenuję',
+            'workout-client': 'Dziś trenuję'
         };
         document.getElementById('pageTitle').textContent = titles[id] || 'Dashboard';
         if (id === 'workout')
             startWorkoutTimer();
-        else
+        else if (id === 'workout-client')
+            startWorkoutTimerClient();
+        else {
             clearInterval(workoutInterval);
+            clearInterval(workoutIntervalClient);
+        }
     }
 
-    // Workout timer
-    let workoutSecs = 34 * 60 + 12,
-        workoutInterval;
+    function endWorkout() {
+        clearInterval(workoutInterval);
+        clearInterval(workoutIntervalClient);
+        showPage('dashboard-pro');
+    }
+
+    // Workout timer — klient trenera
+    let workoutSecsClient = 22 * 60 + 5,
+        workoutIntervalClient;
+    function startWorkoutTimerClient() {
+        clearInterval(workoutIntervalClient);
+        workoutIntervalClient = setInterval(() => {
+            workoutSecsClient++;
+            const m = String(Math.floor(workoutSecsClient / 60)).padStart(2, '0');
+            const s = String(workoutSecsClient % 60).padStart(2, '0');
+            const el = document.getElementById('workoutTimerClient');
+            if (el)
+                el.textContent = m + ':' + s;
+        }, 1000);
+    }
+
+    function goBackFromWorkout() {
+        clearInterval(workoutIntervalClient);
+        clearInterval(workoutInterval);
+        const mode = document.querySelector('.mode-btn.active')?.id?.replace('btn-', '') || 'pro';
+        const dashMap = {
+            'pro': 'dashboard-pro',
+            'client-free': 'dashboard-client-free',
+            'client-pro': 'dashboard-client-pro'
+        };
+        showPage(dashMap[mode] || 'dashboard-pro');
+    }
+
+    function endWorkoutClient() {
+        clearInterval(workoutIntervalClient);
+        const mode = document.querySelector('.mode-btn.active')?.id?.replace('btn-', '') || 'pro';
+        const dashMap = {
+            'pro': 'dashboard-pro',
+            'client-free': 'dashboard-client-free',
+            'client-pro': 'dashboard-client-pro'
+        };
+        showPage(dashMap[mode] || 'dashboard-pro');
+    }
     function startWorkoutTimer() {
         clearInterval(workoutInterval);
         workoutInterval = setInterval(() => {
