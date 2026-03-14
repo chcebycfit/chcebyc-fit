@@ -226,6 +226,7 @@ textarea.form-input{resize:vertical;min-height:80px;}
     <div class="nav-section">Plany</div>
     <div class="nav-item" onclick="show('plans',this)"><span class="nav-icon">📋</span>Moje plany</div>
     <div class="nav-item" onclick="show('builder',this)"><span class="nav-icon">✏️</span>Kreator planu <span class="nav-badge cyan">AI</span></div>
+    <div class="nav-item" onclick="show('quizcreator',this)"><span class="nav-icon">📝</span>Quiz onboardingowy <span class="nav-badge" style="background:var(--gold);color:#000">Nowy</span></div>
     <div class="nav-section">Sprzedaż</div>
     <div class="nav-item" onclick="show('sales',this)"><span class="nav-icon">💰</span>Przychody</div>
     <div class="nav-item" onclick="show('reviews',this)"><span class="nav-icon">⭐</span>Opinie</div>
@@ -950,6 +951,283 @@ textarea.form-input{resize:vertical;min-height:80px;}
       </div>
     </div>
 
+
+    <!-- ══ QUIZ ONBOARDINGOWY ══ -->
+    <div class="page" id="page-quizcreator">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;line-height:1">Quiz <span style="color:var(--gold)">onboardingowy</span></div>
+          <div style="font-size:13px;color:var(--muted);margin-top:4px">Ułóż pytania które wypełni każdy nowy klient zaproszony przez Ciebie</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost" onclick="previewQuiz()">👁️ Podgląd quizu</button>
+          <button class="btn btn-cyan" onclick="saveQuiz()">💾 Zapisz i aktywuj</button>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 340px;gap:20px">
+        <!-- LEWA — lista pytań -->
+        <div>
+          <div class="card" style="margin-bottom:14px;background:rgba(240,200,64,.04);border-color:rgba(240,200,64,.2)">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="font-size:22px">💡</div>
+              <div style="font-size:13px;color:var(--off);line-height:1.5;font-weight:300">
+                Każdy klient zaproszony przez Ciebie wypełni ten quiz przed pierwszym treningiem. Odpowiedzi zobaczysz w profilu klienta. Możesz mieć różne quizy dla różnych grup klientów.
+              </div>
+            </div>
+          </div>
+
+          <div style="font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;font-weight:700">Pytania w quizie <span style="color:var(--gold)" id="qCount">(4 pytania)</span></div>
+
+          <!-- Lista pytań -->
+          <div id="questionsList" style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px">
+
+            <!-- Pytanie 1 -->
+            <div class="card" style="border-left:3px solid var(--gold)" id="q1">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+                <div style="font-size:13px;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase">Pytanie 1</div>
+                <div style="margin-left:auto;display:flex;gap:6px">
+                  <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="moveQ('q1',-1)">↑</button>
+                  <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="moveQ('q1',1)">↓</button>
+                  <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="duplicateQ('q1')">⧉ Duplikuj</button>
+                  <button class="btn" style="padding:4px 10px;font-size:11px;background:var(--red-ghost);border:1px solid rgba(255,85,102,.2);color:var(--red)" onclick="deleteQ('q1')">✕</button>
+                </div>
+              </div>
+              <div style="margin-bottom:10px">
+                <label style="font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:5px;font-weight:700">Treść pytania</label>
+                <input class="form-input" type="text" value="Jaki jest Twój główny cel treningowy?" style="font-size:13px">
+              </div>
+              <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px">
+                <div>
+                  <label style="font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:5px;font-weight:700">Typ odpowiedzi</label>
+                  <select class="form-input" style="font-size:12px;width:auto;padding:7px 28px 7px 10px">
+                    <option selected>Jednokrotny wybór</option>
+                    <option>Wielokrotny wybór</option>
+                    <option>Tekst (otwarte)</option>
+                    <option>Skala 1–10</option>
+                    <option>Tak / Nie</option>
+                  </select>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;margin-top:20px">
+                  <input type="checkbox" id="req1" checked style="accent-color:var(--gold)">
+                  <label for="req1" style="font-size:12px;cursor:pointer">Obowiązkowe</label>
+                </div>
+              </div>
+              <div>
+                <label style="font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:6px;font-weight:700">Opcje odpowiedzi</label>
+                <div style="display:flex;flex-direction:column;gap:6px" id="opts1">
+                  <div style="display:flex;gap:6px;align-items:center"><input class="form-input" type="text" value="💪 Budowa masy" style="font-size:12px;flex:1"><button onclick="removeOpt(this)" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px">✕</button></div>
+                  <div style="display:flex;gap:6px;align-items:center"><input class="form-input" type="text" value="🏋️ Siła" style="font-size:12px;flex:1"><button onclick="removeOpt(this)" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px">✕</button></div>
+                  <div style="display:flex;gap:6px;align-items:center"><input class="form-input" type="text" value="🔥 Redukcja" style="font-size:12px;flex:1"><button onclick="removeOpt(this)" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px">✕</button></div>
+                  <div style="display:flex;gap:6px;align-items:center"><input class="form-input" type="text" value="❤️ Zdrowie ogólne" style="font-size:12px;flex:1"><button onclick="removeOpt(this)" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px">✕</button></div>
+                </div>
+                <button onclick="addOpt('opts1')" style="margin-top:8px;background:none;border:1px dashed var(--border2);border-radius:8px;color:var(--muted);font-size:11px;padding:6px 14px;cursor:pointer;width:100%;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">+ Dodaj opcję</button>
+              </div>
+            </div>
+
+            <!-- Pytanie 2 -->
+            <div class="card" style="border-left:3px solid var(--gold)" id="q2">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+                <div style="font-size:13px;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase">Pytanie 2</div>
+                <div style="margin-left:auto;display:flex;gap:6px">
+                  <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px">↑</button>
+                  <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px">↓</button>
+                  <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px">⧉ Duplikuj</button>
+                  <button class="btn" style="padding:4px 10px;font-size:11px;background:var(--red-ghost);border:1px solid rgba(255,85,102,.2);color:var(--red)">✕</button>
+                </div>
+              </div>
+              <div style="margin-bottom:10px">
+                <label style="font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:5px;font-weight:700">Treść pytania</label>
+                <input class="form-input" type="text" value="Czy masz kontuzje lub dolegliwości które powinienem znać?" style="font-size:13px">
+              </div>
+              <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px">
+                <div>
+                  <label style="font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:5px;font-weight:700">Typ odpowiedzi</label>
+                  <select class="form-input" style="font-size:12px;width:auto;padding:7px 28px 7px 10px">
+                    <option>Jednokrotny wybór</option>
+                    <option selected>Wielokrotny wybór</option>
+                    <option>Tekst (otwarte)</option>
+                    <option>Skala 1–10</option>
+                    <option>Tak / Nie</option>
+                  </select>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;margin-top:20px">
+                  <input type="checkbox" checked style="accent-color:var(--gold)">
+                  <label style="font-size:12px;cursor:pointer">Obowiązkowe</label>
+                </div>
+              </div>
+              <div>
+                <label style="font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:6px;font-weight:700">Opcje odpowiedzi</label>
+                <div style="display:flex;flex-direction:column;gap:6px" id="opts2">
+                  <div style="display:flex;gap:6px;align-items:center"><input class="form-input" type="text" value="Kręgosłup / plecy" style="font-size:12px;flex:1"><button onclick="removeOpt(this)" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px">✕</button></div>
+                  <div style="display:flex;gap:6px;align-items:center"><input class="form-input" type="text" value="Kolano" style="font-size:12px;flex:1"><button onclick="removeOpt(this)" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px">✕</button></div>
+                  <div style="display:flex;gap:6px;align-items:center"><input class="form-input" type="text" value="Bark" style="font-size:12px;flex:1"><button onclick="removeOpt(this)" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px">✕</button></div>
+                  <div style="display:flex;gap:6px;align-items:center"><input class="form-input" type="text" value="Brak kontuzji" style="font-size:12px;flex:1"><button onclick="removeOpt(this)" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px">✕</button></div>
+                </div>
+                <button onclick="addOpt('opts2')" style="margin-top:8px;background:none;border:1px dashed var(--border2);border-radius:8px;color:var(--muted);font-size:11px;padding:6px 14px;cursor:pointer;width:100%;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">+ Dodaj opcję</button>
+              </div>
+            </div>
+
+            <!-- Pytanie 3 -->
+            <div class="card" style="border-left:3px solid var(--gold)" id="q3">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+                <div style="font-size:13px;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase">Pytanie 3</div>
+                <div style="margin-left:auto;display:flex;gap:6px">
+                  <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px">↑</button>
+                  <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px">↓</button>
+                  <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px">⧉ Duplikuj</button>
+                  <button class="btn" style="padding:4px 10px;font-size:11px;background:var(--red-ghost);border:1px solid rgba(255,85,102,.2);color:var(--red)">✕</button>
+                </div>
+              </div>
+              <div style="margin-bottom:10px">
+                <label style="font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:5px;font-weight:700">Treść pytania</label>
+                <input class="form-input" type="text" value="Ile razy w tygodniu możesz trenować?" style="font-size:13px">
+              </div>
+              <div style="display:flex;gap:10px;align-items:center">
+                <div>
+                  <label style="font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:5px;font-weight:700">Typ odpowiedzi</label>
+                  <select class="form-input" style="font-size:12px;width:auto;padding:7px 28px 7px 10px">
+                    <option selected>Jednokrotny wybór</option>
+                    <option>Wielokrotny wybór</option>
+                    <option>Tekst (otwarte)</option>
+                    <option>Skala 1–10</option>
+                    <option>Tak / Nie</option>
+                  </select>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;margin-top:20px">
+                  <input type="checkbox" checked style="accent-color:var(--gold)">
+                  <label style="font-size:12px;cursor:pointer">Obowiązkowe</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pytanie 4 -->
+            <div class="card" style="border-left:3px solid var(--gold)" id="q4">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+                <div style="font-size:13px;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase">Pytanie 4 — otwarte</div>
+                <div style="margin-left:auto;display:flex;gap:6px">
+                  <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px">↑</button>
+                  <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px">↓</button>
+                  <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px">⧉ Duplikuj</button>
+                  <button class="btn" style="padding:4px 10px;font-size:11px;background:var(--red-ghost);border:1px solid rgba(255,85,102,.2);color:var(--red)">✕</button>
+                </div>
+              </div>
+              <div style="margin-bottom:10px">
+                <label style="font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:5px;font-weight:700">Treść pytania</label>
+                <input class="form-input" type="text" value="Czy jest coś jeszcze co chcesz mi powiedzieć przed pierwszym treningiem?" style="font-size:13px">
+              </div>
+              <div style="display:flex;gap:10px;align-items:center">
+                <div>
+                  <label style="font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:5px;font-weight:700">Typ odpowiedzi</label>
+                  <select class="form-input" style="font-size:12px;width:auto;padding:7px 28px 7px 10px">
+                    <option>Jednokrotny wybór</option>
+                    <option>Wielokrotny wybór</option>
+                    <option selected>Tekst (otwarte)</option>
+                    <option>Skala 1–10</option>
+                    <option>Tak / Nie</option>
+                  </select>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;margin-top:20px">
+                  <input type="checkbox" style="accent-color:var(--gold)">
+                  <label style="font-size:12px;cursor:pointer">Obowiązkowe</label>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /questionsList -->
+
+          <!-- Dodaj pytanie -->
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+            <button onclick="addQuestion('single')" style="background:var(--card2);border:1px dashed var(--border2);border-radius:12px;padding:14px;cursor:pointer;font-family:inherit;font-size:12px;color:var(--muted);transition:all .2s;text-align:center" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">
+              + Jednokrotny wybór
+            </button>
+            <button onclick="addQuestion('multi')" style="background:var(--card2);border:1px dashed var(--border2);border-radius:12px;padding:14px;cursor:pointer;font-family:inherit;font-size:12px;color:var(--muted);transition:all .2s;text-align:center" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">
+              + Wielokrotny wybór
+            </button>
+            <button onclick="addQuestion('open')" style="background:var(--card2);border:1px dashed var(--border2);border-radius:12px;padding:14px;cursor:pointer;font-family:inherit;font-size:12px;color:var(--muted);transition:all .2s;text-align:center" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">
+              + Pytanie otwarte
+            </button>
+            <button onclick="addQuestion('scale')" style="background:var(--card2);border:1px dashed var(--border2);border-radius:12px;padding:14px;cursor:pointer;font-family:inherit;font-size:12px;color:var(--muted);transition:all .2s;text-align:center" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">
+              + Skala 1–10
+            </button>
+            <button onclick="addQuestion('yesno')" style="background:var(--card2);border:1px dashed var(--border2);border-radius:12px;padding:14px;cursor:pointer;font-family:inherit;font-size:12px;color:var(--muted);transition:all .2s;text-align:center" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">
+              + Tak / Nie
+            </button>
+            <button onclick="generateQuizWithAI()" style="background:rgba(240,200,64,.06);border:1px dashed rgba(240,200,64,.3);border-radius:12px;padding:14px;cursor:pointer;font-family:inherit;font-size:12px;color:var(--gold);transition:all .2s;text-align:center">
+              🤖 Generuj pytania AI
+            </button>
+          </div>
+        </div>
+
+        <!-- PRAWA — ustawienia i podgląd -->
+        <div style="display:flex;flex-direction:column;gap:14px">
+
+          <!-- Ustawienia quizu -->
+          <div class="card">
+            <div class="card-title">Ustawienia quizu</div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div>
+                <label style="font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:5px;font-weight:700">Nazwa quizu</label>
+                <input class="form-input" type="text" value="Quiz dla klientów siłowych" style="font-size:13px">
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:10px">
+                <div><div style="font-size:13px;font-weight:500">Quiz aktywny</div><div style="font-size:10px;color:var(--muted)">Każdy nowy klient go zobaczy</div></div>
+                <div style="width:40px;height:22px;background:var(--gold);border-radius:11px;cursor:pointer;position:relative;transition:all .2s" id="quizToggle" onclick="this.style.background=this.style.background===''?'var(--border2)':'';"><div style="width:18px;height:18px;background:#000;border-radius:50%;position:absolute;top:2px;right:2px;transition:all .2s"></div></div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:10px">
+                <div><div style="font-size:13px;font-weight:500">Pokaż postęp (X z Y)</div><div style="font-size:10px;color:var(--muted)">Klient widzi na którym pytaniu jest</div></div>
+                <input type="checkbox" checked style="accent-color:var(--gold);width:16px;height:16px">
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:10px">
+                <div><div style="font-size:13px;font-weight:500">Możliwość cofania</div><div style="font-size:10px;color:var(--muted)">Klient może wrócić do poprzedniego pytania</div></div>
+                <input type="checkbox" checked style="accent-color:var(--gold);width:16px;height:16px">
+              </div>
+            </div>
+          </div>
+
+          <!-- Statystyki -->
+          <div class="card">
+            <div class="card-title">Statystyki quizu</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:var(--card2);border-radius:8px;font-size:12px">
+                <span style="color:var(--muted)">Wypełnień łącznie</span>
+                <span style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--white)">24</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:var(--card2);border-radius:8px;font-size:12px">
+                <span style="color:var(--muted)">Ukończonych</span>
+                <span style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--green)">96%</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:var(--card2);border-radius:8px;font-size:12px">
+                <span style="color:var(--muted)">Śr. czas wypełnienia</span>
+                <span style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--cyan)">3.2 min</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI sugestie -->
+          <div class="card" style="background:rgba(240,200,64,.04);border-color:rgba(240,200,64,.15)">
+            <div class="card-title" style="color:var(--gold)">🤖 Sugestie AI</div>
+            <div style="font-size:12px;color:var(--off);line-height:1.6;margin-bottom:10px">Brakuje pytania o <strong>poziom zaawansowania</strong> — bez tego trudno dopasować intensywność planu.</div>
+            <button onclick="addAISuggestion()" class="btn btn-ghost" style="width:100%;justify-content:center;font-size:12px;border-color:rgba(240,200,64,.2);color:var(--gold)">+ Dodaj sugerowane pytanie</button>
+          </div>
+
+          <!-- Link zaproszenia -->
+          <div class="card">
+            <div class="card-title">Link zaproszenia</div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Wyślij ten link klientowi — po kliknięciu zobaczy Twój quiz automatycznie.</div>
+            <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:11px;font-family:monospace;color:var(--cyan);word-break:break-all;margin-bottom:8px">
+              chcebyc.fit/join/MK-4821
+            </div>
+            <div style="display:flex;gap:6px">
+              <button class="btn btn-ghost btn-sm" style="flex:1;justify-content:center" onclick="this.textContent='✓ Skopiowano!';setTimeout(()=>this.textContent='📋 Kopiuj link',2000)">📋 Kopiuj link</button>
+              <button class="btn btn-ghost btn-sm" style="flex:1;justify-content:center">📨 Wyślij emailem</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
   </div><!-- /content -->
 </div><!-- /main -->
 
@@ -1003,7 +1281,7 @@ textarea.form-input{resize:vertical;min-height:80px;}
 
 <script>
 // ── NAV ───────────────────────────────────────────────────────
-const titles={overview:'Dashboard',clients:'Klienci',messages:'Wiadomości',plans:'Moje plany',builder:'Kreator planu',sales:'Przychody',reviews:'Opinie',analytics:'Analityka'};
+const titles={overview:'Dashboard',clients:'Klienci',messages:'Wiadomości',plans:'Moje plany',builder:'Kreator planu',quizcreator:'Quiz onboardingowy',sales:'Przychody',reviews:'Opinie',analytics:'Analityka'};
 function show(id,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const page=document.getElementById('page-'+id);
@@ -1104,6 +1382,145 @@ async function askBuilderAI(preset){
 function generateWithAI(){
   document.getElementById('builderAiInput').value='Oceń ten plan i zaproponuj ulepszenia na podstawie najnowszej wiedzy o hipertrofii';
   askBuilderAI();
+}
+
+// ── QUIZ CREATOR FUNCTIONS ────────────────────────────────────
+let qCounter = 4;
+
+function addQuestion(type) {
+  qCounter++;
+  const typeLabels = {single:'Jednokrotny wybór',multi:'Wielokrotny wybór',open:'Tekst (otwarte)',scale:'Skala 1–10',yesno:'Tak / Nie'};
+  const typeSelected = (t) => t === type ? 'selected' : '';
+
+  const html = `<div class="card" style="border-left:3px solid var(--gold)" id="q${qCounter}">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+      <div style="font-size:13px;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase">Pytanie ${qCounter}</div>
+      <div style="margin-left:auto;display:flex;gap:6px">
+        <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px">↑</button>
+        <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px">↓</button>
+        <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px">⧉ Duplikuj</button>
+        <button class="btn" style="padding:4px 10px;font-size:11px;background:var(--red-ghost);border:1px solid rgba(255,85,102,.2);color:var(--red)" onclick="this.closest('[id^=q]').remove();updateQCount()">✕</button>
+      </div>
+    </div>
+    <div style="margin-bottom:10px">
+      <label style="font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:5px;font-weight:700">Treść pytania</label>
+      <input class="form-input" type="text" placeholder="Wpisz treść pytania..." style="font-size:13px">
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:${type==='open'||type==='scale'||type==='yesno'?'0':'10px'}">
+      <div>
+        <label style="font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:5px;font-weight:700">Typ odpowiedzi</label>
+        <select class="form-input" style="font-size:12px;width:auto;padding:7px 28px 7px 10px">
+          <option ${typeSelected('single')}>Jednokrotny wybór</option>
+          <option ${typeSelected('multi')}>Wielokrotny wybór</option>
+          <option ${typeSelected('open')}>Tekst (otwarte)</option>
+          <option ${typeSelected('scale')}>Skala 1–10</option>
+          <option ${typeSelected('yesno')}>Tak / Nie</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:20px">
+        <input type="checkbox" style="accent-color:var(--gold);width:14px;height:14px">
+        <label style="font-size:12px;cursor:pointer">Obowiązkowe</label>
+      </div>
+    </div>
+    ${type === 'single' || type === 'multi' ? `
+    <div>
+      <label style="font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:6px;font-weight:700">Opcje odpowiedzi</label>
+      <div style="display:flex;flex-direction:column;gap:6px" id="opts${qCounter}">
+        <div style="display:flex;gap:6px;align-items:center"><input class="form-input" type="text" placeholder="Opcja 1" style="font-size:12px;flex:1"><button onclick="removeOpt(this)" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px">✕</button></div>
+        <div style="display:flex;gap:6px;align-items:center"><input class="form-input" type="text" placeholder="Opcja 2" style="font-size:12px;flex:1"><button onclick="removeOpt(this)" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px">✕</button></div>
+      </div>
+      <button onclick="addOpt('opts${qCounter}')" style="margin-top:8px;background:none;border:1px dashed var(--border2);border-radius:8px;color:var(--muted);font-size:11px;padding:6px 14px;cursor:pointer;width:100%;font-family:inherit">+ Dodaj opcję</button>
+    </div>` : type === 'scale' ? `<div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:12px;color:var(--muted);margin-top:8px">Klient wybierze wartość od 1 do 10 na suwaku</div>` : type === 'yesno' ? `<div style="display:flex;gap:8px;margin-top:8px"><div style="flex:1;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;font-size:13px;font-weight:600">✓ Tak</div><div style="flex:1;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;font-size:13px;font-weight:600">✗ Nie</div></div>` : `<div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:12px;color:var(--muted);margin-top:8px">Klient wpisze odpowiedź w polu tekstowym</div>`}
+  </div>`;
+
+  const list = document.getElementById('questionsList');
+  list.insertAdjacentHTML('beforeend', html);
+  updateQCount();
+  document.getElementById('q'+qCounter).scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function addOpt(listId) {
+  const list = document.getElementById(listId);
+  if (!list) return;
+  const count = list.children.length + 1;
+  const row = document.createElement('div');
+  row.style.cssText = 'display:flex;gap:6px;align-items:center';
+  row.innerHTML = `<input class="form-input" type="text" placeholder="Opcja ${count}" style="font-size:12px;flex:1"><button onclick="removeOpt(this)" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px">✕</button>`;
+  list.appendChild(row);
+}
+
+function removeOpt(btn) {
+  btn.closest('div[style*="display:flex"]').remove();
+}
+
+function deleteQ(id) {
+  document.getElementById(id)?.remove();
+  updateQCount();
+}
+
+function updateQCount() {
+  const count = document.getElementById('questionsList').children.length;
+  const el = document.getElementById('qCount');
+  if(el) el.textContent = `(${count} ${count===1?'pytanie':count<5?'pytania':'pytań'})`;
+}
+
+function saveQuiz() {
+  const btn = event.target;
+  btn.textContent = '✓ Zapisano i aktywowano!';
+  btn.style.background = 'var(--green)';
+  setTimeout(() => { btn.textContent = '💾 Zapisz i aktywuj'; btn.style.background = ''; }, 3000);
+}
+
+function previewQuiz() {
+  alert('Podgląd quizu — w pełnej wersji otworzy się modal z symulacją tego co widzi klient 📋');
+}
+
+function addAISuggestion() {
+  qCounter++;
+  const list = document.getElementById('questionsList');
+  const html = `<div class="card" style="border-left:3px solid var(--gold);background:rgba(240,200,64,.03)" id="q${qCounter}">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <div style="font-size:13px;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase">Pytanie ${qCounter} <span style="font-size:10px;background:rgba(240,200,64,.15);padding:1px 6px;border-radius:4px">AI</span></div>
+      <div style="margin-left:auto"><button class="btn" style="padding:4px 10px;font-size:11px;background:var(--red-ghost);border:1px solid rgba(255,85,102,.2);color:var(--red)" onclick="this.closest('[id^=q]').remove();updateQCount()">✕</button></div>
+    </div>
+    <input class="form-input" type="text" value="Jak oceniasz swój obecny poziom zaawansowania?" style="font-size:13px;margin-bottom:10px">
+    <div style="display:flex;flex-direction:column;gap:6px" id="opts${qCounter}">
+      <div style="display:flex;gap:6px;align-items:center"><input class="form-input" type="text" value="🌱 Początkujący (mniej niż rok)" style="font-size:12px;flex:1"><button onclick="removeOpt(this)" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px">✕</button></div>
+      <div style="display:flex;gap:6px;align-items:center"><input class="form-input" type="text" value="🔥 Średniozaawansowany (1–3 lata)" style="font-size:12px;flex:1"><button onclick="removeOpt(this)" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px">✕</button></div>
+      <div style="display:flex;gap:6px;align-items:center"><input class="form-input" type="text" value="⚡ Zaawansowany (3+ lata)" style="font-size:12px;flex:1"><button onclick="removeOpt(this)" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px">✕</button></div>
+    </div>
+  </div>`;
+  list.insertAdjacentHTML('beforeend', html);
+  updateQCount();
+}
+
+async function generateQuizWithAI() {
+  const btn = event.target;
+  btn.textContent = '🤖 Generuję...';
+  btn.disabled = true;
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 600,
+        messages: [{role:'user', content:`Jesteś asystentem trenera personalnego na platformie chceByc.fit. Zaproponuj 2 nowe pytania do quizu onboardingowego dla klientów trenera siłowego. Odpowiedz TYLKO JSON:\n[{"question":"treść pytania","type":"single|multi|open","options":["opcja1","opcja2","opcja3"]},{"question":"treść pytania","type":"open","options":[]}]`}]
+      })
+    });
+    const data = await resp.json();
+    const text = data.content?.map(b=>b.text||'').join('') || '[]';
+    const questions = JSON.parse(text.replace(/```json|```/g,'').trim());
+    questions.forEach(q => {
+      qCounter++;
+      const list = document.getElementById('questionsList');
+      const opts = q.options?.length ? q.options.map(o => `<div style="display:flex;gap:6px;align-items:center"><input class="form-input" type="text" value="${o}" style="font-size:12px;flex:1"><button onclick="removeOpt(this)" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px">✕</button></div>`).join('') : '';
+      list.insertAdjacentHTML('beforeend', `<div class="card" style="border-left:3px solid var(--gold)" id="q${qCounter}"><div style="font-size:13px;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">Pytanie ${qCounter} 🤖 AI</div><input class="form-input" type="text" value="${q.question}" style="font-size:13px;margin-bottom:10px">${opts ? `<div style="display:flex;flex-direction:column;gap:6px">${opts}</div>` : '<div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px;font-size:12px;color:var(--muted)">Pole tekstowe</div>'}</div>`);
+    });
+    updateQCount();
+  } catch(e) { alert('Błąd połączenia z AI.'); }
+  btn.textContent = '🤖 Generuj pytania AI';
+  btn.disabled = false;
 }
 
 // Close modals on overlay click

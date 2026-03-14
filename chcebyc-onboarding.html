@@ -3,713 +3,650 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>chceByc.fit — Twój plan treningowy</title>
+<title>chceByc.fit — Dołącz do platformy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --black: #070b07;
-  --forest: #0c1c0c;
-  --card: #101810;
-  --card2: #141f14;
-  --border: #1c2e1c;
-  --border2: #243824;
-  --lime: #b4f03a;
-  --lime-soft: #ceff6a;
-  --lime-dim: #7aaa22;
-  --lime-ghost: rgba(180,240,58,0.07);
-  --white: #eef8e8;
-  --off: #c8ddb8;
-  --muted: #5a7850;
-  --muted2: #3a5230;
-  --red: #ff5555;
-  --gold: #f0c840;
-  --blue: #4ab0ff;
+  --black:#070b07; --forest:#0c1c0c; --card:#101810; --card2:#141f14;
+  --border:#1c2e1c; --border2:#243824; --border3:#2e4a2e;
+  --lime:#b4f03a; --lime-soft:#ceff6a; --lime-dim:#7aaa22; --lime-ghost:rgba(180,240,58,0.08);
+  --cyan:#3af0d4; --cyan-ghost:rgba(58,240,212,0.08);
+  --gold:#f0c840; --gold-ghost:rgba(240,200,64,0.08);
+  --white:#eef8e8; --off:#c8ddb8; --muted:#5a7850; --muted2:#3a5230;
+  --red:#ff5555; --blue:#4ab0ff;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;overflow:hidden;}
-body{
-  font-family:'Plus Jakarta Sans',sans-serif;
-  background:var(--black);
-  color:var(--white);
-  display:flex;
-  flex-direction:column;
-}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--black);color:var(--white);display:flex;flex-direction:column;}
 
-/* PROGRESS BAR TOP */
-.progress-bar-wrap{
-  position:fixed;top:0;left:0;right:0;height:3px;z-index:1000;
-  background:var(--border);
-}
-.progress-bar-fill{
-  height:100%;
-  background:linear-gradient(90deg,var(--lime-dim),var(--lime));
-  transition:width 0.5s cubic-bezier(.4,0,.2,1);
-  box-shadow:0 0 12px var(--lime);
-}
+/* ── PROGRESS BAR ── */
+.pb-wrap{position:fixed;top:0;left:0;right:0;height:3px;z-index:1000;background:var(--border);}
+.pb-fill{height:100%;background:linear-gradient(90deg,var(--lime-dim),var(--lime));transition:width .5s cubic-bezier(.4,0,.2,1);box-shadow:0 0 12px var(--lime);}
 
-/* HEADER */
-header{
-  position:fixed;top:0;left:0;right:0;z-index:900;
-  padding:16px 40px;
-  display:flex;align-items:center;justify-content:space-between;
-  background:rgba(7,11,7,0.85);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
-}
-.logo{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:900;font-size:22px;letter-spacing:1px;
-  color:var(--white);
-  text-decoration:none;
-}
+/* ── HEADER ── */
+header{position:fixed;top:0;left:0;right:0;z-index:900;padding:16px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(7,11,7,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.logo{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;letter-spacing:.5px;color:var(--white);text-decoration:none;}
 .logo span{color:var(--lime);}
-.step-indicator{
-  display:flex;align-items:center;gap:6px;
-}
-.step-dot{
-  width:8px;height:8px;border-radius:50%;
-  background:var(--border2);
-  transition:all 0.3s;
-}
-.step-dot.active{background:var(--lime);box-shadow:0 0 8px var(--lime);}
-.step-dot.done{background:var(--lime-dim);}
-.skip-btn{
-  background:none;border:1px solid var(--border2);
-  color:var(--muted);border-radius:8px;
-  padding:7px 16px;font-size:12px;font-family:inherit;
-  cursor:pointer;transition:all 0.2s;letter-spacing:0.5px;
-}
+.step-dots{display:flex;align-items:center;gap:6px;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--border2);transition:all .3s;}
+.dot.active{background:var(--lime);box-shadow:0 0 8px var(--lime);}
+.dot.done{background:var(--lime-dim);}
+.skip-btn{background:none;border:1px solid var(--border2);color:var(--muted);border-radius:8px;padding:7px 16px;font-size:12px;font-family:inherit;cursor:pointer;transition:all .2s;}
 .skip-btn:hover{border-color:var(--muted);color:var(--off);}
 
-/* MAIN CONTAINER */
-.onboarding{
-  flex:1;display:flex;
-  align-items:center;justify-content:center;
-  padding:80px 20px 20px;
-  overflow:hidden;
-  position:relative;
-}
+/* ── MAIN ── */
+.onboarding{flex:1;display:flex;align-items:center;justify-content:center;padding:80px 20px 20px;overflow:hidden;position:relative;}
+.bg-glow{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;}
+.bg1{width:500px;height:500px;background:rgba(180,240,58,.04);top:-150px;right:-100px;}
+.bg2{width:350px;height:350px;background:rgba(58,240,212,.03);bottom:-100px;left:-80px;}
 
-/* BG EFFECTS */
-.bg-glow{
-  position:fixed;
-  border-radius:50%;
-  filter:blur(120px);
-  pointer-events:none;
-  transition:all 1s ease;
-}
-.bg-glow-1{
-  width:600px;height:600px;
-  background:rgba(180,240,58,0.04);
-  top:-200px;right:-100px;
-}
-.bg-glow-2{
-  width:400px;height:400px;
-  background:rgba(180,240,58,0.03);
-  bottom:-100px;left:-100px;
-}
+/* ── SCREEN ── */
+.screen{width:100%;max-width:700px;position:absolute;transition:all .4s cubic-bezier(.4,0,.2,1);opacity:0;transform:translateX(60px) scale(.97);pointer-events:none;}
+.screen.active{opacity:1;transform:translateX(0) scale(1);pointer-events:all;position:relative;}
+.screen.exit{opacity:0;transform:translateX(-60px) scale(.97);position:absolute;}
 
-/* SCREEN (each step) */
-.screen{
-  width:100%;max-width:680px;
-  position:absolute;
-  transition:all 0.45s cubic-bezier(.4,0,.2,1);
-  opacity:0;
-  transform:translateX(60px) scale(0.97);
-  pointer-events:none;
-}
-.screen.active{
-  opacity:1;transform:translateX(0) scale(1);
-  pointer-events:all;position:relative;
-}
-.screen.exit{
-  opacity:0;transform:translateX(-60px) scale(0.97);
-  position:absolute;
-}
-
-/* STEP LABEL */
-.step-label{
-  display:inline-flex;align-items:center;gap:8px;
-  font-size:11px;letter-spacing:2.5px;text-transform:uppercase;
-  color:var(--lime);font-weight:600;margin-bottom:16px;
-}
+/* ── TYPOGRAPHY ── */
+.step-label{display:flex;align-items:center;gap:8px;margin-bottom:16px;}
 .step-label-line{width:24px;height:1px;background:var(--lime);}
+.step-label span{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--lime);font-weight:700;}
+.question{font-family:'Barlow Condensed',sans-serif;font-size:clamp(34px,6vw,56px);font-weight:800;text-transform:uppercase;line-height:.95;letter-spacing:-.5px;margin-bottom:8px;}
+.question-sub{font-size:15px;color:var(--muted);font-weight:300;line-height:1.6;margin-bottom:32px;}
 
-/* QUESTION */
-.question{
-  font-family:'Barlow Condensed',sans-serif;
-  font-size:clamp(34px,6vw,56px);
-  font-weight:800;text-transform:uppercase;
-  line-height:0.95;letter-spacing:-0.5px;
-  margin-bottom:10px;
-}
-.question-sub{
-  font-size:15px;color:var(--muted);
-  font-weight:300;line-height:1.6;
-  margin-bottom:36px;
-}
+/* ── PATH CARDS (wybór ścieżki) ── */
+.path-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:32px;}
+.path-card{background:var(--card);border:2px solid var(--border);border-radius:20px;padding:28px 20px;cursor:pointer;transition:all .25s;text-align:center;position:relative;overflow:hidden;}
+.path-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;}
+.path-card:hover{border-color:var(--border2);transform:translateY(-2px);}
+.path-card.selected{transform:translateY(-2px);}
+.path-card.path-pro.selected{border-color:var(--lime);background:rgba(180,240,58,.05);}
+.path-card.path-pro.selected::before{background:radial-gradient(ellipse at 50% 0%,rgba(180,240,58,.08),transparent);opacity:1;}
+.path-card.path-trainer.selected{border-color:var(--cyan);background:rgba(58,240,212,.05);}
+.path-card.path-trainer.selected::before{background:radial-gradient(ellipse at 50% 0%,rgba(58,240,212,.08),transparent);opacity:1;}
+.path-card.path-invited.selected{border-color:var(--gold);background:rgba(240,200,64,.05);}
+.path-card.path-invited.selected::before{background:radial-gradient(ellipse at 50% 0%,rgba(240,200,64,.08),transparent);opacity:1;}
+.path-emoji{font-size:44px;margin-bottom:14px;display:block;}
+.path-name{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;transition:color .2s;}
+.path-pro.selected .path-name{color:var(--lime);}
+.path-trainer.selected .path-name{color:var(--cyan);}
+.path-invited.selected .path-name{color:var(--gold);}
+.path-desc{font-size:12px;color:var(--muted);line-height:1.5;font-weight:300;}
+.path-badge{position:absolute;top:12px;right:12px;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 7px;border-radius:5px;}
 
-/* OPTIONS GRID */
-.options{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:36px;}
-.option{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:16px 22px;
-  cursor:pointer;
-  transition:all 0.2s;
-  display:flex;align-items:center;gap:12px;
-  font-size:14px;font-weight:500;
-  user-select:none;
-  flex:1;min-width:180px;
-}
+/* ── OPTIONS (kafelki) ── */
+.options{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px;}
+.option{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:12px;font-size:14px;font-weight:500;user-select:none;flex:1;min-width:180px;}
 .option:hover{border-color:var(--border2);background:var(--card2);}
-.option.selected{
-  border-color:var(--lime);
-  background:var(--lime-ghost);
-  color:var(--lime);
-  box-shadow:0 0 20px rgba(180,240,58,0.1);
-}
+.option.selected{border-color:var(--lime);background:var(--lime-ghost);color:var(--lime);box-shadow:0 0 20px rgba(180,240,58,.1);}
 .option-icon{font-size:22px;flex-shrink:0;}
-.option-text{display:flex;flex-direction:column;gap:2px;}
-.option-text span{font-size:11px;color:var(--muted);font-weight:300;}
+.option-text span{font-size:11px;color:var(--muted);display:block;margin-top:1px;}
 .option.selected .option-text span{color:var(--lime-dim);}
 
-/* SLIDER QUESTION */
-.slider-wrap{margin-bottom:36px;}
+/* ── TAGS (multiselect) ── */
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px;}
+.tag{background:var(--card);border:1px solid var(--border);border-radius:30px;padding:10px 18px;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;user-select:none;}
+.tag:hover{border-color:var(--border2);}
+.tag.selected{background:var(--lime-ghost);border-color:var(--lime);color:var(--lime);}
+
+/* ── SLIDER ── */
+.slider-wrap{margin-bottom:32px;}
 .slider-labels{display:flex;justify-content:space-between;margin-bottom:10px;font-size:12px;color:var(--muted);}
-.slider{
-  -webkit-appearance:none;appearance:none;
-  width:100%;height:4px;
-  background:linear-gradient(90deg,var(--lime) var(--val,50%),var(--border2) var(--val,50%));
-  border-radius:2px;outline:none;cursor:pointer;
-}
-.slider::-webkit-slider-thumb{
-  -webkit-appearance:none;
-  width:22px;height:22px;
-  background:var(--lime);border-radius:50%;
-  box-shadow:0 0 12px rgba(180,240,58,0.5);
-  cursor:pointer;transition:transform 0.15s;
-}
+.slider{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:2px;outline:none;cursor:pointer;}
+.slider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;background:var(--lime);border-radius:50%;box-shadow:0 0 12px rgba(180,240,58,.5);cursor:pointer;transition:transform .15s;}
 .slider::-webkit-slider-thumb:hover{transform:scale(1.2);}
-.slider-value{
-  text-align:center;margin-top:14px;
-  font-family:'Barlow Condensed',sans-serif;
-  font-size:48px;font-weight:900;color:var(--lime);
-  line-height:1;
-}
+.slider-value{text-align:center;margin-top:14px;font-family:'Barlow Condensed',sans-serif;font-size:48px;font-weight:900;color:var(--lime);line-height:1;}
 .slider-value span{font-size:20px;color:var(--muted);}
 
-/* INPUT */
-.text-input{
-  width:100%;
-  background:var(--card);border:1px solid var(--border);
-  border-radius:14px;padding:18px 22px;
-  color:var(--white);font-size:16px;font-family:inherit;
-  outline:none;transition:border-color 0.2s;margin-bottom:36px;
-}
-.text-input:focus{border-color:var(--lime);}
-.text-input::placeholder{color:var(--muted);}
+/* ── INPUTS ── */
+.form-group{margin-bottom:14px;}
+.form-label{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:6px;font-weight:600;}
+.form-input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px 16px;color:var(--white);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s;}
+.form-input:focus{border-color:var(--lime);}
+.form-input::placeholder{color:var(--muted);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+textarea.form-input{resize:vertical;min-height:80px;}
 
-/* NAV BUTTONS */
+/* ── BUTTONS ── */
 .nav-row{display:flex;gap:12px;align-items:center;}
-.btn-next{
-  background:var(--lime);color:var(--black);
-  border:none;border-radius:12px;
-  padding:14px 36px;
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;font-size:17px;letter-spacing:1.5px;
-  text-transform:uppercase;cursor:pointer;
-  transition:all 0.2s;
-  box-shadow:0 0 30px rgba(180,240,58,0.2);
-}
-.btn-next:hover{background:var(--lime-soft);transform:translateY(-1px);box-shadow:0 0 50px rgba(180,240,58,0.35);}
-.btn-next:disabled{opacity:0.35;cursor:not-allowed;transform:none;box-shadow:none;}
-.btn-back{
-  background:none;border:1px solid var(--border2);
-  color:var(--muted);border-radius:12px;
-  padding:14px 22px;font-family:inherit;
-  font-size:14px;cursor:pointer;transition:all 0.2s;
-}
+.btn-next{background:var(--lime);color:var(--black);border:none;border-radius:12px;padding:14px 36px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;box-shadow:0 0 30px rgba(180,240,58,.2);}
+.btn-next:hover{background:var(--lime-soft);transform:translateY(-1px);}
+.btn-next:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-next.cyan{background:var(--cyan);box-shadow:0 0 30px rgba(58,240,212,.2);}
+.btn-next.cyan:hover{background:#6bffea;}
+.btn-next.gold{background:var(--gold);box-shadow:0 0 30px rgba(240,200,64,.2);}
+.btn-next.gold:hover{background:#ffe066;}
+.btn-back{background:none;border:1px solid var(--border2);color:var(--muted);border-radius:12px;padding:14px 22px;font-family:inherit;font-size:14px;cursor:pointer;transition:all .2s;}
 .btn-back:hover{border-color:var(--muted);color:var(--off);}
 
-/* ROLE CARDS */
-.role-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:36px;}
-.role-card{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:20px;padding:32px 28px;
-  cursor:pointer;transition:all 0.25s;
-  text-align:center;
-}
-.role-card:hover{border-color:var(--border2);transform:translateY(-2px);}
-.role-card.selected{
-  border-color:var(--lime);
-  background:var(--lime-ghost);
-  box-shadow:0 0 30px rgba(180,240,58,0.12);
-  transform:translateY(-2px);
-}
-.role-emoji{font-size:52px;margin-bottom:16px;display:block;}
-.role-name{
-  font-family:'Barlow Condensed',sans-serif;
-  font-size:24px;font-weight:700;text-transform:uppercase;
-  letter-spacing:1px;margin-bottom:8px;
-  transition:color 0.2s;
-}
-.role-card.selected .role-name{color:var(--lime);}
-.role-desc{font-size:12px;color:var(--muted);line-height:1.6;font-weight:300;}
+/* ── PLAN CARDS (trener) ── */
+.plan-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:32px;}
+.plan-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:24px 18px;cursor:pointer;transition:all .25s;text-align:center;position:relative;}
+.plan-card:hover{border-color:var(--border2);transform:translateY(-2px);}
+.plan-card.selected{border-color:var(--cyan);background:var(--cyan-ghost);transform:translateY(-2px);}
+.plan-card-badge{position:absolute;top:10px;right:10px;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 7px;border-radius:5px;background:var(--cyan);color:var(--black);}
+.plan-price{font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:900;color:var(--cyan);line-height:1;margin-bottom:4px;}
+.plan-price sup{font-size:16px;}
+.plan-period{font-size:11px;color:var(--muted);margin-bottom:14px;}
+.plan-name{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;}
+.plan-limit{font-size:13px;color:var(--off);margin-bottom:12px;}
+.plan-features{font-size:11px;color:var(--muted);line-height:1.8;text-align:left;}
+.plan-features li{list-style:none;display:flex;gap:6px;}
+.plan-features li::before{content:'✓';color:var(--cyan);font-weight:700;}
 
-/* TAGS (multiselect) */
-.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:36px;}
-.tag{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:30px;padding:10px 18px;
-  font-size:13px;font-weight:500;
-  cursor:pointer;transition:all 0.2s;
-  user-select:none;
-}
-.tag:hover{border-color:var(--border2);}
-.tag.selected{
-  background:var(--lime-ghost);
-  border-color:var(--lime);color:var(--lime);
-}
+/* ── INVITE SCREEN ── */
+.invite-card{background:linear-gradient(135deg,rgba(240,200,64,.06),var(--card));border:1px solid rgba(240,200,64,.2);border-radius:20px;padding:28px;margin-bottom:24px;display:flex;align-items:center;gap:20px;}
+.trainer-av-big{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--lime-dim),var(--lime));display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;color:var(--black);font-family:'Barlow Condensed',sans-serif;flex-shrink:0;box-shadow:0 0 20px rgba(180,240,58,.2);}
+.invite-info{}
+.invite-from{font-size:11px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:4px;}
+.invite-trainer-name{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.invite-trainer-spec{font-size:13px;color:var(--muted);}
 
-/* GENERATING SCREEN */
-.generating{
-  width:100%;max-width:680px;
-  text-align:center;
-  display:flex;flex-direction:column;align-items:center;
-  gap:0;
-}
-.gen-orb{
-  width:120px;height:120px;
-  border-radius:50%;
-  background:radial-gradient(circle,rgba(180,240,58,0.3),rgba(180,240,58,0.05));
-  border:1px solid rgba(180,240,58,0.3);
-  display:flex;align-items:center;justify-content:center;
-  font-size:50px;
-  margin:0 auto 32px;
-  animation:orbPulse 2s ease infinite;
-  box-shadow:0 0 60px rgba(180,240,58,0.15);
-}
-@keyframes orbPulse{
-  0%,100%{transform:scale(1);box-shadow:0 0 60px rgba(180,240,58,0.15);}
-  50%{transform:scale(1.06);box-shadow:0 0 100px rgba(180,240,58,0.3);}
-}
-.gen-title{
-  font-family:'Barlow Condensed',sans-serif;
-  font-size:42px;font-weight:900;text-transform:uppercase;
-  letter-spacing:1px;margin-bottom:12px;
-}
-.gen-sub{font-size:15px;color:var(--muted);font-weight:300;margin-bottom:36px;}
-.gen-steps{
-  width:100%;display:flex;flex-direction:column;gap:10px;
-  margin-bottom:36px;
-  text-align:left;
-}
-.gen-step{
-  display:flex;align-items:center;gap:14px;
-  background:var(--card);border:1px solid var(--border);
-  border-radius:12px;padding:14px 18px;
-  font-size:13px;font-weight:500;
-  opacity:0.35;
-  transition:all 0.5s;
-}
+/* ── CUSTOM QUIZ (klient trenera) ── */
+.custom-q{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:12px;}
+.custom-q-label{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;font-weight:700;}
+.custom-q-text{font-size:16px;font-weight:600;margin-bottom:14px;line-height:1.4;}
+
+/* ── GENERATING ── */
+.generating{width:100%;max-width:680px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:0;}
+.gen-orb{width:110px;height:110px;border-radius:50%;background:radial-gradient(circle,rgba(180,240,58,.3),rgba(180,240,58,.05));border:1px solid rgba(180,240,58,.3);display:flex;align-items:center;justify-content:center;font-size:46px;margin:0 auto 28px;animation:orbPulse 2s ease infinite;box-shadow:0 0 60px rgba(180,240,58,.15);}
+@keyframes orbPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.gen-title{font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:900;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+.gen-sub{font-size:14px;color:var(--muted);font-weight:300;margin-bottom:32px;}
+.gen-steps{width:100%;display:flex;flex-direction:column;gap:8px;margin-bottom:32px;text-align:left;}
+.gen-step{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;font-size:13px;font-weight:500;opacity:.35;transition:all .5s;}
 .gen-step.active{opacity:1;border-color:var(--border2);}
-.gen-step.done{opacity:1;border-color:rgba(180,240,58,0.3);color:var(--lime);}
-.gen-step-icon{
-  width:28px;height:28px;border-radius:50%;
-  background:var(--border);
-  display:flex;align-items:center;justify-content:center;
-  font-size:13px;flex-shrink:0;
-  transition:all 0.4s;
-}
-.gen-step.active .gen-step-icon{background:var(--border2);animation:spin 1s linear infinite;}
-.gen-step.done .gen-step-icon{background:rgba(180,240,58,0.15);color:var(--lime);}
+.gen-step.done{opacity:1;border-color:rgba(180,240,58,.3);color:var(--lime);}
+.gen-step-icon{width:28px;height:28px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;transition:all .4s;}
+.gen-step.active .gen-step-icon{animation:spin 1s linear infinite;}
+.gen-step.done .gen-step-icon{background:rgba(180,240,58,.15);color:var(--lime);}
 @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 
-/* RESULT SCREEN */
-.result-screen{
-  width:100%;max-width:760px;
-}
-.result-header{
-  display:flex;align-items:flex-start;justify-content:space-between;
-  gap:20px;margin-bottom:28px;
-}
-.result-badge{
-  background:rgba(180,240,58,0.1);
-  border:1px solid rgba(180,240,58,0.25);
-  border-radius:12px;padding:6px 14px;
-  font-size:11px;font-weight:700;letter-spacing:2px;
-  text-transform:uppercase;color:var(--lime);
-  white-space:nowrap;margin-top:8px;
-}
-.plan-title{
-  font-family:'Barlow Condensed',sans-serif;
-  font-size:clamp(36px,6vw,64px);font-weight:900;
-  text-transform:uppercase;line-height:0.95;
-  letter-spacing:-0.5px;
-}
-.plan-title span{color:var(--lime);}
-.plan-summary{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  gap:10px;margin-bottom:24px;
-}
-.plan-stat{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:12px;padding:16px;text-align:center;
-}
-.plan-stat-val{
-  font-family:'Barlow Condensed',sans-serif;
-  font-size:28px;font-weight:900;color:var(--lime);
-  line-height:1;margin-bottom:4px;
-}
-.plan-stat-label{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
-.plan-desc{
-  font-size:14px;line-height:1.8;color:var(--off);
-  font-weight:300;
-  background:var(--card);border:1px solid var(--border);
-  border-radius:14px;padding:20px 22px;
-  margin-bottom:20px;
-  min-height:80px;
-}
-.plan-weeks{display:flex;flex-direction:column;gap:8px;margin-bottom:24px;}
-.week-row{
-  display:flex;align-items:center;gap:12px;
-  background:var(--card);border:1px solid var(--border);
-  border-radius:12px;padding:12px 16px;
-  font-size:13px;
-}
-.week-num{
-  font-family:'Barlow Condensed',sans-serif;
-  font-size:15px;font-weight:700;color:var(--muted);
-  width:56px;flex-shrink:0;
-  text-transform:uppercase;letter-spacing:1px;
-}
-.week-bar-wrap{flex:1;height:6px;background:var(--border);border-radius:3px;}
-.week-bar{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--lime-dim),var(--lime));transition:width 1s ease;}
-.week-label{font-size:11px;color:var(--muted);width:80px;text-align:right;flex-shrink:0;}
+/* ── RESULT ── */
+.result-screen{width:100%;max-width:760px;}
+.result-scroll{max-height:calc(100vh - 130px);overflow-y:auto;padding-right:4px;scrollbar-width:thin;scrollbar-color:var(--border2) transparent;}
+.result-header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:24px;}
+.result-badge{background:rgba(180,240,58,.1);border:1px solid rgba(180,240,58,.25);border-radius:10px;padding:5px 12px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--lime);white-space:nowrap;margin-top:6px;}
+.plan-title-big{font-family:'Barlow Condensed',sans-serif;font-size:clamp(34px,6vw,60px);font-weight:900;text-transform:uppercase;line-height:.95;letter-spacing:-.5px;}
+.plan-title-big span{color:var(--lime);}
+.plan-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;}
+.plan-stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;}
+.plan-stat-val{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--lime);line-height:1;margin-bottom:3px;}
+.plan-stat-lbl{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
+.plan-desc{font-size:14px;line-height:1.8;color:var(--off);font-weight:300;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:18px;min-height:80px;}
+.phase-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.phase-row{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px 14px;}
+.phase-weeks{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--muted);width:56px;flex-shrink:0;text-transform:uppercase;letter-spacing:1px;}
+.phase-bar-wrap{flex:1;height:5px;background:var(--border);border-radius:3px;}
+.phase-bar{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--lime-dim),var(--lime));transition:width 1.2s ease;}
+.phase-label{font-size:11px;color:var(--muted);width:100px;text-align:right;flex-shrink:0;}
+.ai-note{display:flex;gap:12px;align-items:flex-start;background:rgba(180,240,58,.05);border:1px solid rgba(180,240,58,.15);border-radius:14px;padding:16px;margin-bottom:20px;}
+.ai-note-av{width:32px;height:32px;background:var(--lime);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.ai-note-text{font-size:13px;color:var(--off);line-height:1.7;font-weight:300;}
 .result-actions{display:flex;gap:12px;}
-.btn-start{
-  flex:1;background:var(--lime);color:var(--black);
-  border:none;border-radius:12px;padding:16px;
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;font-size:19px;letter-spacing:2px;
-  text-transform:uppercase;cursor:pointer;
-  transition:all 0.2s;
-  box-shadow:0 0 40px rgba(180,240,58,0.25);
-}
+.btn-start{flex:1;background:var(--lime);color:var(--black);border:none;border-radius:12px;padding:15px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:18px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;box-shadow:0 0 40px rgba(180,240,58,.25);}
 .btn-start:hover{background:var(--lime-soft);transform:translateY(-1px);}
-.btn-regen{
-  background:none;border:1px solid var(--border2);
-  color:var(--muted);border-radius:12px;
-  padding:16px 20px;font-size:20px;
-  cursor:pointer;transition:all 0.2s;
-}
+.btn-regen{background:none;border:1px solid var(--border2);color:var(--muted);border-radius:12px;padding:15px 18px;font-size:20px;cursor:pointer;transition:all .2s;}
 .btn-regen:hover{border-color:var(--muted);}
 
-/* LOADING DOTS */
-.dots span{
-  display:inline-block;width:6px;height:6px;
-  background:var(--lime);border-radius:50%;
-  margin:0 2px;
-  animation:dotBounce 1.2s ease infinite;
-}
-.dots span:nth-child(2){animation-delay:0.2s;}
-.dots span:nth-child(3){animation-delay:0.4s;}
-@keyframes dotBounce{0%,100%{transform:translateY(0);opacity:0.4}50%{transform:translateY(-6px);opacity:1}}
+/* ── DOTS LOADER ── */
+.dots span{display:inline-block;width:6px;height:6px;background:var(--lime);border-radius:50%;margin:0 2px;animation:db 1.2s ease infinite;}
+.dots span:nth-child(2){animation-delay:.2s;}
+.dots span:nth-child(3){animation-delay:.4s;}
+@keyframes db{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-6px);opacity:1}}
 
-/* SCROLLABLE RESULT */
-.result-scroll{
-  max-height:calc(100vh - 130px);
-  overflow-y:auto;
-  padding-right:4px;
-  scrollbar-width:thin;
-  scrollbar-color:var(--border2) transparent;
-}
-
-@media(max-width:600px){
-  header{padding:12px 16px;}
-  .onboarding{padding:70px 16px 16px;}
-  .role-cards{grid-template-columns:1fr;}
-  .plan-summary{grid-template-columns:1fr 1fr;}
-  .result-actions{flex-direction:column;}
-}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 </style>
 </head>
 <body>
 
-<div class="bg-glow bg-glow-1" id="bgGlow1"></div>
-<div class="bg-glow bg-glow-2"></div>
+<div class="bg-glow bg1"></div>
+<div class="bg-glow bg2"></div>
+<div class="pb-wrap"><div class="pb-fill" id="pbFill" style="width:0%"></div></div>
 
-<!-- PROGRESS BAR -->
-<div class="progress-bar-wrap">
-  <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
-</div>
-
-<!-- HEADER -->
 <header>
   <a href="#" class="logo">chceByc<span>.fit</span></a>
-  <div class="step-indicator" id="stepIndicator"></div>
-  <button class="skip-btn" id="skipBtn" onclick="skipOnboarding()">Pomiń →</button>
+  <div class="step-dots" id="stepDots"></div>
+  <button class="skip-btn" id="skipBtn" onclick="skipToEnd()">Pomiń →</button>
 </header>
 
-<!-- ONBOARDING SCREENS -->
 <div class="onboarding" id="onboarding">
 
-  <!-- SCREEN 0: ROLE -->
-  <div class="screen active" id="screen-0">
-    <div class="step-label"><div class="step-label-line"></div>Krok 1 z 8</div>
-    <h1 class="question">Kim<br><span style="color:var(--lime)">jesteś?</span></h1>
-    <p class="question-sub">Dostosujemy całą platformę do Twojej roli.</p>
-    <div class="role-cards">
-      <div class="role-card" onclick="selectRole('athlete', this)">
-        <span class="role-emoji">🏃</span>
-        <div class="role-name">Ćwiczę sam</div>
-        <div class="role-desc">Szukam planów treningowych, AI coachA i społeczności która mnie zmotywuje</div>
+  <!-- ══ SCREEN 0 — WYBÓR ŚCIEŻKI ══ -->
+  <div class="screen active" id="s0">
+    <div class="step-label"><div class="step-label-line"></div><span>Krok 1 — wybierz swoją ścieżkę</span></div>
+    <h1 class="question">Jak trafiłeś<br><span style="color:var(--lime)">na chceByc.fit?</span></h1>
+    <p class="question-sub">Dopasujemy rejestrację do Twojej sytuacji — każda ścieżka jest inna.</p>
+    <div class="path-cards">
+      <div class="path-card path-pro" onclick="selectPath('pro',this)">
+        <div class="path-badge" style="background:var(--lime-ghost);color:var(--lime);border:1px solid rgba(180,240,58,.2)">AI Plan</div>
+        <span class="path-emoji">🏃</span>
+        <div class="path-name">Szukam planu dla siebie</div>
+        <div class="path-desc">Chcę trenować, potrzebuję planu i AI coacha który mnie poprowadzi</div>
       </div>
-      <div class="role-card" onclick="selectRole('coach', this)">
-        <span class="role-emoji">🎓</span>
-        <div class="role-name">Jestem trenerem</div>
-        <div class="role-desc">Chcę sprzedawać plany na marketplace i zarządzać klientami w jednym miejscu</div>
+      <div class="path-card path-trainer" onclick="selectPath('trainer',this)">
+        <div class="path-badge" style="background:var(--cyan-ghost);color:var(--cyan);border:1px solid rgba(58,240,212,.2)">Coach</div>
+        <span class="path-emoji">🎓</span>
+        <div class="path-name">Jestem trenerem</div>
+        <div class="path-desc">Chcę zarządzać klientami i sprzedawać plany na marketplace</div>
+      </div>
+      <div class="path-card path-invited" onclick="selectPath('invited',this)">
+        <div class="path-badge" style="background:var(--gold-ghost);color:var(--gold);border:1px solid rgba(240,200,64,.2)">Zaproszenie</div>
+        <span class="path-emoji">📨</span>
+        <div class="path-name">Mam zaproszenie od trenera</div>
+        <div class="path-desc">Mój trener wysłał mi link lub kod dostępu do platformy</div>
       </div>
     </div>
     <div class="nav-row">
-      <button class="btn-next" id="next-0" disabled onclick="nextStep()">Dalej →</button>
+      <button class="btn-next" id="next-s0" disabled onclick="goPath()">Dalej →</button>
     </div>
   </div>
 
-  <!-- SCREEN 1: GOAL -->
-  <div class="screen" id="screen-1">
-    <div class="step-label"><div class="step-label-line"></div>Krok 2 z 8</div>
+  <!-- ══════════════════════════════════════════
+       ŚCIEŻKA A — KLIENT PRO (quiz AI)
+  ══════════════════════════════════════════ -->
+
+  <!-- PRO S1 — CEL -->
+  <div class="screen" id="pro-s1">
+    <div class="step-label"><div class="step-label-line"></div><span>Krok 2 z 8 — cel</span></div>
     <h1 class="question">Jaki masz<br><span style="color:var(--lime)">cel?</span></h1>
-    <p class="question-sub">Wybierz główny priorytet. Możesz go zmienić w każdej chwili.</p>
+    <p class="question-sub">Wybierz główny priorytet. Możesz zmienić w każdej chwili.</p>
     <div class="options">
-      <div class="option" onclick="selectOption(this,'goal','muscle')">
-        <span class="option-icon">💪</span>
-        <div class="option-text">Masa mięśniowa<span>Budowanie sylwetki</span></div>
-      </div>
-      <div class="option" onclick="selectOption(this,'goal','strength')">
-        <span class="option-icon">🏋️</span>
-        <div class="option-text">Siła<span>Wyniki na siłowni</span></div>
-      </div>
-      <div class="option" onclick="selectOption(this,'goal','fat')">
-        <span class="option-icon">🔥</span>
-        <div class="option-text">Redukcja tłuszczu<span>Spalanie i rzeźba</span></div>
-      </div>
-      <div class="option" onclick="selectOption(this,'goal','fitness')">
-        <span class="option-icon">⚡</span>
-        <div class="option-text">Ogólna sprawność<span>Kondycja i zdrowie</span></div>
-      </div>
+      <div class="option" onclick="pick(this,'goal','muscle')"><span class="option-icon">💪</span><div class="option-text">Masa mięśniowa<span>Budowanie sylwetki</span></div></div>
+      <div class="option" onclick="pick(this,'goal','strength')"><span class="option-icon">🏋️</span><div class="option-text">Siła<span>Wyniki na siłowni</span></div></div>
+      <div class="option" onclick="pick(this,'goal','fat')"><span class="option-icon">🔥</span><div class="option-text">Redukcja tłuszczu<span>Spalanie i rzeźba</span></div></div>
+      <div class="option" onclick="pick(this,'goal','fitness')"><span class="option-icon">⚡</span><div class="option-text">Ogólna sprawność<span>Kondycja i zdrowie</span></div></div>
     </div>
-    <div class="nav-row">
-      <button class="btn-back" onclick="prevStep()">← Wróć</button>
-      <button class="btn-next" id="next-1" disabled onclick="nextStep()">Dalej →</button>
-    </div>
+    <div class="nav-row"><button class="btn-back" onclick="back()">← Wróć</button><button class="btn-next" id="next-pro-s1" disabled onclick="next('pro-s2')">Dalej →</button></div>
   </div>
 
-  <!-- SCREEN 2: LEVEL -->
-  <div class="screen" id="screen-2">
-    <div class="step-label"><div class="step-label-line"></div>Krok 3 z 8</div>
+  <!-- PRO S2 — POZIOM -->
+  <div class="screen" id="pro-s2">
+    <div class="step-label"><div class="step-label-line"></div><span>Krok 3 z 8 — poziom</span></div>
     <h1 class="question">Twój<br><span style="color:var(--lime)">poziom?</span></h1>
-    <p class="question-sub">Bądź szczery — plan dopasowany do poziomu daje 2x lepsze wyniki.</p>
+    <p class="question-sub">Bądź szczery — plan dopasowany do poziomu daje 2× lepsze wyniki.</p>
     <div class="options" style="flex-direction:column">
-      <div class="option" style="min-width:100%" onclick="selectOption(this,'level','beginner')">
-        <span class="option-icon">🌱</span>
-        <div class="option-text">Początkujący<span>Ćwiczę mniej niż rok lub wracam po przerwie</span></div>
-      </div>
-      <div class="option" style="min-width:100%" onclick="selectOption(this,'level','intermediate')">
-        <span class="option-icon">🔥</span>
-        <div class="option-text">Średniozaawansowany<span>Ćwiczę regularnie od 1–3 lat, znam podstawy techniki</span></div>
-      </div>
-      <div class="option" style="min-width:100%" onclick="selectOption(this,'level','advanced')">
-        <span class="option-icon">⚡</span>
-        <div class="option-text">Zaawansowany<span>Trenuję 3+ lata, śledzę periodyzację i wyniki</span></div>
-      </div>
+      <div class="option" style="min-width:100%" onclick="pick(this,'level','beginner')"><span class="option-icon">🌱</span><div class="option-text">Początkujący<span>Ćwiczę mniej niż rok lub wracam po przerwie</span></div></div>
+      <div class="option" style="min-width:100%" onclick="pick(this,'level','intermediate')"><span class="option-icon">🔥</span><div class="option-text">Średniozaawansowany<span>Ćwiczę regularnie od 1–3 lat, znam podstawy</span></div></div>
+      <div class="option" style="min-width:100%" onclick="pick(this,'level','advanced')"><span class="option-icon">⚡</span><div class="option-text">Zaawansowany<span>Trenuję 3+ lata, śledzę periodyzację</span></div></div>
     </div>
-    <div class="nav-row">
-      <button class="btn-back" onclick="prevStep()">← Wróć</button>
-      <button class="btn-next" id="next-2" disabled onclick="nextStep()">Dalej →</button>
-    </div>
+    <div class="nav-row"><button class="btn-back" onclick="back()">← Wróć</button><button class="btn-next" id="next-pro-s2" disabled onclick="next('pro-s3')">Dalej →</button></div>
   </div>
 
-  <!-- SCREEN 3: DAYS -->
-  <div class="screen" id="screen-3">
-    <div class="step-label"><div class="step-label-line"></div>Krok 4 z 8</div>
+  <!-- PRO S3 — DNI -->
+  <div class="screen" id="pro-s3">
+    <div class="step-label"><div class="step-label-line"></div><span>Krok 4 z 8 — częstotliwość</span></div>
     <h1 class="question">Ile dni<br><span style="color:var(--lime)">w tygodniu?</span></h1>
-    <p class="question-sub">Ile razy realnie możesz trenować? Lepiej 3x i dowieźć, niż 6x i rzucić.</p>
+    <p class="question-sub">Ile razy realnie możesz trenować? Lepiej 3× i dowieźć niż 6× i rzucić.</p>
     <div class="slider-wrap">
       <div class="slider-labels"><span>1 dzień</span><span>7 dni</span></div>
-      <input type="range" class="slider" id="daysSlider" min="1" max="7" value="3" oninput="updateSlider(this,'days',1,'dni')">
+      <input type="range" class="slider" id="daysSlider" min="1" max="7" value="3" oninput="updateSlider(this,'days',0,'dni')">
       <div class="slider-value" id="daysVal">3 <span>dni</span></div>
     </div>
-    <div class="nav-row">
-      <button class="btn-back" onclick="prevStep()">← Wróć</button>
-      <button class="btn-next" onclick="nextStep()">Dalej →</button>
-    </div>
+    <div class="nav-row"><button class="btn-back" onclick="back()">← Wróć</button><button class="btn-next" onclick="next('pro-s4')">Dalej →</button></div>
   </div>
 
-  <!-- SCREEN 4: EQUIPMENT -->
-  <div class="screen" id="screen-4">
-    <div class="step-label"><div class="step-label-line"></div>Krok 5 z 8</div>
+  <!-- PRO S4 — SPRZĘT -->
+  <div class="screen" id="pro-s4">
+    <div class="step-label"><div class="step-label-line"></div><span>Krok 5 z 8 — sprzęt</span></div>
     <h1 class="question">Masz<br><span style="color:var(--lime)">sprzęt?</span></h1>
     <p class="question-sub">Zaznacz wszystko do czego masz dostęp. Możesz wybrać kilka.</p>
     <div class="tags">
-      <div class="tag" onclick="toggleTag(this,'equipment','gym')">🏋️ Siłownia</div>
-      <div class="tag" onclick="toggleTag(this,'equipment','barbell')">🔩 Sztanga + talerze</div>
-      <div class="tag" onclick="toggleTag(this,'equipment','dumbbells')">💪 Hantle</div>
-      <div class="tag" onclick="toggleTag(this,'equipment','pullbar')">📊 Drążek</div>
-      <div class="tag" onclick="toggleTag(this,'equipment','bands')">🔴 Gumy oporowe</div>
-      <div class="tag" onclick="toggleTag(this,'equipment','rings')">⭕ Ringsy/TRX</div>
-      <div class="tag" onclick="toggleTag(this,'equipment','cardio')">🏃 Sprzęt cardio</div>
-      <div class="tag selected" onclick="toggleTag(this,'equipment','none')">🏠 Bez sprzętu (dom)</div>
+      <div class="tag" onclick="tog(this,'equipment','gym')">🏋️ Siłownia</div>
+      <div class="tag" onclick="tog(this,'equipment','barbell')">🔩 Sztanga + talerze</div>
+      <div class="tag" onclick="tog(this,'equipment','dumbbells')">💪 Hantle</div>
+      <div class="tag" onclick="tog(this,'equipment','pullbar')">📊 Drążek</div>
+      <div class="tag" onclick="tog(this,'equipment','bands')">🔴 Gumy oporowe</div>
+      <div class="tag" onclick="tog(this,'equipment','rings')">⭕ Ringsy/TRX</div>
+      <div class="tag" onclick="tog(this,'equipment','cardio')">🏃 Sprzęt cardio</div>
+      <div class="tag selected" onclick="tog(this,'equipment','none')">🏠 Bez sprzętu (dom)</div>
     </div>
-    <div class="nav-row">
-      <button class="btn-back" onclick="prevStep()">← Wróć</button>
-      <button class="btn-next" onclick="nextStep()">Dalej →</button>
-    </div>
+    <div class="nav-row"><button class="btn-back" onclick="back()">← Wróć</button><button class="btn-next" onclick="next('pro-s5')">Dalej →</button></div>
   </div>
 
-  <!-- SCREEN 5: BODY -->
-  <div class="screen" id="screen-5">
-    <div class="step-label"><div class="step-label-line"></div>Krok 6 z 8</div>
+  <!-- PRO S5 — DANE CIAŁA -->
+  <div class="screen" id="pro-s5">
+    <div class="step-label"><div class="step-label-line"></div><span>Krok 6 z 8 — dane</span></div>
     <h1 class="question">Twoje<br><span style="color:var(--lime)">dane?</span></h1>
-    <p class="question-sub">Potrzebne do obliczenia zapotrzebowania kalorycznego i intensywności treningu. Widoczne tylko dla Ciebie.</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+    <p class="question-sub">Do obliczenia intensywności i zapotrzebowania. Widoczne tylko dla Ciebie.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
       <div>
-        <label style="font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:8px">Wzrost</label>
+        <label class="form-label">Wzrost</label>
         <div class="slider-wrap" style="margin-bottom:0">
           <input type="range" class="slider" min="150" max="210" value="178" oninput="updateSlider(this,'height',0,'cm')" style="margin-bottom:8px">
           <div class="slider-value" id="heightVal" style="font-size:28px">178 <span>cm</span></div>
         </div>
       </div>
       <div>
-        <label style="font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:8px">Waga</label>
+        <label class="form-label">Waga</label>
         <div class="slider-wrap" style="margin-bottom:0">
           <input type="range" class="slider" min="40" max="150" value="75" oninput="updateSlider(this,'weight',0,'kg')" style="margin-bottom:8px">
           <div class="slider-value" id="weightVal" style="font-size:28px">75 <span>kg</span></div>
         </div>
       </div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:36px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px">
       <div>
-        <label style="font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:8px">Wiek</label>
+        <label class="form-label">Wiek</label>
         <div class="slider-wrap" style="margin-bottom:0">
           <input type="range" class="slider" min="14" max="70" value="28" oninput="updateSlider(this,'age',0,'lat')">
           <div class="slider-value" id="ageVal" style="font-size:28px">28 <span>lat</span></div>
         </div>
       </div>
       <div>
-        <label style="font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:8px">Płeć</label>
+        <label class="form-label">Płeć</label>
         <div style="display:flex;gap:8px;margin-top:8px">
-          <div class="option selected" style="flex:1;justify-content:center;padding:12px" onclick="selectOption(this,'gender','male')">
-            <span>♂ Mężczyzna</span>
-          </div>
-          <div class="option" style="flex:1;justify-content:center;padding:12px" onclick="selectOption(this,'gender','female')">
-            <span>♀ Kobieta</span>
-          </div>
+          <div class="option selected" style="flex:1;justify-content:center;padding:12px" onclick="pick(this,'gender','male')"><span>♂ Mężczyzna</span></div>
+          <div class="option" style="flex:1;justify-content:center;padding:12px" onclick="pick(this,'gender','female')"><span>♀ Kobieta</span></div>
         </div>
       </div>
     </div>
-    <div class="nav-row">
-      <button class="btn-back" onclick="prevStep()">← Wróć</button>
-      <button class="btn-next" onclick="nextStep()">Dalej →</button>
-    </div>
+    <div class="nav-row"><button class="btn-back" onclick="back()">← Wróć</button><button class="btn-next" onclick="next('pro-s6')">Dalej →</button></div>
   </div>
 
-  <!-- SCREEN 6: INJURIES -->
-  <div class="screen" id="screen-6">
-    <div class="step-label"><div class="step-label-line"></div>Krok 7 z 8</div>
+  <!-- PRO S6 — KONTUZJE -->
+  <div class="screen" id="pro-s6">
+    <div class="step-label"><div class="step-label-line"></div><span>Krok 7 z 8 — kontuzje</span></div>
     <h1 class="question">Jakieś<br><span style="color:var(--lime)">kontuzje?</span></h1>
-    <p class="question-sub">AI uniknie ćwiczeń które mogą Ci zaszkodzić. Zaznacz co dotyczy lub pomiń.</p>
+    <p class="question-sub">AI uniknie ćwiczeń które mogą Ci zaszkodzić. Pomiń jeśli brak.</p>
     <div class="tags">
-      <div class="tag" onclick="toggleTag(this,'injury','back')">🔴 Kręgosłup / plecy</div>
-      <div class="tag" onclick="toggleTag(this,'injury','knee')">🔴 Kolano</div>
-      <div class="tag" onclick="toggleTag(this,'injury','shoulder')">🔴 Bark</div>
-      <div class="tag" onclick="toggleTag(this,'injury','elbow')">🔴 Łokieć / nadgarstek</div>
-      <div class="tag" onclick="toggleTag(this,'injury','hip')">🔴 Biodro</div>
-      <div class="tag" onclick="toggleTag(this,'injury','neck')">🔴 Szyja / kark</div>
+      <div class="tag" onclick="tog(this,'injury','back')">🔴 Kręgosłup / plecy</div>
+      <div class="tag" onclick="tog(this,'injury','knee')">🔴 Kolano</div>
+      <div class="tag" onclick="tog(this,'injury','shoulder')">🔴 Bark</div>
+      <div class="tag" onclick="tog(this,'injury','elbow')">🔴 Łokieć / nadgarstek</div>
+      <div class="tag" onclick="tog(this,'injury','hip')">🔴 Biodro</div>
+      <div class="tag" onclick="tog(this,'injury','neck')">🔴 Szyja / kark</div>
     </div>
-    <div style="margin-bottom:36px;margin-top:16px">
-      <input class="text-input" type="text" placeholder="Inne uwagi dla AI coachA (np. 'po operacji kolana 2022')..." id="injuryNote" style="margin-bottom:0">
+    <div style="margin-bottom:32px">
+      <input class="form-input" type="text" id="injuryNote" placeholder="Inne uwagi dla AI coacha...">
     </div>
-    <div class="nav-row">
-      <button class="btn-back" onclick="prevStep()">← Wróć</button>
-      <button class="btn-next" onclick="nextStep()">Dalej →</button>
-    </div>
+    <div class="nav-row"><button class="btn-back" onclick="back()">← Wróć</button><button class="btn-next" onclick="next('pro-s7')">Dalej →</button></div>
   </div>
 
-  <!-- SCREEN 7: NAME -->
-  <div class="screen" id="screen-7">
-    <div class="step-label"><div class="step-label-line"></div>Krok 8 z 8</div>
+  <!-- PRO S7 — IMIĘ -->
+  <div class="screen" id="pro-s7">
+    <div class="step-label"><div class="step-label-line"></div><span>Krok 8 z 8 — imię</span></div>
     <h1 class="question">Jak mam<br>do Ciebie<br><span style="color:var(--lime)">mówić?</span></h1>
-    <p class="question-sub">Imię pojawi się w Twoim profilu i w rozmowach z AI coachem.</p>
-    <input class="text-input" type="text" id="nameInput" placeholder="Twoje imię..." oninput="checkName()">
-    <div class="nav-row">
-      <button class="btn-back" onclick="prevStep()">← Wróć</button>
-      <button class="btn-next" id="next-7" disabled onclick="startGenerate()">🚀 Generuj mój plan →</button>
-    </div>
+    <p class="question-sub">Imię pojawi się w profilu i rozmowach z AI coachem.</p>
+    <input class="form-input" type="text" id="proName" placeholder="Twoje imię..." oninput="checkName('proName','next-pro-s7')" style="margin-bottom:32px">
+    <div class="nav-row"><button class="btn-back" onclick="back()">← Wróć</button><button class="btn-next" id="next-pro-s7" disabled onclick="startGenerate()">🚀 Generuj mój plan →</button></div>
   </div>
 
-  <!-- SCREEN 8: GENERATING -->
-  <div class="screen" id="screen-8">
+  <!-- PRO S8 — GENEROWANIE -->
+  <div class="screen" id="pro-s8">
     <div class="generating">
       <div class="gen-orb">🤖</div>
       <h2 class="gen-title">AI tworzy<br><span style="color:var(--lime)">Twój plan</span></h2>
-      <p class="gen-sub">Analizuję Twoje dane i buduję spersonalizowany plan treningowy...</p>
+      <p class="gen-sub">Analizuję Twoje dane i buduję spersonalizowany plan...</p>
       <div class="gen-steps">
-        <div class="gen-step" id="gstep-0">
-          <div class="gen-step-icon">🧬</div>
-          Analizuję Twój profil i cele
-        </div>
-        <div class="gen-step" id="gstep-1">
-          <div class="gen-step-icon">🏋️</div>
-          Dobieramy ćwiczenia do sprzętu
-        </div>
-        <div class="gen-step" id="gstep-2">
-          <div class="gen-step-icon">📅</div>
-          Buduję harmonogram tygodniowy
-        </div>
-        <div class="gen-step" id="gstep-3">
-          <div class="gen-step-icon">⚡</div>
-          Obliczam intensywność i progresję
-        </div>
-        <div class="gen-step" id="gstep-4">
-          <div class="gen-step-icon">✨</div>
-          Finalizuję plan i wskazówki AI
-        </div>
+        <div class="gen-step" id="gs0"><div class="gen-step-icon">🧬</div>Analizuję Twój profil i cele</div>
+        <div class="gen-step" id="gs1"><div class="gen-step-icon">🏋️</div>Dobieramy ćwiczenia do sprzętu</div>
+        <div class="gen-step" id="gs2"><div class="gen-step-icon">📅</div>Buduję harmonogram tygodniowy</div>
+        <div class="gen-step" id="gs3"><div class="gen-step-icon">⚡</div>Obliczam intensywność i progresję</div>
+        <div class="gen-step" id="gs4"><div class="gen-step-icon">✨</div>Finalizuję plan i wskazówki AI</div>
       </div>
       <div class="dots"><span></span><span></span><span></span></div>
     </div>
   </div>
 
-  <!-- SCREEN 9: RESULT -->
-  <div class="screen" id="screen-9">
+  <!-- PRO S9 — WYNIK -->
+  <div class="screen" id="pro-s9">
     <div class="result-scroll">
       <div class="result-screen">
         <div class="result-header">
           <div>
-            <div class="step-label"><div class="step-label-line"></div>Twój plan gotowy ✓</div>
-            <h2 class="plan-title" id="planTitle">Ładowanie<br><span>planu...</span></h2>
+            <div class="step-label"><div class="step-label-line"></div><span>Twój plan gotowy ✓</span></div>
+            <h2 class="plan-title-big" id="planTitle">Ładowanie<br><span>planu...</span></h2>
           </div>
           <div class="result-badge" id="planBadge">AI Generated</div>
         </div>
         <div class="plan-summary">
-          <div class="plan-stat"><div class="plan-stat-val" id="statWeeks">12</div><div class="plan-stat-label">Tygodni</div></div>
-          <div class="plan-stat"><div class="plan-stat-val" id="statDays">3</div><div class="plan-stat-label">Dni/tydz.</div></div>
-          <div class="plan-stat"><div class="plan-stat-val" id="statLevel">⚡</div><div class="plan-stat-label">Poziom</div></div>
-          <div class="plan-stat"><div class="plan-stat-val" id="statGoal">💪</div><div class="plan-stat-label">Cel</div></div>
+          <div class="plan-stat"><div class="plan-stat-val" id="rWeeks">12</div><div class="plan-stat-lbl">Tygodni</div></div>
+          <div class="plan-stat"><div class="plan-stat-val" id="rDays">3×</div><div class="plan-stat-lbl">Dni/tydz.</div></div>
+          <div class="plan-stat"><div class="plan-stat-val" id="rLevel">⚡</div><div class="plan-stat-lbl">Poziom</div></div>
+          <div class="plan-stat"><div class="plan-stat-val" id="rGoal">💪</div><div class="plan-stat-lbl">Cel</div></div>
         </div>
-        <div class="plan-desc" id="planDesc">
-          <div class="dots"><span></span><span></span><span></span></div>
-        </div>
-        <div class="plan-weeks" id="planWeeks">
-          <div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">Struktura programu</div>
+        <div class="plan-desc" id="planDesc"><div class="dots"><span></span><span></span><span></span></div></div>
+        <div class="phase-list" id="phaseList"></div>
+        <div class="ai-note" id="aiNote" style="display:none">
+          <div class="ai-note-av">🤖</div>
+          <div class="ai-note-text" id="aiNoteText"></div>
         </div>
         <div class="result-actions">
-          <button class="btn-start" onclick="enterApp()">🚀 Zaczynam — do aplikacji →</button>
-          <button class="btn-regen" onclick="regenerate()" title="Wygeneruj inny plan">🔄</button>
+          <button class="btn-start" onclick="alert('Witaj na platformie! 🚀')">🚀 Zaczynam — do aplikacji →</button>
+          <button class="btn-regen" onclick="regenPlan()" title="Wygeneruj inny plan">🔄</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       ŚCIEŻKA B — TRENER
+  ══════════════════════════════════════════ -->
+
+  <!-- TRAINER S1 — DANE -->
+  <div class="screen" id="trainer-s1">
+    <div class="step-label"><div class="step-label-line"></div><span style="color:var(--cyan)">Krok 2 z 3 — dane trenera</span></div>
+    <h1 class="question" style="color:var(--cyan)">Opowiedz<br>o sobie</h1>
+    <p class="question-sub">Kilka informacji które pojawią się na Twoim profilu publicznym w marketplace.</p>
+    <div class="form-row" style="margin-bottom:14px">
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Imię i nazwisko</label>
+        <input class="form-input" type="text" id="trainerName" placeholder="np. Marcin Kowalski" oninput="checkTrainerForm()">
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Specjalizacja</label>
+        <input class="form-input" type="text" id="trainerSpec" placeholder="np. Siła, Hipertrofia, HIIT" oninput="checkTrainerForm()">
+      </div>
+    </div>
+    <div class="form-row" style="margin-bottom:14px">
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Lata doświadczenia</label>
+        <input class="form-input" type="number" id="trainerExp" placeholder="np. 5" min="0" max="50" oninput="checkTrainerForm()">
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Certyfikat (opcjonalnie)</label>
+        <input class="form-input" type="text" id="trainerCert" placeholder="np. NASM-CPT, ACE">
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:32px">
+      <label class="form-label">Krótkie bio (pojawi się w marketplace)</label>
+      <textarea class="form-input" id="trainerBio" placeholder="Opisz siebie w 2-3 zdaniach — czym się zajmujesz, komu pomagasz, jakie masz wyniki..."></textarea>
+    </div>
+    <div class="nav-row"><button class="btn-back" onclick="back()">← Wróć</button><button class="btn-next cyan" id="next-trainer-s1" disabled onclick="next('trainer-s2')">Dalej →</button></div>
+  </div>
+
+  <!-- TRAINER S2 — PLAN -->
+  <div class="screen" id="trainer-s2">
+    <div class="step-label"><div class="step-label-line"></div><span style="color:var(--cyan)">Krok 3 z 3 — wybierz plan</span></div>
+    <h1 class="question" style="color:var(--cyan)">Wybierz<br>swój plan</h1>
+    <p class="question-sub">Możesz zmienić plan w każdej chwili. Każdy plan zaczyna się od 14 dni za darmo.</p>
+    <div class="plan-cards">
+      <div class="plan-card" onclick="pickPlan(this,'starter')">
+        <div class="plan-price">49 <sup>zł</sup></div>
+        <div class="plan-period">/ miesiąc</div>
+        <div class="plan-name">Starter</div>
+        <div class="plan-limit">Do 5 klientów</div>
+        <ul class="plan-features">
+          <li>Kreator planów</li>
+          <li>Panel klientów</li>
+          <li>Chat z klientami</li>
+          <li style="opacity:.4;"><span style="color:var(--muted)">✗</span> Marketplace</li>
+        </ul>
+      </div>
+      <div class="plan-card" onclick="pickPlan(this,'pro')" style="border-color:rgba(58,240,212,.3)">
+        <div class="plan-card-badge">Polecany</div>
+        <div class="plan-price">149 <sup>zł</sup></div>
+        <div class="plan-period">/ miesiąc</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-limit">Do 20 klientów</div>
+        <ul class="plan-features">
+          <li>Kreator planów</li>
+          <li>Panel klientów</li>
+          <li>Chat z klientami</li>
+          <li>Marketplace (80%)</li>
+        </ul>
+      </div>
+      <div class="plan-card" onclick="pickPlan(this,'business')">
+        <div class="plan-price">299 <sup>zł</sup></div>
+        <div class="plan-period">/ miesiąc</div>
+        <div class="plan-name">Business</div>
+        <div class="plan-limit">Nielimitowani klienci</div>
+        <ul class="plan-features">
+          <li>Wszystko z Pro</li>
+          <li>Analityki biznesowe</li>
+          <li>Dedykowany opiekun</li>
+          <li>White-label profil</li>
+        </ul>
+      </div>
+    </div>
+    <div class="nav-row"><button class="btn-back" onclick="back()">← Wróć</button><button class="btn-next cyan" id="next-trainer-s2" disabled onclick="finishTrainer()">🎓 Zakończ rejestrację →</button></div>
+  </div>
+
+  <!-- TRAINER S3 — SUKCES -->
+  <div class="screen" id="trainer-s3">
+    <div style="text-align:center;padding:20px 0">
+      <div style="font-size:72px;margin-bottom:20px">🎉</div>
+      <h2 class="question" style="color:var(--cyan);text-align:center;margin-bottom:14px">Witaj<br>na pokładzie!</h2>
+      <p style="font-size:15px;color:var(--muted);line-height:1.7;font-weight:300;margin-bottom:32px;max-width:480px;margin-left:auto;margin-right:auto">Twoje konto trenera jest gotowe. Następny krok — zaproś pierwszego klienta i skonfiguruj swój quiz onboardingowy.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:480px;margin:0 auto 32px">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center">
+          <div style="font-size:28px;margin-bottom:8px">📋</div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:4px">Stwórz swój quiz</div>
+          <div style="font-size:11px;color:var(--muted)">Ułóż pytania pod swoich klientów</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center">
+          <div style="font-size:28px;margin-bottom:8px">📨</div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:4px">Zaproś klienta</div>
+          <div style="font-size:11px;color:var(--muted)">Wyślij link z kodem dostępu</div>
+        </div>
+      </div>
+      <button class="btn-next cyan" onclick="alert('Przejście do panelu trenera! 🎓')">Przejdź do panelu trenera →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       ŚCIEŻKA C — KLIENT ZAPROSZONY
+  ══════════════════════════════════════════ -->
+
+  <!-- INVITED S1 — KOD ZAPROSZENIA -->
+  <div class="screen" id="invited-s1">
+    <div class="step-label"><div class="step-label-line"></div><span style="color:var(--gold)">Krok 2 z 4 — kod zaproszenia</span></div>
+    <h1 class="question">Wpisz swój<br><span style="color:var(--gold)">kod dostępu</span></h1>
+    <p class="question-sub">Trener wysłał Ci unikalny link lub 6-cyfrowy kod. Możesz też kliknąć bezpośrednio w link z wiadomości.</p>
+    <div style="margin-bottom:20px">
+      <label class="form-label">Kod zaproszenia</label>
+      <input class="form-input" type="text" id="inviteCode" placeholder="np. MK-4821" oninput="checkInviteCode()" style="font-size:20px;font-weight:700;letter-spacing:4px;text-align:center;text-transform:uppercase">
+    </div>
+    <div id="inviteConfirm" style="display:none">
+      <div class="invite-card">
+        <div class="trainer-av-big">MK</div>
+        <div class="invite-info">
+          <div class="invite-from">Zaproszenie od trenera</div>
+          <div class="invite-trainer-name">Marcin Kowalski</div>
+          <div class="invite-trainer-spec">Siła · Hipertrofia · Siłownia ✓ Zweryfikowany</div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-row"><button class="btn-back" onclick="back()">← Wróć</button><button class="btn-next gold" id="next-invited-s1" disabled onclick="next('invited-s2')">Potwierdź →</button></div>
+  </div>
+
+  <!-- INVITED S2 — DANE PODSTAWOWE -->
+  <div class="screen" id="invited-s2">
+    <div class="step-label"><div class="step-label-line"></div><span style="color:var(--gold)">Krok 3 z 4 — Twoje dane</span></div>
+    <h1 class="question">Podstawowe<br><span style="color:var(--gold)">informacje</span></h1>
+    <p class="question-sub">Tylko to co potrzebuje Twój trener żeby dobrze przygotować plan.</p>
+    <div class="form-row" style="margin-bottom:14px">
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Imię</label>
+        <input class="form-input" type="text" id="clientName" placeholder="Twoje imię" oninput="checkClientForm()">
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Wiek</label>
+        <input class="form-input" type="number" id="clientAge" placeholder="np. 28" min="14" max="80" oninput="checkClientForm()">
+      </div>
+    </div>
+    <div class="form-row" style="margin-bottom:32px">
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Waga (kg)</label>
+        <input class="form-input" type="number" id="clientWeight" placeholder="np. 75" oninput="checkClientForm()">
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Wzrost (cm)</label>
+        <input class="form-input" type="number" id="clientHeight" placeholder="np. 178" oninput="checkClientForm()">
+      </div>
+    </div>
+    <div class="nav-row"><button class="btn-back" onclick="back()">← Wróć</button><button class="btn-next gold" id="next-invited-s2" disabled onclick="next('invited-s3')">Dalej →</button></div>
+  </div>
+
+  <!-- INVITED S3 — QUIZ TRENERA (customowy) -->
+  <div class="screen" id="invited-s3">
+    <div class="step-label"><div class="step-label-line"></div><span style="color:var(--gold)">Krok 4 z 4 — konsultacja</span></div>
+    <h1 class="question">Kilka pytań<br><span style="color:var(--gold)">od trenera</span></h1>
+    <p class="question-sub">Marcin Kowalski przygotował te pytania żeby jak najlepiej dopasować plan do Ciebie.</p>
+
+    <!-- Przykładowe pytania z customowego quizu trenera -->
+    <div class="custom-q">
+      <div class="custom-q-label">Pytanie 1 z 4</div>
+      <div class="custom-q-text">Jaki jest Twój główny cel treningowy?</div>
+      <div class="options">
+        <div class="option" onclick="pick(this,'q1','mass')"><span class="option-icon">💪</span><div class="option-text">Budowa masy</div></div>
+        <div class="option" onclick="pick(this,'q1','strength')"><span class="option-icon">🏋️</span><div class="option-text">Siła</div></div>
+        <div class="option" onclick="pick(this,'q1','cut')"><span class="option-icon">🔥</span><div class="option-text">Redukcja</div></div>
+        <div class="option" onclick="pick(this,'q1','health')"><span class="option-icon">❤️</span><div class="option-text">Zdrowie</div></div>
+      </div>
+    </div>
+
+    <div class="custom-q">
+      <div class="custom-q-label">Pytanie 2 z 4</div>
+      <div class="custom-q-text">Czy masz jakieś kontuzje lub dolegliwości które trener powinien znać?</div>
+      <div class="tags">
+        <div class="tag" onclick="tog(this,'cq2','back')">Kręgosłup</div>
+        <div class="tag" onclick="tog(this,'cq2','knee')">Kolano</div>
+        <div class="tag" onclick="tog(this,'cq2','shoulder')">Bark</div>
+        <div class="tag" onclick="tog(this,'cq2','none')">Brak kontuzji</div>
+      </div>
+    </div>
+
+    <div class="custom-q">
+      <div class="custom-q-label">Pytanie 3 z 4</div>
+      <div class="custom-q-text">Ile razy w tygodniu możesz trenować?</div>
+      <div class="options">
+        <div class="option" onclick="pick(this,'cq3','2')"><span class="option-icon">2×</span><div class="option-text">2 razy</div></div>
+        <div class="option" onclick="pick(this,'cq3','3')"><span class="option-icon">3×</span><div class="option-text">3 razy</div></div>
+        <div class="option" onclick="pick(this,'cq3','4')"><span class="option-icon">4×</span><div class="option-text">4 razy</div></div>
+        <div class="option" onclick="pick(this,'cq3','5')"><span class="option-icon">5×</span><div class="option-text">5+ razy</div></div>
+      </div>
+    </div>
+
+    <div class="custom-q" style="margin-bottom:32px">
+      <div class="custom-q-label">Pytanie 4 z 4 — otwarte</div>
+      <div class="custom-q-text">Czy jest coś jeszcze co chcesz mi powiedzieć przed pierwszym treningiem?</div>
+      <textarea class="form-input" placeholder="Napisz cokolwiek — motywacja, obawy, poprzednie doświadczenia..."></textarea>
+    </div>
+
+    <div class="nav-row"><button class="btn-back" onclick="back()">← Wróć</button><button class="btn-next gold" onclick="finishInvited()">✓ Wyślij odpowiedzi →</button></div>
+  </div>
+
+  <!-- INVITED S4 — SUKCES -->
+  <div class="screen" id="invited-s4">
+    <div style="text-align:center;padding:20px 0">
+      <div style="font-size:72px;margin-bottom:20px">🤝</div>
+      <h2 class="question" style="color:var(--gold);text-align:center;margin-bottom:14px">Gotowe!<br>Trener czeka.</h2>
+      <p style="font-size:15px;color:var(--muted);line-height:1.7;font-weight:300;margin-bottom:24px;max-width:460px;margin-left:auto;margin-right:auto">Twoje odpowiedzi trafiły do Marcina Kowalskiego. Trener przygotuje Twój plan i wróci do Ciebie wkrótce. Dostaniesz powiadomienie gdy plan będzie gotowy.</p>
+      <div class="invite-card" style="max-width:440px;margin:0 auto 28px;justify-content:center">
+        <div class="trainer-av-big">MK</div>
+        <div class="invite-info">
+          <div class="invite-from">Twój trener</div>
+          <div class="invite-trainer-name">Marcin Kowalski</div>
+          <div style="font-size:12px;color:var(--lime)">✓ Odpowiedzi otrzymane · przygotowuje plan</div>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:24px">Chcesz mieć też <strong style="color:var(--white)">AI Coacha</strong> do dyspozycji 24/7? Dostępny w planie Pro za 49 zł/mies.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="btn-next gold" onclick="alert('Przejście do dashboardu!')">Wejdź do aplikacji →</button>
+        <button class="btn-back" onclick="alert('Upgrade do Pro!')">🤖 Dodaj AI Coach</button>
       </div>
     </div>
   </div>
@@ -717,96 +654,133 @@ header{
 </div><!-- /onboarding -->
 
 <script>
-// ── STATE ──────────────────────────────────────────────────────────
+// ── STATE ──────────────────────────────────────────────────────
 const state = {
-  role: null, goal: null, level: null, days: 3,
-  equipment: ['none'], gender: 'male',
-  height: 178, weight: 75, age: 28,
+  path: null,
+  goal: null, level: null, days: 3, equipment: ['none'],
+  gender: 'male', height: 178, weight: 75, age: 28,
   injuries: [], injuryNote: '', name: ''
 };
-const TOTAL_STEPS = 8;
-let currentStep = 0;
-let isGenerating = false;
 
-// ── STEP DOTS ─────────────────────────────────────────────────────
-function renderDots() {
-  const el = document.getElementById('stepIndicator');
-  el.innerHTML = '';
-  for (let i = 0; i < TOTAL_STEPS; i++) {
-    const d = document.createElement('div');
-    d.className = 'step-dot' + (i === currentStep ? ' active' : i < currentStep ? ' done' : '');
-    el.appendChild(d);
-  }
-  const pct = (currentStep / (TOTAL_STEPS)) * 100;
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('skipBtn').style.display = currentStep >= 8 ? 'none' : '';
-}
+// Historia ekranów (do przycisku wróć)
+const history = [];
+let currentScreen = 's0';
 
-// ── NAVIGATION ────────────────────────────────────────────────────
-function nextStep() {
-  const cur = document.getElementById('screen-' + currentStep);
-  cur.className = 'screen exit';
-  setTimeout(() => { cur.className = 'screen'; }, 500);
-  currentStep++;
-  const next = document.getElementById('screen-' + currentStep);
-  next.className = 'screen active';
-  renderDots();
-  // move glow
-  document.getElementById('bgGlow1').style.top = (currentStep * -30) + 'px';
-}
+// ── NAWIGACJA ──────────────────────────────────────────────────
+function showScreen(id, direction = 'forward') {
+  const cur = document.getElementById(currentScreen);
+  const next = document.getElementById(id);
+  if (!next) return;
 
-function prevStep() {
-  if (currentStep === 0) return;
-  const cur = document.getElementById('screen-' + currentStep);
-  cur.className = 'screen';
-  cur.style.transform = 'translateX(60px)';
-  currentStep--;
-  const prev = document.getElementById('screen-' + currentStep);
-  prev.className = 'screen active';
-  renderDots();
-}
-
-function skipOnboarding() {
-  currentStep = 7;
-  document.querySelectorAll('.screen').forEach(s => s.className = 'screen');
-  document.getElementById('screen-7').className = 'screen active';
-  renderDots();
-}
-
-// ── SELECTION HELPERS ─────────────────────────────────────────────
-function selectRole(role, el) {
-  const isAlreadySelected = el.classList.contains('selected');
-  document.querySelectorAll('#screen-0 .role-card').forEach(c => c.classList.remove('selected'));
-  if (isAlreadySelected) {
-    state.role = null;
-    document.getElementById('next-0').disabled = true;
+  if (direction === 'forward') {
+    history.push(currentScreen);
+    cur.className = 'screen exit';
+    setTimeout(() => { cur.className = 'screen'; }, 450);
   } else {
-    state.role = role;
+    cur.className = 'screen';
+    cur.style.transform = 'translateX(60px)';
+    setTimeout(() => { cur.style.transform = ''; }, 10);
+  }
+
+  next.className = 'screen active';
+  currentScreen = id;
+  updateProgress();
+}
+
+function next(id) { showScreen(id, 'forward'); }
+
+function back() {
+  if (history.length === 0) return;
+  const prev = history.pop();
+  const cur = document.getElementById(currentScreen);
+  cur.className = 'screen';
+  const prevEl = document.getElementById(prev);
+  prevEl.className = 'screen active';
+  currentScreen = prev;
+  updateProgress();
+}
+
+function updateProgress() {
+  const progressMap = {
+    's0': 0,
+    'pro-s1': 14, 'pro-s2': 28, 'pro-s3': 42, 'pro-s4': 56,
+    'pro-s5': 70, 'pro-s6': 84, 'pro-s7': 90, 'pro-s8': 95, 'pro-s9': 100,
+    'trainer-s1': 50, 'trainer-s2': 80, 'trainer-s3': 100,
+    'invited-s1': 30, 'invited-s2': 55, 'invited-s3': 80, 'invited-s4': 100,
+  };
+  const pct = progressMap[currentScreen] || 0;
+  document.getElementById('pbFill').style.width = pct + '%';
+
+  // Dots
+  const dotsEl = document.getElementById('stepDots');
+  dotsEl.innerHTML = '';
+  let total = 8, current = 0;
+  if (state.path === 'trainer') { total = 3; }
+  else if (state.path === 'invited') { total = 4; }
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    const stepPct = ((i + 1) / total) * 100;
+    d.className = 'dot' + (stepPct <= pct ? (stepPct === pct ? ' active' : ' done') : '');
+    dotsEl.appendChild(d);
+  }
+
+  // Skip btn
+  document.getElementById('skipBtn').style.display = pct >= 100 ? 'none' : '';
+}
+
+function skipToEnd() {
+  if (state.path === 'trainer') showScreen('trainer-s2', 'forward');
+  else if (state.path === 'invited') showScreen('invited-s3', 'forward');
+  else showScreen('pro-s7', 'forward');
+}
+
+// ── WYBÓR ŚCIEŻKI ─────────────────────────────────────────────
+function selectPath(path, el) {
+  const isSelected = el.classList.contains('selected');
+  document.querySelectorAll('.path-card').forEach(c => c.classList.remove('selected'));
+  if (isSelected) {
+    state.path = null;
+    document.getElementById('next-s0').disabled = true;
+    // Reset button color
+    const btn = document.getElementById('next-s0');
+    btn.className = 'btn-next';
+  } else {
+    state.path = path;
     el.classList.add('selected');
-    document.getElementById('next-0').disabled = false;
+    const btn = document.getElementById('next-s0');
+    btn.disabled = false;
+    btn.className = 'btn-next' + (path === 'trainer' ? ' cyan' : path === 'invited' ? ' gold' : '');
   }
 }
 
-function selectOption(el, key, value) {
-  const isAlreadySelected = el.classList.contains('selected');
-  const container = el.closest('.options, .slider-wrap, div');
-  container.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+function goPath() {
+  if (!state.path) return;
+  if (state.path === 'pro') next('pro-s1');
+  else if (state.path === 'trainer') next('trainer-s1');
+  else if (state.path === 'invited') next('invited-s1');
+}
 
-  if (isAlreadySelected) {
-    // Odznacz — usuń wartość ze stanu
+// ── KAFELKI (single select z odznaczaniem) ────────────────────
+function pick(el, key, value) {
+  const isSelected = el.classList.contains('selected');
+  const container = el.closest('.options, .custom-q');
+  if (container) container.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+
+  if (isSelected) {
     state[key] = null;
-    const nextBtn = document.getElementById('next-' + currentStep);
+    // Zablokuj przycisk Dalej jeśli to wymagane pole
+    const nextBtn = document.getElementById('next-' + currentScreen);
     if (nextBtn) nextBtn.disabled = true;
   } else {
-    // Zaznacz nowy kafelek
     state[key] = value;
     el.classList.add('selected');
-    const nextBtn = document.getElementById('next-' + currentStep);
+    const nextBtn = document.getElementById('next-' + currentScreen);
     if (nextBtn) nextBtn.disabled = false;
   }
 }
 
-function toggleTag(el, key, value) {
+// ── TAGI (multiselect) ────────────────────────────────────────
+function tog(el, key, value) {
   el.classList.toggle('selected');
   if (!state[key]) state[key] = [];
   if (el.classList.contains('selected')) {
@@ -816,44 +790,66 @@ function toggleTag(el, key, value) {
   }
 }
 
-function updateSlider(el, key, decimals, unit) {
+// ── SUWAKI ────────────────────────────────────────────────────
+function updateSlider(el, key, dec, unit) {
   const val = parseFloat(el.value);
   state[key] = val;
   const pct = ((val - el.min) / (el.max - el.min)) * 100;
-  el.style.setProperty('--val', pct + '%');
   el.style.background = `linear-gradient(90deg,var(--lime-dim) ${pct}%,var(--border2) ${pct}%)`;
-  const display = document.getElementById(key + 'Val');
-  if (display) display.innerHTML = val.toFixed(decimals) + ' <span>' + unit + '</span>';
+  const disp = document.getElementById(key + 'Val');
+  if (disp) disp.innerHTML = val.toFixed(dec) + ' <span>' + unit + '</span>';
 }
 
-function checkName() {
-  const v = document.getElementById('nameInput').value.trim();
+// ── WALIDACJE ─────────────────────────────────────────────────
+function checkName(inputId, btnId) {
+  const v = document.getElementById(inputId)?.value.trim();
   state.name = v;
-  document.getElementById('next-7').disabled = v.length < 2;
+  const btn = document.getElementById(btnId);
+  if (btn) btn.disabled = !v || v.length < 2;
 }
 
-// init sliders
-['daysSlider'].forEach(id => {
-  const el = document.getElementById(id);
-  if (el) updateSlider(el, 'days', 0, 'dni');
-});
+function checkTrainerForm() {
+  const name = document.getElementById('trainerName')?.value.trim();
+  const spec = document.getElementById('trainerSpec')?.value.trim();
+  const exp = document.getElementById('trainerExp')?.value.trim();
+  document.getElementById('next-trainer-s1').disabled = !(name && spec && exp);
+}
 
-// ── GENERATE ──────────────────────────────────────────────────────
+function checkClientForm() {
+  const name = document.getElementById('clientName')?.value.trim();
+  const age = document.getElementById('clientAge')?.value.trim();
+  const weight = document.getElementById('clientWeight')?.value.trim();
+  const height = document.getElementById('clientHeight')?.value.trim();
+  document.getElementById('next-invited-s2').disabled = !(name && age && weight && height);
+}
+
+function checkInviteCode() {
+  const code = document.getElementById('inviteCode')?.value.trim();
+  const isValid = code.length >= 4;
+  document.getElementById('next-invited-s1').disabled = !isValid;
+  document.getElementById('inviteConfirm').style.display = isValid ? 'block' : 'none';
+}
+
+// ── PLAN TRENERA ──────────────────────────────────────────────
+function pickPlan(el, plan) {
+  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.trainerPlan = plan;
+  document.getElementById('next-trainer-s2').disabled = false;
+}
+
+function finishTrainer() { next('trainer-s3'); }
+function finishInvited() { next('invited-s4'); }
+
+// ── GENEROWANIE PLANU AI ──────────────────────────────────────
 async function startGenerate() {
   state.injuryNote = document.getElementById('injuryNote')?.value || '';
-  // Transition to screen 8
-  const cur = document.getElementById('screen-7');
-  cur.className = 'screen exit';
-  setTimeout(() => cur.className = 'screen', 500);
-  currentStep = 8;
-  const gen = document.getElementById('screen-8');
-  gen.className = 'screen active';
-  renderDots();
+  state.name = document.getElementById('proName')?.value.trim() || '';
+  next('pro-s8');
 
-  // Animate gen steps
-  const steps = ['gstep-0','gstep-1','gstep-2','gstep-3','gstep-4'];
+  const steps = ['gs0','gs1','gs2','gs3','gs4'];
   for (let i = 0; i < steps.length; i++) {
-    await delay(i === 0 ? 300 : 600);
+    await delay(i === 0 ? 300 : 700);
     if (i > 0) {
       document.getElementById(steps[i-1]).className = 'gen-step done';
       document.getElementById(steps[i-1]).querySelector('.gen-step-icon').textContent = '✓';
@@ -861,205 +857,109 @@ async function startGenerate() {
     document.getElementById(steps[i]).className = 'gen-step active';
   }
 
-  // Call Claude API
-  const prompt = buildPrompt();
-  let planData;
-  try {
-    planData = await callClaude(prompt);
-  } catch(e) {
-    planData = getFallbackPlan();
-  }
+  let plan;
+  try { plan = await callClaude(); }
+  catch(e) { plan = fallbackPlan(); }
 
   await delay(600);
   document.getElementById(steps[steps.length-1]).className = 'gen-step done';
   document.getElementById(steps[steps.length-1]).querySelector('.gen-step-icon').textContent = '✓';
-  await delay(500);
-
-  // Show result
-  showResult(planData);
+  await delay(400);
+  showResult(plan);
 }
 
-function buildPrompt() {
-  const goalMap = {muscle:'budowanie masy mięśniowej',strength:'zwiększenie siły',fat:'redukcja tłuszczu',fitness:'ogólna sprawność i kondycja'};
+async function callClaude() {
+  const goalMap = {muscle:'budowanie masy mięśniowej',strength:'zwiększenie siły',fat:'redukcja tłuszczu',fitness:'ogólna sprawność'};
   const levelMap = {beginner:'początkujący',intermediate:'średniozaawansowany',advanced:'zaawansowany'};
-  const equipMap = {gym:'siłownia pełna',barbell:'sztanga z talerzami',dumbbells:'hantle',pullbar:'drążek',bands:'gumy oporowe',rings:'ringsy/TRX',cardio:'sprzęt cardio',none:'bez sprzętu (trening w domu)'};
-  const injMap = {back:'kręgosłup/plecy',knee:'kolano',shoulder:'bark',elbow:'łokieć/nadgarstek',hip:'biodro',neck:'szyja/kark'};
+  const eqMap = {gym:'siłownia',barbell:'sztanga',dumbbells:'hantle',pullbar:'drążek',bands:'gumy',rings:'ringsy',cardio:'sprzęt cardio',none:'dom bez sprzętu'};
 
-  const eq = (state.equipment||[]).map(e=>equipMap[e]||e).join(', ') || 'bez sprzętu';
-  const inj = (state.injuries||[]).map(i=>injMap[i]||i).join(', ') || 'brak';
-  const injNote = state.injuryNote ? `Dodatkowe uwagi: ${state.injuryNote}` : '';
+  const eq = (state.equipment||[]).map(e=>eqMap[e]||e).join(', ') || 'dom';
+  const inj = (state.injuries||[]).join(', ') || 'brak';
 
-  return `Jesteś AI coachem fitness platformy chceByc.fit. Stwórz spersonalizowany plan treningowy w formacie JSON.
+  const prompt = `Jesteś AI coachem fitness platformy chceByc.fit. Stwórz spersonalizowany plan treningowy w JSON.
+Dane: imię=${state.name}, cel=${goalMap[state.goal]||state.goal}, poziom=${levelMap[state.level]||state.level}, dni=${state.days}/tydz, sprzęt=${eq}, waga=${state.weight}kg, wzrost=${state.height}cm, wiek=${state.age}lat, płeć=${state.gender==='male'?'mężczyzna':'kobieta'}, kontuzje=${inj}. ${state.injuryNote}
+Odpowiedz TYLKO JSON:
+{"planName":"nazwa max 4 słowa","planSubtitle":"podtytuł max 6 słów","weeks":liczba,"daysPerWeek":${state.days},"levelLabel":"${levelMap[state.level]||'średni'}","goalEmoji":"emoji","description":"3-4 zdania do ${state.name}, motywacyjne i konkretne","phases":[{"name":"nazwa","weeks":"1-X","focus":"opis","intensity":65},{"name":"nazwa","weeks":"X-Y","focus":"opis","intensity":80},{"name":"nazwa","weeks":"Y-Z","focus":"opis","intensity":92}],"coachNote":"1-2 zdania osobista wiadomość do ${state.name}"}`;
 
-Dane użytkownika:
-- Imię: ${state.name}
-- Cel: ${goalMap[state.goal]||state.goal}
-- Poziom: ${levelMap[state.level]||state.level}
-- Dni treningowe/tydzień: ${state.days}
-- Dostępny sprzęt: ${eq}
-- Waga: ${state.weight} kg, Wzrost: ${state.height} cm, Wiek: ${state.age} lat
-- Płeć: ${state.gender==='male'?'mężczyzna':'kobieta'}
-- Kontuzje/ograniczenia: ${inj}. ${injNote}
-
-Odpowiedz TYLKO JSON (bez markdown), dokładnie w tej strukturze:
-{
-  "planName": "Krótka, chwytliwa nazwa planu (max 4 słowa)",
-  "planSubtitle": "Podtytuł opisujący cel (max 6 słów)",
-  "weeks": liczba_tygodni_int,
-  "daysPerWeek": ${state.days},
-  "level": "${levelMap[state.level]||state.level}",
-  "goalEmoji": "emoji celu",
-  "description": "3-4 zdania po polsku: co wyróżnia ten plan, dlaczego jest dopasowany do tej osoby, czego może się spodziewać po ${state.days} tygodniach. Pisz do użytkownika bezpośrednio (do ${state.name}). Ciepło, motywacyjnie, konkretnie.",
-  "phases": [
-    {"name": "Nazwa fazy (np. Adaptacja)", "weeks": "1-4", "focus": "Krótki opis fazy", "intensity": 55},
-    {"name": "Nazwa fazy (np. Progresja)", "weeks": "5-8", "focus": "Krótki opis fazy", "intensity": 75},
-    {"name": "Nazwa fazy (np. Szczyt)", "weeks": "9-12", "focus": "Krótki opis fazy", "intensity": 90}
-  ],
-  "coachNote": "Jedna osobista wiadomość od AI coachA do ${state.name} — motywująca, konkretna, odnosząca się do ich sytuacji (kontuzje, sprzęt, cel). Max 2 zdania."
-}`;
-}
-
-async function callClaude(prompt) {
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
-      messages: [{role:'user', content: prompt}]
-    })
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
   });
-  const data = await response.json();
-  const text = data.content?.map(b => b.text||'').join('') || '{}';
-  const clean = text.replace(/```json|```/g,'').trim();
-  return JSON.parse(clean);
+  const data = await resp.json();
+  const text = data.content?.map(b=>b.text||'').join('') || '{}';
+  return JSON.parse(text.replace(/```json|```/g,'').trim());
 }
 
-function getFallbackPlan() {
-  const goalEmojis = {muscle:'💪',strength:'🏋️',fat:'🔥',fitness:'⚡'};
+function fallbackPlan() {
   return {
-    planName: "Twój Personalny Plan",
-    planSubtitle: "Zbudowany specjalnie dla Ciebie",
-    weeks: 12,
-    daysPerWeek: state.days,
-    level: state.level || 'średniozaawansowany',
-    goalEmoji: goalEmojis[state.goal] || '💪',
-    description: `${state.name}, Twój plan treningowy jest gotowy! Został stworzony z myślą o Twoim celu i możliwościach. Trenujesz ${state.days} razy w tygodniu — to realistyczny harmonogram, który pozwoli Ci zobaczyć wyniki już po kilku tygodniach. Trzymaj się planu, a rezultaty przyjdą.`,
+    planName: "Twój Personalny Plan", planSubtitle: "Stworzony specjalnie dla Ciebie",
+    weeks: 12, daysPerWeek: state.days, levelLabel: state.level || 'średni',
+    goalEmoji: {muscle:'💪',strength:'🏋️',fat:'🔥',fitness:'⚡'}[state.goal] || '💪',
+    description: `${state.name || 'Hej'}, Twój plan treningowy jest gotowy! Zbudowany pod Twój cel i możliwości. Trenuj ${state.days}× w tygodniu — trzymaj się harmonogramu, a wyniki przyjdą szybciej niż myślisz.`,
     phases: [
-      {name:"Adaptacja", weeks:"1-4", focus:"Budowanie nawyku i techniki", intensity: 55},
-      {name:"Progresja", weeks:"5-8", focus:"Zwiększanie obciążeń i objętości", intensity: 75},
-      {name:"Szczyt", weeks:"9-12", focus:"Maksimum wyników i siły", intensity: 90}
+      {name:"Adaptacja",weeks:"1-4",focus:"Budowanie nawyku i techniki",intensity:58},
+      {name:"Progresja",weeks:"5-8",focus:"Zwiększanie obciążeń",intensity:78},
+      {name:"Szczyt",weeks:"9-12",focus:"Maksimum wyników",intensity:92}
     ],
-    coachNote: `${state.name}, masz wszystko czego trzeba. Zaufaj procesowi — wyniki przyjdą szybciej niż myślisz! 🚀`
+    coachNote: `${state.name || 'Atleto'}, zaufaj procesowi — każdy trening przybliża Cię do celu. Nie odpuszczaj! 💪`
   };
 }
 
 function showResult(plan) {
-  // Transition
-  const gen = document.getElementById('screen-8');
-  gen.className = 'screen exit';
-  setTimeout(() => gen.className = 'screen', 500);
-  currentStep = 9;
-  const res = document.getElementById('screen-9');
-  res.className = 'screen active';
-  renderDots();
-
-  // Fill data
-  document.getElementById('planTitle').innerHTML =
-    (plan.planName||'Twój Plan').replace(' ', '<br><span style="color:var(--lime)">') + '</span>';
+  next('pro-s9');
+  document.getElementById('planTitle').innerHTML = (plan.planName||'Twój Plan').replace(/\s(\S+)$/, '<br><span style="color:var(--lime)">$1</span>');
   document.getElementById('planBadge').textContent = '✓ AI Generated dla ' + (state.name||'Ciebie');
-  document.getElementById('statWeeks').textContent = plan.weeks || 12;
-  document.getElementById('statDays').textContent = (plan.daysPerWeek || state.days) + 'x';
-  document.getElementById('statLevel').textContent =
-    {beginner:'🌱',intermediate:'🔥',advanced:'⚡'}[state.level] || '⚡';
-  document.getElementById('statGoal').textContent = plan.goalEmoji || '💪';
+  document.getElementById('rWeeks').textContent = plan.weeks || 12;
+  document.getElementById('rDays').textContent = (plan.daysPerWeek||state.days) + '×';
+  document.getElementById('rLevel').textContent = {beginner:'🌱',intermediate:'🔥',advanced:'⚡'}[state.level] || '⚡';
+  document.getElementById('rGoal').textContent = plan.goalEmoji || '💪';
+  typewrite(document.getElementById('planDesc'), plan.description || '', 16);
 
-  // Typewriter for description
-  typewrite(document.getElementById('planDesc'), plan.description || '', 18);
-
-  // Phases / weeks bars
-  const weeksEl = document.getElementById('planWeeks');
-  weeksEl.innerHTML = '<div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">Fazy programu</div>';
-  (plan.phases || []).forEach((phase, i) => {
+  const phaseList = document.getElementById('phaseList');
+  phaseList.innerHTML = '<div style="font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;font-weight:700">Fazy programu</div>';
+  (plan.phases||[]).forEach(ph => {
     const row = document.createElement('div');
-    row.className = 'week-row';
-    row.innerHTML = `
-      <div class="week-num">${phase.weeks||''}</div>
-      <div style="flex:1">
-        <div style="font-size:13px;font-weight:600;margin-bottom:4px">${phase.name||''}</div>
-        <div class="week-bar-wrap"><div class="week-bar" style="width:0%" data-width="${phase.intensity||60}%"></div></div>
-      </div>
-      <div class="week-label" style="font-size:10px;color:var(--muted)">${phase.focus||''}</div>
-    `;
-    weeksEl.appendChild(row);
+    row.className = 'phase-row';
+    row.innerHTML = `<div class="phase-weeks">${ph.weeks||''}</div><div style="flex:1"><div style="font-size:13px;font-weight:600;margin-bottom:4px">${ph.name||''}</div><div class="phase-bar-wrap"><div class="phase-bar" style="width:0%" data-w="${ph.intensity||60}%"></div></div></div><div class="phase-label">${ph.focus||''}</div>`;
+    phaseList.appendChild(row);
   });
+  setTimeout(() => document.querySelectorAll('.phase-bar[data-w]').forEach(b => { b.style.width = b.dataset.w; }), 200);
 
-  // Animate bars
-  setTimeout(() => {
-    document.querySelectorAll('.week-bar[data-width]').forEach(bar => {
-      bar.style.width = bar.dataset.width;
-    });
-  }, 200);
-
-  // Coach note
   if (plan.coachNote) {
-    const note = document.createElement('div');
-    note.style.cssText = 'background:rgba(180,240,58,0.06);border:1px solid rgba(180,240,58,0.15);border-radius:14px;padding:16px 20px;margin-bottom:20px;display:flex;gap:12px;align-items:flex-start;';
-    note.innerHTML = `
-      <div style="width:32px;height:32px;background:var(--lime);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:1px">🤖</div>
-      <div>
-        <div style="font-size:10px;color:var(--lime);letter-spacing:2px;text-transform:uppercase;font-weight:600;margin-bottom:5px">AI Coach · Wiadomość dla Ciebie</div>
-        <div style="font-size:14px;color:var(--off);line-height:1.6;font-weight:300">${plan.coachNote}</div>
-      </div>`;
-    weeksEl.after(note);
-    note.after(document.querySelector('.result-actions'));
+    document.getElementById('aiNote').style.display = 'flex';
+    document.getElementById('aiNoteText').textContent = plan.coachNote;
   }
+}
+
+function regenPlan() {
+  history.push('pro-s9');
+  document.getElementById('pro-s9').className = 'screen';
+  currentScreen = 'pro-s8';
+  document.getElementById('pro-s8').className = 'screen active';
+  for (let i = 0; i < 5; i++) {
+    const s = document.getElementById('gs'+i);
+    s.className = 'gen-step';
+    s.querySelector('.gen-step-icon').textContent = ['🧬','🏋️','📅','⚡','✨'][i];
+  }
+  startGenerate();
 }
 
 function typewrite(el, text, speed) {
   el.textContent = '';
   let i = 0;
-  const interval = setInterval(() => {
-    el.textContent += text[i] || '';
-    i++;
-    if (i >= text.length) clearInterval(interval);
-  }, speed);
-}
-
-function regenerate() {
-  currentStep = 8;
-  document.querySelectorAll('.screen').forEach(s => s.className = 'screen');
-  document.getElementById('screen-8').className = 'screen active';
-  // Reset gen steps
-  for (let i = 0; i < 5; i++) {
-    const s = document.getElementById('gstep-' + i);
-    s.className = 'gen-step';
-    s.querySelector('.gen-step-icon').textContent = ['🧬','🏋️','📅','⚡','✨'][i];
-  }
-  renderDots();
-  startGenerate();
-}
-
-function enterApp() {
-  // Show a quick celebration then redirect
-  document.body.style.transition = 'opacity 0.5s';
-  document.body.style.opacity = '0';
-  setTimeout(() => {
-    alert('🚀 Witaj na platformie, ' + (state.name||'Atleto') + '! Dashboard wkrótce...');
-    document.body.style.opacity = '1';
-  }, 500);
+  const iv = setInterval(() => { el.textContent += text[i]||''; i++; if(i>=text.length) clearInterval(iv); }, speed);
 }
 
 function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-// ── INIT ──────────────────────────────────────────────────────────
-renderDots();
-
-// init slider backgrounds
+// Init sliders
 document.querySelectorAll('.slider').forEach(sl => {
   const pct = ((sl.value - sl.min) / (sl.max - sl.min)) * 100;
   sl.style.background = `linear-gradient(90deg,var(--lime-dim) ${pct}%,var(--border2) ${pct}%)`;
 });
+
+updateProgress();
 </script>
 </body>
 </html>
