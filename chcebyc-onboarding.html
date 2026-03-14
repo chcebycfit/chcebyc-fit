@@ -14,21 +14,19 @@
         --card2: #141f14;
         --border: #1c2e1c;
         --border2: #243824;
-        --border3: #2e4a2e;
         --lime: #b4f03a;
         --lime-soft: #ceff6a;
         --lime-dim: #7aaa22;
-        --lime-ghost: rgba(180, 240, 58, 0.08);
-        --cyan: #3af0d4;
-        --cyan-ghost: rgba(58, 240, 212, 0.08);
-        --gold: #f0c840;
-        --gold-ghost: rgba(240, 200, 64, 0.08);
+        --lime-ghost: rgba(180, 240, 58, 0.07);
         --white: #eef8e8;
         --off: #c8ddb8;
         --muted: #5a7850;
         --muted2: #3a5230;
         --red: #ff5555;
+        --gold: #f0c840;
         --blue: #4ab0ff;
+        --cyan: #3af0d4;
+        --orange: #ff8c42;
     }
 
     *, *::before, *::after {
@@ -48,8 +46,9 @@
         color: var(--white);
         display: flex;
         flex-direction: column;
-    }/* ── PROGRESS BAR ── */
-    .pb-wrap {
+    }
+
+    .progress-bar-wrap {
         position: fixed;
         top: 0;
         left: 0;
@@ -59,12 +58,13 @@
         background: var(--border);
     }
 
-    .pb-fill {
+    .progress-bar-fill {
         height: 100%;
         background: linear-gradient(90deg, var(--lime-dim), var(--lime));
-        transition: width .5s cubic-bezier(.4, 0, .2, 1);
+        transition: width 0.5s cubic-bezier(.4, 0, .2, 1);
         box-shadow: 0 0 12px var(--lime);
-    }/* ── HEADER ── */
+    }
+
     header {
         position: fixed;
         top: 0;
@@ -75,7 +75,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background: rgba(7, 11, 7, .85);
+        background: rgba(7, 11, 7, 0.85);
         backdrop-filter: blur(20px);
         border-bottom: 1px solid var(--border);
     }
@@ -84,7 +84,7 @@
         font-family: 'Barlow Condensed', sans-serif;
         font-weight: 900;
         font-size: 22px;
-        letter-spacing: .5px;
+        letter-spacing: 0.5px;
         color: var(--white);
         text-decoration: none;
     }
@@ -104,7 +104,7 @@
         height: 8px;
         border-radius: 50%;
         background: var(--border2);
-        transition: all .3s;
+        transition: all 0.3s;
     }
 
     .dot.active {
@@ -116,22 +116,20 @@
         background: var(--lime-dim);
     }
 
-    .skip-btn {
-        background: none;
-        border: 1px solid var(--border2);
-        color: var(--muted);
-        border-radius: 8px;
-        padding: 7px 16px;
-        font-size: 12px;
-        font-family: inherit;
-        cursor: pointer;
-        transition: all .2s;
+    .path-badge {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 4px 12px;
+        border-radius: 6px;
+        display: none;
     }
 
-    .skip-btn:hover {
-        border-color: var(--muted);
-        color: var(--off);
-    }/* ── MAIN ── */
+    .path-badge.show {
+        display: block;
+    }
+
     .onboarding {
         flex: 1;
         display: flex;
@@ -150,27 +148,28 @@
     }
 
     .bg1 {
-        width: 500px;
-        height: 500px;
-        background: rgba(180, 240, 58, .04);
-        top: -150px;
+        width: 600px;
+        height: 600px;
+        background: rgba(180, 240, 58, 0.04);
+        top: -200px;
         right: -100px;
     }
 
     .bg2 {
-        width: 350px;
-        height: 350px;
-        background: rgba(58, 240, 212, .03);
+        width: 400px;
+        height: 400px;
+        background: rgba(180, 240, 58, 0.03);
         bottom: -100px;
-        left: -80px;
-    }/* ── SCREEN ── */
+        left: -100px;
+    }
+
     .screen {
         width: 100%;
         max-width: 700px;
         position: absolute;
-        transition: all .4s cubic-bezier(.4, 0, .2, 1);
+        transition: all 0.45s cubic-bezier(.4, 0, .2, 1);
         opacity: 0;
-        transform: translateX(60px) scale(.97);
+        transform: translateX(60px) scale(0.97);
         pointer-events: none;
     }
 
@@ -183,13 +182,19 @@
 
     .screen.exit {
         opacity: 0;
-        transform: translateX(-60px) scale(.97);
+        transform: translateX(-60px) scale(0.97);
         position: absolute;
-    }/* ── TYPOGRAPHY ── */
+    }
+
     .step-label {
-        display: flex;
+        display: inline-flex;
         align-items: center;
         gap: 8px;
+        font-size: 11px;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: var(--lime);
+        font-weight: 600;
         margin-bottom: 16px;
     }
 
@@ -199,22 +204,14 @@
         background: var(--lime);
     }
 
-    .step-label span {
-        font-size: 11px;
-        letter-spacing: 2.5px;
-        text-transform: uppercase;
-        color: var(--lime);
-        font-weight: 700;
-    }
-
     .question {
         font-family: 'Barlow Condensed', sans-serif;
         font-size: clamp(34px, 6vw, 56px);
         font-weight: 800;
         text-transform: uppercase;
-        line-height: .95;
-        letter-spacing: -.5px;
-        margin-bottom: 8px;
+        line-height: 0.95;
+        letter-spacing: -0.5px;
+        margin-bottom: 10px;
     }
 
     .question-sub {
@@ -223,32 +220,23 @@
         font-weight: 300;
         line-height: 1.6;
         margin-bottom: 32px;
-    }/* ── PATH CARDS (wybór ścieżki) ── */
+    }
+
     .path-cards {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 12px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
         margin-bottom: 32px;
     }
 
     .path-card {
         background: var(--card);
-        border: 2px solid var(--border);
+        border: 1px solid var(--border);
         border-radius: 20px;
         padding: 28px 20px;
         cursor: pointer;
-        transition: all .25s;
+        transition: all 0.25s;
         text-align: center;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .path-card::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        opacity: 0;
-        transition: opacity .3s;
     }
 
     .path-card:hover {
@@ -257,37 +245,10 @@
     }
 
     .path-card.selected {
-        transform: translateY(-2px);
-    }
-
-    .path-card.path-pro.selected {
         border-color: var(--lime);
-        background: rgba(180, 240, 58, .05);
-    }
-
-    .path-card.path-pro.selected::before {
-        background: radial-gradient(ellipse at 50% 0%, rgba(180, 240, 58, .08), transparent);
-        opacity: 1;
-    }
-
-    .path-card.path-trainer.selected {
-        border-color: var(--cyan);
-        background: rgba(58, 240, 212, .05);
-    }
-
-    .path-card.path-trainer.selected::before {
-        background: radial-gradient(ellipse at 50% 0%, rgba(58, 240, 212, .08), transparent);
-        opacity: 1;
-    }
-
-    .path-card.path-invited.selected {
-        border-color: var(--gold);
-        background: rgba(240, 200, 64, .05);
-    }
-
-    .path-card.path-invited.selected::before {
-        background: radial-gradient(ellipse at 50% 0%, rgba(240, 200, 64, .08), transparent);
-        opacity: 1;
+        background: var(--lime-ghost);
+        box-shadow: 0 0 30px rgba(180, 240, 58, 0.1);
+        transform: translateY(-2px);
     }
 
     .path-emoji {
@@ -298,44 +259,45 @@
 
     .path-name {
         font-family: 'Barlow Condensed', sans-serif;
-        font-size: 20px;
-        font-weight: 800;
+        font-size: 22px;
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: .5px;
-        margin-bottom: 6px;
-        transition: color .2s;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+        transition: color 0.2s;
     }
 
-    .path-pro.selected .path-name {
+    .path-card.selected .path-name {
         color: var(--lime);
-    }
-
-    .path-trainer.selected .path-name {
-        color: var(--cyan);
-    }
-
-    .path-invited.selected .path-name {
-        color: var(--gold);
     }
 
     .path-desc {
         font-size: 12px;
         color: var(--muted);
-        line-height: 1.5;
+        line-height: 1.6;
         font-weight: 300;
     }
 
-    .path-badge {
-        position: absolute;
-        top: 12px;
-        right: 12px;
+    .path-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 10px;
+        background: var(--border2);
+        border-radius: 5px;
+        padding: 2px 8px;
         font-size: 9px;
         font-weight: 700;
-        letter-spacing: 1.5px;
+        letter-spacing: 1px;
         text-transform: uppercase;
-        padding: 2px 7px;
-        border-radius: 5px;
-    }/* ── OPTIONS (kafelki) ── */
+        color: var(--muted);
+    }
+
+    .path-card.selected .path-tag {
+        background: rgba(180, 240, 58, 0.15);
+        color: var(--lime);
+    }
+
     .options {
         display: flex;
         flex-wrap: wrap;
@@ -347,9 +309,9 @@
         background: var(--card);
         border: 1px solid var(--border);
         border-radius: 14px;
-        padding: 16px 20px;
+        padding: 16px 22px;
         cursor: pointer;
-        transition: all .2s;
+        transition: all 0.2s;
         display: flex;
         align-items: center;
         gap: 12px;
@@ -369,7 +331,6 @@
         border-color: var(--lime);
         background: var(--lime-ghost);
         color: var(--lime);
-        box-shadow: 0 0 20px rgba(180, 240, 58, .1);
     }
 
     .option-icon {
@@ -377,16 +338,22 @@
         flex-shrink: 0;
     }
 
+    .option-text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
     .option-text span {
         font-size: 11px;
         color: var(--muted);
-        display: block;
-        margin-top: 1px;
+        font-weight: 300;
     }
 
     .option.selected .option-text span {
         color: var(--lime-dim);
-    }/* ── TAGS (multiselect) ── */
+    }
+
     .tags {
         display: flex;
         flex-wrap: wrap;
@@ -402,7 +369,7 @@
         font-size: 13px;
         font-weight: 500;
         cursor: pointer;
-        transition: all .2s;
+        transition: all 0.2s;
         user-select: none;
     }
 
@@ -414,7 +381,8 @@
         background: var(--lime-ghost);
         border-color: var(--lime);
         color: var(--lime);
-    }/* ── SLIDER ── */
+    }
+
     .slider-wrap {
         margin-bottom: 32px;
     }
@@ -432,6 +400,7 @@
         appearance: none;
         width: 100%;
         height: 4px;
+        background: var(--border2);
         border-radius: 2px;
         outline: none;
         cursor: pointer;
@@ -443,9 +412,9 @@
         height: 22px;
         background: var(--lime);
         border-radius: 50%;
-        box-shadow: 0 0 12px rgba(180, 240, 58, .5);
+        box-shadow: 0 0 12px rgba(180, 240, 58, 0.5);
         cursor: pointer;
-        transition: transform .15s;
+        transition: transform 0.15s;
     }
 
     .slider::-webkit-slider-thumb:hover {
@@ -465,52 +434,168 @@
     .slider-value span {
         font-size: 20px;
         color: var(--muted);
-    }/* ── INPUTS ── */
-    .form-group {
-        margin-bottom: 14px;
     }
 
-    .form-label {
+    .text-input {
+        width: 100%;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 16px 20px;
+        color: var(--white);
+        font-size: 15px;
+        font-family: inherit;
+        outline: none;
+        transition: border-color 0.2s;
+        margin-bottom: 12px;
+    }
+
+    .text-input:focus {
+        border-color: var(--lime);
+    }
+
+    .text-input::placeholder {
+        color: var(--muted);
+    }
+
+    .input-label {
         font-size: 10px;
         color: var(--muted);
         letter-spacing: 1.5px;
         text-transform: uppercase;
+        font-weight: 600;
         display: block;
         margin-bottom: 6px;
-        font-weight: 600;
-    }
-
-    .form-input {
-        width: 100%;
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 13px 16px;
-        color: var(--white);
-        font-size: 14px;
-        font-family: inherit;
-        outline: none;
-        transition: border-color .2s;
-    }
-
-    .form-input:focus {
-        border-color: var(--lime);
-    }
-
-    .form-input::placeholder {
-        color: var(--muted);
     }
 
     .form-row {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 12px;
+        margin-bottom: 12px;
     }
 
-    textarea.form-input {
-        resize: vertical;
-        min-height: 80px;
-    }/* ── BUTTONS ── */
+    .pricing-cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-bottom: 32px;
+    }
+
+    .pricing-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 20px 16px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .pricing-card:hover {
+        border-color: var(--border2);
+    }
+
+    .pricing-card.selected {
+        border-color: var(--lime);
+        background: var(--lime-ghost);
+    }
+
+    .pricing-plan {
+        font-size: 10px;
+        color: var(--muted);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+        font-weight: 700;
+    }
+
+    .pricing-price {
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: 36px;
+        font-weight: 900;
+        line-height: 1;
+        margin-bottom: 4px;
+    }
+
+    .pricing-price sup {
+        font-size: 14px;
+    }
+
+    .pricing-price.sel {
+        color: var(--lime);
+    }
+
+    .pricing-period {
+        font-size: 10px;
+        color: var(--muted);
+        margin-bottom: 12px;
+    }
+
+    .pricing-features {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .pricing-features li {
+        font-size: 11px;
+        color: var(--off);
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+        font-weight: 300;
+    }
+
+    .pricing-features li::before {
+        content: '✓';
+        color: var(--lime);
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+
+    .pricing-features li.off {
+        color: var(--muted);
+    }
+
+    .pricing-features li.off::before {
+        content: '×';
+        color: var(--border2);
+    }
+
+    .invite-hero {
+        background: linear-gradient(135deg, rgba(180, 240, 58, 0.08), var(--card));
+        border: 1px solid rgba(180, 240, 58, 0.2);
+        border-radius: 20px;
+        padding: 28px;
+        margin-bottom: 24px;
+        text-align: center;
+    }
+
+    .invite-av {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--lime-dim), var(--lime));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: 28px;
+        font-weight: 900;
+        color: var(--black);
+        margin: 0 auto 14px;
+        box-shadow: 0 0 30px rgba(180, 240, 58, 0.25);
+    }
+
+    .invite-trainer-name {
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: 32px;
+        font-weight: 900;
+        text-transform: uppercase;
+        color: var(--lime);
+    }
+
     .nav-row {
         display: flex;
         gap: 12px;
@@ -529,8 +614,8 @@
         letter-spacing: 1.5px;
         text-transform: uppercase;
         cursor: pointer;
-        transition: all .2s;
-        box-shadow: 0 0 30px rgba(180, 240, 58, .2);
+        transition: all 0.2s;
+        box-shadow: 0 0 30px rgba(180, 240, 58, 0.2);
     }
 
     .btn-next:hover {
@@ -539,28 +624,10 @@
     }
 
     .btn-next:disabled {
-        opacity: .35;
+        opacity: 0.35;
         cursor: not-allowed;
         transform: none;
         box-shadow: none;
-    }
-
-    .btn-next.cyan {
-        background: var(--cyan);
-        box-shadow: 0 0 30px rgba(58, 240, 212, .2);
-    }
-
-    .btn-next.cyan:hover {
-        background: #6bffea;
-    }
-
-    .btn-next.gold {
-        background: var(--gold);
-        box-shadow: 0 0 30px rgba(240, 200, 64, .2);
-    }
-
-    .btn-next.gold:hover {
-        background: #ffe066;
     }
 
     .btn-back {
@@ -572,183 +639,14 @@
         font-family: inherit;
         font-size: 14px;
         cursor: pointer;
-        transition: all .2s;
+        transition: all 0.2s;
     }
 
     .btn-back:hover {
         border-color: var(--muted);
         color: var(--off);
-    }/* ── PLAN CARDS (trener) ── */
-    .plan-cards {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 12px;
-        margin-bottom: 32px;
     }
 
-    .plan-card {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 18px;
-        padding: 24px 18px;
-        cursor: pointer;
-        transition: all .25s;
-        text-align: center;
-        position: relative;
-    }
-
-    .plan-card:hover {
-        border-color: var(--border2);
-        transform: translateY(-2px);
-    }
-
-    .plan-card.selected {
-        border-color: var(--cyan);
-        background: var(--cyan-ghost);
-        transform: translateY(-2px);
-    }
-
-    .plan-card-badge {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        font-size: 9px;
-        font-weight: 700;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        padding: 2px 7px;
-        border-radius: 5px;
-        background: var(--cyan);
-        color: var(--black);
-    }
-
-    .plan-price {
-        font-family: 'Barlow Condensed', sans-serif;
-        font-size: 40px;
-        font-weight: 900;
-        color: var(--cyan);
-        line-height: 1;
-        margin-bottom: 4px;
-    }
-
-    .plan-price sup {
-        font-size: 16px;
-    }
-
-    .plan-period {
-        font-size: 11px;
-        color: var(--muted);
-        margin-bottom: 14px;
-    }
-
-    .plan-name {
-        font-family: 'Barlow Condensed', sans-serif;
-        font-size: 18px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: .5px;
-        margin-bottom: 10px;
-    }
-
-    .plan-limit {
-        font-size: 13px;
-        color: var(--off);
-        margin-bottom: 12px;
-    }
-
-    .plan-features {
-        font-size: 11px;
-        color: var(--muted);
-        line-height: 1.8;
-        text-align: left;
-    }
-
-    .plan-features li {
-        list-style: none;
-        display: flex;
-        gap: 6px;
-    }
-
-    .plan-features li::before {
-        content: '✓';
-        color: var(--cyan);
-        font-weight: 700;
-    }/* ── INVITE SCREEN ── */
-    .invite-card {
-        background: linear-gradient(135deg, rgba(240, 200, 64, .06), var(--card));
-        border: 1px solid rgba(240, 200, 64, .2);
-        border-radius: 20px;
-        padding: 28px;
-        margin-bottom: 24px;
-        display: flex;
-        align-items: center;
-        gap: 20px;
-    }
-
-    .trainer-av-big {
-        width: 64px;
-        height: 64px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--lime-dim), var(--lime));
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 26px;
-        font-weight: 900;
-        color: var(--black);
-        font-family: 'Barlow Condensed', sans-serif;
-        flex-shrink: 0;
-        box-shadow: 0 0 20px rgba(180, 240, 58, .2);
-    }
-
-    .invite-info {
-    }
-
-    .invite-from {
-        font-size: 11px;
-        color: var(--gold);
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        font-weight: 700;
-        margin-bottom: 4px;
-    }
-
-    .invite-trainer-name {
-        font-family: 'Barlow Condensed', sans-serif;
-        font-size: 26px;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: .5px;
-        margin-bottom: 4px;
-    }
-
-    .invite-trainer-spec {
-        font-size: 13px;
-        color: var(--muted);
-    }/* ── CUSTOM QUIZ (klient trenera) ── */
-    .custom-q {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 20px;
-        margin-bottom: 12px;
-    }
-
-    .custom-q-label {
-        font-size: 10px;
-        color: var(--muted);
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        margin-bottom: 10px;
-        font-weight: 700;
-    }
-
-    .custom-q-text {
-        font-size: 16px;
-        font-weight: 600;
-        margin-bottom: 14px;
-        line-height: 1.4;
-    }/* ── GENERATING ── */
     .generating {
         width: 100%;
         max-width: 680px;
@@ -756,22 +654,21 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0;
     }
 
     .gen-orb {
-        width: 110px;
-        height: 110px;
+        width: 120px;
+        height: 120px;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(180, 240, 58, .3), rgba(180, 240, 58, .05));
-        border: 1px solid rgba(180, 240, 58, .3);
+        background: radial-gradient(circle, rgba(180, 240, 58, 0.3), rgba(180, 240, 58, 0.05));
+        border: 1px solid rgba(180, 240, 58, 0.3);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 46px;
-        margin: 0 auto 28px;
+        font-size: 50px;
+        margin: 0 auto 32px;
         animation: orbPulse 2s ease infinite;
-        box-shadow: 0 0 60px rgba(180, 240, 58, .15);
+        box-shadow: 0 0 60px rgba(180, 240, 58, 0.15);
     }
 
     @keyframes orbPulse {
@@ -786,26 +683,26 @@
 
     .gen-title {
         font-family: 'Barlow Condensed', sans-serif;
-        font-size: 40px;
+        font-size: 42px;
         font-weight: 900;
         text-transform: uppercase;
         letter-spacing: 1px;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
     }
 
     .gen-sub {
-        font-size: 14px;
+        font-size: 15px;
         color: var(--muted);
         font-weight: 300;
-        margin-bottom: 32px;
+        margin-bottom: 36px;
     }
 
     .gen-steps {
         width: 100%;
         display: flex;
         flex-direction: column;
-        gap: 8px;
-        margin-bottom: 32px;
+        gap: 10px;
+        margin-bottom: 36px;
         text-align: left;
     }
 
@@ -816,11 +713,11 @@
         background: var(--card);
         border: 1px solid var(--border);
         border-radius: 12px;
-        padding: 12px 16px;
+        padding: 14px 18px;
         font-size: 13px;
         font-weight: 500;
-        opacity: .35;
-        transition: all .5s;
+        opacity: 0.35;
+        transition: all 0.5s;
     }
 
     .gen-step.active {
@@ -830,7 +727,7 @@
 
     .gen-step.done {
         opacity: 1;
-        border-color: rgba(180, 240, 58, .3);
+        border-color: rgba(180, 240, 58, 0.3);
         color: var(--lime);
     }
 
@@ -844,7 +741,6 @@
         justify-content: center;
         font-size: 13px;
         flex-shrink: 0;
-        transition: all .4s;
     }
 
     .gen-step.active .gen-step-icon {
@@ -852,7 +748,7 @@
     }
 
     .gen-step.done .gen-step-icon {
-        background: rgba(180, 240, 58, .15);
+        background: rgba(180, 240, 58, 0.15);
         color: var(--lime);
     }
 
@@ -864,10 +760,36 @@
         to {
             transform: rotate(360deg)
         }
-    }/* ── RESULT ── */
-    .result-screen {
-        width: 100%;
-        max-width: 760px;
+    }
+
+    .dots span {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        background: var(--lime);
+        border-radius: 50%;
+        margin: 0 2px;
+        animation: db 1.2s ease infinite;
+    }
+
+    .dots span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .dots span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes db {
+        0%, 100% {
+            transform: translateY(0);
+            opacity:0.4
+        }
+
+        50% {
+            transform: translateY(-6px);
+            opacity: 1
+        }
     }
 
     .result-scroll {
@@ -878,38 +800,21 @@
         scrollbar-color: var(--border2) transparent;
     }
 
-    .result-header {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 20px;
-        margin-bottom: 24px;
+    .result-screen {
+        width: 100%;
+        max-width: 760px;
     }
 
-    .result-badge {
-        background: rgba(180, 240, 58, .1);
-        border: 1px solid rgba(180, 240, 58, .25);
-        border-radius: 10px;
-        padding: 5px 12px;
-        font-size: 10px;
-        font-weight: 700;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        color: var(--lime);
-        white-space: nowrap;
-        margin-top: 6px;
-    }
-
-    .plan-title-big {
+    .plan-title {
         font-family: 'Barlow Condensed', sans-serif;
-        font-size: clamp(34px, 6vw, 60px);
+        font-size: clamp(36px, 6vw, 64px);
         font-weight: 900;
         text-transform: uppercase;
-        line-height: .95;
-        letter-spacing: -.5px;
+        line-height: 0.95;
+        letter-spacing: -0.5px;
     }
 
-    .plan-title-big span {
+    .plan-title span {
         color: var(--lime);
     }
 
@@ -917,27 +822,27 @@
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 10px;
-        margin-bottom: 20px;
+        margin-bottom: 24px;
     }
 
     .plan-stat {
         background: var(--card);
         border: 1px solid var(--border);
         border-radius: 12px;
-        padding: 14px;
+        padding: 16px;
         text-align: center;
     }
 
     .plan-stat-val {
         font-family: 'Barlow Condensed', sans-serif;
-        font-size: 26px;
+        font-size: 28px;
         font-weight: 900;
         color: var(--lime);
         line-height: 1;
-        margin-bottom: 3px;
+        margin-bottom: 4px;
     }
 
-    .plan-stat-lbl {
+    .plan-stat-label {
         font-size: 10px;
         color: var(--muted);
         letter-spacing: 1.5px;
@@ -952,31 +857,32 @@
         background: var(--card);
         border: 1px solid var(--border);
         border-radius: 14px;
-        padding: 18px 20px;
-        margin-bottom: 18px;
+        padding: 20px 22px;
+        margin-bottom: 20px;
         min-height: 80px;
     }
 
-    .phase-list {
+    .plan-weeks {
         display: flex;
         flex-direction: column;
         gap: 8px;
-        margin-bottom: 20px;
+        margin-bottom: 24px;
     }
 
-    .phase-row {
+    .week-row {
         display: flex;
         align-items: center;
         gap: 12px;
         background: var(--card);
         border: 1px solid var(--border);
         border-radius: 12px;
-        padding: 11px 14px;
+        padding: 12px 16px;
+        font-size: 13px;
     }
 
-    .phase-weeks {
+    .week-num {
         font-family: 'Barlow Condensed', sans-serif;
-        font-size: 14px;
+        font-size: 15px;
         font-weight: 700;
         color: var(--muted);
         width: 56px;
@@ -985,56 +891,26 @@
         letter-spacing: 1px;
     }
 
-    .phase-bar-wrap {
+    .week-bar-wrap {
         flex: 1;
-        height: 5px;
+        height: 6px;
         background: var(--border);
         border-radius: 3px;
     }
 
-    .phase-bar {
+    .week-bar {
         height: 100%;
         border-radius: 3px;
         background: linear-gradient(90deg, var(--lime-dim), var(--lime));
-        transition: width 1.2s ease;
+        transition: width 1s ease;
     }
 
-    .phase-label {
+    .week-label {
         font-size: 11px;
         color: var(--muted);
-        width: 100px;
+        width: 80px;
         text-align: right;
         flex-shrink: 0;
-    }
-
-    .ai-note {
-        display: flex;
-        gap: 12px;
-        align-items: flex-start;
-        background: rgba(180, 240, 58, .05);
-        border: 1px solid rgba(180, 240, 58, .15);
-        border-radius: 14px;
-        padding: 16px;
-        margin-bottom: 20px;
-    }
-
-    .ai-note-av {
-        width: 32px;
-        height: 32px;
-        background: var(--lime);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 15px;
-        flex-shrink: 0;
-    }
-
-    .ai-note-text {
-        font-size: 13px;
-        color: var(--off);
-        line-height: 1.7;
-        font-weight: 300;
     }
 
     .result-actions {
@@ -1048,15 +924,14 @@
         color: var(--black);
         border: none;
         border-radius: 12px;
-        padding: 15px;
+        padding: 16px;
         font-family: 'Barlow Condensed', sans-serif;
         font-weight: 700;
-        font-size: 18px;
+        font-size: 19px;
         letter-spacing: 2px;
         text-transform: uppercase;
         cursor: pointer;
-        transition: all .2s;
-        box-shadow: 0 0 40px rgba(180, 240, 58, .25);
+        transition: all 0.2s;
     }
 
     .btn-start:hover {
@@ -1069,43 +944,86 @@
         border: 1px solid var(--border2);
         color: var(--muted);
         border-radius: 12px;
-        padding: 15px 18px;
+        padding: 16px 20px;
         font-size: 20px;
         cursor: pointer;
-        transition: all .2s;
     }
 
-    .btn-regen:hover {
-        border-color: var(--muted);
-    }/* ── DOTS LOADER ── */
-    .dots span {
-        display: inline-block;
-        width: 6px;
-        height: 6px;
-        background: var(--lime);
-        border-radius: 50%;
-        margin: 0 2px;
-        animation: db 1.2s ease infinite;
+    .success-screen {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
     }
 
-    .dots span:nth-child(2) {
-        animation-delay: .2s;
+    .success-icon {
+        font-size: 80px;
+        animation: bounceIn 0.6s ease;
     }
 
-    .dots span:nth-child(3) {
-        animation-delay: .4s;
-    }
-
-    @keyframes db {
-        0%, 100% {
-            transform: translateY(0);
-            opacity:.4
+    @keyframes bounceIn {
+        0% {
+            transform:scale(0)
         }
 
-        50% {
-            transform: translateY(-6px);
-            opacity: 1
+        70% {
+            transform:scale(1.1)
         }
+
+        100% {
+            transform: scale(1)
+        }
+    }
+
+    .success-title {
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: 48px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        line-height: 1;
+    }
+
+    .success-sub {
+        font-size: 15px;
+        color: var(--muted);
+        font-weight: 300;
+        line-height: 1.7;
+        max-width: 480px;
+    }
+
+    .success-cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        width: 100%;
+        margin-top: 8px;
+    }
+
+    .success-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 18px;
+        text-align: center;
+    }
+
+    .success-card-icon {
+        font-size: 28px;
+        margin-bottom: 8px;
+    }
+
+    .success-card-title {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .success-card-desc {
+        font-size: 11px;
+        color: var(--muted);
+        font-weight: 300;
     }
 
     ::-webkit-scrollbar {
@@ -1123,11 +1041,10 @@
     </style>
 </head>
 <body>
-
     <div class="bg-glow bg1"></div>
     <div class="bg-glow bg2"></div>
-    <div class="pb-wrap">
-        <div class="pb-fill" id="pbFill" style="width:0%"></div>
+    <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
     </div>
 
     <header>
@@ -1136,87 +1053,83 @@
             <span>.fit</span>
         </a>
         <div class="step-dots" id="stepDots"></div>
-        <button class="skip-btn" id="skipBtn" onclick="skipToEnd()">Pomiń →</button>
+        <div class="path-badge" id="pathBadge"></div>
     </header>
 
     <div class="onboarding" id="onboarding">
 
-        <!-- ══ SCREEN 0 — WYBÓR ŚCIEŻKI ══ -->
-        <div class="screen active" id="s0">
+        <!-- ══ KROK 0 — WYBÓR ŚCIEŻKI ══ -->
+        <div class="screen active" id="screen-0">
             <div class="step-label">
                 <div class="step-label-line"></div>
-                <span>Krok 1 — wybierz swoją ścieżkę</span>
+                Pierwszy krok
             </div>
             <h1 class="question">
-                Jak trafiłeś
+                Kim
                 <br>
-                <span style="color:var(--lime)">na chceByc.fit?</span>
+                <span style="color:var(--lime)">jesteś?</span>
             </h1>
-            <p class="question-sub">Dopasujemy rejestrację do Twojej sytuacji — każda ścieżka jest inna.</p>
+            <p class="question-sub">Każda osoba dostaje inny, dopasowany proces rejestracji.</p>
             <div class="path-cards">
-                <div class="path-card path-pro" onclick="selectPath('pro',this)">
-                    <div class="path-badge" style="background:var(--lime-ghost);color:var(--lime);border:1px solid rgba(180,240,58,.2)">AI Plan</div>
+                <div class="path-card" onclick="selectPath('pro',this)">
                     <span class="path-emoji">🏃</span>
-                    <div class="path-name">Szukam planu dla siebie</div>
-                    <div class="path-desc">Chcę trenować, potrzebuję planu i AI coacha który mnie poprowadzi</div>
+                    <div class="path-name">Ćwiczę sam</div>
+                    <div class="path-desc">Szukam planu treningowego, AI coachA i motywacji do działania</div>
+                    <div class="path-tag">✨ AI buduje plan</div>
                 </div>
-                <div class="path-card path-trainer" onclick="selectPath('trainer',this)">
-                    <div class="path-badge" style="background:var(--cyan-ghost);color:var(--cyan);border:1px solid rgba(58,240,212,.2)">Coach</div>
+                <div class="path-card" onclick="selectPath('trainer',this)">
                     <span class="path-emoji">🎓</span>
                     <div class="path-name">Jestem trenerem</div>
-                    <div class="path-desc">Chcę zarządzać klientami i sprzedawać plany na marketplace</div>
+                    <div class="path-desc">Chcę prowadzić klientów na platformie i sprzedawać plany w marketplace</div>
+                    <div class="path-tag">💼 Panel trenera</div>
                 </div>
-                <div class="path-card path-invited" onclick="selectPath('invited',this)">
-                    <div class="path-badge" style="background:var(--gold-ghost);color:var(--gold);border:1px solid rgba(240,200,64,.2)">Zaproszenie</div>
-                    <span class="path-emoji">📨</span>
-                    <div class="path-name">Mam zaproszenie od trenera</div>
-                    <div class="path-desc">Mój trener wysłał mi link lub kod dostępu do platformy</div>
+                <div class="path-card" onclick="selectPath('invited',this)">
+                    <span class="path-emoji">📩</span>
+                    <div class="path-name">Mam zaproszenie</div>
+                    <div class="path-desc">Mój trener wysłał mi link do rejestracji na tej platformie</div>
+                    <div class="path-tag">🔗 Kod zaproszenia</div>
                 </div>
             </div>
             <div class="nav-row">
-                <button class="btn-next" id="next-s0" disabled onclick="goPath()">Dalej →</button>
+                <button class="btn-next" id="next-0" disabled onclick="startPath()">Dalej →</button>
             </div>
         </div>
 
-        <!-- ══════════════════════════════════════════
-               ŚCIEŻKA A — KLIENT PRO (quiz AI)
-          ══════════════════════════════════════════ -->
-
-        <!-- PRO S1 — CEL -->
-        <div class="screen" id="pro-s1">
+        <!-- ══ ŚCIEŻKA A — KLIENT PRO ══ -->
+        <div class="screen" id="pro-1">
             <div class="step-label">
                 <div class="step-label-line"></div>
-                <span>Krok 2 z 8 — cel</span>
+                Krok 1 z 7 · Plan Pro
             </div>
             <h1 class="question">
                 Jaki masz
                 <br>
                 <span style="color:var(--lime)">cel?</span>
             </h1>
-            <p class="question-sub">Wybierz główny priorytet. Możesz zmienić w każdej chwili.</p>
+            <p class="question-sub">Wybierz główny priorytet. Możesz go zmienić w dowolnym momencie.</p>
             <div class="options">
-                <div class="option" onclick="pick(this,'goal','muscle')">
+                <div class="option" onclick="soloSelect(this,'goal','muscle')">
                     <span class="option-icon">💪</span>
                     <div class="option-text">
                         Masa mięśniowa
                         <span>Budowanie sylwetki</span>
                     </div>
                 </div>
-                <div class="option" onclick="pick(this,'goal','strength')">
+                <div class="option" onclick="soloSelect(this,'goal','strength')">
                     <span class="option-icon">🏋️</span>
                     <div class="option-text">
                         Siła
                         <span>Wyniki na siłowni</span>
                     </div>
                 </div>
-                <div class="option" onclick="pick(this,'goal','fat')">
+                <div class="option" onclick="soloSelect(this,'goal','fat')">
                     <span class="option-icon">🔥</span>
                     <div class="option-text">
                         Redukcja tłuszczu
                         <span>Spalanie i rzeźba</span>
                     </div>
                 </div>
-                <div class="option" onclick="pick(this,'goal','fitness')">
+                <div class="option" onclick="soloSelect(this,'goal','fitness')">
                     <span class="option-icon">⚡</span>
                     <div class="option-text">
                         Ogólna sprawność
@@ -1225,16 +1138,15 @@
                 </div>
             </div>
             <div class="nav-row">
-                <button class="btn-back" onclick="back()">← Wróć</button>
-                <button class="btn-next" id="next-pro-s1" disabled onclick="next('pro-s2')">Dalej →</button>
+                <button class="btn-back" onclick="goBack()">← Wróć</button>
+                <button class="btn-next" id="next-pro-1" disabled onclick="goTo('pro-1','pro-2',2,7)">Dalej →</button>
             </div>
         </div>
 
-        <!-- PRO S2 — POZIOM -->
-        <div class="screen" id="pro-s2">
+        <div class="screen" id="pro-2">
             <div class="step-label">
                 <div class="step-label-line"></div>
-                <span>Krok 3 z 8 — poziom</span>
+                Krok 2 z 7 · Plan Pro
             </div>
             <h1 class="question">
                 Twój
@@ -1243,21 +1155,21 @@
             </h1>
             <p class="question-sub">Bądź szczery — plan dopasowany do poziomu daje 2× lepsze wyniki.</p>
             <div class="options" style="flex-direction:column">
-                <div class="option" style="min-width:100%" onclick="pick(this,'level','beginner')">
+                <div class="option" style="min-width:100%" onclick="soloSelect(this,'level','beginner')">
                     <span class="option-icon">🌱</span>
                     <div class="option-text">
                         Początkujący
                         <span>Ćwiczę mniej niż rok lub wracam po przerwie</span>
                     </div>
                 </div>
-                <div class="option" style="min-width:100%" onclick="pick(this,'level','intermediate')">
+                <div class="option" style="min-width:100%" onclick="soloSelect(this,'level','intermediate')">
                     <span class="option-icon">🔥</span>
                     <div class="option-text">
                         Średniozaawansowany
-                        <span>Ćwiczę regularnie od 1–3 lat, znam podstawy</span>
+                        <span>Ćwiczę regularnie od 1–3 lat</span>
                     </div>
                 </div>
-                <div class="option" style="min-width:100%" onclick="pick(this,'level','advanced')">
+                <div class="option" style="min-width:100%" onclick="soloSelect(this,'level','advanced')">
                     <span class="option-icon">⚡</span>
                     <div class="option-text">
                         Zaawansowany
@@ -1266,23 +1178,22 @@
                 </div>
             </div>
             <div class="nav-row">
-                <button class="btn-back" onclick="back()">← Wróć</button>
-                <button class="btn-next" id="next-pro-s2" disabled onclick="next('pro-s3')">Dalej →</button>
+                <button class="btn-back" onclick="goTo('pro-2','pro-1',1,7)">← Wróć</button>
+                <button class="btn-next" id="next-pro-2" disabled onclick="goTo('pro-2','pro-3',3,7)">Dalej →</button>
             </div>
         </div>
 
-        <!-- PRO S3 — DNI -->
-        <div class="screen" id="pro-s3">
+        <div class="screen" id="pro-3">
             <div class="step-label">
                 <div class="step-label-line"></div>
-                <span>Krok 4 z 8 — częstotliwość</span>
+                Krok 3 z 7 · Plan Pro
             </div>
             <h1 class="question">
                 Ile dni
                 <br>
                 <span style="color:var(--lime)">w tygodniu?</span>
             </h1>
-            <p class="question-sub">Ile razy realnie możesz trenować? Lepiej 3× i dowieźć niż 6× i rzucić.</p>
+            <p class="question-sub">Ile razy realnie możesz trenować? Lepiej 3× i dowieźć, niż 6× i rzucić.</p>
             <div class="slider-wrap">
                 <div class="slider-labels">
                     <span>1 dzień</span>
@@ -1295,16 +1206,15 @@
                 </div>
             </div>
             <div class="nav-row">
-                <button class="btn-back" onclick="back()">← Wróć</button>
-                <button class="btn-next" onclick="next('pro-s4')">Dalej →</button>
+                <button class="btn-back" onclick="goTo('pro-3','pro-2',2,7)">← Wróć</button>
+                <button class="btn-next" onclick="goTo('pro-3','pro-4',4,7)">Dalej →</button>
             </div>
         </div>
 
-        <!-- PRO S4 — SPRZĘT -->
-        <div class="screen" id="pro-s4">
+        <div class="screen" id="pro-4">
             <div class="step-label">
                 <div class="step-label-line"></div>
-                <span>Krok 5 z 8 — sprzęt</span>
+                Krok 4 z 7 · Plan Pro
             </div>
             <h1 class="question">
                 Masz
@@ -1313,36 +1223,35 @@
             </h1>
             <p class="question-sub">Zaznacz wszystko do czego masz dostęp. Możesz wybrać kilka.</p>
             <div class="tags">
-                <div class="tag" onclick="tog(this,'equipment','gym')">🏋️ Siłownia</div>
-                <div class="tag" onclick="tog(this,'equipment','barbell')">🔩 Sztanga + talerze</div>
-                <div class="tag" onclick="tog(this,'equipment','dumbbells')">💪 Hantle</div>
-                <div class="tag" onclick="tog(this,'equipment','pullbar')">📊 Drążek</div>
-                <div class="tag" onclick="tog(this,'equipment','bands')">🔴 Gumy oporowe</div>
-                <div class="tag" onclick="tog(this,'equipment','rings')">⭕ Ringsy/TRX</div>
-                <div class="tag" onclick="tog(this,'equipment','cardio')">🏃 Sprzęt cardio</div>
-                <div class="tag selected" onclick="tog(this,'equipment','none')">🏠 Bez sprzętu (dom)</div>
+                <div class="tag" onclick="toggleTag(this,'equipment','gym')">🏋️ Siłownia</div>
+                <div class="tag" onclick="toggleTag(this,'equipment','barbell')">🔩 Sztanga + talerze</div>
+                <div class="tag" onclick="toggleTag(this,'equipment','dumbbells')">💪 Hantle</div>
+                <div class="tag" onclick="toggleTag(this,'equipment','pullbar')">📊 Drążek</div>
+                <div class="tag" onclick="toggleTag(this,'equipment','bands')">🔴 Gumy oporowe</div>
+                <div class="tag" onclick="toggleTag(this,'equipment','rings')">⭕ Ringsy/TRX</div>
+                <div class="tag" onclick="toggleTag(this,'equipment','cardio')">🏃 Sprzęt cardio</div>
+                <div class="tag selected" onclick="toggleTag(this,'equipment','none')">🏠 Bez sprzętu (dom)</div>
             </div>
             <div class="nav-row">
-                <button class="btn-back" onclick="back()">← Wróć</button>
-                <button class="btn-next" onclick="next('pro-s5')">Dalej →</button>
+                <button class="btn-back" onclick="goTo('pro-4','pro-3',3,7)">← Wróć</button>
+                <button class="btn-next" onclick="goTo('pro-4','pro-5',5,7)">Dalej →</button>
             </div>
         </div>
 
-        <!-- PRO S5 — DANE CIAŁA -->
-        <div class="screen" id="pro-s5">
+        <div class="screen" id="pro-5">
             <div class="step-label">
                 <div class="step-label-line"></div>
-                <span>Krok 6 z 8 — dane</span>
+                Krok 5 z 7 · Plan Pro
             </div>
             <h1 class="question">
                 Twoje
                 <br>
                 <span style="color:var(--lime)">dane?</span>
             </h1>
-            <p class="question-sub">Do obliczenia intensywności i zapotrzebowania. Widoczne tylko dla Ciebie.</p>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+            <p class="question-sub">Potrzebne do obliczenia intensywności treningu. Widoczne tylko dla Ciebie.</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px">
                 <div>
-                    <label class="form-label">Wzrost</label>
+                    <label class="input-label">Wzrost</label>
                     <div class="slider-wrap" style="margin-bottom:0">
                         <input type="range" class="slider" min="150" max="210" value="178" oninput="updateSlider(this,'height',0,'cm')" style="margin-bottom:8px">
                         <div class="slider-value" id="heightVal" style="font-size:28px">
@@ -1352,7 +1261,7 @@
                     </div>
                 </div>
                 <div>
-                    <label class="form-label">Waga</label>
+                    <label class="input-label">Waga</label>
                     <div class="slider-wrap" style="margin-bottom:0">
                         <input type="range" class="slider" min="40" max="150" value="75" oninput="updateSlider(this,'weight',0,'kg')" style="margin-bottom:8px">
                         <div class="slider-value" id="weightVal" style="font-size:28px">
@@ -1362,9 +1271,9 @@
                     </div>
                 </div>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px">
                 <div>
-                    <label class="form-label">Wiek</label>
+                    <label class="input-label">Wiek</label>
                     <div class="slider-wrap" style="margin-bottom:0">
                         <input type="range" class="slider" min="14" max="70" value="28" oninput="updateSlider(this,'age',0,'lat')">
                         <div class="slider-value" id="ageVal" style="font-size:28px">
@@ -1374,57 +1283,53 @@
                     </div>
                 </div>
                 <div>
-                    <label class="form-label">Płeć</label>
+                    <label class="input-label">Płeć</label>
                     <div style="display:flex;gap:8px;margin-top:8px">
-                        <div class="option selected" style="flex:1;justify-content:center;padding:12px" onclick="pick(this,'gender','male')">
+                        <div class="option selected" style="flex:1;justify-content:center;padding:12px" onclick="soloSelect(this,'gender','male')">
                             <span>♂ Mężczyzna</span>
                         </div>
-                        <div class="option" style="flex:1;justify-content:center;padding:12px" onclick="pick(this,'gender','female')">
+                        <div class="option" style="flex:1;justify-content:center;padding:12px" onclick="soloSelect(this,'gender','female')">
                             <span>♀ Kobieta</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="nav-row">
-                <button class="btn-back" onclick="back()">← Wróć</button>
-                <button class="btn-next" onclick="next('pro-s6')">Dalej →</button>
+                <button class="btn-back" onclick="goTo('pro-5','pro-4',4,7)">← Wróć</button>
+                <button class="btn-next" onclick="goTo('pro-5','pro-6',6,7)">Dalej →</button>
             </div>
         </div>
 
-        <!-- PRO S6 — KONTUZJE -->
-        <div class="screen" id="pro-s6">
+        <div class="screen" id="pro-6">
             <div class="step-label">
                 <div class="step-label-line"></div>
-                <span>Krok 7 z 8 — kontuzje</span>
+                Krok 6 z 7 · Plan Pro
             </div>
             <h1 class="question">
                 Jakieś
                 <br>
                 <span style="color:var(--lime)">kontuzje?</span>
             </h1>
-            <p class="question-sub">AI uniknie ćwiczeń które mogą Ci zaszkodzić. Pomiń jeśli brak.</p>
+            <p class="question-sub">AI uniknie ćwiczeń które mogą Ci zaszkodzić. Zaznacz co dotyczy lub pomiń.</p>
             <div class="tags">
-                <div class="tag" onclick="tog(this,'injury','back')">🔴 Kręgosłup / plecy</div>
-                <div class="tag" onclick="tog(this,'injury','knee')">🔴 Kolano</div>
-                <div class="tag" onclick="tog(this,'injury','shoulder')">🔴 Bark</div>
-                <div class="tag" onclick="tog(this,'injury','elbow')">🔴 Łokieć / nadgarstek</div>
-                <div class="tag" onclick="tog(this,'injury','hip')">🔴 Biodro</div>
-                <div class="tag" onclick="tog(this,'injury','neck')">🔴 Szyja / kark</div>
+                <div class="tag" onclick="toggleTag(this,'injury','back')">🔴 Kręgosłup / plecy</div>
+                <div class="tag" onclick="toggleTag(this,'injury','knee')">🔴 Kolano</div>
+                <div class="tag" onclick="toggleTag(this,'injury','shoulder')">🔴 Bark</div>
+                <div class="tag" onclick="toggleTag(this,'injury','elbow')">🔴 Łokieć / nadgarstek</div>
+                <div class="tag" onclick="toggleTag(this,'injury','hip')">🔴 Biodro</div>
+                <div class="tag" onclick="toggleTag(this,'injury','neck')">🔴 Szyja / kark</div>
             </div>
-            <div style="margin-bottom:32px">
-                <input class="form-input" type="text" id="injuryNote" placeholder="Inne uwagi dla AI coacha...">
-            </div>
+            <input class="text-input" type="text" placeholder="Inne uwagi dla AI coachA..." id="injuryNote" style="margin-top:8px">
             <div class="nav-row">
-                <button class="btn-back" onclick="back()">← Wróć</button>
-                <button class="btn-next" onclick="next('pro-s7')">Dalej →</button>
+                <button class="btn-back" onclick="goTo('pro-6','pro-5',5,7)">← Wróć</button>
+                <button class="btn-next" onclick="goTo('pro-6','pro-7',7,7)">Dalej →</button>
             </div>
         </div>
 
-        <!-- PRO S7 — IMIĘ -->
-        <div class="screen" id="pro-s7">
+        <div class="screen" id="pro-7">
             <div class="step-label">
                 <div class="step-label-line"></div>
-                <span>Krok 8 z 8 — imię</span>
+                Krok 7 z 7 · Plan Pro
             </div>
             <h1 class="question">
                 Jak mam
@@ -1433,16 +1338,15 @@
                 <br>
                 <span style="color:var(--lime)">mówić?</span>
             </h1>
-            <p class="question-sub">Imię pojawi się w profilu i rozmowach z AI coachem.</p>
-            <input class="form-input" type="text" id="proName" placeholder="Twoje imię..." oninput="checkName('proName','next-pro-s7')" style="margin-bottom:32px">
+            <p class="question-sub">Imię pojawi się w Twoim profilu i w rozmowach z AI coachem.</p>
+            <input class="text-input" type="text" id="proNameInput" placeholder="Twoje imię..." oninput="checkProName()">
             <div class="nav-row">
-                <button class="btn-back" onclick="back()">← Wróć</button>
-                <button class="btn-next" id="next-pro-s7" disabled onclick="startGenerate()">🚀 Generuj mój plan →</button>
+                <button class="btn-back" onclick="goTo('pro-7','pro-6',6,7)">← Wróć</button>
+                <button class="btn-next" id="next-pro-7" disabled onclick="startGenerating()">🚀 Generuj mój plan →</button>
             </div>
         </div>
 
-        <!-- PRO S8 — GENEROWANIE -->
-        <div class="screen" id="pro-s8">
+        <div class="screen" id="pro-generating">
             <div class="generating">
                 <div class="gen-orb">🤖</div>
                 <h2 class="gen-title">
@@ -1450,25 +1354,25 @@
                     <br>
                     <span style="color:var(--lime)">Twój plan</span>
                 </h2>
-                <p class="gen-sub">Analizuję Twoje dane i buduję spersonalizowany plan...</p>
+                <p class="gen-sub">Analizuję Twoje dane i buduję spersonalizowany plan treningowy...</p>
                 <div class="gen-steps">
-                    <div class="gen-step" id="gs0">
+                    <div class="gen-step" id="gs-0">
                         <div class="gen-step-icon">🧬</div>
                         Analizuję Twój profil i cele
                     </div>
-                    <div class="gen-step" id="gs1">
+                    <div class="gen-step" id="gs-1">
                         <div class="gen-step-icon">🏋️</div>
                         Dobieramy ćwiczenia do sprzętu
                     </div>
-                    <div class="gen-step" id="gs2">
+                    <div class="gen-step" id="gs-2">
                         <div class="gen-step-icon">📅</div>
                         Buduję harmonogram tygodniowy
                     </div>
-                    <div class="gen-step" id="gs3">
+                    <div class="gen-step" id="gs-3">
                         <div class="gen-step-icon">⚡</div>
                         Obliczam intensywność i progresję
                     </div>
-                    <div class="gen-step" id="gs4">
+                    <div class="gen-step" id="gs-4">
                         <div class="gen-step-icon">✨</div>
                         Finalizuję plan i wskazówki AI
                     </div>
@@ -1481,40 +1385,35 @@
             </div>
         </div>
 
-        <!-- PRO S9 — WYNIK -->
-        <div class="screen" id="pro-s9">
+        <div class="screen" id="pro-result">
             <div class="result-scroll">
                 <div class="result-screen">
-                    <div class="result-header">
+                    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:28px">
                         <div>
                             <div class="step-label">
                                 <div class="step-label-line"></div>
-                                <span>Twój plan gotowy ✓</span>
+                                Twój plan gotowy ✓
                             </div>
-                            <h2 class="plan-title-big" id="planTitle">
-                                Ładowanie
-                                <br>
-                                <span>planu...</span>
-                            </h2>
+                            <h2 class="plan-title" id="planTitle">Ładowanie...</h2>
                         </div>
-                        <div class="result-badge" id="planBadge">AI Generated</div>
+                        <div id="planBadge" style="background:rgba(180,240,58,0.1);border:1px solid rgba(180,240,58,0.25);border-radius:12px;padding:6px 14px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--lime);white-space:nowrap;margin-top:8px">AI Generated</div>
                     </div>
                     <div class="plan-summary">
                         <div class="plan-stat">
-                            <div class="plan-stat-val" id="rWeeks">12</div>
-                            <div class="plan-stat-lbl">Tygodni</div>
+                            <div class="plan-stat-val" id="statWeeks">12</div>
+                            <div class="plan-stat-label">Tygodni</div>
                         </div>
                         <div class="plan-stat">
-                            <div class="plan-stat-val" id="rDays">3×</div>
-                            <div class="plan-stat-lbl">Dni/tydz.</div>
+                            <div class="plan-stat-val" id="statDays">3</div>
+                            <div class="plan-stat-label">Dni/tydz.</div>
                         </div>
                         <div class="plan-stat">
-                            <div class="plan-stat-val" id="rLevel">⚡</div>
-                            <div class="plan-stat-lbl">Poziom</div>
+                            <div class="plan-stat-val" id="statLevel">⚡</div>
+                            <div class="plan-stat-label">Poziom</div>
                         </div>
                         <div class="plan-stat">
-                            <div class="plan-stat-val" id="rGoal">💪</div>
-                            <div class="plan-stat-lbl">Cel</div>
+                            <div class="plan-stat-val" id="statGoal">💪</div>
+                            <div class="plan-stat-label">Cel</div>
                         </div>
                     </div>
                     <div class="plan-desc" id="planDesc">
@@ -1524,344 +1423,251 @@
                             <span></span>
                         </div>
                     </div>
-                    <div class="phase-list" id="phaseList"></div>
-                    <div class="ai-note" id="aiNote" style="display:none">
-                        <div class="ai-note-av">🤖</div>
-                        <div class="ai-note-text" id="aiNoteText"></div>
-                    </div>
+                    <div class="plan-weeks" id="planWeeks"></div>
                     <div class="result-actions">
-                        <button class="btn-start" onclick="alert('Witaj na platformie! 🚀')">🚀 Zaczynam — do aplikacji →</button>
-                        <button class="btn-regen" onclick="regenPlan()" title="Wygeneruj inny plan">🔄</button>
+                        <button class="btn-start" onclick="window.location.href='chcebyc-dashboard.html'">🚀 Zaczynam — do aplikacji →</button>
+                        <button class="btn-regen" onclick="goTo('pro-result','pro-7',7,7)" title="Zmień odpowiedzi">🔄</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ══════════════════════════════════════════
-               ŚCIEŻKA B — TRENER
-          ══════════════════════════════════════════ -->
-
-        <!-- TRAINER S1 — DANE -->
-        <div class="screen" id="trainer-s1">
+        <!-- ══ ŚCIEŻKA B — TRENER ══ -->
+        <div class="screen" id="trainer-1">
             <div class="step-label">
                 <div class="step-label-line"></div>
-                <span style="color:var(--cyan)">Krok 2 z 3 — dane trenera</span>
+                Krok 1 z 3 · Rejestracja Trenera
             </div>
-            <h1 class="question" style="color:var(--cyan)">
-                Opowiedz
+            <h1 class="question">
+                Twoje
                 <br>
-                o sobie
+                <span style="color:var(--cyan)">dane?</span>
             </h1>
-            <p class="question-sub">Kilka informacji które pojawią się na Twoim profilu publicznym w marketplace.</p>
-            <div class="form-row" style="margin-bottom:14px">
-                <div class="form-group" style="margin-bottom:0">
-                    <label class="form-label">Imię i nazwisko</label>
-                    <input class="form-input" type="text" id="trainerName" placeholder="np. Marcin Kowalski" oninput="checkTrainerForm()">
+            <p class="question-sub">Podstawowe informacje widoczne na Twoim profilu publicznym w marketplace.</p>
+            <div class="form-row">
+                <div>
+                    <label class="input-label">Imię i nazwisko</label>
+                    <input class="text-input" type="text" id="trainerName" placeholder="np. Marcin Kowalski" oninput="checkTrainer1()" style="margin-bottom:0">
                 </div>
-                <div class="form-group" style="margin-bottom:0">
-                    <label class="form-label">Specjalizacja</label>
-                    <input class="form-input" type="text" id="trainerSpec" placeholder="np. Siła, Hipertrofia, HIIT" oninput="checkTrainerForm()">
-                </div>
-            </div>
-            <div class="form-row" style="margin-bottom:14px">
-                <div class="form-group" style="margin-bottom:0">
-                    <label class="form-label">Lata doświadczenia</label>
-                    <input class="form-input" type="number" id="trainerExp" placeholder="np. 5" min="0" max="50" oninput="checkTrainerForm()">
-                </div>
-                <div class="form-group" style="margin-bottom:0">
-                    <label class="form-label">Certyfikat (opcjonalnie)</label>
-                    <input class="form-input" type="text" id="trainerCert" placeholder="np. NASM-CPT, ACE">
+                <div>
+                    <label class="input-label">Miasto</label>
+                    <input class="text-input" type="text" id="trainerCity" placeholder="np. Warszawa" style="margin-bottom:0">
                 </div>
             </div>
-            <div class="form-group" style="margin-bottom:32px">
-                <label class="form-label">Krótkie bio (pojawi się w marketplace)</label>
-                <textarea class="form-input" id="trainerBio" placeholder="Opisz siebie w 2-3 zdaniach — czym się zajmujesz, komu pomagasz, jakie masz wyniki..."></textarea>
+            <label class="input-label" style="margin-top:14px">Specjalizacja</label>
+            <div class="tags" style="margin-bottom:20px">
+                <div class="tag" onclick="toggleTag(this,'trainerSpec','strength')">💪 Siła</div>
+                <div class="tag" onclick="toggleTag(this,'trainerSpec','hypertrophy')">🏋️ Hipertrofia</div>
+                <div class="tag" onclick="toggleTag(this,'trainerSpec','fat')">🔥 Redukcja</div>
+                <div class="tag" onclick="toggleTag(this,'trainerSpec','cardio')">🏃 Cardio/HIIT</div>
+                <div class="tag" onclick="toggleTag(this,'trainerSpec','calisthenics')">🤸 Kalistenika</div>
+                <div class="tag" onclick="toggleTag(this,'trainerSpec','mobility')">🧘 Mobilność</div>
             </div>
             <div class="nav-row">
-                <button class="btn-back" onclick="back()">← Wróć</button>
-                <button class="btn-next cyan" id="next-trainer-s1" disabled onclick="next('trainer-s2')">Dalej →</button>
+                <button class="btn-back" onclick="goBack()">← Wróć</button>
+                <button class="btn-next" id="next-trainer-1" disabled onclick="goTo('trainer-1','trainer-2',2,3)">Dalej →</button>
             </div>
         </div>
 
-        <!-- TRAINER S2 — PLAN -->
-        <div class="screen" id="trainer-s2">
+        <div class="screen" id="trainer-2">
             <div class="step-label">
                 <div class="step-label-line"></div>
-                <span style="color:var(--cyan)">Krok 3 z 3 — wybierz plan</span>
+                Krok 2 z 3 · Rejestracja Trenera
             </div>
-            <h1 class="question" style="color:var(--cyan)">
+            <h1 class="question">
+                Twoje
+                <br>
+                <span style="color:var(--cyan)">doświadczenie?</span>
+            </h1>
+            <p class="question-sub">Te informacje budują zaufanie klientów w marketplace.</p>
+            <label class="input-label">Lat doświadczenia</label>
+            <div class="slider-wrap">
+                <div class="slider-labels">
+                    <span>1 rok</span>
+                    <span>20+ lat</span>
+                </div>
+                <input type="range" class="slider" min="1" max="20" value="3" oninput="updateSlider(this,'trainerExp',0,'lat')">
+                <div class="slider-value" id="trainerExpVal">
+                    3 
+                    <span>lat</span>
+                </div>
+            </div>
+            <label class="input-label" style="margin-top:4px">
+                Certyfikaty 
+                <span style="color:var(--muted);font-weight:300">(opcjonalne)</span>
+            </label>
+            <input class="text-input" type="text" placeholder="np. Instruktor fitness PZKFiTS..." id="trainerCerts">
+            <label class="input-label">Krótkie bio</label>
+            <textarea class="text-input" placeholder="Napisz kilka zdań o sobie — co Cię wyróżnia, z kim pracujesz..." id="trainerBio" style="min-height:80px;resize:vertical"></textarea>
+            <div class="nav-row">
+                <button class="btn-back" onclick="goTo('trainer-2','trainer-1',1,3)">← Wróć</button>
+                <button class="btn-next" onclick="goTo('trainer-2','trainer-3',3,3)">Dalej →</button>
+            </div>
+        </div>
+
+        <div class="screen" id="trainer-3">
+            <div class="step-label">
+                <div class="step-label-line"></div>
+                Krok 3 z 3 · Rejestracja Trenera
+            </div>
+            <h1 class="question">
                 Wybierz
                 <br>
-                swój plan
+                <span style="color:var(--cyan)">plan?</span>
             </h1>
-            <p class="question-sub">Możesz zmienić plan w każdej chwili. Każdy plan zaczyna się od 14 dni za darmo.</p>
-            <div class="plan-cards">
-                <div class="plan-card" onclick="pickPlan(this,'starter')">
-                    <div class="plan-price">
+            <p class="question-sub">Możesz zmienić plan w każdej chwili. 14 dni za darmo — bez karty.</p>
+            <div class="pricing-cards">
+                <div class="pricing-card" id="plan-starter" onclick="selectPlan('starter',this)">
+                    <div class="pricing-plan">Starter</div>
+                    <div class="pricing-price" id="pp-starter">
                         49 
                         <sup>zł</sup>
                     </div>
-                    <div class="plan-period">/ miesiąc</div>
-                    <div class="plan-name">Starter</div>
-                    <div class="plan-limit">Do 5 klientów</div>
-                    <ul class="plan-features">
+                    <div class="pricing-period">/ miesiąc</div>
+                    <ul class="pricing-features">
+                        <li>Do 5 klientów</li>
                         <li>Kreator planów</li>
+                        <li>Customowy quiz ✓</li>
                         <li>Panel klientów</li>
-                        <li>Chat z klientami</li>
-                        <li style="opacity:.4;">
-                            <span style="color:var(--muted)">✗</span>
-                             Marketplace
-                        </li>
+                        <li class="off">Marketplace</li>
+                        <li class="off">Analityki</li>
                     </ul>
                 </div>
-                <div class="plan-card" onclick="pickPlan(this,'pro')" style="border-color:rgba(58,240,212,.3)">
-                    <div class="plan-card-badge">Polecany</div>
-                    <div class="plan-price">
+                <div class="pricing-card selected" id="plan-pro" onclick="selectPlan('pro',this)">
+                    <div style="font-size:9px;background:var(--lime);color:var(--black);border-radius:4px;padding:2px 7px;font-weight:700;letter-spacing:1px;text-transform:uppercase;display:inline-block;margin-bottom:6px">Polecany</div>
+                    <div class="pricing-plan">Pro</div>
+                    <div class="pricing-price sel" id="pp-pro">
                         149 
                         <sup>zł</sup>
                     </div>
-                    <div class="plan-period">/ miesiąc</div>
-                    <div class="plan-name">Pro</div>
-                    <div class="plan-limit">Do 20 klientów</div>
-                    <ul class="plan-features">
+                    <div class="pricing-period">/ miesiąc</div>
+                    <ul class="pricing-features">
+                        <li>Do 20 klientów</li>
                         <li>Kreator planów</li>
-                        <li>Panel klientów</li>
-                        <li>Chat z klientami</li>
+                        <li>Customowy quiz ✓</li>
                         <li>Marketplace (80%)</li>
+                        <li>Panel klientów</li>
+                        <li>Analityki sprzedaży</li>
                     </ul>
                 </div>
-                <div class="plan-card" onclick="pickPlan(this,'business')">
-                    <div class="plan-price">
+                <div class="pricing-card" id="plan-business" onclick="selectPlan('business',this)">
+                    <div class="pricing-plan">Business</div>
+                    <div class="pricing-price" id="pp-business">
                         299 
                         <sup>zł</sup>
                     </div>
-                    <div class="plan-period">/ miesiąc</div>
-                    <div class="plan-name">Business</div>
-                    <div class="plan-limit">Nielimitowani klienci</div>
-                    <ul class="plan-features">
+                    <div class="pricing-period">/ miesiąc</div>
+                    <ul class="pricing-features">
+                        <li>Nielimitowani klienci</li>
                         <li>Wszystko z Pro</li>
-                        <li>Analityki biznesowe</li>
                         <li>Dedykowany opiekun</li>
                         <li>White-label profil</li>
+                        <li>API integracje</li>
+                        <li>Priorytetowe wsparcie</li>
                     </ul>
                 </div>
             </div>
             <div class="nav-row">
-                <button class="btn-back" onclick="back()">← Wróć</button>
-                <button class="btn-next cyan" id="next-trainer-s2" disabled onclick="finishTrainer()">🎓 Zakończ rejestrację →</button>
+                <button class="btn-back" onclick="goTo('trainer-3','trainer-2',2,3)">← Wróć</button>
+                <button class="btn-next" onclick="finishTrainer()">🎓 Zakończ rejestrację →</button>
             </div>
         </div>
 
-        <!-- TRAINER S3 — SUKCES -->
-        <div class="screen" id="trainer-s3">
-            <div style="text-align:center;padding:20px 0">
-                <div style="font-size:72px;margin-bottom:20px">🎉</div>
-                <h2 class="question" style="color:var(--cyan);text-align:center;margin-bottom:14px">
+        <div class="screen" id="trainer-success">
+            <div class="success-screen">
+                <div class="success-icon">🎓</div>
+                <div class="success-title">
                     Witaj
                     <br>
-                    na pokładzie!
-                </h2>
-                <p style="font-size:15px;color:var(--muted);line-height:1.7;font-weight:300;margin-bottom:32px;max-width:480px;margin-left:auto;margin-right:auto">Twoje konto trenera jest gotowe. Następny krok — zaproś pierwszego klienta i skonfiguruj swój quiz onboardingowy.</p>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:480px;margin:0 auto 32px">
-                    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center">
-                        <div style="font-size:28px;margin-bottom:8px">📋</div>
-                        <div style="font-size:13px;font-weight:600;margin-bottom:4px">Stwórz swój quiz</div>
-                        <div style="font-size:11px;color:var(--muted)">Ułóż pytania pod swoich klientów</div>
+                    <span style="color:var(--cyan)" id="trainerWelcomeName">Trenerze</span>
+                    !
+                </div>
+                <div class="success-sub">Twoje konto trenera jest gotowe. Możesz teraz zapraszać klientów, tworzyć plany i konfigurować własny quiz onboardingowy.</div>
+                <div class="success-cards">
+                    <div class="success-card">
+                        <div class="success-card-icon">📋</div>
+                        <div class="success-card-title">Stwórz pierwszy plan</div>
+                        <div class="success-card-desc">Kreator planów z AI asystentem</div>
                     </div>
-                    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center">
-                        <div style="font-size:28px;margin-bottom:8px">📨</div>
-                        <div style="font-size:13px;font-weight:600;margin-bottom:4px">Zaproś klienta</div>
-                        <div style="font-size:11px;color:var(--muted)">Wyślij link z kodem dostępu</div>
+                    <div class="success-card">
+                        <div class="success-card-icon">🧩</div>
+                        <div class="success-card-title">Skonfiguruj quiz</div>
+                        <div class="success-card-desc">Dostosuj pytania do swoich klientów</div>
+                    </div>
+                    <div class="success-card">
+                        <div class="success-card-icon">📩</div>
+                        <div class="success-card-title">Zaproś klientów</div>
+                        <div class="success-card-desc">Wyślij link zaproszenia</div>
                     </div>
                 </div>
-                <button class="btn-next cyan" onclick="alert('Przejście do panelu trenera! 🎓')">Przejdź do panelu trenera →</button>
+                <button class="btn-next" style="margin-top:8px;width:100%" onclick="window.location.href='chcebyc-coach.html'">→ Przejdź do panelu trenera</button>
             </div>
         </div>
 
-        <!-- ══════════════════════════════════════════
-               ŚCIEŻKA C — KLIENT ZAPROSZONY
-          ══════════════════════════════════════════ -->
-
-        <!-- INVITED S1 — KOD ZAPROSZENIA -->
-        <div class="screen" id="invited-s1">
+        <!-- ══ ŚCIEŻKA C — KLIENT ZAPROSZONY ══ -->
+        <div class="screen" id="invited-1">
             <div class="step-label">
                 <div class="step-label-line"></div>
-                <span style="color:var(--gold)">Krok 2 z 4 — kod zaproszenia</span>
+                Zaproszenie od trenera
             </div>
-            <h1 class="question">
-                Wpisz swój
-                <br>
-                <span style="color:var(--gold)">kod dostępu</span>
-            </h1>
-            <p class="question-sub">Trener wysłał Ci unikalny link lub 6-cyfrowy kod. Możesz też kliknąć bezpośrednio w link z wiadomości.</p>
-            <div style="margin-bottom:20px">
-                <label class="form-label">Kod zaproszenia</label>
-                <input class="form-input" type="text" id="inviteCode" placeholder="np. MK-4821" oninput="checkInviteCode()" style="font-size:20px;font-weight:700;letter-spacing:4px;text-align:center;text-transform:uppercase">
+            <div class="invite-hero">
+                <div class="invite-av" id="inviteAv">MK</div>
+                <div style="font-size:13px;color:var(--muted);margin-bottom:6px">Twój trener zaprasza Cię na platformę</div>
+                <div class="invite-trainer-name" id="inviteTrainerName">Marcin Kowalski</div>
+                <div style="font-size:12px;color:var(--muted);margin-top:4px" id="inviteTrainerSpec">Siła · Hipertrofia · Siłownia</div>
+                <div style="font-size:14px;color:var(--off);line-height:1.7;font-weight:300;margin-top:14px">"Cześć! Zapraszam Cię na chceByc.fit — będziemy tu prowadzić Twoje treningi i śledzić postępy. Zajmie Ci to 2 minuty."</div>
             </div>
-            <div id="inviteConfirm" style="display:none">
-                <div class="invite-card">
-                    <div class="trainer-av-big">MK</div>
-                    <div class="invite-info">
-                        <div class="invite-from">Zaproszenie od trenera</div>
-                        <div class="invite-trainer-name">Marcin Kowalski</div>
-                        <div class="invite-trainer-spec">Siła · Hipertrofia · Siłownia ✓ Zweryfikowany</div>
-                    </div>
-                </div>
-            </div>
+            <label class="input-label">Kod zaproszenia</label>
+            <input class="text-input" type="text" id="inviteCode" placeholder="np. MARCIN-2024" oninput="checkInvite()" style="text-transform:uppercase;letter-spacing:2px">
             <div class="nav-row">
-                <button class="btn-back" onclick="back()">← Wróć</button>
-                <button class="btn-next gold" id="next-invited-s1" disabled onclick="next('invited-s2')">Potwierdź →</button>
+                <button class="btn-back" onclick="goBack()">← Wróć</button>
+                <button class="btn-next" id="next-invited-1" disabled onclick="startInvitedQuiz()">Potwierdź →</button>
             </div>
         </div>
 
-        <!-- INVITED S2 — DANE PODSTAWOWE -->
-        <div class="screen" id="invited-s2">
+        <div class="screen" id="invited-quiz">
             <div class="step-label">
                 <div class="step-label-line"></div>
-                <span style="color:var(--gold)">Krok 3 z 4 — Twoje dane</span>
+                Konsultacja wstępna · 
+                <span id="invQuizLabel">Krok 1</span>
             </div>
-            <h1 class="question">
-                Podstawowe
-                <br>
-                <span style="color:var(--gold)">informacje</span>
-            </h1>
-            <p class="question-sub">Tylko to co potrzebuje Twój trener żeby dobrze przygotować plan.</p>
-            <div class="form-row" style="margin-bottom:14px">
-                <div class="form-group" style="margin-bottom:0">
-                    <label class="form-label">Imię</label>
-                    <input class="form-input" type="text" id="clientName" placeholder="Twoje imię" oninput="checkClientForm()">
-                </div>
-                <div class="form-group" style="margin-bottom:0">
-                    <label class="form-label">Wiek</label>
-                    <input class="form-input" type="number" id="clientAge" placeholder="np. 28" min="14" max="80" oninput="checkClientForm()">
-                </div>
-            </div>
-            <div class="form-row" style="margin-bottom:32px">
-                <div class="form-group" style="margin-bottom:0">
-                    <label class="form-label">Waga (kg)</label>
-                    <input class="form-input" type="number" id="clientWeight" placeholder="np. 75" oninput="checkClientForm()">
-                </div>
-                <div class="form-group" style="margin-bottom:0">
-                    <label class="form-label">Wzrost (cm)</label>
-                    <input class="form-input" type="number" id="clientHeight" placeholder="np. 178" oninput="checkClientForm()">
-                </div>
-            </div>
+            <h1 class="question" id="invQuizQ">Twoje imię?</h1>
+            <p class="question-sub" id="invQuizSub">Trener będzie się do Ciebie zwracać po imieniu.</p>
+            <div id="invQuizArea" style="transition:opacity 0.25s,transform 0.25s"></div>
             <div class="nav-row">
-                <button class="btn-back" onclick="back()">← Wróć</button>
-                <button class="btn-next gold" id="next-invited-s2" disabled onclick="next('invited-s3')">Dalej →</button>
+                <button class="btn-back" onclick="prevInvQ()">← Wróć</button>
+                <button class="btn-next" id="next-inv-quiz" disabled onclick="nextInvQ()">Dalej →</button>
             </div>
         </div>
 
-        <!-- INVITED S3 — QUIZ TRENERA (customowy) -->
-        <div class="screen" id="invited-s3">
-            <div class="step-label">
-                <div class="step-label-line"></div>
-                <span style="color:var(--gold)">Krok 4 z 4 — konsultacja</span>
-            </div>
-            <h1 class="question">
-                Kilka pytań
-                <br>
-                <span style="color:var(--gold)">od trenera</span>
-            </h1>
-            <p class="question-sub">Marcin Kowalski przygotował te pytania żeby jak najlepiej dopasować plan do Ciebie.</p>
-
-            <!-- Przykładowe pytania z customowego quizu trenera -->
-            <div class="custom-q">
-                <div class="custom-q-label">Pytanie 1 z 4</div>
-                <div class="custom-q-text">Jaki jest Twój główny cel treningowy?</div>
-                <div class="options">
-                    <div class="option" onclick="pick(this,'q1','mass')">
-                        <span class="option-icon">💪</span>
-                        <div class="option-text">Budowa masy</div>
-                    </div>
-                    <div class="option" onclick="pick(this,'q1','strength')">
-                        <span class="option-icon">🏋️</span>
-                        <div class="option-text">Siła</div>
-                    </div>
-                    <div class="option" onclick="pick(this,'q1','cut')">
-                        <span class="option-icon">🔥</span>
-                        <div class="option-text">Redukcja</div>
-                    </div>
-                    <div class="option" onclick="pick(this,'q1','health')">
-                        <span class="option-icon">❤️</span>
-                        <div class="option-text">Zdrowie</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="custom-q">
-                <div class="custom-q-label">Pytanie 2 z 4</div>
-                <div class="custom-q-text">Czy masz jakieś kontuzje lub dolegliwości które trener powinien znać?</div>
-                <div class="tags">
-                    <div class="tag" onclick="tog(this,'cq2','back')">Kręgosłup</div>
-                    <div class="tag" onclick="tog(this,'cq2','knee')">Kolano</div>
-                    <div class="tag" onclick="tog(this,'cq2','shoulder')">Bark</div>
-                    <div class="tag" onclick="tog(this,'cq2','none')">Brak kontuzji</div>
-                </div>
-            </div>
-
-            <div class="custom-q">
-                <div class="custom-q-label">Pytanie 3 z 4</div>
-                <div class="custom-q-text">Ile razy w tygodniu możesz trenować?</div>
-                <div class="options">
-                    <div class="option" onclick="pick(this,'cq3','2')">
-                        <span class="option-icon">2×</span>
-                        <div class="option-text">2 razy</div>
-                    </div>
-                    <div class="option" onclick="pick(this,'cq3','3')">
-                        <span class="option-icon">3×</span>
-                        <div class="option-text">3 razy</div>
-                    </div>
-                    <div class="option" onclick="pick(this,'cq3','4')">
-                        <span class="option-icon">4×</span>
-                        <div class="option-text">4 razy</div>
-                    </div>
-                    <div class="option" onclick="pick(this,'cq3','5')">
-                        <span class="option-icon">5×</span>
-                        <div class="option-text">5+ razy</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="custom-q" style="margin-bottom:32px">
-                <div class="custom-q-label">Pytanie 4 z 4 — otwarte</div>
-                <div class="custom-q-text">Czy jest coś jeszcze co chcesz mi powiedzieć przed pierwszym treningiem?</div>
-                <textarea class="form-input" placeholder="Napisz cokolwiek — motywacja, obawy, poprzednie doświadczenia..."></textarea>
-            </div>
-
-            <div class="nav-row">
-                <button class="btn-back" onclick="back()">← Wróć</button>
-                <button class="btn-next gold" onclick="finishInvited()">✓ Wyślij odpowiedzi →</button>
-            </div>
-        </div>
-
-        <!-- INVITED S4 — SUKCES -->
-        <div class="screen" id="invited-s4">
-            <div style="text-align:center;padding:20px 0">
-                <div style="font-size:72px;margin-bottom:20px">🤝</div>
-                <h2 class="question" style="color:var(--gold);text-align:center;margin-bottom:14px">
-                    Gotowe!
+        <div class="screen" id="invited-success">
+            <div class="success-screen">
+                <div class="success-icon">🎉</div>
+                <div class="success-title">
+                    Gotowe,
                     <br>
-                    Trener czeka.
-                </h2>
-                <p style="font-size:15px;color:var(--muted);line-height:1.7;font-weight:300;margin-bottom:24px;max-width:460px;margin-left:auto;margin-right:auto">Twoje odpowiedzi trafiły do Marcina Kowalskiego. Trener przygotuje Twój plan i wróci do Ciebie wkrótce. Dostaniesz powiadomienie gdy plan będzie gotowy.</p>
-                <div class="invite-card" style="max-width:440px;margin:0 auto 28px;justify-content:center">
-                    <div class="trainer-av-big">MK</div>
-                    <div class="invite-info">
-                        <div class="invite-from">Twój trener</div>
-                        <div class="invite-trainer-name">Marcin Kowalski</div>
-                        <div style="font-size:12px;color:var(--lime)">✓ Odpowiedzi otrzymane · przygotowuje plan</div>
+                    <span style="color:var(--lime)" id="invitedName">Atleto</span>
+                    !
+                </div>
+                <div class="success-sub" id="invitedSuccessSub">Twój trener otrzymał Twoje odpowiedzi i przygotuje spersonalizowany plan.</div>
+                <div class="success-cards">
+                    <div class="success-card">
+                        <div class="success-card-icon">📋</div>
+                        <div class="success-card-title">Plan od trenera</div>
+                        <div class="success-card-desc">Trener przygotuje go specjalnie dla Ciebie</div>
+                    </div>
+                    <div class="success-card">
+                        <div class="success-card-icon">💬</div>
+                        <div class="success-card-title">Kontakt z trenerem</div>
+                        <div class="success-card-desc">Chat bezpośrednio w aplikacji</div>
+                    </div>
+                    <div class="success-card">
+                        <div class="success-card-icon">🤖</div>
+                        <div class="success-card-title">Chcesz AI Coacha?</div>
+                        <div class="success-card-desc">Pro za 49 zł/mies — możesz dodać kiedy chcesz</div>
                     </div>
                 </div>
-                <p style="font-size:13px;color:var(--muted);margin-bottom:24px">
-                    Chcesz mieć też 
-                    <strong style="color:var(--white)">AI Coacha</strong>
-                     do dyspozycji 24/7? Dostępny w planie Pro za 49 zł/mies.
-                </p>
-                <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-                    <button class="btn-next gold" onclick="alert('Przejście do dashboardu!')">Wejdź do aplikacji →</button>
-                    <button class="btn-back" onclick="alert('Upgrade do Pro!')">🤖 Dodaj AI Coach</button>
-                </div>
+                <button class="btn-next" style="margin-top:8px;width:100%" onclick="window.location.href='chcebyc-dashboard.html'">→ Przejdź do swojego profilu</button>
             </div>
         </div>
 
@@ -1870,7 +1676,7 @@
 
     <script>
     // ── STATE ──────────────────────────────────────────────────────
-    const state = {
+    const S = {
         path: null,
         goal: null,
         level: null,
@@ -1880,297 +1686,259 @@
         height: 178,
         weight: 75,
         age: 28,
-        injuries: [],
+        injury: [],
         injuryNote: '',
-        name: ''
+        proName: '',
+        trainerName: '',
+        trainerCity: '',
+        trainerSpec: [],
+        trainerExp: 3,
+        trainerCerts: '',
+        trainerBio: '',
+        trainerPlan: 'pro',
+        inviteCode: '',
+        invitedAnswers: {}
     };
 
-    // Historia ekranów (do przycisku wróć)
-    const history = [];
-    let currentScreen = 's0';
+    // Quiz dla klienta zaproszonego (trener może edytować w swoim panelu)
+    const QUIZ = [
+    {
+        id: 'name',
+        type: 'text',
+        q: 'Twoje imię?',
+        sub: 'Trener będzie się do Ciebie zwracać po imieniu.',
+        ph: 'np. Marek',
+        req: true
+    },
+    {
+        id: 'age',
+        type: 'slider',
+        q: 'Ile masz lat?',
+        sub: 'Potrzebne do dostosowania intensywności.',
+        min: 14,
+        max: 70,
+        val: 25,
+        unit: 'lat',
+        req: true
+    },
+    {
+        id: 'weight',
+        type: 'slider',
+        q: 'Jaka jest Twoja waga?',
+        sub: 'Przybliżona — do obliczenia intensywności.',
+        min: 40,
+        max: 150,
+        val: 75,
+        unit: 'kg',
+        req: true
+    },
+    {
+        id: 'goal',
+        type: 'options',
+        q: 'Jaki jest Twój cel?',
+        sub: 'Trener dostosuje plan do Twojego priorytetu.',
+        opts: [{
+            icon: '💪',
+            label: 'Masa mięśniowa',
+            v: 'muscle'
+        }, {
+            icon: '🔥',
+            label: 'Redukcja tłuszczu',
+            v: 'fat'
+        }, {
+            icon: '🏋️',
+            label: 'Siła',
+            v: 'strength'
+        }, {
+            icon: '⚡',
+            label: 'Ogólna sprawność',
+            v: 'fitness'
+        }],
+        req: true
+    },
+    {
+        id: 'exp',
+        type: 'options',
+        q: 'Jak długo ćwiczysz?',
+        sub: 'Pomoże trenerowi dobrać odpowiedni poziom.',
+        opts: [{
+            icon: '🌱',
+            label: 'Zaczynam od zera',
+            v: 'beginner'
+        }, {
+            icon: '🔥',
+            label: 'Ćwiczę 1–3 lata',
+            v: 'intermediate'
+        }, {
+            icon: '⚡',
+            label: 'Ćwiczę 3+ lat',
+            v: 'advanced'
+        }],
+        req: true
+    },
+    {
+        id: 'inj',
+        type: 'tags',
+        q: 'Masz jakieś kontuzje?',
+        sub: 'Trener uniknie ćwiczeń które mogą Ci zaszkodzić. Możesz pominąć.',
+        tags: [{
+            l: '🔴 Kręgosłup',
+            v: 'back'
+        }, {
+            l: '🔴 Kolano',
+            v: 'knee'
+        }, {
+            l: '🔴 Bark',
+            v: 'shoulder'
+        }, {
+            l: '🔴 Łokieć',
+            v: 'elbow'
+        }],
+        req: false
+    },
+    {
+        id: 'note',
+        type: 'text',
+        q: 'Coś jeszcze dla trenera?',
+        sub: 'Cele, historia, preferencje — napisz cokolwiek.',
+        ph: 'Opcjonalna wiadomość...',
+        req: false
+    },
+    ];
 
-    // ── NAWIGACJA ──────────────────────────────────────────────────
-    function showScreen(id, direction='forward') {
-        const cur = document.getElementById(currentScreen);
-        const next = document.getElementById(id);
-        if (!next)
-            return;
+    let invQIdx = 0;
 
-        if (direction === 'forward') {
-            history.push(currentScreen);
-            cur.className = 'screen exit';
-            setTimeout(() => {
-                cur.className = 'screen';
-            }, 450);
-        } else {
-            cur.className = 'screen';
-            cur.style.transform = 'translateX(60px)';
-            setTimeout(() => {
-                cur.style.transform = '';
-            }, 10);
-        }
-
-        next.className = 'screen active';
-        currentScreen = id;
-        updateProgress();
+    // ── NAVIGATION ────────────────────────────────────────────────
+    function goTo(from, to, step, total) {
+        const f = document.getElementById(from);
+        f.className = 'screen exit';
+        setTimeout(() => f.className = 'screen', 500);
+        setTimeout(() => {
+            const t = document.getElementById(to);
+            t.className = 'screen active';
+        }, 50);
+        updateProgress(step, total);
+        renderDots(total, step - 1);
     }
 
-    function next(id) {
-        showScreen(id, 'forward');
+    function goBack() {
+        document.querySelectorAll('.screen.active').forEach(s => {
+            s.className = 'screen exit';
+            setTimeout(() => s.className = 'screen', 500);
+        });
+        document.getElementById('pathBadge').classList.remove('show');
+        renderDots(0);
+        updateProgress(0, 0);
+        setTimeout(() => {
+            document.getElementById('screen-0').className = 'screen active';
+        }, 50);
     }
 
-    function back() {
-        if (history.length === 0)
-            return;
-        const prev = history.pop();
-        const cur = document.getElementById(currentScreen);
-        cur.className = 'screen';
-        const prevEl = document.getElementById(prev);
-        prevEl.className = 'screen active';
-        currentScreen = prev;
-        updateProgress();
-    }
-
-    function updateProgress() {
-        const progressMap = {
-            's0': 0,
-            'pro-s1': 14,
-            'pro-s2': 28,
-            'pro-s3': 42,
-            'pro-s4': 56,
-            'pro-s5': 70,
-            'pro-s6': 84,
-            'pro-s7': 90,
-            'pro-s8': 95,
-            'pro-s9': 100,
-            'trainer-s1': 50,
-            'trainer-s2': 80,
-            'trainer-s3': 100,
-            'invited-s1': 30,
-            'invited-s2': 55,
-            'invited-s3': 80,
-            'invited-s4': 100,
-        };
-        const pct = progressMap[currentScreen] || 0;
-        document.getElementById('pbFill').style.width = pct + '%';
-
-        // Dots
-        const dotsEl = document.getElementById('stepDots');
-        dotsEl.innerHTML = '';
-        let total = 8,
-            current = 0;
-        if (state.path === 'trainer') {
-            total = 3;
-        }
-        else if (state.path === 'invited') {
-            total = 4;
-        }
-        for (let i = 0; i < total; i++) {
-            const d = document.createElement('div');
-            const stepPct = ((i + 1) / total) * 100;
-            d.className = 'dot' + (stepPct <= pct ? (stepPct === pct ? ' active' : ' done') : '');
-            dotsEl.appendChild(d);
-        }
-
-        // Skip btn
-        document.getElementById('skipBtn').style.display = pct >= 100 ? 'none' : '';
-    }
-
-    function skipToEnd() {
-        if (state.path === 'trainer')
-            showScreen('trainer-s2', 'forward');
-        else if (state.path === 'invited')
-            showScreen('invited-s3', 'forward');
-        else
-            showScreen('pro-s7', 'forward');
-    }
-
-    // ── WYBÓR ŚCIEŻKI ─────────────────────────────────────────────
+    // ── PATH SELECT ───────────────────────────────────────────────
     function selectPath(path, el) {
-        const isSelected = el.classList.contains('selected');
+        const already = el.classList.contains('selected');
         document.querySelectorAll('.path-card').forEach(c => c.classList.remove('selected'));
-        if (isSelected) {
-            state.path = null;
-            document.getElementById('next-s0').disabled = true;
-            // Reset button color
-            const btn = document.getElementById('next-s0');
-            btn.className = 'btn-next';
-        } else {
-            state.path = path;
+        if (already) {
+            S.path = null;
+            document.getElementById('next-0').disabled = true;
+        }
+        else {
+            S.path = path;
             el.classList.add('selected');
-            const btn = document.getElementById('next-s0');
-            btn.disabled = false;
-            btn.className = 'btn-next' + (path === 'trainer' ? ' cyan' : path === 'invited' ? ' gold' : '');
+            document.getElementById('next-0').disabled = false;
         }
     }
 
-    function goPath() {
-        if (!state.path)
-            return;
-        if (state.path === 'pro')
-            next('pro-s1');
-        else if (state.path === 'trainer')
-            next('trainer-s1');
-        else if (state.path === 'invited')
-            next('invited-s1');
+    function startPath() {
+        const badge = document.getElementById('pathBadge');
+        if (S.path === 'pro') {
+            badge.textContent = '🏃 Plan Pro';
+            badge.style.cssText = 'background:rgba(180,240,58,.08);color:var(--lime);border:1px solid rgba(180,240,58,.2)';
+            badge.classList.add('show');
+            renderDots(7);
+            goTo('screen-0', 'pro-1', 1, 7);
+        } else if (S.path === 'trainer') {
+            badge.textContent = '🎓 Trener';
+            badge.style.cssText = 'background:rgba(58,240,212,.08);color:var(--cyan);border:1px solid rgba(58,240,212,.2)';
+            badge.classList.add('show');
+            renderDots(3);
+            goTo('screen-0', 'trainer-1', 1, 3);
+        } else if (S.path === 'invited') {
+            badge.classList.remove('show');
+            renderDots(0);
+            goTo('screen-0', 'invited-1', 0, 0);
+        }
     }
 
-    // ── KAFELKI (single select z odznaczaniem) ────────────────────
-    function pick(el, key, value) {
-        const isSelected = el.classList.contains('selected');
-        const container = el.closest('.options, .custom-q');
-        if (container)
-            container.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
-
-        if (isSelected) {
-            state[key] = null;
-            // Zablokuj przycisk Dalej jeśli to wymagane pole
-            const nextBtn = document.getElementById('next-' + currentScreen);
-            if (nextBtn)
-                nextBtn.disabled = true;
+    // ── PRO PATH ──────────────────────────────────────────────────
+    function soloSelect(el, key, value) {
+        const already = el.classList.contains('selected');
+        const container = el.closest('.options') || el.parentElement;
+        container.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+        if (already) {
+            S[key] = null;
+            // Znajdź odpowiedni przycisk Next i zablokuj
+            const nb = el.closest('.screen')?.querySelector('.btn-next');
+            if (nb && nb.id && nb.id.startsWith('next-pro'))
+                nb.disabled = true;
         } else {
-            state[key] = value;
+            S[key] = value;
             el.classList.add('selected');
-            const nextBtn = document.getElementById('next-' + currentScreen);
-            if (nextBtn)
-                nextBtn.disabled = false;
+            const nb = el.closest('.screen')?.querySelector('.btn-next');
+            if (nb && nb.id && nb.id.startsWith('next-pro'))
+                nb.disabled = false;
         }
     }
 
-    // ── TAGI (multiselect) ────────────────────────────────────────
-    function tog(el, key, value) {
-        el.classList.toggle('selected');
-        if (!state[key])
-            state[key] = [];
-        if (el.classList.contains('selected')) {
-            if (!state[key].includes(value))
-                state[key].push(value);
-        } else {
-            state[key] = state[key].filter(v => v !== value);
-        }
+    function checkProName() {
+        const v = document.getElementById('proNameInput').value.trim();
+        S.proName = v;
+        document.getElementById('next-pro-7').disabled = v.length < 2;
     }
 
-    // ── SUWAKI ────────────────────────────────────────────────────
-    function updateSlider(el, key, dec, unit) {
-        const val = parseFloat(el.value);
-        state[key] = val;
-        const pct = ((val - el.min) / (el.max - el.min)) * 100;
-        el.style.background = `linear-gradient(90deg,var(--lime-dim) ${pct}%,var(--border2) ${pct}%)`;
-        const disp = document.getElementById(key + 'Val');
-        if (disp)
-            disp.innerHTML = val.toFixed(dec) + ' <span>' + unit + '</span>';
-    }
-
-    // ── WALIDACJE ─────────────────────────────────────────────────
-    function checkName(inputId, btnId) {
-        const v = document.getElementById(inputId)?.value.trim();
-        state.name = v;
-        const btn = document.getElementById(btnId);
-        if (btn)
-            btn.disabled = !v || v.length < 2;
-    }
-
-    function checkTrainerForm() {
-        const name = document.getElementById('trainerName')?.value.trim();
-        const spec = document.getElementById('trainerSpec')?.value.trim();
-        const exp = document.getElementById('trainerExp')?.value.trim();
-        document.getElementById('next-trainer-s1').disabled = !(name && spec && exp);
-    }
-
-    function checkClientForm() {
-        const name = document.getElementById('clientName')?.value.trim();
-        const age = document.getElementById('clientAge')?.value.trim();
-        const weight = document.getElementById('clientWeight')?.value.trim();
-        const height = document.getElementById('clientHeight')?.value.trim();
-        document.getElementById('next-invited-s2').disabled = !(name && age && weight && height);
-    }
-
-    function checkInviteCode() {
-        const code = document.getElementById('inviteCode')?.value.trim();
-        const isValid = code.length >= 4;
-        document.getElementById('next-invited-s1').disabled = !isValid;
-        document.getElementById('inviteConfirm').style.display = isValid ? 'block' : 'none';
-    }
-
-    // ── PLAN TRENERA ──────────────────────────────────────────────
-    function pickPlan(el, plan) {
-        document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
-        el.classList.add('selected');
-        state.trainerPlan = plan;
-        document.getElementById('next-trainer-s2').disabled = false;
-    }
-
-    function finishTrainer() {
-        next('trainer-s3');
-    }
-    function finishInvited() {
-        next('invited-s4');
-    }
-
-    // ── GENEROWANIE PLANU AI ──────────────────────────────────────
-    async function startGenerate() {
-        state.injuryNote = document.getElementById('injuryNote')?.value || '';
-        state.name = document.getElementById('proName')?.value.trim() || '';
-        next('pro-s8');
-
-        const steps = ['gs0', 'gs1', 'gs2', 'gs3', 'gs4'];
+    async function startGenerating() {
+        S.injuryNote = document.getElementById('injuryNote')?.value || '';
+        goTo('pro-7', 'pro-generating', 8, 8);
+        const steps = ['gs-0', 'gs-1', 'gs-2', 'gs-3', 'gs-4'];
         for (let i = 0; i < steps.length; i++) {
-            await delay(i === 0 ? 300 : 700);
+            await wait(i === 0 ? 300 : 600);
             if (i > 0) {
                 document.getElementById(steps[i - 1]).className = 'gen-step done';
                 document.getElementById(steps[i - 1]).querySelector('.gen-step-icon').textContent = '✓';
             }
             document.getElementById(steps[i]).className = 'gen-step active';
         }
-
         let plan;
         try {
             plan = await callClaude();
+        } catch (e) {
+            plan = fallback();
         }
-        catch (e) {
-            plan = fallbackPlan();
-        }
-
-        await delay(600);
-        document.getElementById(steps[steps.length - 1]).className = 'gen-step done';
-        document.getElementById(steps[steps.length - 1]).querySelector('.gen-step-icon').textContent = '✓';
-        await delay(400);
+        await wait(500);
+        document.getElementById(steps[4]).className = 'gen-step done';
+        document.getElementById(steps[4]).querySelector('.gen-step-icon').textContent = '✓';
+        await wait(400);
         showResult(plan);
     }
 
     async function callClaude() {
-        const goalMap = {
+        const gm = {
             muscle: 'budowanie masy mięśniowej',
-            strength: 'zwiększenie siły',
+            strength: 'siła',
             fat: 'redukcja tłuszczu',
             fitness: 'ogólna sprawność'
         };
-        const levelMap = {
+        const lm = {
             beginner: 'początkujący',
             intermediate: 'średniozaawansowany',
             advanced: 'zaawansowany'
         };
-        const eqMap = {
-            gym: 'siłownia',
-            barbell: 'sztanga',
-            dumbbells: 'hantle',
-            pullbar: 'drążek',
-            bands: 'gumy',
-            rings: 'ringsy',
-            cardio: 'sprzęt cardio',
-            none: 'dom bez sprzętu'
-        };
-
-        const eq = (state.equipment || []).map(e => eqMap[e] || e).join(', ') || 'dom';
-        const inj = (state.injuries || []).join(', ') || 'brak';
-
-        const prompt = `Jesteś AI coachem fitness platformy chceByc.fit. Stwórz spersonalizowany plan treningowy w JSON.
-Dane: imię=${state.name}, cel=${goalMap[state.goal] || state.goal}, poziom=${levelMap[state.level] || state.level}, dni=${state.days}/tydz, sprzęt=${eq}, waga=${state.weight}kg, wzrost=${state.height}cm, wiek=${state.age}lat, płeć=${state.gender === 'male' ? 'mężczyzna' : 'kobieta'}, kontuzje=${inj}. ${state.injuryNote}
-Odpowiedz TYLKO JSON:
-{"planName":"nazwa max 4 słowa","planSubtitle":"podtytuł max 6 słów","weeks":liczba,"daysPerWeek":${
-        state.days},"levelLabel":"${levelMap[state.level] || 'średni'}","goalEmoji":"emoji","description":"3-4 zdania do ${state.name}, motywacyjne i konkretne","phases":[{"name":"nazwa","weeks":"1-X","focus":"opis","intensity":65},{"name":"nazwa","weeks":"X-Y","focus":"opis","intensity":80},{"name":"nazwa","weeks":"Y-Z","focus":"opis","intensity":92}],"coachNote":"1-2 zdania osobista wiadomość do ${state.name}"}`;
-
-        const resp = await fetch('https://api.anthropic.com/v1/messages', {
+        const prompt = `Jesteś AI coachem fitness chceByc.fit. Stwórz plan w JSON.
+Dane: imię:${S.proName}, cel:${gm[S.goal] || 'sprawność'}, poziom:${lm[S.level] || 'średni'}, dni:${S.days}, sprzęt:${(S.equipment || []).join(',')}, waga:${S.weight}kg, wzrost:${S.height}cm, wiek:${S.age}lat, płeć:${S.gender === 'male' ? 'mężczyzna' : 'kobieta'}, kontuzje:${(S.injury || []).join(',') || 'brak'}.
+Odpowiedz TYLKO JSON (bez markdown):
+{"planName":"Krótka nazwa","planSubtitle":"Podtytuł","weeks":12,"daysPerWeek":${
+        S.days},"level":"${lm[S.level] || 'średni'}","goalEmoji":"emoji","description":"3-4 zdania po polsku do ${S.proName}.","phases":[{"name":"Faza","weeks":"1-4","focus":"Opis","intensity":55}],"coachNote":"Jedna wiadomość do ${S.proName}."}`;
+        const r = await fetch('https://api.anthropic.com/v1/messages', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -2184,92 +1952,292 @@ Odpowiedz TYLKO JSON:
                 }]
             })
         });
-        const data = await resp.json();
-        const text = data.content?.map(b => b.text || '').join('') || '{}';
-        return JSON.parse(text.replace(/```json|```/g, '').trim());
+        const d = await r.json();
+        return JSON.parse((d.content?.map(b => b.text || '').join('') || '{}').replace(/```json|```/g, '').trim());
     }
 
-    function fallbackPlan() {
+    function fallback() {
         return {
             planName: "Twój Personalny Plan",
-            planSubtitle: "Stworzony specjalnie dla Ciebie",
+            planSubtitle: "Zbudowany specjalnie dla Ciebie",
             weeks: 12,
-            daysPerWeek: state.days,
-            levelLabel: state.level || 'średni',
-            goalEmoji: {
-                muscle: '💪',
-                strength: '🏋️',
-                fat: '🔥',
-                fitness: '⚡'
-            }[state.goal] || '💪',
-            description: `${state.name || 'Hej'}, Twój plan treningowy jest gotowy! Zbudowany pod Twój cel i możliwości. Trenuj ${state.days}× w tygodniu — trzymaj się harmonogramu, a wyniki przyjdą szybciej niż myślisz.`,
-            phases: [
-            {
+            daysPerWeek: S.days,
+            level: S.level || 'średni',
+            goalEmoji: '💪',
+            description: `${S.proName}, Twój plan jest gotowy! Trenujesz ${S.days} razy w tygodniu. Trzymaj się planu — wyniki przyjdą.`,
+            phases: [{
                 name: "Adaptacja",
                 weeks: "1-4",
-                focus: "Budowanie nawyku i techniki",
-                intensity: 58
-            },
-            {
+                focus: "Technika i nawyk",
+                intensity: 55
+            }, {
                 name: "Progresja",
                 weeks: "5-8",
                 focus: "Zwiększanie obciążeń",
-                intensity: 78
-            },
-            {
+                intensity: 75
+            }, {
                 name: "Szczyt",
                 weeks: "9-12",
                 focus: "Maksimum wyników",
-                intensity: 92
-            }
-            ],
-            coachNote: `${state.name || 'Atleto'}, zaufaj procesowi — każdy trening przybliża Cię do celu. Nie odpuszczaj! 💪`
+                intensity: 90
+            }],
+            coachNote: `${S.proName}, zaufaj procesowi! 🚀`
         };
     }
 
     function showResult(plan) {
-        next('pro-s9');
-        document.getElementById('planTitle').innerHTML = (plan.planName || 'Twój Plan').replace(/\s(\S+)$/, '<br><span style="color:var(--lime)">$1</span>');
-        document.getElementById('planBadge').textContent = '✓ AI Generated dla ' + (state.name || 'Ciebie');
-        document.getElementById('rWeeks').textContent = plan.weeks || 12;
-        document.getElementById('rDays').textContent = (plan.daysPerWeek || state.days) + '×';
-        document.getElementById('rLevel').textContent = {
+        goTo('pro-generating', 'pro-result', 8, 8);
+        const name = plan.planName || 'Twój Plan';
+        const parts = name.split(' ');
+        const first = parts[0];
+        const rest = parts.slice(1).join(' ');
+        document.getElementById('planTitle').innerHTML = first + (rest ? `<br><span style="color:var(--lime)">${rest}</span>` : '');
+        document.getElementById('planBadge').textContent = '✓ AI · ' + (S.proName || 'Ciebie');
+        document.getElementById('statWeeks').textContent = plan.weeks || 12;
+        document.getElementById('statDays').textContent = (plan.daysPerWeek || S.days) + 'x';
+        document.getElementById('statLevel').textContent = {
             beginner: '🌱',
             intermediate: '🔥',
             advanced: '⚡'
-        }[state.level] || '⚡';
-        document.getElementById('rGoal').textContent = plan.goalEmoji || '💪';
-        typewrite(document.getElementById('planDesc'), plan.description || '', 16);
-
-        const phaseList = document.getElementById('phaseList');
-        phaseList.innerHTML = '<div style="font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;font-weight:700">Fazy programu</div>';
-        (plan.phases || []).forEach(ph => {
-            const row = document.createElement('div');
-            row.className = 'phase-row';
-            row.innerHTML = `<div class="phase-weeks">${ph.weeks || ''}</div><div style="flex:1"><div style="font-size:13px;font-weight:600;margin-bottom:4px">${ph.name || ''}</div><div class="phase-bar-wrap"><div class="phase-bar" style="width:0%" data-w="${ph.intensity || 60}%"></div></div></div><div class="phase-label">${ph.focus || ''}</div>`;
-            phaseList.appendChild(row);
+        }[S.level] || '⚡';
+        document.getElementById('statGoal').textContent = plan.goalEmoji || '💪';
+        typewrite(document.getElementById('planDesc'), plan.description || '', 18);
+        const w = document.getElementById('planWeeks');
+        w.innerHTML = '<div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">Fazy programu</div>';
+        (plan.phases || []).forEach(p => {
+            const r = document.createElement('div');
+            r.className = 'week-row';
+            r.innerHTML = `<div class="week-num">${p.weeks || ''}</div><div style="flex:1"><div style="font-size:13px;font-weight:600;margin-bottom:4px">${p.name || ''}</div><div class="week-bar-wrap"><div class="week-bar" style="width:0%" data-w="${p.intensity || 60}%"></div></div></div><div class="week-label" style="font-size:10px;color:var(--muted)">${p.focus || ''}</div>`;
+            w.appendChild(r);
         });
-        setTimeout(() => document.querySelectorAll('.phase-bar[data-w]').forEach(b => {
-            b.style.width = b.dataset.w;
-        }), 200);
-
+        setTimeout(() => document.querySelectorAll('.week-bar[data-w]').forEach(b => b.style.width = b.dataset.w), 200);
         if (plan.coachNote) {
-            document.getElementById('aiNote').style.display = 'flex';
-            document.getElementById('aiNoteText').textContent = plan.coachNote;
+            const note = document.createElement('div');
+            note.style.cssText = 'background:rgba(180,240,58,.06);border:1px solid rgba(180,240,58,.15);border-radius:14px;padding:16px 20px;margin-bottom:20px;display:flex;gap:12px;';
+            note.innerHTML = `<div style="width:32px;height:32px;background:var(--lime);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🤖</div><div><div style="font-size:10px;color:var(--lime);letter-spacing:2px;text-transform:uppercase;font-weight:600;margin-bottom:5px">AI Coach</div><div style="font-size:14px;color:var(--off);line-height:1.6;font-weight:300">${plan.coachNote}</div></div>`;
+            w.appendChild(note);
         }
     }
 
-    function regenPlan() {
-        history.push('pro-s9');
-        document.getElementById('pro-s9').className = 'screen';
-        currentScreen = 'pro-s8';
-        document.getElementById('pro-s8').className = 'screen active';
-        for (let i = 0; i < 5; i++) {
-            const s = document.getElementById('gs' + i);
-            s.className = 'gen-step';
-            s.querySelector('.gen-step-icon').textContent = ['🧬', '🏋️', '📅', '⚡', '✨'][i];
+    // ── TRAINER PATH ──────────────────────────────────────────────
+    function checkTrainer1() {
+        S.trainerName = document.getElementById('trainerName').value.trim();
+        document.getElementById('next-trainer-1').disabled = S.trainerName.length < 2;
+    }
+
+    function selectPlan(plan, el) {
+        S.trainerPlan = plan;
+        ['starter', 'pro', 'business'].forEach(p => {
+            const card = document.getElementById('plan-' + p);
+            const price = document.getElementById('pp-' + p);
+            card.classList.remove('selected');
+            price.classList.remove('sel');
+        });
+        el.classList.add('selected');
+        document.getElementById('pp-' + plan).classList.add('sel');
+    }
+
+    function finishTrainer() {
+        S.trainerName = document.getElementById('trainerName')?.value || 'Trenerze';
+        document.getElementById('trainerWelcomeName').textContent = S.trainerName.split(' ')[0];
+        const f = document.getElementById('trainer-3');
+        f.className = 'screen exit';
+        setTimeout(() => f.className = 'screen', 500);
+        setTimeout(() => {
+            document.getElementById('trainer-success').className = 'screen active';
+        }, 50);
+        document.getElementById('stepDots').innerHTML = '';
+        document.getElementById('progressFill').style.width = '100%';
+    }
+
+    // ── INVITED PATH ──────────────────────────────────────────────
+    function checkInvite() {
+        const v = document.getElementById('inviteCode').value.trim();
+        S.inviteCode = v;
+        document.getElementById('next-invited-1').disabled = v.length < 3;
+    }
+
+    function startInvitedQuiz() {
+        invQIdx = 0;
+        goTo('invited-1', 'invited-quiz', 1, QUIZ.length);
+        renderInvQ();
+    }
+
+    function renderInvQ() {
+        const q = QUIZ[invQIdx];
+        document.getElementById('invQuizLabel').textContent = `Krok ${invQIdx + 1} z ${QUIZ.length}`;
+        document.getElementById('invQuizQ').textContent = q.q;
+        document.getElementById('invQuizSub').textContent = q.sub;
+        updateProgress(invQIdx + 1, QUIZ.length);
+        renderDots(QUIZ.length, invQIdx);
+
+        const area = document.getElementById('invQuizArea');
+        area.style.opacity = '0';
+        area.style.transform = 'translateX(20px)';
+        area.innerHTML = '';
+
+        const nb = document.getElementById('next-inv-quiz');
+        nb.disabled = q.req;
+
+        if (q.type === 'text') {
+            const inp = document.createElement('input');
+            inp.className = 'text-input';
+            inp.type = 'text';
+            inp.placeholder = q.ph || '';
+            if (S.invitedAnswers[q.id]) {
+                inp.value = S.invitedAnswers[q.id];
+                nb.disabled = false;
+            }
+            inp.oninput = () => {
+                S.invitedAnswers[q.id] = inp.value;
+                nb.disabled = q.req && inp.value.trim().length < 2;
+            };
+            area.appendChild(inp);
+
+        } else if (q.type === 'slider') {
+            const v = S.invitedAnswers[q.id] || q.val;
+            S.invitedAnswers[q.id] = v;
+            const wrap = document.createElement('div');
+            wrap.className = 'slider-wrap';
+            const pct = ((v - q.min) / (q.max - q.min)) * 100;
+            wrap.innerHTML = `<div class="slider-labels"><span>${q.min} ${q.unit}</span><span>${q.max} ${q.unit}</span></div>
+      <input type="range" class="slider" min="${q.min}" max="${q.max}" value="${v}" style="background:linear-gradient(90deg,var(--lime-dim) ${pct}%,var(--border2) ${pct}%)">
+      <div class="slider-value">${v} <span>${q.unit}</span></div>`;
+            const sl = wrap.querySelector('input'),
+                dv = wrap.querySelector('.slider-value');
+            sl.oninput = () => {
+                S.invitedAnswers[q.id] = sl.value;
+                dv.innerHTML = sl.value + ' <span>' + q.unit + '</span>';
+                const p = ((sl.value - q.min) / (q.max - q.min)) * 100;
+                sl.style.background = `linear-gradient(90deg,var(--lime-dim) ${p}%,var(--border2) ${p}%)`;
+            };
+            nb.disabled = false;
+            area.appendChild(wrap);
+
+        } else if (q.type === 'options') {
+            const opts = document.createElement('div');
+            opts.className = 'options';
+            opts.style.flexDirection = 'column';
+            q.opts.forEach(o => {
+                const div = document.createElement('div');
+                div.className = 'option' + (S.invitedAnswers[q.id] === o.v ? ' selected' : '');
+                div.style.minWidth = '100%';
+                div.innerHTML = `<span class="option-icon">${o.icon}</span><span>${o.label}</span>`;
+                div.onclick = () => {
+                    const was = div.classList.contains('selected');
+                    opts.querySelectorAll('.option').forEach(x => x.classList.remove('selected'));
+                    if (was) {
+                        delete S.invitedAnswers[q.id];
+                        nb.disabled = true;
+                    }
+                    else {
+                        div.classList.add('selected');
+                        S.invitedAnswers[q.id] = o.v;
+                        nb.disabled = false;
+                    }
+                };
+                opts.appendChild(div);
+            });
+            if (S.invitedAnswers[q.id])
+                nb.disabled = false;
+            area.appendChild(opts);
+
+        } else if (q.type === 'tags') {
+            if (!S.invitedAnswers[q.id])
+                S.invitedAnswers[q.id] = [];
+            const tw = document.createElement('div');
+            tw.className = 'tags';
+            q.tags.forEach(t => {
+                const div = document.createElement('div');
+                div.className = 'tag' + (S.invitedAnswers[q.id].includes(t.v) ? ' selected' : '');
+                div.textContent = t.l;
+                div.onclick = () => {
+                    div.classList.toggle('selected');
+                    const arr = S.invitedAnswers[q.id];
+                    if (div.classList.contains('selected'))
+                        arr.push(t.v);
+                    else
+                        S.invitedAnswers[q.id] = arr.filter(x => x !== t.v);
+                };
+                tw.appendChild(div);
+            });
+            nb.disabled = false;
+            area.appendChild(tw);
         }
-        startGenerate();
+
+        requestAnimationFrame(() => {
+            area.style.transition = 'opacity .25s,transform .25s';
+            area.style.opacity = '1';
+            area.style.transform = 'translateX(0)';
+        });
+    }
+
+    function nextInvQ() {
+        invQIdx++;
+        if (invQIdx >= QUIZ.length) {
+            finishInvited();
+            return;
+        }
+        renderInvQ();
+    }
+
+    function prevInvQ() {
+        if (invQIdx === 0) {
+            goTo('invited-quiz', 'invited-1', 0, 0);
+            return;
+        }
+        invQIdx--;
+        renderInvQ();
+    }
+
+    function finishInvited() {
+        const name = S.invitedAnswers['name'] || 'Atleto';
+        document.getElementById('invitedName').textContent = name;
+        document.getElementById('invitedSuccessSub').textContent = `Twój trener ${document.getElementById('inviteTrainerName').textContent} otrzymał Twoje odpowiedzi i przygotuje spersonalizowany plan. Dostaniesz powiadomienie gdy będzie gotowy.`;
+        const f = document.getElementById('invited-quiz');
+        f.className = 'screen exit';
+        setTimeout(() => f.className = 'screen', 500);
+        setTimeout(() => {
+            document.getElementById('invited-success').className = 'screen active';
+        }, 50);
+        document.getElementById('stepDots').innerHTML = '';
+        document.getElementById('progressFill').style.width = '100%';
+    }
+
+    // ── SHARED HELPERS ────────────────────────────────────────────
+    function toggleTag(el, key, value) {
+        el.classList.toggle('selected');
+        if (!S[key])
+            S[key] = [];
+        if (el.classList.contains('selected')) {
+            if (!S[key].includes(value))
+                S[key].push(value);
+        }
+        else
+            S[key] = S[key].filter(v => v !== value);
+    }
+
+    function updateSlider(el, key, dec, unit) {
+        S[key] = parseFloat(el.value);
+        const pct = ((el.value - el.min) / (el.max - el.min)) * 100;
+        el.style.background = `linear-gradient(90deg,var(--lime-dim) ${pct}%,var(--border2) ${pct}%)`;
+        const d = document.getElementById(key + 'Val');
+        if (d)
+            d.innerHTML = parseFloat(el.value).toFixed(dec) + ' <span>' + unit + '</span>';
+    }
+
+    function renderDots(total, current=0) {
+        const el = document.getElementById('stepDots');
+        el.innerHTML = '';
+        for (let i = 0; i < total; i++) {
+            const d = document.createElement('div');
+            d.className = 'dot' + (i === current ? ' active' : i < current ? ' done' : '');
+            el.appendChild(d);
+        }
+    }
+
+    function updateProgress(step, total) {
+        document.getElementById('progressFill').style.width = (total > 0 ? (step / total) * 100 : 0) + '%';
     }
 
     function typewrite(el, text, speed) {
@@ -2283,17 +2251,15 @@ Odpowiedz TYLKO JSON:
         }, speed);
     }
 
-    function delay(ms) {
+    function wait(ms) {
         return new Promise(r => setTimeout(r, ms));
     }
 
-    // Init sliders
+    // INIT SLIDERS
     document.querySelectorAll('.slider').forEach(sl => {
         const pct = ((sl.value - sl.min) / (sl.max - sl.min)) * 100;
         sl.style.background = `linear-gradient(90deg,var(--lime-dim) ${pct}%,var(--border2) ${pct}%)`;
     });
-
-    updateProgress();
     </script>
 </body>
 </html>
