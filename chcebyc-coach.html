@@ -1007,6 +1007,76 @@
 
     .modal-close:hover {
         color: var(--red);
+    }/* ── PUNKTY KONTROLNE ── */
+    .cp-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 12px;
+        background: var(--card2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        transition: border-color .2s;
+    }
+
+    .cp-item.cp-upcoming {
+        border-color: rgba(58, 240, 212, .18);
+        background: rgba(58, 240, 212, .03);
+    }
+
+    .cp-item.cp-done {
+        opacity: .65;
+    }
+
+    .cp-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .cp-icon-wrap {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        border: 1px solid;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+    .cp-title {
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 2px;
+    }
+
+    .cp-meta {
+        font-size: 10px;
+        color: var(--muted);
+    }/* checkpoint type picker */
+    .cp-type-btn {
+        background: var(--card2);
+        border: 1.5px solid var(--border2);
+        border-radius: 12px;
+        padding: 12px 14px;
+        cursor: pointer;
+        transition: all .2s;
+        text-align: center;
+    }
+
+    .cp-type-btn:hover {
+        border-color: var(--border3);
+    }
+
+    .cp-type-btn.active {
+        border-color: rgba(58, 240, 212, .4);
+        background: rgba(58, 240, 212, .06);
+        box-shadow: 0 0 16px rgba(58, 240, 212, .08);
     }/* ── AI HELPER ── */
     .ai-chip {
         display: flex;
@@ -2979,9 +3049,147 @@
                     <a href="chcebyc-calendar.html" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(240,200,64,.08);border:1px solid rgba(240,200,64,.2);color:var(--gold);border-radius:8px;padding:10px 18px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;text-decoration:none;transition:all .2s;">📅 Kalendarz</a>
                 </div>
             </div>
+
+            <!-- PUNKTY KONTROLNE -->
+            <div style="margin-bottom:16px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                    <div style="font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;">Punkty kontrolne</div>
+                    <button class="btn btn-ghost btn-sm" onclick="openModal('checkpointCreate')" style="font-size:11px;border-color:rgba(58,240,212,.25);color:var(--cyan);">+ Dodaj punkt</button>
+                </div>
+                <div id="checkpointList" style="display:flex;flex-direction:column;gap:7px;">
+                    <!-- upcoming -->
+                    <div class="cp-item cp-upcoming">
+                        <div class="cp-left">
+                            <div class="cp-icon-wrap" style="background:rgba(58,240,212,.1);border-color:rgba(58,240,212,.2);">📐</div>
+                            <div>
+                                <div class="cp-title">Pomiar obwodów</div>
+                                <div class="cp-meta">10 kwi 2026 · za 26 dni</div>
+                            </div>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:6px;">
+                            <span class="badge" style="background:rgba(58,240,212,.08);color:var(--cyan);border:1px solid rgba(58,240,212,.2);">Nadchodzący</span>
+                            <button onclick="event.stopPropagation();this.closest('.cp-item').remove()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:2px;">×</button>
+                        </div>
+                    </div>
+                    <!-- done -->
+                    <div class="cp-item cp-done">
+                        <div class="cp-left">
+                            <div class="cp-icon-wrap" style="background:rgba(74,240,144,.08);border-color:rgba(74,240,144,.2);">✅</div>
+                            <div>
+                                <div class="cp-title">
+                                    Pomiar obwodów 
+                                    <span style="color:var(--green);font-size:10px;margin-left:4px;">✓ wykonany</span>
+                                </div>
+                                <div class="cp-meta">10 mar 2026 · Waga -3.2 kg · Talia -4 cm</div>
+                            </div>
+                        </div>
+                        <span class="badge" style="background:var(--green-ghost);color:var(--green);">Ukończony</span>
+                    </div>
+                    <div class="cp-item cp-done">
+                        <div class="cp-left">
+                            <div class="cp-icon-wrap" style="background:rgba(74,240,144,.08);border-color:rgba(74,240,144,.2);">✅</div>
+                            <div>
+                                <div class="cp-title">
+                                    Przypomnienie o planie 
+                                    <span style="color:var(--green);font-size:10px;margin-left:4px;">✓ wykonany</span>
+                                </div>
+                                <div class="cp-meta">10 lut 2026 · Klient potwierdził zapoznanie z planem</div>
+                            </div>
+                        </div>
+                        <span class="badge" style="background:var(--green-ghost);color:var(--green);">Ukończony</span>
+                    </div>
+                </div>
+            </div>
+
             <div style="display:flex;gap:10px">
                 <button class="btn btn-cyan" style="flex:1" onclick="openReply('Piotr');closeModal('clientDetail')">💬 Wyślij wiadomość</button>
                 <button class="btn btn-outline" onclick="closeModal('clientDetail')">Zamknij</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ MODAL: TWORZENIE PUNKTU KONTROLNEGO ══ -->
+    <div class="modal-overlay" id="modal-checkpointCreate">
+        <div class="modal" style="width:520px;">
+            <button class="modal-close" onclick="closeModal('checkpointCreate')">×</button>
+            <div class="modal-title">
+                Nowy punkt 
+                <span style="color:var(--cyan)">kontrolny</span>
+            </div>
+
+            <!-- typ punktu -->
+            <div style="font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">Typ punktu kontrolnego</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;" id="cpTypeGrid">
+                <div class="cp-type-btn active" onclick="selectCpType(this,'pomiar')">
+                    <div style="font-size:20px;margin-bottom:4px;">📐</div>
+                    <div style="font-size:12px;font-weight:700;">Pomiar obwodów</div>
+                    <div style="font-size:10px;color:var(--muted);margin-top:2px;">Klient wpisuje wymiary</div>
+                </div>
+                <div class="cp-type-btn" onclick="selectCpType(this,'trening')">
+                    <div style="font-size:20px;margin-bottom:4px;">💪</div>
+                    <div style="font-size:12px;font-weight:700;">Zaległy trening</div>
+                    <div style="font-size:10px;color:var(--muted);margin-top:2px;">Przypomnienie + motywacja</div>
+                </div>
+                <div class="cp-type-btn" onclick="selectCpType(this,'zdjecie')">
+                    <div style="font-size:20px;margin-bottom:4px;">📸</div>
+                    <div style="font-size:12px;font-weight:700;">Zdjęcie sylwetki</div>
+                    <div style="font-size:10px;color:var(--muted);margin-top:2px;">Klient wysyła zdjęcie przed/po</div>
+                </div>
+                <div class="cp-type-btn" onclick="selectCpType(this,'zadanie')">
+                    <div style="font-size:20px;margin-bottom:4px;">✅</div>
+                    <div style="font-size:12px;font-weight:700;">Zadanie do wykonania</div>
+                    <div style="font-size:10px;color:var(--muted);margin-top:2px;">Cel przed kolejnym punktem</div>
+                </div>
+                <div class="cp-type-btn" onclick="selectCpType(this,'notatka')" style="grid-column:span 2;">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <div style="font-size:20px;">📝</div>
+                        <div>
+                            <div style="font-size:12px;font-weight:700;">Notatka / komentarz trenera</div>
+                            <div style="font-size:10px;color:var(--muted);margin-top:1px;">Wiadomość widoczna dla klienta w aplikacji</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- data + czas -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+                <div>
+                    <div style="font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;">Data punktu</div>
+                    <input type="date" id="cpDate" value="2026-04-10" style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:9px;padding:9px 12px;color:var(--white);font-size:13px;font-family:inherit;outline:none;">
+                </div>
+                <div>
+                    <div style="font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;">Przypomnienie dla klienta</div>
+                    <select id="cpReminder" style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:9px;padding:9px 12px;color:var(--white);font-size:13px;font-family:inherit;outline:none;cursor:pointer;">
+                        <option value="1d">1 dzień wcześniej</option>
+                        <option value="3d" selected>3 dni wcześniej</option>
+                        <option value="7d">7 dni wcześniej</option>
+                        <option value="none">Bez przypomnienia</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- tytul / notatka trenera -->
+            <div style="margin-bottom:14px;">
+                <div style="font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;">Treść / instrukcja dla klienta</div>
+                <textarea id="cpNote" style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:9px;padding:10px 12px;color:var(--white);font-size:13px;font-family:inherit;outline:none;resize:vertical;min-height:80px;transition:border-color .2s;" placeholder="np. Wykonaj pomiary rano przed posiłkiem, w tym samym miejscu co poprzednio..." onfocus="this.style.borderColor='var(--cyan)'" onblur="this.style.borderColor='var(--border2)'"></textarea>
+            </div>
+
+            <!-- podglad powiadomienia push -->
+            <div style="background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:18px;">
+                <div style="font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">Podgląd powiadomienia push</div>
+                <div style="display:flex;gap:10px;align-items:flex-start;">
+                    <div style="width:32px;height:32px;border-radius:8px;background:var(--cyan-ghost);border:1px solid rgba(58,240,212,.2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">📐</div>
+                    <div>
+                        <div style="font-size:12px;font-weight:700;margin-bottom:2px;">chceByc.fit</div>
+                        <div style="font-size:11px;color:var(--off);line-height:1.5;" id="cpPushPreview">Piotr, czas na pomiar obwodów! Zaloguj wyniki w aplikacji.</div>
+                        <div style="font-size:9px;color:var(--muted);margin-top:3px;">7 kwi 2026 · 3 dni przed terminem</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display:flex;gap:10px;">
+                <button class="btn btn-cyan" style="flex:2;" onclick="saveCheckpoint()">📌 Zapisz punkt kontrolny</button>
+                <button class="btn btn-outline" onclick="closeModal('checkpointCreate')">Anuluj</button>
             </div>
         </div>
     </div>
@@ -4180,6 +4388,126 @@
         renderMyEx();
         renderGlobalEx('', '');
     }, 100);
+
+    // ── PUNKTY KONTROLNE ─────────────────────────────────────
+    let cpSelectedType = 'pomiar';
+
+    const cpTypeConfig = {
+        pomiar: {
+            icon: '📐',
+            label: 'Pomiar obwodów',
+            push: 'Czas na pomiar obwodów! Zaloguj wyniki w aplikacji.'
+        },
+        trening: {
+            icon: '💪',
+            label: 'Zaległy trening',
+            push: 'Nie zapomnij o treningu! Twój plan czeka.'
+        },
+        zdjecie: {
+            icon: '📸',
+            label: 'Zdjęcie sylwetki',
+            push: 'Wyślij zdjęcie sylwetki — czas zobaczyć postępy!'
+        },
+        zadanie: {
+            icon: '✅',
+            label: 'Zadanie do wykonania',
+            push: 'Masz zadanie do wykonania przed kolejnym punktem.'
+        },
+        notatka: {
+            icon: '📝',
+            label: 'Notatka trenera',
+            push: 'Twój trener zostawił Ci wiadomość w aplikacji.'
+        },
+    };
+
+    function selectCpType(el, type) {
+        cpSelectedType = type;
+        document.querySelectorAll('.cp-type-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        // update push preview
+        const note = document.getElementById('cpNote').value.trim();
+        const cfg = cpTypeConfig[type];
+        document.getElementById('cpPushPreview').textContent = note || cfg.push;
+        // update preview icon
+        const iconEl = document.querySelector('#modal-checkpointCreate .cp-push-icon');
+        if (iconEl)
+            iconEl.textContent = cfg.icon;
+    }
+
+    document.addEventListener('input', e => {
+        if (e.target.id === 'cpNote') {
+            const cfg = cpTypeConfig[cpSelectedType];
+            const val = e.target.value.trim();
+            document.getElementById('cpPushPreview').textContent = val || cfg.push;
+        }
+    });
+
+    function saveCheckpoint() {
+        const date = document.getElementById('cpDate').value;
+        const note = document.getElementById('cpNote').value.trim();
+        const reminder = document.getElementById('cpReminder').value;
+        if (!date) {
+            document.getElementById('cpDate').style.borderColor = 'var(--red)';
+            return;
+        }
+
+        const cfg = cpTypeConfig[cpSelectedType];
+        const dateObj = new Date(date);
+        const months = ['sty', 'lut', 'mar', 'kwi', 'maj', 'cze', 'lip', 'sie', 'wrz', 'paz', 'lis', 'gru'];
+        const dateStr = dateObj.getDate() + ' ' + months[dateObj.getMonth()] + ' ' + dateObj.getFullYear();
+
+        // oblicz ile dni do terminu
+        const today = new Date();
+        const diff = Math.round((dateObj - today) / (1000 * 60 * 60 * 24));
+        const diffStr = diff > 0 ? 'za ' + diff + ' dni' : diff === 0 ? 'dziś' : Math.abs(diff) + ' dni temu';
+
+        // zbuduj nowy element
+        const list = document.getElementById('checkpointList');
+        const item = document.createElement('div');
+        item.className = 'cp-item cp-upcoming';
+        item.innerHTML = `
+    <div class="cp-left">
+      <div class="cp-icon-wrap" style="background:rgba(58,240,212,.1);border-color:rgba(58,240,212,.2);">${
+        cfg.icon}</div>
+      <div>
+        <div class="cp-title">${
+        cfg.label}</div>
+        <div class="cp-meta">${dateStr} · ${diffStr}${note ? ' · ' + note.substring(0, 40) + (note.length > 40 ? '…' : '') : ''}</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;">
+      <span class="badge" style="background:rgba(58,240,212,.08);color:var(--cyan);border:1px solid rgba(58,240,212,.2);">Nadchodzący</span>
+      <button onclick="event.stopPropagation();this.closest('.cp-item').remove()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:2px;">×</button>
+    </div>`
+
+
+
+
+
+        ;
+
+        // wstaw przed pierwszym ukończonym
+        const firstDone = list.querySelector('.cp-done');
+        if (firstDone)
+            list.insertBefore(item, firstDone);
+        else
+            list.appendChild(item);
+
+        closeModal('checkpointCreate');
+
+        // reset formularza
+        document.getElementById('cpNote').value = '';
+        cpSelectedType = 'pomiar';
+        document.querySelectorAll('.cp-type-btn').forEach((b, i) => b.classList.toggle('active', i === 0));
+        document.getElementById('cpPushPreview').textContent = cpTypeConfig['pomiar'].push;
+
+        // toast
+        const t = document.createElement('div');
+        t.style.cssText = 'position:fixed;bottom:22px;right:22px;background:var(--card);border:1px solid rgba(58,240,212,.3);border-radius:12px;padding:11px 18px;font-size:12px;color:var(--cyan);z-index:9999;animation:fadeIn .3s ease;';
+        t.textContent = '📌 Punkt kontrolny zapisany i wysłano powiadomienie';
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 3000);
+    }
     </script>
 </body>
 </html>
