@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>chceByc.fit - Moj profil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--black:#070b07;--forest:#0c1a0c;--card:#0f170f;--card2:#131e13;--border:#1a2e1a;--border2:#243824;--border3:#2d4a2d;--lime:#b4f03a;--lime-dim:#7aaa22;--lime-ghost:rgba(180,240,58,.07);--white:#eef8e8;--off:#c8ddb8;--muted:#5a7850;--muted2:#3a5230;--red:#ff5555;--red-ghost:rgba(255,85,85,.1);--gold:#f0c840;--gold-ghost:rgba(240,200,64,.1);--blue:#4ab0ff;--blue-ghost:rgba(74,176,255,.1);--orange:#ff8c42;--orange-ghost:rgba(255,140,66,.1);--cyan:#3af0d4;--cyan-ghost:rgba(58,240,212,.08);--green:#44ff88;--purple:#c46eff;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:"Plus Jakarta Sans",sans-serif;background:var(--black);color:var(--white);display:flex;flex-direction:column;}
+.app{flex:1;display:flex;overflow:hidden;}
+.sidebar{width:220px;flex-shrink:0;background:var(--forest);border-right:1px solid var(--border);display:flex;flex-direction:column;}
+.sb-logo{padding:15px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px;flex-shrink:0;}
+.logo-main{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:18px;}
+.logo-main span{color:var(--lime);}
+.sb-xp{margin:10px 12px;background:var(--blue-ghost);border:1px solid rgba(74,176,255,.2);border-radius:11px;padding:11px;}
+.xp-level-name{font-size:9px;color:var(--blue);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;}
+.xp-level-num{font-family:"Barlow Condensed",sans-serif;font-size:20px;font-weight:900;color:var(--white);line-height:1;}
+.xp-bar{height:4px;background:var(--border2);border-radius:2px;margin-top:6px;}
+.xp-bar-fill{height:100%;width:68%;background:linear-gradient(90deg,var(--blue),var(--lime));border-radius:2px;}
+.xp-next{font-size:9px;color:var(--muted);margin-top:3px;}
+.sb-nav{flex:1;overflow-y:auto;padding:6px 0;scrollbar-width:none;}
+.sb-nav::-webkit-scrollbar{display:none;}
+.ns{font-size:9px;color:var(--muted2);letter-spacing:2px;text-transform:uppercase;padding:9px 15px 2px;font-weight:700;}
+.ni{display:flex;align-items:center;gap:9px;padding:8px 15px;cursor:pointer;font-size:12px;font-weight:500;color:var(--muted);border-left:2px solid transparent;transition:all .18s;}
+.ni:hover{color:var(--off);background:rgba(255,255,255,.018);}
+.ni.active{color:var(--lime);background:var(--lime-ghost);border-left-color:var(--lime);}
+.ni-icon{font-size:13px;width:16px;text-align:center;flex-shrink:0;}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.topbar{height:50px;flex-shrink:0;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(7,11,7,.9);backdrop-filter:blur(12px);}
+.back-btn{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;text-decoration:none;transition:color .2s;}
+.back-btn:hover{color:var(--off);}
+.page-title{font-family:"Barlow Condensed",sans-serif;font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+.save-btn{background:var(--lime);border:none;border-radius:8px;padding:7px 16px;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;color:#000;display:none;}
+.save-btn.show{display:block;}
+.content{flex:1;overflow-y:auto;padding:18px 22px;scrollbar-width:thin;scrollbar-color:var(--border2) transparent;}
+.pg{display:none;animation:fi .25s ease;}
+.pg.active{display:block;}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;}
+.ct{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.flabel{display:block;font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;font-weight:600;margin-bottom:4px;}
+.fi{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:9px 12px;color:var(--white);font-size:13px;font-family:inherit;outline:none;transition:border-color .2s;margin-bottom:11px;}
+.fi:focus{border-color:var(--lime);}
+.fi::placeholder{color:var(--muted);}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+/* body history */
+.be{display:flex;align-items:center;gap:9px;padding:9px 11px;background:var(--card2);border:1px solid var(--border);border-radius:9px;margin-bottom:6px;}
+.be-date{font-size:10px;color:var(--muted);width:75px;flex-shrink:0;}
+.be-val{font-family:"Barlow Condensed",sans-serif;font-size:18px;font-weight:900;width:65px;}
+.be-d{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;flex-shrink:0;}
+.be-d.pos{background:var(--lime-ghost);color:var(--lime);}
+.be-d.neg{background:var(--red-ghost);color:var(--red);}
+.be-d.neu{background:var(--border2);color:var(--muted);}
+.be-note{font-size:10px;color:var(--muted);flex:1;}
+.be-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:3px;transition:color .2s;}
+.be-del:hover{color:var(--red);}
+.add-row{display:flex;gap:7px;align-items:flex-end;background:var(--card2);border:1px solid rgba(180,240,58,.15);border-radius:9px;padding:10px;margin-bottom:12px;}
+.abi{flex:1;background:var(--card);border:1px solid var(--border);border-radius:7px;padding:7px 10px;color:var(--white);font-size:12px;font-family:inherit;outline:none;transition:border-color .2s;}
+.abi:focus{border-color:var(--lime);}
+.abi::placeholder{color:var(--muted);}
+.add-btn{background:var(--lime);border:none;border-radius:7px;padding:8px 13px;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;color:#000;flex-shrink:0;}
+/* xp */
+.xpr{display:flex;align-items:center;gap:9px;padding:9px 11px;background:var(--card2);border:1px solid var(--border);border-radius:9px;margin-bottom:5px;}
+.xpr-icon{font-size:16px;width:24px;text-align:center;flex-shrink:0;}
+.xpr-lbl{font-size:12px;font-weight:600;flex:1;}
+.xpr-date{font-size:10px;color:var(--muted);}
+.xpr-pts{font-family:"Barlow Condensed",sans-serif;font-size:17px;font-weight:900;color:var(--lime);}
+/* levels */
+.lv{display:flex;align-items:center;gap:11px;padding:11px 13px;background:var(--card2);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;}
+.lv.current{border-color:rgba(180,240,58,.3);background:var(--lime-ghost);}
+.lv.locked{opacity:.3;}
+.lv-icon{font-size:22px;width:28px;text-align:center;flex-shrink:0;}
+.lv-name{font-family:"Barlow Condensed",sans-serif;font-size:17px;font-weight:900;text-transform:uppercase;}
+.lv-range{font-size:10px;color:var(--muted);}
+.lv-bar{flex:1;height:4px;background:var(--border2);border-radius:2px;}
+.lv-fill{height:100%;border-radius:2px;}
+/* notif */
+.nrow{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);}
+.nrow:last-child{border-bottom:none;}
+.nlbl{font-size:13px;font-weight:600;}
+.nsub{font-size:11px;color:var(--muted);margin-top:1px;}
+.toggle{position:relative;width:38px;height:21px;flex-shrink:0;cursor:pointer;}
+.toggle input{opacity:0;width:0;height:0;}
+.ttrack{position:absolute;inset:0;background:var(--border2);border-radius:11px;transition:all .3s;}
+.toggle input:checked + .ttrack{background:var(--lime);}
+.tthumb{position:absolute;top:2.5px;left:2.5px;width:16px;height:16px;background:var(--white);border-radius:50%;transition:transform .3s;}
+.toggle input:checked ~ .tthumb{transform:translateX(17px);}
+/* danger */
+.danger{display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--red-ghost);border:1px solid rgba(255,85,85,.15);border-radius:9px;margin-bottom:7px;}
+.dlbl{font-size:12px;font-weight:600;color:var(--red);}
+.dsub{font-size:10px;color:var(--muted);margin-top:2px;}
+.dbtn{background:none;border:1px solid rgba(255,85,85,.3);color:var(--red);border-radius:6px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;}
+.dbtn:hover{background:var(--red-ghost);}
+.toast{position:fixed;bottom:22px;right:22px;background:var(--card);border:1px solid rgba(180,240,58,.3);border-radius:11px;padding:11px 16px;font-size:12px;color:var(--lime);z-index:9999;display:none;animation:tin .3s ease;}
+@keyframes tin{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div style="width:28px;height:28px;border-radius:7px;background:#0f1f0f;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="5.5" r="3" fill="#b4f03a"/><rect x="10" y="9.5" width="4" height="7" rx="2" fill="#b4f03a"/><line x1="10" y1="11" x2="5.5" y2="15" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/><line x1="14" y1="10.5" x2="18.5" y2="6" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/><line x1="10.5" y1="16.5" x2="7.5" y2="22" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/><line x1="13.5" y1="16.5" x2="16.5" y2="22" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </div>
+    <div class="logo-main">chceByc<span>.fit</span></div>
+  </div>
+  <div class="sb-xp">
+    <div class="xp-level-name">Poziom 14 - Atleta</div>
+    <div class="xp-level-num">3 420 XP</div>
+    <div class="xp-bar"><div class="xp-bar-fill"></div></div>
+    <div class="xp-next">1 580 XP do Wojownika</div>
+  </div>
+  <div class="sb-nav">
+    <div class="ns">Profil</div>
+    <div class="ni active" onclick="show('data',this)"><span class="ni-icon">&#128100;</span>Moje dane</div>
+    <div class="ni" onclick="show('body',this)"><span class="ni-icon">&#128207;</span>Dane fizyczne</div>
+    <div class="ni" onclick="show('goals',this)"><span class="ni-icon">&#127919;</span>Moje cele</div>
+    <div class="ni" onclick="show('injuries',this)"><span class="ni-icon">&#129657;</span>Kontuzje</div>
+    <div class="ns">Gamifikacja</div>
+    <div class="ni" onclick="show('xp',this)"><span class="ni-icon">&#9889;</span>Punkty XP <span style="margin-left:auto;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:var(--lime-ghost);color:var(--lime);">3420</span></div>
+    <div class="ni" onclick="show('levels',this)"><span class="ni-icon">&#127942;</span>Poziomy</div>
+    <div class="ns">Ustawienia</div>
+    <div class="ni" onclick="show('notif',this)"><span class="ni-icon">&#128276;</span>Powiadomienia</div>
+    <div class="ni" onclick="show('privacy',this)"><span class="ni-icon">&#128274;</span>Prywatnosc</div>
+    <div class="ni" onclick="show('account',this)"><span class="ni-icon">&#9881;</span>Konto</div>
+  </div>
+</aside>
+<div class="main">
+  <div class="topbar">
+    <a href="chcebyc-dashboard.html" class="back-btn">&#8592; Dashboard</a>
+    <div class="page-title" id="ptitle">Moje dane</div>
+    <button class="save-btn" id="saveBtn" onclick="saveAll()">Zapisz zmiany</button>
+  </div>
+  <div class="content">
+
+    <!-- MOJE DANE -->
+    <div class="pg active" id="pg-data">
+      <div style="display:flex;align-items:center;gap:18px;margin-bottom:20px;">
+        <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#7aaa22,#b4f03a);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;color:#000;position:relative;cursor:pointer;box-shadow:0 0 20px rgba(180,240,58,.2);" onclick="toast('Przesylanie zdjecia dostepne w produkcji.')">
+          MK
+          <div style="position:absolute;bottom:0;right:0;width:24px;height:24px;border-radius:50%;background:var(--lime);border:2px solid var(--card);display:flex;align-items:center;justify-content:center;font-size:11px;">&#128247;</div>
+        </div>
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;text-transform:uppercase;">Maciej Kowalski</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2f424e4c464a4501446f48424e4643014c4042">[email&#160;protected]</a></div>
+          <div style="display:flex;gap:5px;margin-top:5px;flex-wrap:wrap;">
+            <span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;background:var(--lime-ghost);color:var(--lime);">Atleta Lvl 14</span>
+            <span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;background:var(--orange-ghost);color:var(--orange);">Seria 14 dni</span>
+            <span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;background:var(--gold-ghost);color:var(--gold);">Pro</span>
+          </div>
+        </div>
+      </div>
+      <div class="g2">
+        <div class="card">
+          <div class="ct">Dane osobowe</div>
+          <div class="frow">
+            <div><label class="flabel">Imie</label><input class="fi" type="text" value="Maciej" oninput="dirty()"></div>
+            <div><label class="flabel">Nazwisko</label><input class="fi" type="text" value="Kowalski" oninput="dirty()"></div>
+          </div>
+          <label class="flabel">Email</label><input class="fi" type="email" value="maciej.k@gmail.com" oninput="dirty()">
+          <label class="flabel">Data urodzenia</label><input class="fi" type="date" value="1996-08-14" oninput="dirty()">
+          <label class="flabel">Miasto</label><input class="fi" type="text" value="Warszawa" oninput="dirty()">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="card">
+            <div class="ct">Bio</div>
+            <textarea class="fi" style="min-height:80px;resize:vertical;" oninput="dirty()">Trenuję od 3 lat. Głównie siłownia, buduje mase. Uwielbiam wyciskanie i martwy ciag.</textarea>
+          </div>
+          <div class="card">
+            <div class="ct">Widocznosc profilu</div>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;margin-bottom:7px;"><input type="radio" name="vis" checked style="accent-color:var(--lime);"> Publiczny</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;margin-bottom:7px;"><input type="radio" name="vis" style="accent-color:var(--lime);"> Tylko znajomi</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;"><input type="radio" name="vis" style="accent-color:var(--lime);"> Prywatny</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DANE FIZYCZNE -->
+    <div class="pg" id="pg-body">
+      <div class="g2">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="card">
+            <div class="ct">Waga <span id="curW" style="color:var(--lime);font-size:13px;font-weight:700;">76.0 kg</span></div>
+            <svg viewBox="0 0 300 70" style="width:100%;margin-bottom:10px;overflow:visible;">
+              <defs><linearGradient id="wg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(180,240,58,.12)"/><stop offset="100%" stop-color="rgba(180,240,58,0)"/></linearGradient></defs>
+              <path d="M0,58 L50,52 L100,44 L150,40 L200,34 L250,28 L300,24 L300,70 L0,70 Z" fill="url(#wg)"/>
+              <polyline points="0,58 50,52 100,44 150,40 200,34 250,28 300,24" fill="none" stroke="#b4f03a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="300" cy="24" r="3" fill="#b4f03a"/>
+              <text x="0" y="68" font-size="8" fill="#5a7850" font-family="Plus Jakarta Sans,sans-serif">sty</text>
+              <text x="248" y="68" font-size="8" fill="#5a7850" font-family="Plus Jakarta Sans,sans-serif">mar</text>
+            </svg>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:12px;">
+              <div style="text-align:center;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:9px;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--blue);">80.2</div><div style="font-size:9px;color:var(--muted);">Start</div></div>
+              <div style="text-align:center;background:rgba(180,240,58,.06);border:1px solid rgba(180,240,58,.15);border-radius:8px;padding:9px;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--lime);">76.0</div><div style="font-size:9px;color:var(--muted);">Teraz</div></div>
+              <div style="text-align:center;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:9px;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--lime);">-4.2</div><div style="font-size:9px;color:var(--muted);">Zmiana</div></div>
+            </div>
+            <div class="ct" style="margin-bottom:8px;">Dodaj pomiar</div>
+            <div class="add-row">
+              <div style="flex:1;"><div style="font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:3px;">Waga (kg)</div><input class="abi" type="number" step="0.1" placeholder="np. 75.8" id="nw"></div>
+              <div style="flex:1;"><div style="font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:3px;">Data</div><input class="abi" type="date" id="nd" value="2026-03-15"></div>
+              <div style="flex:2;"><div style="font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:3px;">Notatka</div><input class="abi" type="text" placeholder="opcjonalnie" id="nn"></div>
+              <button class="add-btn" onclick="addW()">+ Zapisz</button>
+            </div>
+            <div class="ct" style="margin-top:4px;">Historia</div>
+            <div id="wHist">
+              <div class="be"><span class="be-date">15 mar 2026</span><span class="be-val" style="color:var(--lime)">76.0 kg</span><span class="be-d pos">-0.4</span><span class="be-note">rano</span><button class="be-del" onclick="delE(this)">x</button></div>
+              <div class="be"><span class="be-date">8 mar 2026</span><span class="be-val">76.4 kg</span><span class="be-d pos">-0.6</span><span class="be-note"></span><button class="be-del" onclick="delE(this)">x</button></div>
+              <div class="be"><span class="be-date">1 mar 2026</span><span class="be-val">77.0 kg</span><span class="be-d pos">-0.8</span><span class="be-note">po tygodniu diety</span><button class="be-del" onclick="delE(this)">x</button></div>
+              <div class="be"><span class="be-date">15 lut 2026</span><span class="be-val">77.8 kg</span><span class="be-d neg">+0.2</span><span class="be-note">po urodzinach</span><button class="be-del" onclick="delE(this)">x</button></div>
+              <div class="be"><span class="be-date">1 sty 2026</span><span class="be-val">80.2 kg</span><span class="be-d neu">start</span><span class="be-note">waga startowa</span><button class="be-del" onclick="delE(this)">x</button></div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="card">
+            <div class="ct">Wzrost</div>
+            <div style="text-align:center;margin-bottom:12px;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:48px;font-weight:900;color:var(--cyan);">178</div><div style="font-size:12px;color:var(--muted);">cm</div></div>
+            <div style="display:flex;gap:7px;">
+              <input class="fi" type="number" placeholder="np. 178" style="margin-bottom:0;flex:1;" id="nh">
+              <button style="background:var(--cyan);border:none;border-radius:8px;padding:9px 13px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;color:#000;cursor:pointer;" onclick="saveH()">Zapisz</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="ct">BMI</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px;">
+              <div style="background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:11px;text-align:center;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--gold);">23.9</div><div style="font-size:9px;color:var(--muted);">BMI</div><div style="font-size:10px;color:var(--gold);margin-top:2px;">Prawidlowa</div></div>
+              <div style="background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:11px;text-align:center;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--lime);">28</div><div style="font-size:9px;color:var(--muted);">Wiek biol.</div><div style="font-size:10px;color:var(--lime);margin-top:2px;">vs 29 metryk.</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="ct">Obwody (opcjonalne)</div>
+            <div class="frow">
+              <div><label class="flabel">Klatka (cm)</label><input class="fi" type="number" placeholder="np. 98" oninput="dirty()"></div>
+              <div><label class="flabel">Talia (cm)</label><input class="fi" type="number" placeholder="np. 82" oninput="dirty()"></div>
+            </div>
+            <div class="frow">
+              <div><label class="flabel">Biodra (cm)</label><input class="fi" type="number" placeholder="np. 96" oninput="dirty()"></div>
+              <div><label class="flabel">Udo (cm)</label><input class="fi" type="number" placeholder="np. 58" oninput="dirty()"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CELE -->
+    <div class="pg" id="pg-goals">
+      <div class="g2">
+        <div class="card">
+          <div class="ct">Glowny cel</div>
+          <label style="display:flex;align-items:center;gap:9px;padding:10px 12px;background:rgba(180,240,58,.06);border:1px solid rgba(180,240,58,.2);border-radius:8px;cursor:pointer;font-size:13px;margin-bottom:7px;"><input type="radio" name="goal" checked style="accent-color:var(--lime);"> Masa miesniowa</label>
+          <label style="display:flex;align-items:center;gap:9px;padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:13px;margin-bottom:7px;"><input type="radio" name="goal" style="accent-color:var(--lime);"> Sila</label>
+          <label style="display:flex;align-items:center;gap:9px;padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:13px;margin-bottom:7px;"><input type="radio" name="goal" style="accent-color:var(--lime);"> Redukcja tluszczu</label>
+          <label style="display:flex;align-items:center;gap:9px;padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:13px;"><input type="radio" name="goal" style="accent-color:var(--lime);"> Ogolna sprawnosc</label>
+          <label class="flabel" style="margin-top:12px;">Poziom zaawansowania</label>
+          <select class="fi fselect" oninput="dirty()"><option>Poczatkujacy</option><option selected>Srednio-zaawansowany</option><option>Zaawansowany</option></select>
+          <label class="flabel">Dni treningow w tygodniu</label>
+          <select class="fi fselect" oninput="dirty()" style="margin-bottom:0;"><option>2</option><option selected>3</option><option>4</option><option>5</option><option>6</option></select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="card">
+            <div class="ct">Sprzet</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <label style="display:flex;align-items:center;gap:6px;background:rgba(180,240,58,.07);border:1px solid rgba(180,240,58,.2);border-radius:5px;padding:4px 9px;font-size:11px;cursor:pointer;"><input type="checkbox" checked style="accent-color:var(--lime);">Silownia</label>
+              <label style="display:flex;align-items:center;gap:6px;background:var(--card2);border:1px solid var(--border);border-radius:5px;padding:4px 9px;font-size:11px;cursor:pointer;"><input type="checkbox" style="accent-color:var(--lime);">Sztanga</label>
+              <label style="display:flex;align-items:center;gap:6px;background:rgba(180,240,58,.07);border:1px solid rgba(180,240,58,.2);border-radius:5px;padding:4px 9px;font-size:11px;cursor:pointer;"><input type="checkbox" checked style="accent-color:var(--lime);">Hantle</label>
+              <label style="display:flex;align-items:center;gap:6px;background:var(--card2);border:1px solid var(--border);border-radius:5px;padding:4px 9px;font-size:11px;cursor:pointer;"><input type="checkbox" style="accent-color:var(--lime);">Drazek</label>
+              <label style="display:flex;align-items:center;gap:6px;background:var(--card2);border:1px solid var(--border);border-radius:5px;padding:4px 9px;font-size:11px;cursor:pointer;"><input type="checkbox" style="accent-color:var(--lime);">Gumy</label>
+              <label style="display:flex;align-items:center;gap:6px;background:var(--card2);border:1px solid var(--border);border-radius:5px;padding:4px 9px;font-size:11px;cursor:pointer;"><input type="checkbox" style="accent-color:var(--lime);">Bez sprzetu</label>
+            </div>
+          </div>
+          <div class="card">
+            <div class="ct">Waga docelowa</div>
+            <input class="fi" type="number" placeholder="np. 80" value="80" oninput="dirty()">
+            <div style="font-size:10px;color:var(--muted);">Aktualna: 76.0 kg · roznica: +4.0 kg</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KONTUZJE -->
+    <div class="pg" id="pg-injuries">
+      <div class="card" style="max-width:600px;">
+        <div class="ct">Kontuzje i ograniczenia</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:14px;font-weight:300;line-height:1.6;">AI i trener uwzglednia te ograniczenia przy doborze cwiczen.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px;">
+          <label style="display:flex;align-items:center;gap:7px;padding:8px 12px;background:var(--card2);border:1px solid var(--border);border-radius:7px;font-size:12px;cursor:pointer;"><input type="checkbox" style="accent-color:var(--red);">Kregoslup / plecy</label>
+          <label style="display:flex;align-items:center;gap:7px;padding:8px 12px;background:var(--card2);border:1px solid var(--border);border-radius:7px;font-size:12px;cursor:pointer;"><input type="checkbox" style="accent-color:var(--red);">Kolano</label>
+          <label style="display:flex;align-items:center;gap:7px;padding:8px 12px;background:var(--red-ghost);border:1px solid rgba(255,85,85,.2);border-radius:7px;font-size:12px;cursor:pointer;"><input type="checkbox" checked style="accent-color:var(--red);">Bark</label>
+          <label style="display:flex;align-items:center;gap:7px;padding:8px 12px;background:var(--card2);border:1px solid var(--border);border-radius:7px;font-size:12px;cursor:pointer;"><input type="checkbox" style="accent-color:var(--red);">Lokiec</label>
+          <label style="display:flex;align-items:center;gap:7px;padding:8px 12px;background:var(--card2);border:1px solid var(--border);border-radius:7px;font-size:12px;cursor:pointer;"><input type="checkbox" style="accent-color:var(--red);">Biodro</label>
+          <label style="display:flex;align-items:center;gap:7px;padding:8px 12px;background:var(--card2);border:1px solid var(--border);border-radius:7px;font-size:12px;cursor:pointer;"><input type="checkbox" style="accent-color:var(--red);">Szyja / kark</label>
+        </div>
+        <label class="flabel">Dodatkowe uwagi</label>
+        <textarea class="fi" style="min-height:90px;resize:vertical;" oninput="dirty()">Bark prawy - stary uraz rotatorow. Uwikam wyciskania z barkiem powyzej 90 stopni.</textarea>
+      </div>
+    </div>
+
+    <!-- XP -->
+    <div class="pg" id="pg-xp">
+      <div class="g2">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="card" style="background:linear-gradient(135deg,rgba(180,240,58,.05),var(--card));border-color:rgba(180,240,58,.2);">
+            <div class="ct" style="color:var(--lime);">Twoje XP</div>
+            <div style="text-align:center;padding:8px 0 14px;">
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:58px;font-weight:900;color:var(--lime);line-height:1;" id="xpCount">3 420</div>
+              <div style="font-size:11px;color:var(--muted);">punktow lacznie</div>
+            </div>
+            <div style="height:7px;background:var(--border2);border-radius:4px;margin-bottom:7px;"><div style="height:100%;width:68%;background:linear-gradient(90deg,var(--lime-dim),var(--lime));border-radius:4px;"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);"><span>Atleta</span><span style="color:var(--lime);">1 580 XP do Wojownika</span></div>
+          </div>
+          <div class="card">
+            <div class="ct">Jak zdobywasz XP</div>
+            <div style="display:flex;flex-direction:column;gap:5px;">
+              <div style="display:flex;justify-content:space-between;padding:7px 9px;background:var(--card2);border:1px solid var(--border);border-radius:8px;font-size:12px;"><span>Ukonczony trening</span><span style="font-family:'Barlow Condensed',sans-serif;font-weight:900;color:var(--lime);">+50</span></div>
+              <div style="display:flex;justify-content:space-between;padding:7px 9px;background:var(--card2);border:1px solid var(--border);border-radius:8px;font-size:12px;"><span>Pobity rekord PR</span><span style="font-family:'Barlow Condensed',sans-serif;font-weight:900;color:var(--gold);">+100</span></div>
+              <div style="display:flex;justify-content:space-between;padding:7px 9px;background:var(--card2);border:1px solid var(--border);border-radius:8px;font-size:12px;"><span>Seria 7 dni</span><span style="font-family:'Barlow Condensed',sans-serif;font-weight:900;color:var(--orange);">+150</span></div>
+              <div style="display:flex;justify-content:space-between;padding:7px 9px;background:var(--card2);border:1px solid var(--border);border-radius:8px;font-size:12px;"><span>Seria 30 dni</span><span style="font-family:'Barlow Condensed',sans-serif;font-weight:900;color:var(--orange);">+500</span></div>
+              <div style="display:flex;justify-content:space-between;padding:7px 9px;background:var(--card2);border:1px solid var(--border);border-radius:8px;font-size:12px;"><span>Uzupelniony profil</span><span style="font-family:'Barlow Condensed',sans-serif;font-weight:900;color:var(--blue);">+50</span></div>
+              <div style="display:flex;justify-content:space-between;padding:7px 9px;background:var(--card2);border:1px solid var(--border);border-radius:8px;font-size:12px;"><span>Zakup planu</span><span style="font-family:'Barlow Condensed',sans-serif;font-weight:900;color:var(--purple);">+75</span></div>
+              <div style="display:flex;justify-content:space-between;padding:7px 9px;background:var(--card2);border:1px solid var(--border);border-radius:8px;font-size:12px;"><span>Zaproszony znajomy</span><span style="font-family:'Barlow Condensed',sans-serif;font-weight:900;color:var(--cyan);">+100</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ct">Historia XP</div>
+          <div id="xpHist">
+            <div class="xpr"><span class="xpr-icon">&#128170;</span><span class="xpr-lbl">Trening ukonczony</span><span class="xpr-date">dzis</span><span class="xpr-pts">+50</span></div>
+            <div class="xpr"><span class="xpr-icon">&#127942;</span><span class="xpr-lbl">PR - wyciskanie 82.5 kg</span><span class="xpr-date">wczoraj</span><span class="xpr-pts">+100</span></div>
+            <div class="xpr"><span class="xpr-icon">&#128170;</span><span class="xpr-lbl">Trening ukonczony</span><span class="xpr-date">13 mar</span><span class="xpr-pts">+50</span></div>
+            <div class="xpr"><span class="xpr-icon">&#128170;</span><span class="xpr-lbl">Trening ukonczony</span><span class="xpr-date">12 mar</span><span class="xpr-pts">+50</span></div>
+            <div class="xpr"><span class="xpr-icon">&#128293;</span><span class="xpr-lbl">Seria 7 dni!</span><span class="xpr-date">10 mar</span><span class="xpr-pts">+150</span></div>
+            <div class="xpr"><span class="xpr-icon">&#128128;</span><span class="xpr-lbl">Zakup planu HIIT Shred</span><span class="xpr-date">5 mar</span><span class="xpr-pts">+75</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- POZIOMY -->
+    <div class="pg" id="pg-levels">
+      <div style="max-width:600px;">
+        <div class="card" style="margin-bottom:12px;">
+          <div class="ct">Twoj poziom</div>
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div style="font-size:42px;">&#9889;</div>
+            <div style="flex:1;">
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--lime);">Atleta</div>
+              <div style="font-size:11px;color:var(--muted);">Poziom 14 · 3 420 XP</div>
+              <div style="height:5px;background:var(--border2);border-radius:3px;margin-top:7px;"><div style="height:100%;width:68%;background:linear-gradient(90deg,var(--lime-dim),var(--lime));border-radius:3px;"></div></div>
+              <div style="font-size:10px;color:var(--muted);margin-top:3px;">1 580 XP do Wojownika</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ct">Wszystkie poziomy</div>
+          <div class="lv locked"><span class="lv-icon">&#127807;</span><div style="flex:1;"><div class="lv-name">Nowicjusz</div><div class="lv-range">0 - 499 XP</div></div><div class="lv-bar"><div class="lv-fill" style="width:100%;background:var(--green);"></div></div><span style="color:var(--green);font-weight:900;font-size:13px;">&#10003;</span></div>
+          <div class="lv locked"><span class="lv-icon">&#127939;</span><div style="flex:1;"><div class="lv-name">Aktywny</div><div class="lv-range">500 - 1 499 XP</div></div><div class="lv-bar"><div class="lv-fill" style="width:100%;background:var(--green);"></div></div><span style="color:var(--green);font-weight:900;font-size:13px;">&#10003;</span></div>
+          <div class="lv current"><span class="lv-icon">&#9889;</span><div style="flex:1;"><div class="lv-name" style="color:var(--lime);">Atleta</div><div class="lv-range">1 500 - 3 499 XP</div></div><div class="lv-bar"><div class="lv-fill" style="width:95%;background:var(--lime);"></div></div><span style="color:var(--lime);font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;">3420</span></div>
+          <div class="lv"><span class="lv-icon">&#9876;</span><div style="flex:1;"><div class="lv-name">Wojownik</div><div class="lv-range">3 500 - 6 999 XP</div></div><div class="lv-bar"><div class="lv-fill" style="width:0%;background:var(--orange);"></div></div><span style="color:var(--muted);">—</span></div>
+          <div class="lv"><span class="lv-icon">&#128081;</span><div style="flex:1;"><div class="lv-name">Mistrz</div><div class="lv-range">7 000 - 12 999 XP</div></div><div class="lv-bar"><div class="lv-fill" style="width:0%;background:var(--gold);"></div></div><span style="color:var(--muted);">—</span></div>
+          <div class="lv"><span class="lv-icon">&#127775;</span><div style="flex:1;"><div class="lv-name">Legenda</div><div class="lv-range">13 000+ XP</div></div><div class="lv-bar"><div class="lv-fill" style="width:0%;background:var(--purple);"></div></div><span style="color:var(--muted);">—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- POWIADOMIENIA -->
+    <div class="pg" id="pg-notif">
+      <div class="card" style="max-width:560px;margin-bottom:12px;">
+        <div class="ct">Push</div>
+        <div class="nrow"><div><div class="nlbl">Przypomnienie o treningu</div><div class="nsub">Codziennie o wybranej godzinie</div></div><label class="toggle"><input type="checkbox" checked><div class="ttrack"></div><div class="tthumb"></div></label></div>
+        <div class="nrow"><div><div class="nlbl">Wiadomosc od trenera</div><div class="nsub">Natychmiast</div></div><label class="toggle"><input type="checkbox" checked><div class="ttrack"></div><div class="tthumb"></div></label></div>
+        <div class="nrow"><div><div class="nlbl">Nowa odznaka lub poziom</div><div class="nsub">Gdy zdobedziesz nagrode</div></div><label class="toggle"><input type="checkbox" checked><div class="ttrack"></div><div class="tthumb"></div></label></div>
+        <div class="nrow"><div><div class="nlbl">Aktywnosc znajomych</div><div class="nsub">Nowe wyniki, rekordy</div></div><label class="toggle"><input type="checkbox"><div class="ttrack"></div><div class="tthumb"></div></label></div>
+        <div class="nrow"><div><div class="nlbl">Tygodniowe podsumowanie</div><div class="nsub">Co niedziele</div></div><label class="toggle"><input type="checkbox" checked><div class="ttrack"></div><div class="tthumb"></div></label></div>
+      </div>
+      <div class="card" style="max-width:560px;">
+        <div class="ct">Email</div>
+        <div class="nrow"><div><div class="nlbl">Newsletter chceByc.fit</div><div class="nsub">Porady, nowe funkcje</div></div><label class="toggle"><input type="checkbox" checked><div class="ttrack"></div><div class="tthumb"></div></label></div>
+        <div class="nrow"><div><div class="nlbl">Miesieczne podsumowanie</div><div class="nsub">Raport postegow</div></div><label class="toggle"><input type="checkbox" checked><div class="ttrack"></div><div class="tthumb"></div></label></div>
+        <div class="nrow"><div><div class="nlbl">Oferty i promocje</div><div class="nsub">Znizki na plany</div></div><label class="toggle"><input type="checkbox"><div class="ttrack"></div><div class="tthumb"></div></label></div>
+      </div>
+    </div>
+
+    <!-- PRYWATNOSC -->
+    <div class="pg" id="pg-privacy">
+      <div class="card" style="max-width:560px;">
+        <div class="ct">Widocznosc danych</div>
+        <div class="nrow"><div><div class="nlbl">Postepy widoczne dla trenera</div><div class="nsub">Waga, wyniki, historia</div></div><label class="toggle"><input type="checkbox" checked><div class="ttrack"></div><div class="tthumb"></div></label></div>
+        <div class="nrow"><div><div class="nlbl">Profil widoczny w spolecznosci</div><div class="nsub">Imie, zdjecie, poziom XP</div></div><label class="toggle"><input type="checkbox" checked><div class="ttrack"></div><div class="tthumb"></div></label></div>
+        <div class="nrow"><div><div class="nlbl">Wyniki w leaderboardzie</div><div class="nsub">XP widoczne publicznie</div></div><label class="toggle"><input type="checkbox" checked><div class="ttrack"></div><div class="tthumb"></div></label></div>
+        <div class="nrow"><div><div class="nlbl">Dane ciala dla znajomych</div><div class="nsub">Waga, BMI</div></div><label class="toggle"><input type="checkbox"><div class="ttrack"></div><div class="tthumb"></div></label></div>
+      </div>
+    </div>
+
+    <!-- KONTO -->
+    <div class="pg" id="pg-account">
+      <div class="g2">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="card">
+            <div class="ct">Zmiana hasla</div>
+            <label class="flabel">Aktualne haslo</label><input class="fi" type="password" placeholder="••••••••">
+            <label class="flabel">Nowe haslo</label><input class="fi" type="password" placeholder="Min. 8 znakow">
+            <label class="flabel">Powtorz</label><input class="fi" type="password" placeholder="••••••••" style="margin-bottom:0;">
+            <button style="margin-top:10px;width:100%;background:var(--lime);border:none;border-radius:8px;padding:9px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;color:#000;" onclick="toast('Haslo zmienione!')">Zmien haslo</button>
+          </div>
+          <div class="card">
+            <div class="ct">Subskrypcja</div>
+            <div style="display:flex;align-items:center;gap:10px;padding:11px;background:var(--lime-ghost);border:1px solid rgba(180,240,58,.2);border-radius:9px;margin-bottom:10px;">
+              <div style="font-size:22px;">&#10024;</div>
+              <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--lime);">Plan Pro</div><div style="font-size:11px;color:var(--muted);">Odnowienie: 14 kwi 2026 · 49 zl/mies</div></div>
+            </div>
+            <button style="width:100%;background:none;border:1px solid var(--border2);border-radius:8px;padding:8px;font-family:inherit;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;" onclick="toast('Zarzadzanie subskrypcja - Stripe Portal')">Zarzadzaj subskrypcja</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ct" style="color:var(--red);">Strefa niebezpieczna</div>
+          <div class="danger"><div><div class="dlbl">Eksportuj moje dane</div><div class="dsub">Pobierz dane w formacie JSON</div></div><button class="dbtn" onclick="toast('Eksport danych - dostepny w produkcji')">Eksportuj</button></div>
+          <div class="danger"><div><div class="dlbl">Dezaktywuj konto</div><div class="dsub">Zawies konto, mozesz przywrocic</div></div><button class="dbtn" onclick="toast('Konto dezaktywowane (symulacja)')">Dezaktywuj</button></div>
+          <div class="danger" style="border-color:rgba(255,85,85,.3);"><div><div class="dlbl">Usun konto trwale</div><div class="dsub">Nieodwracalne — wszystkie dane znikna</div></div><button class="dbtn" onclick="confirmDel()">Usun konto</button></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+<div class="toast" id="toastEl"></div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const titles={data:"Moje dane",body:"Dane fizyczne",goals:"Moje cele",injuries:"Kontuzje",xp:"Punkty XP",levels:"Poziomy",notif:"Powiadomienia",privacy:"Prywatnosc",account:"Konto"};
+function show(id,el){
+  document.querySelectorAll(".pg").forEach(p=>p.classList.remove("active"));
+  document.getElementById("pg-"+id).classList.add("active");
+  document.querySelectorAll(".ni").forEach(n=>n.classList.remove("active"));
+  if(el)el.classList.add("active");
+  document.getElementById("ptitle").textContent=titles[id]||id;
+  isDirty=false;document.getElementById("saveBtn").classList.remove("show");
+}
+let isDirty=false;
+function dirty(){isDirty=true;document.getElementById("saveBtn").classList.add("show");}
+function saveAll(){isDirty=false;document.getElementById("saveBtn").classList.remove("show");toast("Zmiany zapisane!");}
+function toast(msg){const t=document.getElementById("toastEl");t.textContent=msg;t.style.display="block";setTimeout(()=>{t.style.display="none";},3000);}
+function addW(){
+  const w=document.getElementById("nw").value;
+  const d=document.getElementById("nd").value;
+  const n=document.getElementById("nn").value;
+  if(!w||!d){toast("Podaj wage i date.");return;}
+  const list=document.getElementById("wHist");
+  const row=document.createElement("div");row.className="be";
+  const dt=new Date(d);const months=["sty","lut","mar","kwi","maj","cze","lip","sie","wrz","paz","lis","gru"];
+  row.innerHTML=`<span class="be-date">${dt.getDate()} ${months[dt.getMonth()]} ${dt.getFullYear()}</span><span class="be-val" style="color:var(--lime)">${parseFloat(w).toFixed(1)} kg</span><span class="be-d pos">Nowy</span><span class="be-note">${n}</span><button class="be-del" onclick="delE(this)">x</button>`;
+  list.insertBefore(row,list.firstChild);
+  document.getElementById("curW").textContent=parseFloat(w).toFixed(1)+" kg";
+  document.getElementById("nw").value="";document.getElementById("nn").value="";
+  toast("Pomiar zapisany! +50 XP");
+  addXP(50,"Nowy pomiar wagi");
+}
+function delE(btn){if(confirm("Usunac wpis?"))btn.closest(".be").remove();}
+function saveH(){const h=document.getElementById("nh").value;if(h<100||h>250){toast("Podaj wzrost 100-250 cm.");return;}toast("Wzrost zaktualizowany!");}
+function addXP(pts,lbl){
+  const h=document.getElementById("xpHist");
+  const row=document.createElement("div");row.className="xpr";
+  row.innerHTML=`<span class="xpr-icon">&#128207;</span><span class="xpr-lbl">${lbl}</span><span class="xpr-date">teraz</span><span class="xpr-pts">+${pts}</span>`;
+  h.insertBefore(row,h.firstChild);
+  const c=document.getElementById("xpCount");
+  let cur=parseInt(c.textContent.replace(/\s/g,""));const tgt=cur+pts;const step=Math.ceil(pts/20);
+  const iv=setInterval(()=>{cur=Math.min(cur+step,tgt);c.textContent=cur.toLocaleString("pl");if(cur>=tgt)clearInterval(iv);},40);
+}
+function confirmDel(){if(confirm("Na pewno chcesz usunac konto? Tej operacji nie mozna cofnac."))toast("Konto usuniete (symulacja).");}
+</script>
+</body>
+</html>
