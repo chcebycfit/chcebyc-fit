@@ -1266,12 +1266,313 @@
             transform: translateY(-5px);
             opacity: 1
         }
+    }/* ── EKRAN POWITALNY ── */
+    .welcome-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9000;
+        background: rgba(7, 11, 7, .96);
+        backdrop-filter: blur(20px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .welcome-overlay.hidden {
+        display: none;
+    }
+
+    .welcome-box {
+        background: var(--card);
+        border: 1px solid var(--border2);
+        border-radius: 24px;
+        padding: 36px 40px;
+        width: 100%;
+        max-width: 480px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .welcome-box::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(ellipse at top right, rgba(180, 240, 58, .08), transparent 70%);
+        pointer-events: none;
+    }
+
+    .welcome-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 28px;
+    }
+
+    .welcome-title {
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: 36px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        line-height: 1;
+        margin-bottom: 6px;
+    }
+
+    .welcome-title span {
+        color: var(--lime);
+    }
+
+    .welcome-sub {
+        font-size: 13px;
+        color: var(--muted);
+        font-weight: 300;
+        margin-bottom: 28px;
+        line-height: 1.6;
+    }
+
+    .wf-label {
+        font-size: 10px;
+        color: var(--muted);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        font-weight: 700;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .wf-input {
+        width: 100%;
+        background: var(--card2);
+        border: 1.5px solid var(--border2);
+        border-radius: 11px;
+        padding: 12px 14px;
+        color: var(--white);
+        font-size: 14px;
+        font-family: inherit;
+        outline: none;
+        transition: border-color .2s;
+        margin-bottom: 14px;
+    }
+
+    .wf-input:focus {
+        border-color: var(--lime);
+    }
+
+    .wf-input::placeholder {
+        color: var(--muted2);
+    }
+
+    .wf-opts {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 14px;
+    }
+
+    .wf-opt {
+        background: var(--card2);
+        border: 1.5px solid var(--border2);
+        border-radius: 11px;
+        padding: 11px 12px;
+        cursor: pointer;
+        transition: all .2s;
+        text-align: left;
+    }
+
+    .wf-opt:hover {
+        border-color: var(--border3);
+    }
+
+    .wf-opt.sel {
+        border-color: var(--lime);
+        background: var(--lime-ghost);
+    }
+
+    .wf-opt-icon {
+        font-size: 18px;
+        margin-bottom: 4px;
+    }
+
+    .wf-opt-label {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--white);
+    }
+
+    .wf-opt-sub {
+        font-size: 10px;
+        color: var(--muted);
+        margin-top: 1px;
+    }
+
+    .wf-opt.sel .wf-opt-label {
+        color: var(--lime);
+    }
+
+    .welcome-btn {
+        width: 100%;
+        background: var(--lime);
+        border: none;
+        border-radius: 11px;
+        padding: 14px;
+        font-family: 'Barlow Condensed', sans-serif;
+        font-weight: 700;
+        font-size: 18px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        cursor: pointer;
+        color: #000;
+        margin-top: 6px;
+        transition: all .2s;
+        box-shadow: 0 0 30px rgba(180, 240, 58, .2);
+    }
+
+    .welcome-btn:hover {
+        filter: brightness(1.08);
+        transform: translateY(-1px);
+    }
+
+    .welcome-btn:disabled {
+        opacity: .4;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .wf-step {
+        font-size: 10px;
+        color: var(--muted);
+        text-align: center;
+        margin-top: 14px;
+    }
+
+    .wf-step span {
+        color: var(--lime);
+        font-weight: 700;
     }
     </style>
 </head>
 <body>
 
-    <!-- DEV SWITCHER -->
+    <!-- ══ EKRAN POWITALNY ══ -->
+    <div class="welcome-overlay" id="welcomeOverlay">
+        <div class="welcome-box">
+
+            <div class="welcome-logo">
+                <div style="width:36px;height:36px;border-radius:10px;background:#0f1f0f;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="5.5" r="3" fill="#b4f03a"/>
+                        <rect x="10" y="9.5" width="4" height="7" rx="2" fill="#b4f03a"/>
+                        <line x1="10" y1="11" x2="5.5" y2="15" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
+                        <line x1="14" y1="10.5" x2="18.5" y2="6" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
+                        <line x1="10.5" y1="16.5" x2="7.5" y2="22" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
+                        <line x1="13.5" y1="16.5" x2="16.5" y2="22" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;">
+                    chceByc
+                    <span style="color:var(--lime)">.fit</span>
+                </div>
+            </div>
+
+            <!-- KROK 1: imię -->
+            <div id="wStep1">
+                <div class="welcome-title">
+                    Witaj w 
+                    <span>chceByc.fit</span>
+                </div>
+                <div class="welcome-sub">Kilka szybkich pytań — AI Coach dopasuje sie do Ciebie. Zajmie to 30 sekund.</div>
+                <label class="wf-label">Jak masz na imie?</label>
+                <input class="wf-input" id="wName" type="text" placeholder="np. Marcin" maxlength="30" oninput="document.getElementById('wBtn1').disabled=this.value.trim().length<2" onkeydown="if(event.key==='Enter')nextStep(2)">
+                <button class="welcome-btn" id="wBtn1" onclick="nextStep(2)" disabled>Dalej →</button>
+                <div class="wf-step">
+                    Krok 
+                    <span>1</span>
+                     z 3
+                </div>
+            </div>
+
+            <!-- KROK 2: cel -->
+            <div id="wStep2" style="display:none;">
+                <div class="welcome-title">
+                    Jaki 
+                    <span>cel</span>
+                    ?
+                </div>
+                <div class="welcome-sub">AI Coach dostosuje porady i oceny postegow do Twojego celu.</div>
+                <div class="wf-opts">
+                    <div class="wf-opt" onclick="selectWOpt(this,'goal','masa')">
+                        <div class="wf-opt-icon">💪</div>
+                        <div class="wf-opt-label">Masa miesniowa</div>
+                        <div class="wf-opt-sub">Buduje sile i objetosc</div>
+                    </div>
+                    <div class="wf-opt" onclick="selectWOpt(this,'goal','redukcja')">
+                        <div class="wf-opt-icon">🔥</div>
+                        <div class="wf-opt-label">Redukcja</div>
+                        <div class="wf-opt-sub">Chude, zdefiniowane cialo</div>
+                    </div>
+                    <div class="wf-opt" onclick="selectWOpt(this,'goal','sprawnosc')">
+                        <div class="wf-opt-icon">⚡</div>
+                        <div class="wf-opt-label">Ogolna sprawnosc</div>
+                        <div class="wf-opt-sub">Kondycja i zdrowie</div>
+                    </div>
+                    <div class="wf-opt" onclick="selectWOpt(this,'goal','sila')">
+                        <div class="wf-opt-icon">🏋️</div>
+                        <div class="wf-opt-label">Sila</div>
+                        <div class="wf-opt-sub">Maksymalne ciezary</div>
+                    </div>
+                </div>
+                <button class="welcome-btn" id="wBtn2" onclick="nextStep(3)" disabled>Dalej →</button>
+                <div class="wf-step">
+                    Krok 
+                    <span>2</span>
+                     z 3
+                </div>
+            </div>
+
+            <!-- KROK 3: poziom -->
+            <div id="wStep3" style="display:none;">
+                <div class="welcome-title">
+                    Jaki 
+                    <span>poziom</span>
+                    ?
+                </div>
+                <div class="welcome-sub">Zeby AI Coach wiedzial jak trudne dawac rady i jak oceniac postepy.</div>
+                <div class="wf-opts">
+                    <div class="wf-opt" onclick="selectWOpt(this,'level','poczatkujacy')">
+                        <div class="wf-opt-icon">🌱</div>
+                        <div class="wf-opt-label">Poczatkujacy</div>
+                        <div class="wf-opt-sub">Mniej niz rok cwiczen</div>
+                    </div>
+                    <div class="wf-opt" onclick="selectWOpt(this,'level','sredni')">
+                        <div class="wf-opt-icon">📈</div>
+                        <div class="wf-opt-label">Srednio-zaawansowany</div>
+                        <div class="wf-opt-sub">1-3 lata cwiczen</div>
+                    </div>
+                    <div class="wf-opt" onclick="selectWOpt(this,'level','zaawansowany')">
+                        <div class="wf-opt-icon">🏆</div>
+                        <div class="wf-opt-label">Zaawansowany</div>
+                        <div class="wf-opt-sub">Powyzej 3 lat</div>
+                    </div>
+                    <div class="wf-opt" onclick="selectWOpt(this,'level','wyczynowy')">
+                        <div class="wf-opt-icon">🥇</div>
+                        <div class="wf-opt-label">Wyczynowy</div>
+                        <div class="wf-opt-sub">Zawodnik / sportowiec</div>
+                    </div>
+                </div>
+                <button class="welcome-btn" id="wBtn3" onclick="finishWelcome()" disabled>Zacznijmy! 🚀</button>
+                <div class="wf-step">
+                    Krok 
+                    <span>3</span>
+                     z 3
+                </div>
+            </div>
+
+        </div>
+    </div>
     <div class="mode-bar">
         <span class="mode-label">Tryb:</span>
         <button class="mode-btn active" id="btn-pro" onclick="setMode('pro')">🏃 Klient Pro</button>
@@ -1386,7 +1687,8 @@
                 <div class="page active" id="page-dashboard-pro">
                     <div style="margin-bottom:16px">
                         <div style="font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;line-height:1;margin-bottom:3px">
-                            Hej, Maciej! 👋
+                            <span class="dash-greeting">Hej, Maciej!</span>
+                             👋
                             <br>
                             <span style="color:var(--lime)">Czas na trening.</span>
                         </div>
@@ -4069,8 +4371,153 @@
         appendAiMsg('assistant', 'Czesc <strong>Maciej</strong>! Widze ze jestes w trakcie programu <strong style="color:var(--lime)">Power Hypertrophy 12W</strong>, tydzien 6 z 12. Dzis czeka Cie <strong style="color:var(--lime)">Dzien A — Pchanie</strong>. Masz 47 treningow i serie 14 dni — swietna robota! W czym moge Ci pomoc?');
     }
 
+    // ── EKRAN POWITALNY ──────────────────────────────────────
+    var wData = {
+        name: '',
+        goal: '',
+        level: ''
+    };
+
+    function nextStep(n) {
+        if (n === 2) {
+            var name = document.getElementById('wName').value.trim();
+            if (name.length < 2)
+                return;
+            wData.name = name;
+        }
+        for (var i = 1; i <= 3; i++) {
+            document.getElementById('wStep' + i).style.display = 'none';
+        }
+        document.getElementById('wStep' + n).style.display = 'block';
+    }
+
+    function selectWOpt(el, type, value) {
+        var parent = el.parentElement;
+        parent.querySelectorAll('.wf-opt').forEach(function(o) {
+            o.classList.remove('sel');
+        });
+        el.classList.add('sel');
+        wData[type] = value;
+        var btnMap = {
+            goal: 'wBtn2',
+            level: 'wBtn3'
+        };
+        var btn = document.getElementById(btnMap[type]);
+        if (btn)
+            btn.disabled = false;
+    }
+
+    function finishWelcome() {
+        if (!wData.name || !wData.goal || !wData.level)
+            return;
+
+        // Zapisz do localStorage
+        localStorage.setItem('cbf_name', wData.name);
+        localStorage.setItem('cbf_goal', wData.goal);
+        localStorage.setItem('cbf_level', wData.level);
+
+        // Ukryj overlay
+        document.getElementById('welcomeOverlay').classList.add('hidden');
+
+        // Zaktualizuj UI
+        applyUserProfile(wData.name, wData.goal, wData.level);
+    }
+
+    function applyUserProfile(name, goal, level) {
+        // Inicjaly do avatara
+        var parts = name.trim().split(' ');
+        var initials = parts.length >= 2
+        ? parts[0][0] + parts[parts.length - 1][0]
+        : name.substring(0, 2);
+        initials = initials.toUpperCase();
+
+        // Avatar i imie w sidebarze
+        var av = document.getElementById('userAv');
+        if (av)
+            av.textContent = initials;
+        var un = document.getElementById('userName');
+        if (un)
+            un.textContent = name;
+
+        // Powitanie na dashboardzie
+        var greetEls = document.querySelectorAll('.dash-greeting');
+        greetEls.forEach(function(el) {
+            el.textContent = 'Hej, ' + name.split(' ')[0] + '!';
+        });
+
+        // Zaktualizuj cel w kafelku postegow
+        var goalMap = {
+            masa: 'masa',
+            redukcja: 'redukcja',
+            sprawnosc: 'sprawnosc',
+            sila: 'masa'
+        };
+        userGoal = goalMap[goal] || 'masa';
+        renderAllTiles();
+
+        // Zaktualizuj system prompt AI Coacha
+        var goalLabPL = {
+            masa: 'budowanie masy miesniowej',
+            redukcja: 'redukcja tkanki tluszczowej',
+            sprawnosc: 'ogolna sprawnosc i kondycja',
+            sila: 'budowanie sily maksymalnej'
+        };
+        var levelPL = {
+            poczatkujacy: 'poczatkujacy (mniej niz rok cwiczen)',
+            sredni: 'srednio-zaawansowany (1-3 lata)',
+            zaawansowany: 'zaawansowany (powyzej 3 lat)',
+            wyczynowy: 'wyczynowy sportowiec'
+        };
+
+        AI_SYSTEM = 'Jestes AI Coachem w aplikacji fitness chceByc.fit. Rozmawiasz z ' + name + '.\n\n'
+        + 'Profil uzytkownika:\n'
+        + '- Imie: ' + name + '\n'
+        + '- Cel: ' + (goalLabPL[goal] || goal) + '\n'
+        + '- Poziom: ' + (levelPL[level] || level) + '\n\n'
+        + 'Zasady odpowiedzi:\n'
+        + '- Odpowiadaj po polsku, krotko i konkretnie (max 3-4 zdania)\n'
+        + '- Badz motywujacy ale rzeczowy — jak dobry trener osobisty\n'
+        + '- Odwoluj sie do celu i poziomu uzytkownika\n'
+        + '- Zwracaj sie do niego po imieniu (' + name.split(' ')[0] + ') lub per ty';
+
+        // Reset czatu z nowym powitaniem
+        aiHistory = [];
+        var box = document.getElementById('aiMessages');
+        if (box) {
+            box.innerHTML = '';
+            var firstName = name.split(' ')[0];
+            var goalMsg = {
+                masa: 'Widzę że chcesz budować masę — świetny cel!',
+                redukcja: 'Widzę że jesteś na redukcji — trzymaj się planu!',
+                sprawnosc: 'Widzę że zależy Ci na ogólnej sprawności — dobry wybór!',
+                sila: 'Widzę że celujesz w siłę maksymalną — lubię to!'
+            };
+            appendAiMsg('assistant', 'Cześć <strong>' + firstName + '</strong>! ' + (goalMsg[goal] || '') + ' Jestem Twoim AI Coachem — znam Twój cel i poziom. W czym mogę Ci dziś pomóc?');
+        }
+    }
+
+    function checkWelcome() {
+        var name = localStorage.getItem('cbf_name');
+        var goal = localStorage.getItem('cbf_goal');
+        var level = localStorage.getItem('cbf_level');
+
+        if (name && goal && level) {
+            // Juz wypelniony — ukryj overlay od razu
+            document.getElementById('welcomeOverlay').classList.add('hidden');
+            wData = {
+                name: name,
+                goal: goal,
+                level: level
+            };
+            applyUserProfile(name, goal, level);
+        }
+
+    }
+    // Jesli nie ma danych — overlay pozostaje widoczny
+
     setMode('pro');
     renderAllTiles();
+    checkWelcome();
     </script>
 </body>
 </html>
