@@ -333,7 +333,7 @@
 
     .ni-badge {
         margin-left: auto;
-        border-radius: 7px;
+        border-radius: 8px;
         padding: 1px 6px;
         font-size: 9px;
         font-weight: 700;
@@ -447,7 +447,7 @@
     .ic-btn {
         width: 30px;
         height: 30px;
-        border-radius: 7px;
+        border-radius: 8px;
         background: var(--card);
         border: 1px solid var(--border);
         display: flex;
@@ -480,7 +480,7 @@
         gap: 5px;
         background: var(--card);
         border: 1px solid var(--border);
-        border-radius: 7px;
+        border-radius: 8px;
         padding: 4px 9px;
         font-size: 10px;
     }
@@ -511,7 +511,7 @@
         gap: 6px;
         background: var(--lime-ghost);
         border: 1px solid rgba(180, 240, 58, .2);
-        border-radius: 7px;
+        border-radius: 8px;
         padding: 5px 11px;
         font-size: 10px;
         font-weight: 600;
@@ -1227,8 +1227,8 @@
         <!-- SIDEBAR -->
         <aside class="sidebar">
             <div class="sb-logo">
-                <div class="logo-icon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <div style="width:30px;height:30px;border-radius:8px;background:#0f1f0f;border:1px solid #1a2e1a;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                         <circle cx="12" cy="5.5" r="3" fill="#b4f03a"/>
                         <rect x="10" y="9.5" width="4" height="7" rx="2" fill="#b4f03a"/>
                         <line x1="10" y1="11" x2="5.5" y2="15" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
@@ -1368,79 +1368,7 @@
                     </div>
 
                     <!-- KAFELEK POSTEPOW -->
-                    <div class="prog-tile" onclick="window.location.href='chcebyc-measurements.html'">
-                        <div class="pt-header">
-                            <div class="pt-title">
-                                <div class="pt-title-dot"></div>
-                                Postepy od poczatku programu
-                            </div>
-                            <div style="display:flex;align-items:center;gap:10px;">
-                                <div class="pt-dates">
-                                    10 sty 2026 
-                                    <strong>→</strong>
-                                     15 mar 2026
-                                </div>
-                                <span class="pt-link">Zobacz pomiary →</span>
-                            </div>
-                        </div>
-                        <div class="pt-metrics">
-                            <div class="pt-metric highlight">
-                                <div class="ptm-icon">⚖️</div>
-                                <div class="ptm-val good">-6.2 kg</div>
-                                <div class="ptm-lbl">Waga</div>
-                                <div class="ptm-base">82.0 → 75.8 kg</div>
-                            </div>
-                            <div class="pt-metric">
-                                <div class="ptm-icon">📐</div>
-                                <div class="ptm-val good">-8 cm</div>
-                                <div class="ptm-lbl">Talia</div>
-                                <div class="ptm-base">88 → 80 cm</div>
-                            </div>
-                            <div class="pt-metric">
-                                <div class="ptm-icon">💪</div>
-                                <div class="ptm-val good">+2 cm</div>
-                                <div class="ptm-lbl">Biceps</div>
-                                <div class="ptm-base">35 → 37 cm</div>
-                            </div>
-                            <div class="pt-metric">
-                                <div class="ptm-icon">📊</div>
-                                <div class="ptm-val good">-6%</div>
-                                <div class="ptm-lbl">Tkanka tl.</div>
-                                <div class="ptm-base">22% → 16%</div>
-                            </div>
-                        </div>
-                        <div class="pt-bar-row">
-                            <div class="pt-bar-item">
-                                <div class="pt-bar-label">Klatka</div>
-                                <div class="pt-bar-track">
-                                    <div class="pt-bar-fill" style="width:78%;background:var(--blue);"></div>
-                                </div>
-                                <div class="pt-bar-diff" style="color:#44ff88;">-4 cm</div>
-                            </div>
-                            <div class="pt-bar-item">
-                                <div class="pt-bar-label">Biodra</div>
-                                <div class="pt-bar-track">
-                                    <div class="pt-bar-fill" style="width:72%;background:var(--purple,#c46eff);"></div>
-                                </div>
-                                <div class="pt-bar-diff" style="color:#44ff88;">-4 cm</div>
-                            </div>
-                            <div class="pt-bar-item">
-                                <div class="pt-bar-label">Udo</div>
-                                <div class="pt-bar-track">
-                                    <div class="pt-bar-fill" style="width:68%;background:var(--orange);"></div>
-                                </div>
-                                <div class="pt-bar-diff" style="color:#44ff88;">-2 cm</div>
-                            </div>
-                        </div>
-                        <div class="pt-cta">
-                            <div class="pt-cta-txt">
-                                Nastepny punkt kontrolny za 
-                                <strong style="color:var(--white)">26 dni</strong>
-                                 — ustalony przez trenera
-                            </div>
-                            <div class="pt-cta-arr">Dodaj pomiar →</div>
-                        </div>
-                    </div>
+                    <div id="prog-tile-pro"></div>
 
                     <div class="gmain">
                         <div style="display:flex;flex-direction:column;gap:12px">
@@ -1614,56 +1542,7 @@
                     </div>
 
                     <!-- KAFELEK POSTEPOW — FREE -->
-                    <div class="prog-tile" onclick="window.location.href='chcebyc-measurements.html'">
-                        <div class="pt-header">
-                            <div class="pt-title">
-                                <div class="pt-title-dot"></div>
-                                Twoje postepy od startu
-                            </div>
-                            <div style="display:flex;align-items:center;gap:10px;">
-                                <div class="pt-dates">
-                                    10 sty 2026 
-                                    <strong>→</strong>
-                                     15 mar 2026
-                                </div>
-                                <span class="pt-link">Wszystkie pomiary →</span>
-                            </div>
-                        </div>
-                        <div class="pt-metrics">
-                            <div class="pt-metric highlight">
-                                <div class="ptm-icon">⚖️</div>
-                                <div class="ptm-val good">-6.2 kg</div>
-                                <div class="ptm-lbl">Waga</div>
-                                <div class="ptm-base">82.0 → 75.8 kg</div>
-                            </div>
-                            <div class="pt-metric">
-                                <div class="ptm-icon">📐</div>
-                                <div class="ptm-val good">-8 cm</div>
-                                <div class="ptm-lbl">Talia</div>
-                                <div class="ptm-base">88 → 80 cm</div>
-                            </div>
-                            <div class="pt-metric">
-                                <div class="ptm-icon">💪</div>
-                                <div class="ptm-val good">+2 cm</div>
-                                <div class="ptm-lbl">Biceps</div>
-                                <div class="ptm-base">35 → 37 cm</div>
-                            </div>
-                            <div class="pt-metric">
-                                <div class="ptm-icon">📊</div>
-                                <div class="ptm-val good">-6%</div>
-                                <div class="ptm-lbl">Tkanka tl.</div>
-                                <div class="ptm-base">22% → 16%</div>
-                            </div>
-                        </div>
-                        <div class="pt-cta">
-                            <div class="pt-cta-txt">
-                                Nastepny punkt kontrolny: 
-                                <strong style="color:var(--cyan)">10 kwi 2026</strong>
-                                 — ustalony przez Marcina
-                            </div>
-                            <div class="pt-cta-arr">Dodaj pomiar →</div>
-                        </div>
-                    </div>
+                    <div id="prog-tile-free"></div>
 
                     <div class="gmain">
                         <div style="display:flex;flex-direction:column;gap:12px">
@@ -1772,15 +1651,15 @@
                             <div class="card">
                                 <div class="ct">Harmonogram trenera</div>
                                 <div style="display:flex;flex-direction:column;gap:5px">
-                                    <div style="display:flex;justify-content:space-between;padding:7px 9px;background:rgba(180,240,58,.05);border:1px solid rgba(180,240,58,.12);border-radius:7px;font-size:11px">
+                                    <div style="display:flex;justify-content:space-between;padding:7px 9px;background:rgba(180,240,58,.05);border:1px solid rgba(180,240,58,.12);border-radius:8px;font-size:11px">
                                         <span style="color:var(--lime)">Dziś</span>
                                         <span>Pchanie — Klatka/Barki</span>
                                     </div>
-                                    <div style="display:flex;justify-content:space-between;padding:7px 9px;background:var(--card2);border:1px solid var(--border);border-radius:7px;font-size:11px">
+                                    <div style="display:flex;justify-content:space-between;padding:7px 9px;background:var(--card2);border:1px solid var(--border);border-radius:8px;font-size:11px">
                                         <span style="color:var(--muted)">Śr</span>
                                         <span>Ciągnięcie — Plecy/Biceps</span>
                                     </div>
-                                    <div style="display:flex;justify-content:space-between;padding:7px 9px;background:var(--card2);border:1px solid var(--border);border-radius:7px;font-size:11px">
+                                    <div style="display:flex;justify-content:space-between;padding:7px 9px;background:var(--card2);border:1px solid var(--border);border-radius:8px;font-size:11px">
                                         <span style="color:var(--muted)">Pt</span>
                                         <span>Nogi + Core</span>
                                     </div>
@@ -1816,79 +1695,7 @@
                     </div>
 
                     <!-- KAFELEK POSTEPOW — CLIENT PRO -->
-                    <div class="prog-tile" onclick="window.location.href='chcebyc-measurements.html'" style="margin-bottom:13px;">
-                        <div class="pt-header">
-                            <div class="pt-title">
-                                <div class="pt-title-dot"></div>
-                                Twoje postepy od startu
-                            </div>
-                            <div style="display:flex;align-items:center;gap:10px;">
-                                <div class="pt-dates">
-                                    10 sty 2026 
-                                    <strong>→</strong>
-                                     15 mar 2026
-                                </div>
-                                <span class="pt-link">Wszystkie pomiary →</span>
-                            </div>
-                        </div>
-                        <div class="pt-metrics">
-                            <div class="pt-metric highlight">
-                                <div class="ptm-icon">⚖️</div>
-                                <div class="ptm-val good">-6.2 kg</div>
-                                <div class="ptm-lbl">Waga</div>
-                                <div class="ptm-base">82.0 → 75.8 kg</div>
-                            </div>
-                            <div class="pt-metric">
-                                <div class="ptm-icon">📐</div>
-                                <div class="ptm-val good">-8 cm</div>
-                                <div class="ptm-lbl">Talia</div>
-                                <div class="ptm-base">88 → 80 cm</div>
-                            </div>
-                            <div class="pt-metric">
-                                <div class="ptm-icon">💪</div>
-                                <div class="ptm-val good">+2 cm</div>
-                                <div class="ptm-lbl">Biceps</div>
-                                <div class="ptm-base">35 → 37 cm</div>
-                            </div>
-                            <div class="pt-metric">
-                                <div class="ptm-icon">📊</div>
-                                <div class="ptm-val good">-6%</div>
-                                <div class="ptm-lbl">Tkanka tl.</div>
-                                <div class="ptm-base">22% → 16%</div>
-                            </div>
-                        </div>
-                        <div class="pt-bar-row">
-                            <div class="pt-bar-item">
-                                <div class="pt-bar-label">Klatka</div>
-                                <div class="pt-bar-track">
-                                    <div class="pt-bar-fill" style="width:78%;background:var(--blue);"></div>
-                                </div>
-                                <div class="pt-bar-diff" style="color:#44ff88;">-4 cm</div>
-                            </div>
-                            <div class="pt-bar-item">
-                                <div class="pt-bar-label">Biodra</div>
-                                <div class="pt-bar-track">
-                                    <div class="pt-bar-fill" style="width:72%;background:#c46eff;"></div>
-                                </div>
-                                <div class="pt-bar-diff" style="color:#44ff88;">-4 cm</div>
-                            </div>
-                            <div class="pt-bar-item">
-                                <div class="pt-bar-label">Udo</div>
-                                <div class="pt-bar-track">
-                                    <div class="pt-bar-fill" style="width:68%;background:var(--orange);"></div>
-                                </div>
-                                <div class="pt-bar-diff" style="color:#44ff88;">-2 cm</div>
-                            </div>
-                        </div>
-                        <div class="pt-cta">
-                            <div class="pt-cta-txt">
-                                Nastepny punkt kontrolny: 
-                                <strong style="color:var(--cyan)">10 kwi 2026</strong>
-                                 — ustalony przez Marcina
-                            </div>
-                            <div class="pt-cta-arr">Dodaj pomiar →</div>
-                        </div>
-                    </div>
+                    <div id="prog-tile-clientpro" style="margin-bottom:13px;"></div>
 
                     <div class="g4" style="margin-bottom:13px">
                         <div class="stat">
@@ -2163,29 +1970,29 @@
                                     <!-- Seria 1 — zrobiona -->
                                     <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:rgba(180,240,58,.06);border:1px solid rgba(180,240,58,.15);border-radius:9px;opacity:.6;">
                                         <span style="font-size:11px;color:var(--muted);width:50px;">Seria 1</span>
-                                        <input style="width:62px;background:var(--border2);border:1px solid var(--border);border-radius:7px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" value="70" type="number">
+                                        <input style="width:62px;background:var(--border2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" value="70" type="number">
                                         <span style="font-size:10px;color:var(--muted);">kg</span>
-                                        <input style="width:52px;background:var(--border2);border:1px solid var(--border);border-radius:7px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" value="10" type="number">
+                                        <input style="width:52px;background:var(--border2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" value="10" type="number">
                                         <span style="font-size:10px;color:var(--muted);">rep</span>
-                                        <button style="margin-left:auto;width:28px;height:28px;border-radius:7px;background:rgba(180,240,58,.15);border:none;color:var(--lime);cursor:pointer;font-size:13px;">✓</button>
+                                        <button style="margin-left:auto;width:28px;height:28px;border-radius:8px;background:rgba(180,240,58,.15);border:none;color:var(--lime);cursor:pointer;font-size:13px;">✓</button>
                                     </div>
                                     <!-- Seria 2 — zrobiona -->
                                     <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:rgba(180,240,58,.06);border:1px solid rgba(180,240,58,.15);border-radius:9px;opacity:.6;">
                                         <span style="font-size:11px;color:var(--muted);width:50px;">Seria 2</span>
-                                        <input style="width:62px;background:var(--border2);border:1px solid var(--border);border-radius:7px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" value="70" type="number">
+                                        <input style="width:62px;background:var(--border2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" value="70" type="number">
                                         <span style="font-size:10px;color:var(--muted);">kg</span>
-                                        <input style="width:52px;background:var(--border2);border:1px solid var(--border);border-radius:7px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" value="10" type="number">
+                                        <input style="width:52px;background:var(--border2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" value="10" type="number">
                                         <span style="font-size:10px;color:var(--muted);">rep</span>
-                                        <button style="margin-left:auto;width:28px;height:28px;border-radius:7px;background:rgba(180,240,58,.15);border:none;color:var(--lime);cursor:pointer;font-size:13px;">✓</button>
+                                        <button style="margin-left:auto;width:28px;height:28px;border-radius:8px;background:rgba(180,240,58,.15);border:none;color:var(--lime);cursor:pointer;font-size:13px;">✓</button>
                                     </div>
                                     <!-- Seria 3 — aktywna -->
                                     <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:rgba(180,240,58,.04);border:1px solid rgba(180,240,58,.25);border-radius:9px;">
                                         <span style="font-size:11px;color:var(--lime);width:50px;font-weight:600;">Seria 3</span>
-                                        <input style="width:62px;background:var(--card2);border:1px solid rgba(180,240,58,.3);border-radius:7px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" placeholder="kg" type="number">
+                                        <input style="width:62px;background:var(--card2);border:1px solid rgba(180,240,58,.3);border-radius:8px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" placeholder="kg" type="number">
                                         <span style="font-size:10px;color:var(--muted);">kg</span>
-                                        <input style="width:52px;background:var(--card2);border:1px solid rgba(180,240,58,.3);border-radius:7px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" placeholder="rep" type="number">
+                                        <input style="width:52px;background:var(--card2);border:1px solid rgba(180,240,58,.3);border-radius:8px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" placeholder="rep" type="number">
                                         <span style="font-size:10px;color:var(--muted);">rep</span>
-                                        <button onclick="startRest()" style="margin-left:auto;width:28px;height:28px;border-radius:7px;background:var(--border2);border:none;color:var(--muted);cursor:pointer;font-size:13px;transition:all .2s;" onmouseover="this.style.background='rgba(180,240,58,.15)';this.style.color='var(--lime)'" onmouseout="this.style.background='var(--border2)';this.style.color='var(--muted)'">○</button>
+                                        <button onclick="startRest()" style="margin-left:auto;width:28px;height:28px;border-radius:8px;background:var(--border2);border:none;color:var(--muted);cursor:pointer;font-size:13px;transition:all .2s;" onmouseover="this.style.background='rgba(180,240,58,.15)';this.style.color='var(--lime)'" onmouseout="this.style.background='var(--border2)';this.style.color='var(--muted)'">○</button>
                                     </div>
                                 </div>
                                 <!-- Timer odpoczynku -->
@@ -2326,19 +2133,19 @@
                                     <div style="font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px;">Serie</div>
                                     <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:rgba(58,240,212,.05);border:1px solid rgba(58,240,212,.15);border-radius:9px;opacity:.6;">
                                         <span style="font-size:11px;color:var(--muted);width:50px;">Seria 1</span>
-                                        <input style="width:62px;background:var(--border2);border:1px solid var(--border);border-radius:7px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" value="50" type="number">
+                                        <input style="width:62px;background:var(--border2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" value="50" type="number">
                                         <span style="font-size:10px;color:var(--muted);">kg</span>
-                                        <input style="width:52px;background:var(--border2);border:1px solid var(--border);border-radius:7px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" value="8" type="number">
+                                        <input style="width:52px;background:var(--border2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" value="8" type="number">
                                         <span style="font-size:10px;color:var(--muted);">rep</span>
-                                        <button style="margin-left:auto;width:28px;height:28px;border-radius:7px;background:rgba(58,240,212,.15);border:none;color:var(--cyan);cursor:pointer;font-size:13px;">✓</button>
+                                        <button style="margin-left:auto;width:28px;height:28px;border-radius:8px;background:rgba(58,240,212,.15);border:none;color:var(--cyan);cursor:pointer;font-size:13px;">✓</button>
                                     </div>
                                     <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:rgba(58,240,212,.04);border:1px solid rgba(58,240,212,.25);border-radius:9px;">
                                         <span style="font-size:11px;color:var(--cyan);width:50px;font-weight:600;">Seria 2</span>
-                                        <input style="width:62px;background:var(--card2);border:1px solid rgba(58,240,212,.3);border-radius:7px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" placeholder="kg" type="number">
+                                        <input style="width:62px;background:var(--card2);border:1px solid rgba(58,240,212,.3);border-radius:8px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" placeholder="kg" type="number">
                                         <span style="font-size:10px;color:var(--muted);">kg</span>
-                                        <input style="width:52px;background:var(--card2);border:1px solid rgba(58,240,212,.3);border-radius:7px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" placeholder="rep" type="number">
+                                        <input style="width:52px;background:var(--card2);border:1px solid rgba(58,240,212,.3);border-radius:8px;padding:6px 10px;color:var(--white);font-size:13px;font-weight:600;text-align:center;font-family:inherit;outline:none;" placeholder="rep" type="number">
                                         <span style="font-size:10px;color:var(--muted);">rep</span>
-                                        <button style="margin-left:auto;width:28px;height:28px;border-radius:7px;background:var(--border2);border:none;color:var(--muted);cursor:pointer;font-size:13px;">○</button>
+                                        <button style="margin-left:auto;width:28px;height:28px;border-radius:8px;background:var(--border2);border:none;color:var(--muted);cursor:pointer;font-size:13px;">○</button>
                                     </div>
                                     <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--card2);border:1px solid var(--border);border-radius:9px;opacity:.5;">
                                         <span style="font-size:11px;color:var(--muted);width:50px;">Seria 3</span>
@@ -2577,10 +2384,10 @@
                                 </div>
                                 <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
                                     <div style="display:flex;gap:8px;">
-                                        <button style="background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">📷 Zdjecie</button>
-                                        <button style="background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">🏆 Wynik</button>
+                                        <button style="background:none;border:1px solid var(--border2);border-radius:8px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">📷 Zdjecie</button>
+                                        <button style="background:none;border:1px solid var(--border2);border-radius:8px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">🏆 Wynik</button>
                                     </div>
-                                    <button style="background:var(--lime);border:none;border-radius:7px;padding:6px 16px;color:var(--black);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">Opublikuj</button>
+                                    <button style="background:var(--lime);border:none;border-radius:8px;padding:6px 16px;color:var(--black);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">Opublikuj</button>
                                 </div>
                             </div>
 
@@ -2622,9 +2429,9 @@
                                             </div>
                                         </div>
                                         <div style="display:flex;gap:8px;">
-                                            <button style="background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;" onmouseover="this.style.color='var(--orange)';this.style.borderColor='rgba(255,140,66,.3)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border2)'">🔥 14</button>
-                                            <button style="background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">💬 3</button>
-                                            <button style="background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">↗ Udostepnij</button>
+                                            <button style="background:none;border:1px solid var(--border2);border-radius:8px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;" onmouseover="this.style.color='var(--orange)';this.style.borderColor='rgba(255,140,66,.3)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border2)'">🔥 14</button>
+                                            <button style="background:none;border:1px solid var(--border2);border-radius:8px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">💬 3</button>
+                                            <button style="background:none;border:1px solid var(--border2);border-radius:8px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">↗ Udostepnij</button>
                                         </div>
                                     </div>
                                 </div>
@@ -2639,8 +2446,8 @@
                                         </div>
                                         <div style="font-size:12px;color:var(--off);line-height:1.6;margin-bottom:10px;">30 dni bez przerwy! Kto by pomyslal ze przetrwam caly miesiac 😅 Teraz cel — 60 dni!</div>
                                         <div style="display:flex;gap:8px;">
-                                            <button style="background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">🔥 28</button>
-                                            <button style="background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">💬 7</button>
+                                            <button style="background:none;border:1px solid var(--border2);border-radius:8px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">🔥 28</button>
+                                            <button style="background:none;border:1px solid var(--border2);border-radius:8px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">💬 7</button>
                                         </div>
                                     </div>
                                 </div>
@@ -2654,8 +2461,8 @@
                                         </div>
                                         <div style="font-size:12px;color:var(--off);line-height:1.6;margin-bottom:10px;">Pierwsze podciagniecia w zyciu! 3 sztuki — dla kogokolwiek kto dopiero zaczyna, to nie jest niemozliwe 💪</div>
                                         <div style="display:flex;gap:8px;">
-                                            <button style="background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">🔥 41</button>
-                                            <button style="background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">💬 12</button>
+                                            <button style="background:none;border:1px solid var(--border2);border-radius:8px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">🔥 41</button>
+                                            <button style="background:none;border:1px solid var(--border2);border-radius:8px;padding:5px 10px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">💬 12</button>
                                         </div>
                                     </div>
                                 </div>
@@ -3356,7 +3163,590 @@
             banner.style.display = 'none';
     }
 
+    // ─── KAFELEK POSTEPOW — silnik plec + cel ────────────────────
+    // W produkcji obie wartosci przychodza z profilu uzytkownika
+    var userGender = 'm'; // 'm' | 'f'
+    var userGoal = 'masa'; // 'masa' | 'redukcja' | 'sprawnosc'
+
+    // ── Matryca oceny: czy zmiana jest dobra? ──────────────────
+    // Zwraca: 'good' | 'bad' | 'neutral'
+    function evalMetric(key, delta, gender, goal) {
+        var up = delta > 0; // true = wzrost, false = spadek
+
+        // Tkanka tluszczowa: zawsze lepiej w dol
+        if (key === 'bf')
+            return up ? 'bad' : 'good';
+
+        // Waga — zalezne od CELU
+        if (key === 'waga') {
+            if (goal === 'masa')
+                return up ? 'good' : 'bad';
+            if (goal === 'redukcja')
+                return up ? 'bad' : 'good';
+            return 'neutral'; // sprawnosc — neutralne
+        }
+
+        // Obwody sylwetki — zalezne od celu i metryki
+        if (key === 'klatka' || key === 'biceps') {
+            // Przyrost masy miesniowej = dobrze na masie i sprawnosci, neutralnie na redukcji
+            if (goal === 'masa')
+                return up ? 'good' : 'neutral';
+            if (goal === 'redukcja')
+                return 'neutral';
+            return up ? 'good' : 'neutral';
+        }
+
+        if (key === 'talia' || key === 'biodra' || key === 'udo' || key === 'lydka' || key === 'szyja') {
+            // Obwody obrysowe — zmniejszenie dobre na redukcji i sprawnosci, neutralne na masie
+            if (goal === 'redukcja')
+                return up ? 'bad' : 'good';
+            if (goal === 'masa')
+                return 'neutral';
+            return up ? 'bad' : 'good';
+        }
+
+        return 'neutral';
+    }
+
+    // ── Surowe dane pomiarowe (plec × cel) ─────────────────────
+    // W produkcji: obliczane dynamicznie z historii pomiarow klienta
+    var rawMeas = {
+        m: {
+            masa: {
+                dateFrom: '10 sty 2026',
+                dateTo: '15 mar 2026',
+                metrics: [
+                {
+                    key: 'klatka',
+                    icon: '🫁',
+                    lbl: 'Klatka',
+                    val: '+4 cm',
+                    delta: 4,
+                    base: '98 → 102 cm',
+                    highlight: true
+                },
+                {
+                    key: 'biceps',
+                    icon: '💪',
+                    lbl: 'Biceps',
+                    val: '+2 cm',
+                    delta: 2,
+                    base: '35 → 37 cm',
+                    highlight: false
+                },
+                {
+                    key: 'waga',
+                    icon: '⚖️',
+                    lbl: 'Waga',
+                    val: '+3.2 kg',
+                    delta: 3.2,
+                    base: '76 → 79.2 kg',
+                    highlight: false
+                },
+                {
+                    key: 'bf',
+                    icon: '📊',
+                    lbl: 'Tkanka tl.',
+                    val: '-2%',
+                    delta: -2,
+                    base: '16% → 14%',
+                    highlight: false
+                },
+                ],
+                bars: [
+                {
+                    key: 'talia',
+                    lbl: 'Talia',
+                    pct: 45,
+                    color: 'var(--orange)',
+                    diff: '+1 cm',
+                    delta: 1
+                },
+                {
+                    key: 'udo',
+                    lbl: 'Udo',
+                    pct: 70,
+                    color: 'var(--blue)',
+                    diff: '+3 cm',
+                    delta: 3
+                },
+                {
+                    key: 'szyja',
+                    lbl: 'Szyja',
+                    pct: 35,
+                    color: 'var(--cyan)',
+                    diff: '+1 cm',
+                    delta: 1
+                },
+                ]
+            },
+            redukcja: {
+                dateFrom: '10 sty 2026',
+                dateTo: '15 mar 2026',
+                metrics: [
+                {
+                    key: 'waga',
+                    icon: '⚖️',
+                    lbl: 'Waga',
+                    val: '-6.2 kg',
+                    delta: -6.2,
+                    base: '82 → 75.8 kg',
+                    highlight: true
+                },
+                {
+                    key: 'klatka',
+                    icon: '🫁',
+                    lbl: 'Klatka',
+                    val: '-4 cm',
+                    delta: -4,
+                    base: '102 → 98 cm',
+                    highlight: false
+                },
+                {
+                    key: 'biceps',
+                    icon: '💪',
+                    lbl: 'Biceps',
+                    val: '+1 cm',
+                    delta: 1,
+                    base: '35 → 36 cm',
+                    highlight: false
+                },
+                {
+                    key: 'bf',
+                    icon: '📊',
+                    lbl: 'Tkanka tl.',
+                    val: '-6%',
+                    delta: -6,
+                    base: '22% → 16%',
+                    highlight: false
+                },
+                ],
+                bars: [
+                {
+                    key: 'talia',
+                    lbl: 'Talia',
+                    pct: 82,
+                    color: 'var(--lime)',
+                    diff: '-8 cm',
+                    delta: -8
+                },
+                {
+                    key: 'udo',
+                    lbl: 'Udo',
+                    pct: 64,
+                    color: 'var(--orange)',
+                    diff: '-2 cm',
+                    delta: -2
+                },
+                {
+                    key: 'szyja',
+                    lbl: 'Szyja',
+                    pct: 55,
+                    color: 'var(--blue)',
+                    diff: '-2 cm',
+                    delta: -2
+                },
+                ]
+            },
+            sprawnosc: {
+                dateFrom: '10 sty 2026',
+                dateTo: '15 mar 2026',
+                metrics: [
+                {
+                    key: 'bf',
+                    icon: '📊',
+                    lbl: 'Tkanka tl.',
+                    val: '-4%',
+                    delta: -4,
+                    base: '20% → 16%',
+                    highlight: true
+                },
+                {
+                    key: 'klatka',
+                    icon: '🫁',
+                    lbl: 'Klatka',
+                    val: '+2 cm',
+                    delta: 2,
+                    base: '98 → 100 cm',
+                    highlight: false
+                },
+                {
+                    key: 'biceps',
+                    icon: '💪',
+                    lbl: 'Biceps',
+                    val: '+1 cm',
+                    delta: 1,
+                    base: '35 → 36 cm',
+                    highlight: false
+                },
+                {
+                    key: 'waga',
+                    icon: '⚖️',
+                    lbl: 'Waga',
+                    val: '-2.0 kg',
+                    delta: -2,
+                    base: '80 → 78 kg',
+                    highlight: false
+                },
+                ],
+                bars: [
+                {
+                    key: 'talia',
+                    lbl: 'Talia',
+                    pct: 60,
+                    color: 'var(--lime)',
+                    diff: '-4 cm',
+                    delta: -4
+                },
+                {
+                    key: 'udo',
+                    lbl: 'Udo',
+                    pct: 50,
+                    color: 'var(--orange)',
+                    diff: '-1 cm',
+                    delta: -1
+                },
+                {
+                    key: 'szyja',
+                    lbl: 'Szyja',
+                    pct: 40,
+                    color: 'var(--blue)',
+                    diff: '-1 cm',
+                    delta: -1
+                },
+                ]
+            }
+        },
+        f: {
+            masa: {
+                dateFrom: '10 sty 2026',
+                dateTo: '15 mar 2026',
+                metrics: [
+                {
+                    key: 'waga',
+                    icon: '⚖️',
+                    lbl: 'Waga',
+                    val: '+2.8 kg',
+                    delta: 2.8,
+                    base: '58 → 60.8 kg',
+                    highlight: true
+                },
+                {
+                    key: 'talia',
+                    icon: '📐',
+                    lbl: 'Talia',
+                    val: '+1 cm',
+                    delta: 1,
+                    base: '65 → 66 cm',
+                    highlight: false
+                },
+                {
+                    key: 'biodra',
+                    icon: '🍑',
+                    lbl: 'Biodra',
+                    val: '+3 cm',
+                    delta: 3,
+                    base: '88 → 91 cm',
+                    highlight: false
+                },
+                {
+                    key: 'bf',
+                    icon: '📊',
+                    lbl: 'Tkanka tl.',
+                    val: '-2%',
+                    delta: -2,
+                    base: '22% → 20%',
+                    highlight: false
+                },
+                ],
+                bars: [
+                {
+                    key: 'udo',
+                    lbl: 'Udo',
+                    pct: 65,
+                    color: '#c46eff',
+                    diff: '+3 cm',
+                    delta: 3
+                },
+                {
+                    key: 'klatka',
+                    lbl: 'Klatka',
+                    pct: 55,
+                    color: 'var(--blue)',
+                    diff: '+2 cm',
+                    delta: 2
+                },
+                {
+                    key: 'lydka',
+                    lbl: 'Lydka',
+                    pct: 45,
+                    color: 'var(--cyan)',
+                    diff: '+1 cm',
+                    delta: 1
+                },
+                ]
+            },
+            redukcja: {
+                dateFrom: '10 sty 2026',
+                dateTo: '15 mar 2026',
+                metrics: [
+                {
+                    key: 'waga',
+                    icon: '⚖️',
+                    lbl: 'Waga',
+                    val: '-5.4 kg',
+                    delta: -5.4,
+                    base: '68 → 62.6 kg',
+                    highlight: true
+                },
+                {
+                    key: 'talia',
+                    icon: '📐',
+                    lbl: 'Talia',
+                    val: '-9 cm',
+                    delta: -9,
+                    base: '76 → 67 cm',
+                    highlight: false
+                },
+                {
+                    key: 'biodra',
+                    icon: '🍑',
+                    lbl: 'Biodra',
+                    val: '-6 cm',
+                    delta: -6,
+                    base: '98 → 92 cm',
+                    highlight: false
+                },
+                {
+                    key: 'bf',
+                    icon: '📊',
+                    lbl: 'Tkanka tl.',
+                    val: '-5%',
+                    delta: -5,
+                    base: '28% → 23%',
+                    highlight: false
+                },
+                ],
+                bars: [
+                {
+                    key: 'udo',
+                    lbl: 'Udo',
+                    pct: 78,
+                    color: '#c46eff',
+                    diff: '-5 cm',
+                    delta: -5
+                },
+                {
+                    key: 'klatka',
+                    lbl: 'Klatka',
+                    pct: 50,
+                    color: 'var(--blue)',
+                    diff: '-3 cm',
+                    delta: -3
+                },
+                {
+                    key: 'lydka',
+                    lbl: 'Lydka',
+                    pct: 40,
+                    color: 'var(--cyan)',
+                    diff: '-2 cm',
+                    delta: -2
+                },
+                ]
+            },
+            sprawnosc: {
+                dateFrom: '10 sty 2026',
+                dateTo: '15 mar 2026',
+                metrics: [
+                {
+                    key: 'bf',
+                    icon: '📊',
+                    lbl: 'Tkanka tl.',
+                    val: '-4%',
+                    delta: -4,
+                    base: '26% → 22%',
+                    highlight: true
+                },
+                {
+                    key: 'waga',
+                    icon: '⚖️',
+                    lbl: 'Waga',
+                    val: '-2.5 kg',
+                    delta: -2.5,
+                    base: '65 → 62.5 kg',
+                    highlight: false
+                },
+                {
+                    key: 'talia',
+                    icon: '📐',
+                    lbl: 'Talia',
+                    val: '-4 cm',
+                    delta: -4,
+                    base: '72 → 68 cm',
+                    highlight: false
+                },
+                {
+                    key: 'biodra',
+                    icon: '🍑',
+                    lbl: 'Biodra',
+                    val: '-2 cm',
+                    delta: -2,
+                    base: '94 → 92 cm',
+                    highlight: false
+                },
+                ],
+                bars: [
+                {
+                    key: 'udo',
+                    lbl: 'Udo',
+                    pct: 55,
+                    color: '#c46eff',
+                    diff: '-3 cm',
+                    delta: -3
+                },
+                {
+                    key: 'klatka',
+                    lbl: 'Klatka',
+                    pct: 40,
+                    color: 'var(--blue)',
+                    diff: '-2 cm',
+                    delta: -2
+                },
+                {
+                    key: 'lydka',
+                    lbl: 'Lydka',
+                    pct: 35,
+                    color: 'var(--cyan)',
+                    diff: '-1 cm',
+                    delta: -1
+                },
+                ]
+            }
+        }
+    };
+
+    // Etykiety celu do wyswietlenia w kafelku
+    var goalLabels = {
+        masa: {
+            txt: 'Budowanie masy',
+            color: 'var(--blue)'
+        },
+        redukcja: {
+            txt: 'Redukcja',
+            color: 'var(--lime)'
+        },
+        sprawnosc: {
+            txt: 'Ogolna sprawnosc',
+            color: 'var(--orange)'
+        }
+    };
+
+    // Checkpoint dla trybow z trenerem
+    var checkpointByGender = {
+        m: '10 kwi 2026 — ustalony przez Marcina',
+        f: '10 kwi 2026 — ustalony przez Marcine'
+    };
+
+    // ── Builder ────────────────────────────────────────────────
+    function buildProgTile(gender, hasTrainer, ctaColor) {
+        var goal = userGoal;
+        var d = rawMeas[gender][goal];
+        var gc = '#44ff88';
+        var rc = 'var(--red)';
+        var nc = 'var(--muted)';
+
+        function evalColor(key, delta) {
+            var result = evalMetric(key, delta, gender, goal);
+            return result === 'good' ? gc : result === 'bad' ? rc : nc;
+        }
+        function evalClass(key, delta) {
+            var result = evalMetric(key, delta, gender, goal);
+            return result === 'good' ? 'good' : result === 'bad' ? 'bad' : 'neutral';
+        }
+
+        var metricsHTML = d.metrics.map(function(m) {
+            return '<div class="pt-metric' + (m.highlight ? ' highlight' : '') + '">' +
+            '<div class="ptm-icon">' + m.icon + '</div>' +
+            '<div class="ptm-val ' + evalClass(m.key, m.delta) + '">' + m.val + '</div>' +
+            '<div class="ptm-lbl">' + m.lbl + '</div>' +
+            '<div class="ptm-base">' + m.base + '</div>' +
+            '</div>';
+        }).join('');
+
+        var barsHTML = d.bars.map(function(b) {
+            var col = evalColor(b.key, b.delta);
+            // pasek zawsze w kolorze metryki, diff w kolorze oceny
+            return '<div class="pt-bar-item">' +
+            '<div class="pt-bar-label">' + b.lbl + '</div>' +
+            '<div class="pt-bar-track"><div class="pt-bar-fill" style="width:' + b.pct + '%;background:' + b.color + ';"></div></div>' +
+            '<div class="pt-bar-diff" style="color:' + col + ';">' + b.diff + '</div>' +
+            '</div>';
+        }).join('');
+
+        var gl = goalLabels[goal];
+        var goalBadge = '<span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:4px;' +
+        'background:rgba(255,255,255,.04);border:1px solid var(--border2);color:' + gl.color + ';">' +
+        gl.txt + '</span>';
+
+        var ctaHTML = hasTrainer
+        ? '<div class="pt-cta-txt">Nastepny punkt kontrolny: <strong style="color:' + (ctaColor || 'var(--cyan)') + '">' + checkpointByGender[gender] + '</strong></div>'
+        : '<div class="pt-cta-txt">Brak aktywnego punktu — <strong style="color:var(--white)">dodaj pomiar samodzielnie</strong></div>';
+
+        // ── Demo switcher (plec + cel) ──
+        function gbtn(g, lbl) {
+            var act = gender === g;
+            return '<button onclick="event.stopPropagation();switchTileGender(\'' + g + '\')" style="padding:3px 8px;border-radius:5px;font-size:9px;font-weight:700;cursor:pointer;border:1px solid var(--border2);background:' + (act ? 'var(--lime)' : 'none') + ';color:' + (act ? '#000' : 'var(--muted)') + ';font-family:inherit;">' + lbl + '</button>';
+        }
+        function gobtn(go, lbl) {
+            var act = goal === go;
+            return '<button onclick="event.stopPropagation();switchTileGoal(\'' + go + '\')" style="padding:3px 8px;border-radius:5px;font-size:9px;font-weight:700;cursor:pointer;border:1px solid var(--border2);background:' + (act ? 'rgba(180,240,58,.2)' : 'none') + ';color:' + (act ? 'var(--lime)' : 'var(--muted)') + ';font-family:inherit;">' + lbl + '</button>';
+        }
+        var switcherHTML =
+        '<div style="display:flex;gap:3px;align-items:center;margin-left:auto;flex-wrap:wrap;justify-content:flex-end;">' +
+        gbtn('m', 'M') + gbtn('f', 'K') +
+        '<span style="width:1px;height:14px;background:var(--border2);margin:0 2px;"></span>' +
+        gobtn('masa', 'Masa') + gobtn('redukcja', 'Redukcja') + gobtn('sprawnosc', 'Sprawnosc') +
+        '</div>';
+
+        return '<div class="prog-tile" onclick="window.location.href=\'chcebyc-measurements.html\'">' +
+        '<div class="pt-header">' +
+        '<div class="pt-title"><div class="pt-title-dot"></div>Postepy od poczatku &nbsp;' + goalBadge + '</div>' +
+        '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
+        '<div class="pt-dates">' + d.dateFrom + ' <strong>→</strong> ' + d.dateTo + '</div>' +
+        '<span class="pt-link">Wszystkie pomiary →</span>' +
+        switcherHTML +
+        '</div>' +
+        '</div>' +
+        '<div class="pt-metrics">' + metricsHTML + '</div>' +
+        '<div class="pt-bar-row">' + barsHTML + '</div>' +
+        '<div class="pt-cta">' + ctaHTML + '<div class="pt-cta-arr">Dodaj pomiar →</div></div>' +
+        '</div>';
+    }
+
+    function renderAllTiles() {
+        var g = userGender;
+        var pro = document.getElementById('prog-tile-pro');
+        var free = document.getElementById('prog-tile-free');
+        var cp = document.getElementById('prog-tile-clientpro');
+        if (pro)
+            pro.innerHTML = buildProgTile(g, false, null);
+        if (free)
+            free.innerHTML = buildProgTile(g, true, 'var(--cyan)');
+        if (cp)
+            cp.innerHTML = buildProgTile(g, true, 'var(--cyan)');
+    }
+
+    function switchTileGender(g) {
+        userGender = g;
+        renderAllTiles();
+    }
+    function switchTileGoal(go) {
+        userGoal = go;
+        renderAllTiles();
+    }
+
     setMode('pro');
+    renderAllTiles();
     </script>
 </body>
 </html>
