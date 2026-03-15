@@ -4019,14 +4019,22 @@
                 })
             });
 
+            var data = await response.json();
+
+            // Blad HTTP
             if (!response.ok) {
-                var errData = await response.json().catch(function() {
-                    return {};
-                });
-                throw new Error(errData.error || 'HTTP ' + response.status);
+                var errMsg = typeof data.error === 'string' ? data.error
+                : data.error && data.error.message ? data.error.message
+                : 'Blad HTTP ' + response.status;
+                throw new Error(errMsg);
             }
 
-            var data = await response.json();
+            // Blad Anthropic (np. niepoprawny klucz)
+            if (data.type === 'error') {
+                var aErr = data.error && data.error.message ? data.error.message : JSON.stringify(data.error);
+                throw new Error('Anthropic: ' + aErr);
+            }
+
             var reply = (data.content && data.content[0] && data.content[0].text) || 'Brak odpowiedzi.';
             removeTyping();
             appendAiMsg('assistant', reply);
@@ -4037,11 +4045,7 @@
 
         } catch (err) {
             removeTyping();
-            var msg = err.message && err.message.indexOf('fetch') !== -1
-            ? 'Nie moge polaczyc sie z serwerem AI. Sprawdz czy Worker jest wdrozony i URL jest poprawny.'
-            : 'Blad: ' + err.message;
-            appendAiMsg('assistant', msg);
-            // Cofnij ostatnia wiadomosc uzytkownika z historii
+            appendAiMsg('assistant', 'Blad: ' + (err.message || 'nieznany'));
             aiHistory.pop();
         }
         setAiLoading(false);
