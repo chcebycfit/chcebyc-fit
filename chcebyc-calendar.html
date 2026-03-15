@@ -1,2955 +1,1422 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>chceByc.fit — Kalendarz treningowy</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-    :root {
-        --black: #070b07;
-        --forest: #0c1a0c;
-        --card: #0f170f;
-        --card2: #131e13;
-        --card3: #172017;
-        --border: #1a2e1a;
-        --border2: #243824;
-        --border3: #2d4a2d;
-        --lime: #b4f03a;
-        --lime-dim: #7aaa22;
-        --lime-ghost: rgba(180, 240, 58, .07);
-        --lime-soft: rgba(180, 240, 58, .15);
-        --white: #eef8e8;
-        --off: #c8ddb8;
-        --muted: #5a7850;
-        --muted2: #3a5230;
-        --cyan: #3af0d4;
-        --cyan-ghost: rgba(58, 240, 212, .08);
-        --cyan-soft: rgba(58, 240, 212, .15);
-        --blue: #4ab0ff;
-        --blue-ghost: rgba(74, 176, 255, .1);
-        --orange: #ff8c42;
-        --orange-ghost: rgba(255, 140, 66, .1);
-        --red: #ff5555;
-        --red-ghost: rgba(255, 85, 85, .1);
-        --gold: #f0c840;
-        --gold-ghost: rgba(240, 200, 64, .1);
-        --green: #44ff88;
-        --purple: #c46eff;
-    }
-
-    *, *::before, *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-
-    html, body {
-        height: 100%;
-        overflow: hidden;
-    }
-
-    body {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        background: var(--black);
-        color: var(--white);
-        display: flex;
-        flex-direction: column;
-    }/* MODE BAR */
-    .mode-bar {
-        background: #0a0f0a;
-        border-bottom: 1px solid var(--border);
-        padding: 7px 20px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex-shrink: 0;
-    }
-
-    .mode-label {
-        font-size: 9px;
-        color: var(--muted);
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        font-weight: 600;
-    }
-
-    .mode-btn {
-        padding: 5px 12px;
-        border-radius: 6px;
-        font-size: 10px;
-        font-weight: 700;
-        letter-spacing: .5px;
-        text-transform: uppercase;
-        cursor: pointer;
-        border: 1px solid var(--border2);
-        background: none;
-        color: var(--muted);
-        transition: all .2s;
-        font-family: inherit;
-    }
-
-    .mode-btn:hover {
-        border-color: var(--border3);
-        color: var(--off);
-    }
-
-    .mode-btn.active {
-        background: var(--lime-ghost);
-        border-color: rgba(180, 240, 58, .3);
-        color: var(--lime);
-    }/* LAYOUT */
-    .app {
-        flex: 1;
-        display: flex;
-        overflow: hidden;
-    }/* SIDEBAR */
-    .sidebar {
-        width: 240px;
-        flex-shrink: 0;
-        background: var(--forest);
-        border-right: 1px solid var(--border);
-        display: flex;
-        flex-direction: column;
-    }
-
-    .sb-logo {
-        padding: 16px 16px 14px;
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        align-items: center;
-        gap: 9px;
-    }
-
-    .logo-icon {
-        width: 30px;
-        height: 30px;
-        border-radius: 8px;
-        background: #0f1f0f;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .logo-main {
-        font-family: 'Barlow Condensed', sans-serif;
-        font-weight: 900;
-        font-size: 18px;
-    }
-
-    .logo-main span {
-        color: var(--lime);
-    }
-
-    .sb-context {
-        padding: 12px 14px;
-        border-bottom: 1px solid var(--border);
-        flex-shrink: 0;
-    }
-
-    .ctx-label {
-        font-size: 9px;
-        color: var(--muted);
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        margin-bottom: 6px;
-        font-weight: 700;
-    }
-
-    .ctx-card {
-        background: var(--cyan-ghost);
-        border: 1px solid rgba(58, 240, 212, .15);
-        border-radius: 10px;
-        padding: 10px 12px;
-        display: flex;
-        align-items: center;
-        gap: 9px;
-    }
-
-    .ctx-av {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Barlow Condensed', sans-serif;
-        font-size: 13px;
-        font-weight: 900;
-        flex-shrink: 0;
-    }
-
-    .ctx-name {
-        font-size: 12px;
-        font-weight: 700;
-    }
-
-    .ctx-sub {
-        font-size: 10px;
-        color: var(--cyan);
-    }/* Mini calendar in sidebar */
-    .sb-mini-cal {
-        padding: 14px;
-        flex-shrink: 0;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .mini-cal-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 10px;
-    }
-
-    .mini-cal-month {
-        font-family: 'Barlow Condensed', sans-serif;
-        font-size: 14px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: .5px;
-    }
-
-    .mini-nav {
-        background: none;
-        border: none;
-        color: var(--muted);
-        cursor: pointer;
-        font-size: 14px;
-        padding: 2px 6px;
-        transition: color .2s;
-    }
-
-    .mini-nav:hover {
-        color: var(--off);
-    }
-
-    .mini-grid {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 2px;
-    }
-
-    .mini-day-hdr {
-        font-size: 8px;
-        color: var(--muted2);
-        text-align: center;
-        padding: 2px 0;
-        letter-spacing: .5px;
-    }
-
-    .mini-day {
-        font-size: 10px;
-        text-align: center;
-        padding: 4px 2px;
-        border-radius: 5px;
-        cursor: pointer;
-        color: var(--muted);
-        transition: all .15s;
-        position: relative;
-    }
-
-    .mini-day:hover {
-        background: var(--border2);
-        color: var(--off);
-    }
-
-    .mini-day.today {
-        background: var(--lime);
-        color: var(--black);
-        font-weight: 700;
-    }
-
-    .mini-day.selected {
-        background: var(--cyan-ghost);
-        border: 1px solid rgba(58, 240, 212, .3);
-        color: var(--cyan);
-    }
-
-    .mini-day.has-workout::after {
-        content: '';
-        position: absolute;
-        bottom: 1px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 3px;
-        height: 3px;
-        border-radius: 50%;
-        background: var(--lime);
-    }
-
-    .mini-day.has-workout.today::after {
-        background: var(--black);
-    }
-
-    .mini-day.other-month {
-        opacity: .25;
-    }/* Legenda */
-    .sb-legend {
-        padding: 12px 14px;
-        flex-shrink: 0;
-    }
-
-    .legend-title {
-        font-size: 9px;
-        color: var(--muted);
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        margin-bottom: 8px;
-        font-weight: 700;
-    }
-
-    .legend-row {
-        display: flex;
-        align-items: center;
-        gap: 7px;
-        margin-bottom: 5px;
-        font-size: 10px;
-        color: var(--off);
-    }
-
-    .legend-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 2px;
-        flex-shrink: 0;
-    }/* Upcoming */
-    .sb-upcoming {
-        flex: 1;
-        overflow-y: auto;
-        padding: 12px 14px;
-        scrollbar-width: none;
-    }
-
-    .sb-upcoming::-webkit-scrollbar {
-        display: none;
-    }
-
-    .upcoming-title {
-        font-size: 9px;
-        color: var(--muted);
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        margin-bottom: 8px;
-        font-weight: 700;
-    }
-
-    .upcoming-item {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 9px;
-        padding: 9px 11px;
-        margin-bottom: 6px;
-        cursor: pointer;
-        transition: all .2s;
-    }
-
-    .upcoming-item:hover {
-        border-color: var(--border2);
-    }
-
-    .upcoming-date {
-        font-size: 9px;
-        color: var(--muted);
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        margin-bottom: 3px;
-    }
-
-    .upcoming-name {
-        font-size: 12px;
-        font-weight: 600;
-    }
-
-    .upcoming-meta {
-        font-size: 10px;
-        color: var(--muted);
-        margin-top: 1px;
-    }/* MAIN */
-    .main {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-    }/* TOPBAR */
-    .topbar {
-        height: 54px;
-        flex-shrink: 0;
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 22px;
-        background: rgba(7, 11, 7, .9);
-        backdrop-filter: blur(12px);
-    }
-
-    .tb-nav {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .nav-arrow {
-        width: 30px;
-        height: 30px;
-        border-radius: 7px;
-        background: var(--card);
-        border: 1px solid var(--border);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        font-size: 14px;
-        transition: all .2s;
-    }
-
-    .nav-arrow:hover {
-        border-color: var(--border2);
-    }
-
-    .current-period {
-        font-family: 'Barlow Condensed', sans-serif;
-        font-size: 22px;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: .5px;
-        min-width: 180px;
-        text-align: center;
-    }
-
-    .today-btn {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 7px;
-        padding: 5px 14px;
-        font-family: inherit;
-        font-size: 11px;
-        font-weight: 600;
-        color: var(--muted);
-        cursor: pointer;
-        transition: all .2s;
-    }
-
-    .today-btn:hover {
-        border-color: var(--border2);
-        color: var(--off);
-    }
-
-    .tb-right {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .view-toggle {
-        display: flex;
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        overflow: hidden;
-    }
-
-    .vt-btn {
-        padding: 6px 14px;
-        font-size: 11px;
-        font-weight: 600;
-        cursor: pointer;
-        border: none;
-        background: none;
-        color: var(--muted);
-        transition: all .2s;
-        font-family: inherit;
-    }
-
-    .vt-btn.active {
-        background: var(--lime-ghost);
-        color: var(--lime);
-    }
-
-    .add-btn {
-        background: var(--cyan);
-        border: none;
-        border-radius: 8px;
-        padding: 7px 16px;
-        font-family: 'Barlow Condensed', sans-serif;
-        font-weight: 700;
-        font-size: 14px;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        cursor: pointer;
-        color: var(--black);
-        transition: all .2s;
-    }
-
-    .add-btn:hover {
-        background: #5af4e0;
-    }
-
-    .import-btn {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 7px 14px;
-        font-family: inherit;
-        font-size: 11px;
-        font-weight: 600;
-        color: var(--muted);
-        cursor: pointer;
-        transition: all .2s;
-    }
-
-    .import-btn:hover {
-        border-color: var(--border2);
-        color: var(--off);
-    }/* CALENDAR AREA */
-    .cal-area {
-        flex: 1;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-    }/* WEEK VIEW */
-    .week-view {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-    }
-
-    .week-header {
-        display: grid;
-        grid-template-columns: 52px repeat(7, 1fr);
-        border-bottom: 1px solid var(--border);
-        flex-shrink: 0;
-    }
-
-    .week-hdr-spacer {
-        border-right: 1px solid var(--border);
-    }
-
-    .week-hdr-day {
-        padding: 10px 8px;
-        text-align: center;
-        border-right: 1px solid var(--border);
-        transition: background .15s;
-    }
-
-    .week-hdr-day:last-child {
-        border-right: none;
-    }
-
-    .week-hdr-day.today {
-        background: var(--lime-ghost);
-    }
-
-    .wh-name {
-        font-size: 10px;
-        color: var(--muted);
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        margin-bottom: 3px;
-    }
-
-    .wh-num {
-        font-family: 'Barlow Condensed', sans-serif;
-        font-size: 22px;
-        font-weight: 900;
-        line-height: 1;
-    }
-
-    .week-hdr-day.today .wh-num {
-        color: var(--lime);
-    }
-
-    .week-body {
-        flex: 1;
-        overflow-y: auto;
-        display: grid;
-        grid-template-columns: 52px repeat(7, 1fr);
-        scrollbar-width: thin;
-        scrollbar-color: var(--border2) transparent;
-    }
-
-    .time-col {
-        display: flex;
-        flex-direction: column;
-        border-right: 1px solid var(--border);
-    }
-
-    .time-slot {
-        height: 60px;
-        display: flex;
-        align-items: flex-start;
-        justify-content: flex-end;
-        padding: 4px 6px 0 0;
-        font-size: 9px;
-        color: var(--muted2);
-        letter-spacing: .5px;
-        border-bottom: 1px solid var(--border);
-        flex-shrink: 0;
-    }
-
-    .day-col {
-        border-right: 1px solid var(--border);
-        position: relative;
-        cursor: pointer;
-        transition: background .15s;
-    }
-
-    .day-col:last-child {
-        border-right: none;
-    }
-
-    .day-col:hover {
-        background: rgba(255, 255, 255, .012);
-    }
-
-    .day-col.today-col {
-        background: rgba(180, 240, 58, .02);
-    }
-
-    .hour-line {
-        height: 60px;
-        border-bottom: 1px solid var(--border);
-        position: relative;
-    }
-
-    .hour-line:hover::after {
-        content: '+';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 18px;
-        color: var(--muted2);
-        pointer-events: none;
-    }/* MONTH VIEW */
-    .month-view {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-    }
-
-    .month-header {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        border-bottom: 1px solid var(--border);
-        flex-shrink: 0;
-    }
-
-    .month-hdr-day {
-        padding: 8px;
-        text-align: center;
-        font-size: 9px;
-        color: var(--muted);
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        border-right: 1px solid var(--border);
-    }
-
-    .month-hdr-day:last-child {
-        border-right: none;
-    }
-
-    .month-grid {
-        flex: 1;
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        grid-template-rows: repeat(6, 1fr);
-        overflow: hidden;
-    }
-
-    .month-cell {
-        border-right: 1px solid var(--border);
-        border-bottom: 1px solid var(--border);
-        padding: 6px 8px;
-        cursor: pointer;
-        transition: background .15s;
-        overflow: hidden;
-        min-height: 0;
-    }
-
-    .month-cell:nth-child(7n) {
-        border-right: none;
-    }
-
-    .month-cell:hover {
-        background: rgba(255, 255, 255, .015);
-    }
-
-    .month-cell.today-cell {
-        background: rgba(180, 240, 58, .04);
-    }
-
-    .month-cell.other-month-cell {
-        opacity: .35;
-    }
-
-    .mc-num {
-        font-size: 12px;
-        font-weight: 600;
-        margin-bottom: 4px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .mc-num span {
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .today-cell .mc-num span {
-        background: var(--lime);
-        color: var(--black);
-        font-weight: 900;
-    }/* WORKOUT CARDS in calendar */
-    .workout-chip {
-        border-radius: 5px;
-        padding: 3px 7px;
-        font-size: 10px;
-        font-weight: 600;
-        margin-bottom: 3px;
-        cursor: pointer;
-        transition: all .15s;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .workout-chip:hover {
-        filter: brightness(1.15);
-    }
-
-    .chip-planned {
-        background: rgba(180, 240, 58, .12);
-        border: 1px solid rgba(180, 240, 58, .2);
-        color: var(--lime);
-    }
-
-    .chip-done {
-        background: rgba(68, 255, 136, .1);
-        border: 1px solid rgba(68, 255, 136, .2);
-        color: var(--green);
-    }
-
-    .chip-missed {
-        background: rgba(255, 85, 85, .1);
-        border: 1px solid rgba(255, 85, 85, .2);
-        color: var(--red);
-    }
-
-    .chip-moved {
-        background: rgba(255, 140, 66, .1);
-        border: 1px solid rgba(255, 140, 66, .2);
-        color: var(--orange);
-    }
-
-    .chip-trainer {
-        background: rgba(58, 240, 212, .1);
-        border: 1px solid rgba(58, 240, 212, .2);
-        color: var(--cyan);
-    }/* Week workout blocks */
-    .workout-block {
-        position: absolute;
-        left: 4px;
-        right: 4px;
-        border-radius: 8px;
-        padding: 6px 8px;
-        cursor: pointer;
-        transition: all .2s;
-        overflow: hidden;
-        z-index: 1;
-    }
-
-    .workout-block:hover {
-        filter: brightness(1.1);
-        transform: translateX(2px);
-    }
-
-    .wb-planned {
-        background: rgba(180, 240, 58, .12);
-        border-left: 3px solid var(--lime);
-    }
-
-    .wb-done {
-        background: rgba(68, 255, 136, .08);
-        border-left: 3px solid var(--green);
-    }
-
-    .wb-missed {
-        background: rgba(255, 85, 85, .08);
-        border-left: 3px solid var(--red);
-    }
-
-    .wb-moved {
-        background: rgba(255, 140, 66, .08);
-        border-left: 3px solid var(--orange);
-    }
-
-    .wb-trainer {
-        background: rgba(58, 240, 212, .08);
-        border-left: 3px solid var(--cyan);
-    }
-
-    .wb-title {
-        font-size: 11px;
-        font-weight: 700;
-        line-height: 1.2;
-    }
-
-    .wb-meta {
-        font-size: 9px;
-        color: var(--muted);
-        margin-top: 2px;
-    }
-
-    .wb-status {
-        font-size: 8px;
-        font-weight: 700;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        margin-top: 3px;
-    }/* MODAL */
-    .overlay {
-        display: none;
-        position: fixed;
-        inset: 0;
-        z-index: 500;
-        background: rgba(7, 11, 7, .88);
-        backdrop-filter: blur(12px);
-        align-items: center;
-        justify-content: center;
-    }
-
-    .overlay.open {
-        display: flex;
-    }
-
-    .modal {
-        background: var(--card);
-        border: 1px solid var(--border2);
-        border-radius: 20px;
-        width: 520px;
-        max-width: 95vw;
-        max-height: 90vh;
-        overflow-y: auto;
-    }
-
-    .modal-head {
-        padding: 22px 24px 16px;
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .modal-title {
-        font-family: 'Barlow Condensed', sans-serif;
-        font-size: 26px;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: .5px;
-    }
-
-    .modal-close {
-        background: none;
-        border: none;
-        color: var(--muted);
-        font-size: 22px;
-        cursor: pointer;
-        padding: 4px;
-        line-height: 1;
-        transition: color .2s;
-    }
-
-    .modal-close:hover {
-        color: var(--red);
-    }
-
-    .modal-body {
-        padding: 20px 24px;
-    }
-
-    .form-group {
-        margin-bottom: 14px;
-    }
-
-    .form-label {
-        display: block;
-        font-size: 10px;
-        color: var(--muted);
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        margin-bottom: 5px;
-        font-weight: 600;
-    }
-
-    .form-input {
-        width: 100%;
-        background: var(--card2);
-        border: 1px solid var(--border);
-        border-radius: 9px;
-        padding: 10px 12px;
-        color: var(--white);
-        font-size: 13px;
-        font-family: inherit;
-        outline: none;
-        transition: border-color .2s;
-    }
-
-    .form-input:focus {
-        border-color: var(--cyan);
-    }
-
-    .form-input::placeholder {
-        color: var(--muted);
-    }
-
-    .form-select {
-        cursor: pointer;
-        appearance: none;
-    }
-
-    .form-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-    }
-
-    .form-textarea {
-        resize: vertical;
-        min-height: 72px;
-    }
-
-    .ex-add-row {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        margin-top: 8px;
-    }
-
-    .ex-add-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        background: var(--card2);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 8px 10px;
-    }
-
-    .ex-add-name {
-        font-size: 12px;
-        font-weight: 600;
-        flex: 1;
-    }
-
-    .ex-add-sets {
-        font-size: 10px;
-        color: var(--muted);
-    }
-
-    .ex-remove {
-        background: none;
-        border: none;
-        color: var(--muted);
-        cursor: pointer;
-        font-size: 14px;
-        padding: 2px;
-        transition: color .2s;
-    }
-
-    .ex-remove:hover {
-        color: var(--red);
-    }
-
-    .modal-foot {
-        padding: 16px 24px;
-        border-top: 1px solid var(--border);
-        display: flex;
-        gap: 10px;
-    }
-
-    .btn {
-        border-radius: 8px;
-        padding: 10px 18px;
-        font-family: 'Barlow Condensed', sans-serif;
-        font-weight: 700;
-        font-size: 14px;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        cursor: pointer;
-        transition: all .2s;
-        border: none;
-    }
-
-    .btn-cyan {
-        background: var(--cyan);
-        color: var(--black);
-    }
-
-    .btn-cyan:hover {
-        background: #5af4e0;
-    }
-
-    .btn-lime {
-        background: var(--lime);
-        color: var(--black);
-    }
-
-    .btn-lime:hover {
-        background: #ceff6a;
-    }
-
-    .btn-outline {
-        background: none;
-        border: 1px solid var(--border2);
-        color: var(--muted);
-    }
-
-    .btn-outline:hover {
-        border-color: var(--muted);
-        color: var(--off);
-    }
-
-    .btn-danger {
-        background: var(--red-ghost);
-        border: 1px solid rgba(255, 85, 85, .2);
-        color: var(--red);
-    }/* Move modal */
-    .move-date-grid {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 4px;
-        margin: 12px 0;
-    }
-
-    .move-day {
-        padding: 8px 4px;
-        text-align: center;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all .2s;
-        background: var(--card2);
-        border: 1px solid var(--border);
-    }
-
-    .move-day:hover {
-        border-color: var(--border2);
-    }
-
-    .move-day.selected-day {
-        background: var(--cyan-ghost);
-        border-color: rgba(58, 240, 212, .3);
-        color: var(--cyan);
-    }
-
-    .move-day.has-conflict {
-        border-color: rgba(255, 85, 85, .3);
-    }
-
-    .md-name {
-        font-size: 9px;
-        color: var(--muted);
-        letter-spacing: 1px;
-        text-transform: uppercase;
-    }
-
-    .md-num {
-        font-family: 'Barlow Condensed', sans-serif;
-        font-size: 20px;
-        font-weight: 900;
-        line-height: 1;
-        margin: 2px 0;
-    }
-
-    .md-dot {
-        height: 4px;
-        display: flex;
-        gap: 2px;
-        justify-content: center;
-        margin-top: 2px;
-    }
-
-    .md-dot span {
-        width: 4px;
-        height: 4px;
-        border-radius: 50%;
-        background: var(--lime);
-    }/* Import from program */
-    .program-list {
-        display: flex;
-        flex-direction: column;
-        gap: 7px;
-        margin-bottom: 16px;
-    }
-
-    .prog-item {
-        background: var(--card2);
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        padding: 12px 14px;
-        cursor: pointer;
-        transition: all .2s;
-    }
-
-    .prog-item:hover {
-        border-color: var(--border2);
-    }
-
-    .prog-item.selected {
-        border-color: var(--cyan);
-        background: var(--cyan-ghost);
-    }
-
-    .prog-item-name {
-        font-size: 13px;
-        font-weight: 700;
-        margin-bottom: 3px;
-    }
-
-    .prog-item-meta {
-        font-size: 10px;
-        color: var(--muted);
-    }
-
-    .prog-weeks {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        margin-top: 10px;
-        max-height: 180px;
-        overflow-y: auto;
-    }
-
-    .prog-week-row {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 7px 10px;
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 7px;
-        cursor: pointer;
-        transition: all .2s;
-    }
-
-    .prog-week-row:hover {
-        border-color: var(--border2);
-    }
-
-    .prog-week-row.selected {
-        border-color: var(--lime);
-        background: var(--lime-ghost);
-    }/* Toast */
-    .toast {
-        position: fixed;
-        bottom: 24px;
-        right: 24px;
-        background: var(--card);
-        border: 1px solid rgba(58, 240, 212, .3);
-        border-radius: 12px;
-        padding: 12px 18px;
-        font-size: 12px;
-        color: var(--cyan);
-        z-index: 9999;
-        display: none;
-        animation: toastIn .3s ease;
-    }
-
-    @keyframes toastIn {
-        from {
-            opacity: 0;
-            transform:translateY(12px)
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0)
-        }
-    }/* Drag styles */
-    .dragging {
-        opacity: .5;
-        cursor: grabbing !important;
-    }
-
-    .drag-over {
-        background: rgba(58, 240, 212, .06) !important;
-        border: 1px dashed rgba(58, 240, 212, .3) !important;
-    }
-
-    ::-webkit-scrollbar {
-        width: 3px;
-        height: 3px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: var(--border2);
-        border-radius: 2px;
-    }
-
-    .ex-cat-btn {
-        background: var(--card2);
-        border: 1px solid var(--border);
-        border-radius: 5px;
-        padding: 3px 9px;
-        font-size: 10px;
-        font-weight: 600;
-        color: var(--muted);
-        cursor: pointer;
-        font-family: inherit;
-        transition: all .2s;
-    }
-
-    .ex-cat-btn:hover {
-        border-color: var(--border2);
-        color: var(--off);
-    }
-
-    .ex-cat-btn.active {
-        background: var(--lime-ghost);
-        border-color: rgba(180, 240, 58, .3);
-        color: var(--lime);
-    }
-
-    .ex-result {
-        display: flex;
-        align-items: center;
-        gap: 9px;
-        padding: 8px 10px;
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all .2s;
-    }
-
-    .ex-result:hover {
-        border-color: var(--border2);
-        background: var(--card2);
-    }
-
-    .ex-result-name {
-        font-size: 12px;
-        font-weight: 600;
-        flex: 1;
-    }
-
-    .ex-result-cat {
-        font-size: 9px;
-        font-weight: 700;
-        padding: 2px 6px;
-        border-radius: 4px;
-        background: var(--border2);
-        color: var(--muted);
-    }
-
-    .ex-result-mine {
-        font-size: 9px;
-        font-weight: 700;
-        padding: 2px 6px;
-        border-radius: 4px;
-        background: var(--cyan-ghost);
-        color: var(--cyan);
-    }
-
-    .ex-freeform {
-        background: var(--card2);
-        border: 1px solid rgba(180, 240, 58, .15);
-        border-left: 3px solid var(--lime);
-        border-radius: 9px;
-        padding: 10px 12px;
-        margin-bottom: 6px;
-        position: relative;
-    }
-
-    .ex-freeform-label {
-        font-size: 9px;
-        color: var(--lime);
-        font-weight: 700;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        margin-bottom: 5px;
-    }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>chceByc.fit — Kalendarz treningowy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black:#070b07;--forest:#0c1a0c;--card:#0f170f;--card2:#131e13;--card3:#172017;
+  --border:#1a2e1a;--border2:#243824;--border3:#2d4a2d;
+  --lime:#b4f03a;--lime-dim:#7aaa22;--lime-ghost:rgba(180,240,58,.07);--lime-soft:rgba(180,240,58,.15);
+  --white:#eef8e8;--off:#c8ddb8;--muted:#5a7850;--muted2:#3a5230;
+  --cyan:#3af0d4;--cyan-ghost:rgba(58,240,212,.08);--cyan-soft:rgba(58,240,212,.15);
+  --blue:#4ab0ff;--blue-ghost:rgba(74,176,255,.1);
+  --orange:#ff8c42;--orange-ghost:rgba(255,140,66,.1);
+  --red:#ff5555;--red-ghost:rgba(255,85,85,.1);
+  --gold:#f0c840;--gold-ghost:rgba(240,200,64,.1);
+  --green:#44ff88;--purple:#c46eff;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--black);color:var(--white);display:flex;flex-direction:column;}
+
+/* MODE BAR */
+.mode-bar{background:#0a0f0a;border-bottom:1px solid var(--border);padding:7px 20px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.mode-label{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-weight:600;}
+.mode-btn{padding:5px 12px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;border:1px solid var(--border2);background:none;color:var(--muted);transition:all .2s;font-family:inherit;}
+.mode-btn:hover{border-color:var(--border3);color:var(--off);}
+.mode-btn.active{background:var(--lime-ghost);border-color:rgba(180,240,58,.3);color:var(--lime);}
+
+/* LAYOUT */
+.app{flex:1;display:flex;overflow:hidden;}
+
+/* SIDEBAR */
+.sidebar{width:240px;flex-shrink:0;background:var(--forest);border-right:1px solid var(--border);display:flex;flex-direction:column;}
+.sb-logo{padding:16px 16px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px;}
+.logo-icon{width:30px;height:30px;border-radius:8px;background:#0f1f0f;display:flex;align-items:center;justify-content:center;}
+.logo-main{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;}
+.logo-main span{color:var(--lime);}
+.sb-context{padding:12px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.ctx-label{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;font-weight:700;}
+.ctx-card{background:var(--cyan-ghost);border:1px solid rgba(58,240,212,.15);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:9px;}
+.ctx-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:900;flex-shrink:0;}
+.ctx-name{font-size:12px;font-weight:700;}
+.ctx-sub{font-size:10px;color:var(--cyan);}
+
+/* Mini calendar in sidebar */
+.sb-mini-cal{padding:14px;flex-shrink:0;border-bottom:1px solid var(--border);}
+.mini-cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.mini-cal-month{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.mini-nav{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:2px 6px;transition:color .2s;}
+.mini-nav:hover{color:var(--off);}
+.mini-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+.mini-day-hdr{font-size:8px;color:var(--muted2);text-align:center;padding:2px 0;letter-spacing:.5px;}
+.mini-day{font-size:10px;text-align:center;padding:4px 2px;border-radius:5px;cursor:pointer;color:var(--muted);transition:all .15s;position:relative;}
+.mini-day:hover{background:var(--border2);color:var(--off);}
+.mini-day.today{background:var(--lime);color:var(--black);font-weight:700;}
+.mini-day.selected{background:var(--cyan-ghost);border:1px solid rgba(58,240,212,.3);color:var(--cyan);}
+.mini-day.has-workout::after{content:'';position:absolute;bottom:1px;left:50%;transform:translateX(-50%);width:3px;height:3px;border-radius:50%;background:var(--lime);}
+.mini-day.has-workout.today::after{background:var(--black);}
+.mini-day.other-month{opacity:.25;}
+
+/* Legenda */
+.sb-legend{padding:12px 14px;flex-shrink:0;}
+.legend-title{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;font-weight:700;}
+.legend-row{display:flex;align-items:center;gap:7px;margin-bottom:5px;font-size:10px;color:var(--off);}
+.legend-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
+
+/* Upcoming */
+.sb-upcoming{flex:1;overflow-y:auto;padding:12px 14px;scrollbar-width:none;}
+.sb-upcoming::-webkit-scrollbar{display:none;}
+.upcoming-title{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;font-weight:700;}
+.upcoming-item{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:9px 11px;margin-bottom:6px;cursor:pointer;transition:all .2s;}
+.upcoming-item:hover{border-color:var(--border2);}
+.upcoming-date{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;}
+.upcoming-name{font-size:12px;font-weight:600;}
+.upcoming-meta{font-size:10px;color:var(--muted);margin-top:1px;}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+
+/* TOPBAR */
+.topbar{height:54px;flex-shrink:0;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:rgba(7,11,7,.9);backdrop-filter:blur(12px);}
+.tb-nav{display:flex;align-items:center;gap:8px;}
+.nav-arrow{width:30px;height:30px;border-radius:7px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;transition:all .2s;}
+.nav-arrow:hover{border-color:var(--border2);}
+.current-period{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;min-width:180px;text-align:center;}
+.today-btn{background:var(--card);border:1px solid var(--border);border-radius:7px;padding:5px 14px;font-family:inherit;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;}
+.today-btn:hover{border-color:var(--border2);color:var(--off);}
+.tb-right{display:flex;align-items:center;gap:8px;}
+.view-toggle{display:flex;background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.vt-btn{padding:6px 14px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--muted);transition:all .2s;font-family:inherit;}
+.vt-btn.active{background:var(--lime-ghost);color:var(--lime);}
+.add-btn{background:var(--cyan);border:none;border-radius:8px;padding:7px 16px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;color:var(--black);transition:all .2s;}
+.add-btn:hover{background:#5af4e0;}
+.import-btn{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-family:inherit;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;}
+.import-btn:hover{border-color:var(--border2);color:var(--off);}
+
+/* CALENDAR AREA */
+.cal-area{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+
+/* WEEK VIEW */
+.week-view{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.week-header{display:grid;grid-template-columns:52px repeat(7,1fr);border-bottom:1px solid var(--border);flex-shrink:0;}
+.week-hdr-spacer{border-right:1px solid var(--border);}
+.week-hdr-day{padding:10px 8px;text-align:center;border-right:1px solid var(--border);transition:background .15s;}
+.week-hdr-day:last-child{border-right:none;}
+.week-hdr-day.today{background:var(--lime-ghost);}
+.wh-name{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;}
+.wh-num{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;line-height:1;}
+.week-hdr-day.today .wh-num{color:var(--lime);}
+.week-body{flex:1;overflow-y:auto;display:grid;grid-template-columns:52px repeat(7,1fr);scrollbar-width:thin;scrollbar-color:var(--border2) transparent;}
+.time-col{display:flex;flex-direction:column;border-right:1px solid var(--border);}
+.time-slot{height:60px;display:flex;align-items:flex-start;justify-content:flex-end;padding:4px 6px 0 0;font-size:9px;color:var(--muted2);letter-spacing:.5px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.day-col{border-right:1px solid var(--border);position:relative;cursor:pointer;transition:background .15s;}
+.day-col:last-child{border-right:none;}
+.day-col:hover{background:rgba(255,255,255,.012);}
+.day-col.today-col{background:rgba(180,240,58,.02);}
+.hour-line{height:60px;border-bottom:1px solid var(--border);position:relative;}
+.hour-line:hover::after{content:'+';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:18px;color:var(--muted2);pointer-events:none;}
+
+/* MONTH VIEW */
+.month-view{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.month-header{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid var(--border);flex-shrink:0;}
+.month-hdr-day{padding:8px;text-align:center;font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;border-right:1px solid var(--border);}
+.month-hdr-day:last-child{border-right:none;}
+.month-grid{flex:1;display:grid;grid-template-columns:repeat(7,1fr);grid-template-rows:repeat(6,1fr);overflow:hidden;}
+.month-cell{border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:6px 8px;cursor:pointer;transition:background .15s;overflow:hidden;min-height:0;}
+.month-cell:nth-child(7n){border-right:none;}
+.month-cell:hover{background:rgba(255,255,255,.015);}
+.month-cell.today-cell{background:rgba(180,240,58,.04);}
+.month-cell.other-month-cell{opacity:.35;}
+.mc-num{font-size:12px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;}
+.mc-num span{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.today-cell .mc-num span{background:var(--lime);color:var(--black);font-weight:900;}
+
+/* WORKOUT CARDS in calendar */
+.workout-chip{
+  border-radius:5px;padding:3px 7px;font-size:10px;font-weight:600;
+  margin-bottom:3px;cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;gap:5px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.workout-chip:hover{filter:brightness(1.15);}
+.chip-planned{background:rgba(180,240,58,.12);border:1px solid rgba(180,240,58,.2);color:var(--lime);}
+.chip-done{background:rgba(68,255,136,.1);border:1px solid rgba(68,255,136,.2);color:var(--green);}
+.chip-missed{background:rgba(255,85,85,.1);border:1px solid rgba(255,85,85,.2);color:var(--red);}
+.chip-moved{background:rgba(255,140,66,.1);border:1px solid rgba(255,140,66,.2);color:var(--orange);}
+.chip-trainer{background:rgba(58,240,212,.1);border:1px solid rgba(58,240,212,.2);color:var(--cyan);}
+
+/* Week workout blocks */
+.workout-block{
+  position:absolute;left:4px;right:4px;
+  border-radius:8px;padding:6px 8px;
+  cursor:pointer;transition:all .2s;
+  overflow:hidden;z-index:1;
+}
+.workout-block:hover{filter:brightness(1.1);transform:translateX(2px);}
+.wb-planned{background:rgba(180,240,58,.12);border-left:3px solid var(--lime);}
+.wb-done{background:rgba(68,255,136,.08);border-left:3px solid var(--green);}
+.wb-missed{background:rgba(255,85,85,.08);border-left:3px solid var(--red);}
+.wb-moved{background:rgba(255,140,66,.08);border-left:3px solid var(--orange);}
+.wb-trainer{background:rgba(58,240,212,.08);border-left:3px solid var(--cyan);}
+.wb-title{font-size:11px;font-weight:700;line-height:1.2;}
+.wb-meta{font-size:9px;color:var(--muted);margin-top:2px;}
+.wb-status{font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-top:3px;}
+
+/* MODAL */
+.overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(7,11,7,.88);backdrop-filter:blur(12px);align-items:center;justify-content:center;}
+.overlay.open{display:flex;}
+.modal{background:var(--card);border:1px solid var(--border2);border-radius:20px;width:520px;max-width:95vw;max-height:90vh;overflow-y:auto;}
+.modal-head{padding:22px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;}
+.modal-close{background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;padding:4px;line-height:1;transition:color .2s;}
+.modal-close:hover{color:var(--red);}
+.modal-body{padding:20px 24px;}
+.form-group{margin-bottom:14px;}
+.form-label{display:block;font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;font-weight:600;}
+.form-input{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:10px 12px;color:var(--white);font-size:13px;font-family:inherit;outline:none;transition:border-color .2s;}
+.form-input:focus{border-color:var(--cyan);}
+.form-input::placeholder{color:var(--muted);}
+.form-select{cursor:pointer;appearance:none;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-textarea{resize:vertical;min-height:72px;}
+.ex-add-row{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+.ex-add-item{display:flex;align-items:center;gap:8px;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;}
+.ex-add-name{font-size:12px;font-weight:600;flex:1;}
+.ex-add-sets{font-size:10px;color:var(--muted);}
+.ex-remove{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:2px;transition:color .2s;}
+.ex-remove:hover{color:var(--red);}
+.modal-foot{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px;}
+.btn{border-radius:8px;padding:10px 18px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s;border:none;}
+.btn-cyan{background:var(--cyan);color:var(--black);}
+.btn-cyan:hover{background:#5af4e0;}
+.btn-lime{background:var(--lime);color:var(--black);}
+.btn-lime:hover{background:#ceff6a;}
+.btn-outline{background:none;border:1px solid var(--border2);color:var(--muted);}
+.btn-outline:hover{border-color:var(--muted);color:var(--off);}
+.btn-danger{background:var(--red-ghost);border:1px solid rgba(255,85,85,.2);color:var(--red);}
+
+/* Move modal */
+.move-date-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:12px 0;}
+.move-day{padding:8px 4px;text-align:center;border-radius:8px;cursor:pointer;transition:all .2s;background:var(--card2);border:1px solid var(--border);}
+.move-day:hover{border-color:var(--border2);}
+.move-day.selected-day{background:var(--cyan-ghost);border-color:rgba(58,240,212,.3);color:var(--cyan);}
+.move-day.has-conflict{border-color:rgba(255,85,85,.3);}
+.md-name{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+.md-num{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;line-height:1;margin:2px 0;}
+.md-dot{height:4px;display:flex;gap:2px;justify-content:center;margin-top:2px;}
+.md-dot span{width:4px;height:4px;border-radius:50%;background:var(--lime);}
+
+/* Import from program */
+.program-list{display:flex;flex-direction:column;gap:7px;margin-bottom:16px;}
+.prog-item{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .2s;}
+.prog-item:hover{border-color:var(--border2);}
+.prog-item.selected{border-color:var(--cyan);background:var(--cyan-ghost);}
+.prog-item-name{font-size:13px;font-weight:700;margin-bottom:3px;}
+.prog-item-meta{font-size:10px;color:var(--muted);}
+.prog-weeks{display:flex;flex-direction:column;gap:4px;margin-top:10px;max-height:180px;overflow-y:auto;}
+.prog-week-row{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--card);border:1px solid var(--border);border-radius:7px;cursor:pointer;transition:all .2s;}
+.prog-week-row:hover{border-color:var(--border2);}
+.prog-week-row.selected{border-color:var(--lime);background:var(--lime-ghost);}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--card);border:1px solid rgba(58,240,212,.3);border-radius:12px;padding:12px 18px;font-size:12px;color:var(--cyan);z-index:9999;display:none;animation:toastIn .3s ease;}
+@keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* Drag styles */
+.dragging{opacity:.5;cursor:grabbing!important;}
+.drag-over{background:rgba(58,240,212,.06)!important;border:1px dashed rgba(58,240,212,.3)!important;}
+
+::-webkit-scrollbar{width:3px;height:3px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.ex-cat-btn{background:var(--card2);border:1px solid var(--border);border-radius:5px;padding:3px 9px;font-size:10px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;transition:all .2s;}
+.ex-cat-btn:hover{border-color:var(--border2);color:var(--off);}
+.ex-cat-btn.active{background:var(--lime-ghost);border-color:rgba(180,240,58,.3);color:var(--lime);}
+.ex-result{display:flex;align-items:center;gap:9px;padding:8px 10px;background:var(--card);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s;}
+.ex-result:hover{border-color:var(--border2);background:var(--card2);}
+.ex-result-name{font-size:12px;font-weight:600;flex:1;}
+.ex-result-cat{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:var(--border2);color:var(--muted);}
+.ex-result-mine{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:var(--cyan-ghost);color:var(--cyan);}
+.ex-freeform{background:var(--card2);border:1px solid rgba(180,240,58,.15);border-left:3px solid var(--lime);border-radius:9px;padding:10px 12px;margin-bottom:6px;position:relative;}
+.ex-freeform-label{font-size:9px;color:var(--lime);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;}
+</style>
 </head>
 <body>
 
-    <!-- MODE BAR -->
-    <div class="mode-bar">
-        <span class="mode-label">Widok:</span>
-        <button class="mode-btn active" id="btn-trainer" onclick="setRole('trainer')">🎓 Trener</button>
-        <button class="mode-btn" id="btn-client" onclick="setRole('client')">👤 Klient</button>
-        <span style="font-size:9px;color:var(--muted2);margin-left:6px;">Przycisk tylko do testow — w produkcji ustawiany automatycznie</span>
+<!-- MODE BAR -->
+<div class="mode-bar">
+  <span class="mode-label">Widok:</span>
+  <button class="mode-btn active" id="btn-trainer" onclick="setRole('trainer')">🎓 Trener</button>
+  <button class="mode-btn" id="btn-client" onclick="setRole('client')">👤 Klient</button>
+  <span style="font-size:9px;color:var(--muted2);margin-left:6px;">Przycisk tylko do testow — w produkcji ustawiany automatycznie</span>
+</div>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="logo-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="5.5" r="3" fill="#b4f03a"/><rect x="10" y="9.5" width="4" height="7" rx="2" fill="#b4f03a"/><line x1="10" y1="11" x2="5.5" y2="15" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/><line x1="14" y1="10.5" x2="18.5" y2="6" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/><line x1="10.5" y1="16.5" x2="7.5" y2="22" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/><line x1="13.5" y1="16.5" x2="16.5" y2="22" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/></svg>
     </div>
+    <div class="logo-main">chceByc<span>.fit</span></div>
+  </div>
 
-    <div class="app">
+  <div class="sb-context">
+    <div class="ctx-label" id="ctxLabel">Kalendarz klienta</div>
+    <div class="ctx-card">
+      <div class="ctx-av" id="ctxAv" style="background:linear-gradient(135deg,#7aaa22,#b4f03a);color:#000;">PK</div>
+      <div>
+        <div class="ctx-name" id="ctxName">Piotr Kwiatkowski</div>
+        <div class="ctx-sub" id="ctxSub">Power Hypertrophy 12W</div>
+      </div>
+    </div>
+  </div>
 
-        <!-- SIDEBAR -->
-        <aside class="sidebar">
-            <div class="sb-logo">
-                <div class="logo-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <circle cx="12" cy="5.5" r="3" fill="#b4f03a"/>
-                        <rect x="10" y="9.5" width="4" height="7" rx="2" fill="#b4f03a"/>
-                        <line x1="10" y1="11" x2="5.5" y2="15" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
-                        <line x1="14" y1="10.5" x2="18.5" y2="6" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
-                        <line x1="10.5" y1="16.5" x2="7.5" y2="22" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
-                        <line x1="13.5" y1="16.5" x2="16.5" y2="22" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
-                    </svg>
-                </div>
-                <div class="logo-main">
-                    chceByc
-                    <span>.fit</span>
-                </div>
-            </div>
+  <div class="sb-mini-cal">
+    <div class="mini-cal-header">
+      <button class="mini-nav" onclick="miniPrev()">‹</button>
+      <div class="mini-cal-month" id="miniMonth">MAR 2026</div>
+      <button class="mini-nav" onclick="miniNext()">›</button>
+    </div>
+    <div class="mini-grid" id="miniGrid"></div>
+  </div>
 
-            <div class="sb-context">
-                <div class="ctx-label" id="ctxLabel">Kalendarz klienta</div>
-                <div class="ctx-card">
-                    <div class="ctx-av" id="ctxAv" style="background:linear-gradient(135deg,#7aaa22,#b4f03a);color:#000;">PK</div>
-                    <div>
-                        <div class="ctx-name" id="ctxName">Piotr Kwiatkowski</div>
-                        <div class="ctx-sub" id="ctxSub">Power Hypertrophy 12W</div>
-                    </div>
-                </div>
-            </div>
+  <div class="sb-legend">
+    <div class="legend-title">Status treningów</div>
+    <div class="legend-row"><div class="legend-dot" style="background:var(--lime)"></div>Zaplanowany</div>
+    <div class="legend-row"><div class="legend-dot" style="background:var(--green)"></div>Wykonany</div>
+    <div class="legend-row"><div class="legend-dot" style="background:var(--orange)"></div>Przesunięty</div>
+    <div class="legend-row"><div class="legend-dot" style="background:var(--red)"></div>Pominięty</div>
+    <div class="legend-row"><div class="legend-dot" style="background:var(--cyan)"></div>Od trenera</div>
+  </div>
 
-            <div class="sb-mini-cal">
-                <div class="mini-cal-header">
-                    <button class="mini-nav" onclick="miniPrev()">‹</button>
-                    <div class="mini-cal-month" id="miniMonth">MAR 2026</div>
-                    <button class="mini-nav" onclick="miniNext()">›</button>
-                </div>
-                <div class="mini-grid" id="miniGrid"></div>
-            </div>
+  <div class="sb-upcoming">
+    <div class="upcoming-title">Nadchodzące</div>
+    <div id="upcomingList"></div>
+  </div>
 
-            <div class="sb-legend">
-                <div class="legend-title">Status treningów</div>
-                <div class="legend-row">
-                    <div class="legend-dot" style="background:var(--lime)"></div>
-                    Zaplanowany
-                </div>
-                <div class="legend-row">
-                    <div class="legend-dot" style="background:var(--green)"></div>
-                    Wykonany
-                </div>
-                <div class="legend-row">
-                    <div class="legend-dot" style="background:var(--orange)"></div>
-                    Przesunięty
-                </div>
-                <div class="legend-row">
-                    <div class="legend-dot" style="background:var(--red)"></div>
-                    Pominięty
-                </div>
-                <div class="legend-row">
-                    <div class="legend-dot" style="background:var(--cyan)"></div>
-                    Od trenera
-                </div>
-            </div>
+  <div style="padding:12px 16px;border-top:1px solid var(--border);margin-top:auto;">
+    <a href="chcebyc-dashboard.html" style="display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;color:var(--muted);text-decoration:none;padding:7px 10px;border-radius:8px;transition:all .2s;" onmouseover="this.style.color='var(--lime)';this.style.background='var(--lime-ghost)'" onmouseout="this.style.color='var(--muted)';this.style.background='transparent'">
+      <span>←</span> Wróć do dashboardu
+    </a>
+  </div>
+</aside>
 
-            <div class="sb-upcoming">
-                <div class="upcoming-title">Nadchodzące</div>
-                <div id="upcomingList"></div>
-            </div>
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="tb-nav">
+      <button class="nav-arrow" onclick="prevPeriod()">‹</button>
+      <div class="current-period" id="currentPeriod">17–23 MAR 2026</div>
+      <button class="nav-arrow" onclick="nextPeriod()">›</button>
+      <button class="today-btn" onclick="goToToday()">Dziś</button>
+    </div>
+    <div class="tb-right">
+      <div class="view-toggle">
+        <button class="vt-btn active" id="vt-week" onclick="setView('week')">Tydzień</button>
+        <button class="vt-btn" id="vt-month" onclick="setView('month')">Miesiąc</button>
+      </div>
+      <button class="import-btn" onclick="openImport()" id="importBtn">↓ Wciągnij z programu</button>
+      <button class="add-btn" onclick="openAddModal(null)" id="addBtn">+ Dodaj trening</button>
+    </div>
+  </div>
 
-            <div style="padding:12px 16px;border-top:1px solid var(--border);margin-top:auto;">
-                <a href="chcebyc-dashboard.html" style="display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;color:var(--muted);text-decoration:none;padding:7px 10px;border-radius:8px;transition:all .2s;" onmouseover="this.style.color='var(--lime)';this.style.background='var(--lime-ghost)'" onmouseout="this.style.color='var(--muted)';this.style.background='transparent'">
-                    <span>←</span>
-                     Wróć do dashboardu
-                        
-                </a>
-            </div>
-        </aside>
+  <div class="cal-area" id="calArea"></div>
+</div>
+</div>
 
-        <!-- MAIN -->
-        <div class="main">
-            <div class="topbar">
-                <div class="tb-nav">
-                    <button class="nav-arrow" onclick="prevPeriod()">‹</button>
-                    <div class="current-period" id="currentPeriod">17–23 MAR 2026</div>
-                    <button class="nav-arrow" onclick="nextPeriod()">›</button>
-                    <button class="today-btn" onclick="goToToday()">Dziś</button>
-                </div>
-                <div class="tb-right">
-                    <div class="view-toggle">
-                        <button class="vt-btn active" id="vt-week" onclick="setView('week')">Tydzień</button>
-                        <button class="vt-btn" id="vt-month" onclick="setView('month')">Miesiąc</button>
-                    </div>
-                    <button class="import-btn" onclick="openImport()" id="importBtn">↓ Wciągnij z programu</button>
-                    <button class="add-btn" onclick="openAddModal(null)" id="addBtn">+ Dodaj trening</button>
-                </div>
-            </div>
-
-            <div class="cal-area" id="calArea"></div>
+<!-- ══ MODAL: DODAJ / EDYTUJ TRENING ══ -->
+<div class="overlay" id="overlay-add">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="addModalTitle">Dodaj <span style="color:var(--cyan)">trening</span></div>
+      <button class="modal-close" onclick="closeOverlay('add')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">Nazwa treningu</label>
+          <input class="form-input" type="text" id="addName" placeholder="np. Górna partia — Pchanie">
         </div>
-    </div>
-
-    <!-- ══ MODAL: DODAJ / EDYTUJ TRENING ══ -->
-    <div class="overlay" id="overlay-add">
-        <div class="modal">
-            <div class="modal-head">
-                <div class="modal-title" id="addModalTitle">
-                    Dodaj 
-                    <span style="color:var(--cyan)">trening</span>
-                </div>
-                <button class="modal-close" onclick="closeOverlay('add')">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-row">
-                    <div class="form-group" style="margin-bottom:0">
-                        <label class="form-label">Nazwa treningu</label>
-                        <input class="form-input" type="text" id="addName" placeholder="np. Górna partia — Pchanie">
-                    </div>
-                    <div class="form-group" style="margin-bottom:0">
-                        <label class="form-label">Typ</label>
-                        <select class="form-input form-select" id="addType">
-                            <option>Siła</option>
-                            <option>Hipertrofia</option>
-                            <option>Cardio</option>
-                            <option>HIIT</option>
-                            <option>Mobilność</option>
-                            <option>Inny</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row" style="margin-top:12px;">
-                    <div class="form-group" style="margin-bottom:0">
-                        <label class="form-label">Data</label>
-                        <input class="form-input" type="date" id="addDate">
-                    </div>
-                    <div class="form-group" style="margin-bottom:0">
-                        <label class="form-label">Czas trwania</label>
-                        <select class="form-input form-select" id="addDuration">
-                            <option>30 min</option>
-                            <option>45 min</option>
-                            <option selected>60 min</option>
-                            <option>75 min</option>
-                            <option>90 min</option>
-                            <option>120 min</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group" style="margin-top:12px;">
-                    <label class="form-label">
-                        Cwiczenia 
-                        <span style="color:var(--muted2);font-weight:300;">(opcjonalne)</span>
-                    </label>
-                    <div class="ex-add-row" id="exList"></div>
-                    <!-- Przyciski dodawania -->
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px;">
-                        <button onclick="openExSearch()" style="background:var(--cyan-ghost);border:1px dashed rgba(58,240,212,.3);border-radius:7px;padding:8px;color:var(--cyan);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;" onmouseover="this.style.background='rgba(58,240,212,.12)'" onmouseout="this.style.background='var(--cyan-ghost)'">🔍 Szukaj w bazie</button>
-                        <button onclick="addFreeformRow()" style="background:var(--lime-ghost);border:1px dashed rgba(180,240,58,.3);border-radius:7px;padding:8px;color:var(--lime);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;" onmouseover="this.style.background='rgba(180,240,58,.12)'" onmouseout="this.style.background='var(--lime-ghost)'">📝 Dodaj blok tekstowy</button>
-                    </div>
-                </div>
-
-                <!-- Wyszukiwarka cwiczen (inline) -->
-                <div id="exSearchPanel" style="display:none;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px;">
-                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-                        <div style="font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;font-weight:700;">Baza cwiczen</div>
-                        <button onclick="closeExSearch()" style="background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:2px;">×</button>
-                    </div>
-                    <input class="form-input" id="exSearchInput" type="text" placeholder="Szukaj cwiczenia... (np. wyciskanie, przysiad)" oninput="filterExercises(this.value)" style="margin-bottom:10px;">
-                    <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;" id="exCatFilters">
-                        <button class="ex-cat-btn active" onclick="filterByCat('',this)">Wszystkie</button>
-                        <button class="ex-cat-btn" onclick="filterByCat('Klatka',this)">Klatka</button>
-                        <button class="ex-cat-btn" onclick="filterByCat('Plecy',this)">Plecy</button>
-                        <button class="ex-cat-btn" onclick="filterByCat('Nogi',this)">Nogi</button>
-                        <button class="ex-cat-btn" onclick="filterByCat('Barki',this)">Barki</button>
-                        <button class="ex-cat-btn" onclick="filterByCat('Rece',this)">Rece</button>
-                        <button class="ex-cat-btn" onclick="filterByCat('Core',this)">Core</button>
-                        <button class="ex-cat-btn" onclick="filterByCat('Cardio',this)">Cardio</button>
-                        <button class="ex-cat-btn" onclick="filterByCat('Moje',this)" style="border-color:rgba(58,240,212,.3);color:var(--cyan);">Moje</button>
-                    </div>
-                    <div id="exSearchResults" style="display:flex;flex-direction:column;gap:4px;max-height:180px;overflow-y:auto;scrollbar-width:thin;"></div>
-                    <!-- Nie znalazlem - dodaj do bazy -->
-                    <div id="exAddToDb" style="display:none;margin-top:8px;padding:8px 10px;background:var(--lime-ghost);border:1px dashed rgba(180,240,58,.3);border-radius:8px;font-size:11px;color:var(--lime);cursor:pointer;" onclick="saveNewExercise()">
-
-                                  + Zapisz "
-                        <span id="exAddName"></span>
-                        " do mojej bazy
-                                
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">
-                        Notatka dla klienta 
-                        <span style="color:var(--muted2);font-weight:300;">(opcjonalna)</span>
-                    </label>
-                    <textarea class="form-input form-textarea" id="addNote" placeholder="np. Skupiaj sie na technice, nie forsuj ciezaru..."></textarea>
-                </div>
-            </div>
-            <div class="modal-foot">
-                <button class="btn btn-outline" onclick="closeOverlay('add')">Anuluj</button>
-                <button class="btn btn-cyan" style="flex:1" onclick="saveWorkout()" id="saveWorkoutBtn">Zapisz trening →</button>
-            </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">Typ</label>
+          <select class="form-input form-select" id="addType">
+            <option>Siła</option>
+            <option>Hipertrofia</option>
+            <option>Cardio</option>
+            <option>HIIT</option>
+            <option>Mobilność</option>
+            <option>Inny</option>
+          </select>
         </div>
-    </div>
-
-    <!-- ══ MODAL: SZCZEGÓŁY TRENINGU ══ -->
-    <div class="overlay" id="overlay-detail">
-        <div class="modal">
-            <div class="modal-head">
-                <div>
-                    <div class="modal-title" id="detailTitle">Górna partia</div>
-                    <div style="font-size:11px;color:var(--muted);margin-top:2px;" id="detailMeta">Wtorek, 17 marca 2026 · 60 min</div>
-                </div>
-                <button class="modal-close" onclick="closeOverlay('detail')">×</button>
-            </div>
-            <div class="modal-body">
-                <div style="display:flex;gap:8px;margin-bottom:16px;" id="detailStatusRow"></div>
-                <div id="detailExercises" style="margin-bottom:16px;"></div>
-                <div id="detailNote" style="background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:12px 14px;font-size:12px;color:var(--off);line-height:1.6;display:none;"></div>
-            </div>
-            <div class="modal-foot" id="detailFoot"></div>
+      </div>
+      <div class="form-row" style="margin-top:12px;">
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">Data</label>
+          <input class="form-input" type="date" id="addDate">
         </div>
-    </div>
-
-    <!-- ══ MODAL: PRZESUŃ TRENING ══ -->
-    <div class="overlay" id="overlay-move">
-        <div class="modal" style="width:480px;">
-            <div class="modal-head">
-                <div class="modal-title">
-                    Przesuń 
-                    <span style="color:var(--orange)">trening</span>
-                </div>
-                <button class="modal-close" onclick="closeOverlay('move')">×</button>
-            </div>
-            <div class="modal-body">
-                <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">
-                    Wybierz nowy termin dla: 
-                    <strong style="color:var(--white)" id="movingWorkoutName">—</strong>
-                </div>
-                <div class="move-date-grid" id="moveDateGrid"></div>
-                <div style="font-size:10px;color:var(--muted);margin-top:8px;">Możesz też wpisać konkretną datę:</div>
-                <input class="form-input" type="date" id="moveCustomDate" style="margin-top:6px;">
-                <div style="background:var(--orange-ghost);border:1px solid rgba(255,140,66,.2);border-radius:9px;padding:10px 12px;margin-top:12px;font-size:11px;color:var(--orange);">
-                    <strong>Trener zostanie powiadomiony</strong>
-                     o przesunięciu treningu.
-                          
-                </div>
-            </div>
-            <div class="modal-foot">
-                <button class="btn btn-outline" onclick="closeOverlay('move')">Anuluj</button>
-                <button class="btn" style="flex:1;background:var(--orange);color:var(--black);" onclick="confirmMove()">Przesuń trening →</button>
-            </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">Czas trwania</label>
+          <select class="form-input form-select" id="addDuration">
+            <option>30 min</option>
+            <option>45 min</option>
+            <option selected>60 min</option>
+            <option>75 min</option>
+            <option>90 min</option>
+            <option>120 min</option>
+          </select>
         </div>
-    </div>
-
-    <!-- ══ MODAL: IMPORTUJ Z PROGRAMU ══ -->
-    <div class="overlay" id="overlay-import">
-        <div class="modal" style="width:540px;">
-            <div class="modal-head">
-                <div class="modal-title">
-                    Wciągnij z 
-                    <span style="color:var(--lime)">programu</span>
-                </div>
-                <button class="modal-close" onclick="closeOverlay('import')">×</button>
-            </div>
-            <div class="modal-body">
-                <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Wybierz program i tydzień który chcesz wciągnąć do kalendarza</div>
-
-                <div class="form-group">
-                    <label class="form-label">Program</label>
-                    <div class="program-list" id="programList"></div>
-                </div>
-
-                <div id="weekSelector" style="display:none;">
-                    <div class="form-group">
-                        <label class="form-label">Tydzień programu</label>
-                        <div class="prog-weeks" id="progWeeks"></div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group" style="margin-bottom:0">
-                            <label class="form-label">Wciągnij od daty</label>
-                            <input class="form-input" type="date" id="importStartDate">
-                        </div>
-                        <div class="form-group" style="margin-bottom:0">
-                            <label class="form-label">Rozkład dni</label>
-                            <select class="form-input form-select" id="importSpread">
-                                <option>Pon / Śr / Pt</option>
-                                <option>Wt / Czw / Sob</option>
-                                <option>Pon / Śr / Sob</option>
-                                <option>Pon / Czw / Sob</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-foot">
-                <button class="btn btn-outline" onclick="closeOverlay('import')">Anuluj</button>
-                <button class="btn btn-lime" style="flex:1" id="importConfirmBtn" onclick="confirmImport()" disabled>↓ Wciągnij do kalendarza →</button>
-            </div>
+      </div>
+      <div class="form-group" style="margin-top:12px;">
+        <label class="form-label">Cwiczenia <span style="color:var(--muted2);font-weight:300;">(opcjonalne)</span></label>
+        <div class="ex-add-row" id="exList"></div>
+        <!-- Przyciski dodawania -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px;">
+          <button onclick="openExSearch()" style="background:var(--cyan-ghost);border:1px dashed rgba(58,240,212,.3);border-radius:7px;padding:8px;color:var(--cyan);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;" onmouseover="this.style.background='rgba(58,240,212,.12)'" onmouseout="this.style.background='var(--cyan-ghost)'">🔍 Szukaj w bazie</button>
+          <button onclick="addFreeformRow()" style="background:var(--lime-ghost);border:1px dashed rgba(180,240,58,.3);border-radius:7px;padding:8px;color:var(--lime);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;" onmouseover="this.style.background='rgba(180,240,58,.12)'" onmouseout="this.style.background='var(--lime-ghost)'">📝 Dodaj blok tekstowy</button>
         </div>
+      </div>
+
+      <!-- Wyszukiwarka cwiczen (inline) -->
+      <div id="exSearchPanel" style="display:none;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div style="font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;font-weight:700;">Baza cwiczen</div>
+          <button onclick="closeExSearch()" style="background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:2px;">×</button>
+        </div>
+        <input class="form-input" id="exSearchInput" type="text" placeholder="Szukaj cwiczenia... (np. wyciskanie, przysiad)" oninput="filterExercises(this.value)" style="margin-bottom:10px;">
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;" id="exCatFilters">
+          <button class="ex-cat-btn active" onclick="filterByCat('',this)">Wszystkie</button>
+          <button class="ex-cat-btn" onclick="filterByCat('Klatka',this)">Klatka</button>
+          <button class="ex-cat-btn" onclick="filterByCat('Plecy',this)">Plecy</button>
+          <button class="ex-cat-btn" onclick="filterByCat('Nogi',this)">Nogi</button>
+          <button class="ex-cat-btn" onclick="filterByCat('Barki',this)">Barki</button>
+          <button class="ex-cat-btn" onclick="filterByCat('Rece',this)">Rece</button>
+          <button class="ex-cat-btn" onclick="filterByCat('Core',this)">Core</button>
+          <button class="ex-cat-btn" onclick="filterByCat('Cardio',this)">Cardio</button>
+          <button class="ex-cat-btn" onclick="filterByCat('Moje',this)" style="border-color:rgba(58,240,212,.3);color:var(--cyan);">Moje</button>
+        </div>
+        <div id="exSearchResults" style="display:flex;flex-direction:column;gap:4px;max-height:180px;overflow-y:auto;scrollbar-width:thin;"></div>
+        <!-- Nie znalazlem - dodaj do bazy -->
+        <div id="exAddToDb" style="display:none;margin-top:8px;padding:8px 10px;background:var(--lime-ghost);border:1px dashed rgba(180,240,58,.3);border-radius:8px;font-size:11px;color:var(--lime);cursor:pointer;" onclick="saveNewExercise()">
+          + Zapisz "<span id="exAddName"></span>" do mojej bazy
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Notatka dla klienta <span style="color:var(--muted2);font-weight:300;">(opcjonalna)</span></label>
+        <textarea class="form-input form-textarea" id="addNote" placeholder="np. Skupiaj sie na technice, nie forsuj ciezaru..."></textarea>
+      </div>
     </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="closeOverlay('add')">Anuluj</button>
+      <button class="btn btn-cyan" style="flex:1" onclick="saveWorkout()" id="saveWorkoutBtn">Zapisz trening →</button>
+    </div>
+  </div>
+</div>
 
-    <!-- TOAST -->
-    <div class="toast" id="toast"></div>
+<!-- ══ MODAL: SZCZEGÓŁY TRENINGU ══ -->
+<div class="overlay" id="overlay-detail">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title" id="detailTitle">Górna partia</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px;" id="detailMeta">Wtorek, 17 marca 2026 · 60 min</div>
+      </div>
+      <button class="modal-close" onclick="closeOverlay('detail')">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;gap:8px;margin-bottom:16px;" id="detailStatusRow"></div>
+      <div id="detailExercises" style="margin-bottom:16px;"></div>
+      <div id="detailNote" style="background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:12px 14px;font-size:12px;color:var(--off);line-height:1.6;display:none;"></div>
+    </div>
+    <div class="modal-foot" id="detailFoot"></div>
+  </div>
+</div>
 
-    <script>
-    // ── YOUTUBE HELPERS ───────────────────────────────────────────
-    function getYTEmbed(url) {
-        if (!url)
-            return '';
-        const patterns = [
-        /youtube\.com\/watch\?v=([^&]+)/,
-        /youtu\.be\/([^?]+)/,
-        /youtube\.com\/shorts\/([^?]+)/,
-        /youtube\.com\/embed\/([^?]+)/,
-        ];
-        for (const p of patterns) {
-            const m = url.match(p);
-            if (m)
-                return 'https://www.youtube.com/embed/' + m[1];
-        }
-        return url;
-    }
+<!-- ══ MODAL: PRZESUŃ TRENING ══ -->
+<div class="overlay" id="overlay-move">
+  <div class="modal" style="width:480px;">
+    <div class="modal-head">
+      <div class="modal-title">Przesuń <span style="color:var(--orange)">trening</span></div>
+      <button class="modal-close" onclick="closeOverlay('move')">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">Wybierz nowy termin dla: <strong style="color:var(--white)" id="movingWorkoutName">—</strong></div>
+      <div class="move-date-grid" id="moveDateGrid"></div>
+      <div style="font-size:10px;color:var(--muted);margin-top:8px;">Możesz też wpisać konkretną datę:</div>
+      <input class="form-input" type="date" id="moveCustomDate" style="margin-top:6px;">
+      <div style="background:var(--orange-ghost);border:1px solid rgba(255,140,66,.2);border-radius:9px;padding:10px 12px;margin-top:12px;font-size:11px;color:var(--orange);">
+        <strong>Trener zostanie powiadomiony</strong> o przesunięciu treningu.
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="closeOverlay('move')">Anuluj</button>
+      <button class="btn" style="flex:1;background:var(--orange);color:var(--black);" onclick="confirmMove()">Przesuń trening →</button>
+    </div>
+  </div>
+</div>
 
-    function toggleCalVideo(idx, url) {
-        const vidEl = document.getElementById('cal-vid-' + idx);
-        const btn = document.getElementById('cal-vid-btn-' + idx);
-        if (!vidEl)
-            return;
-        const isVisible = vidEl.style.display !== 'none';
-        vidEl.style.display = isVisible ? 'none' : 'block';
-        if (btn)
-            btn.textContent = isVisible ? '▶ Obejrzyj filmik' : '✕ Ukryj filmik';
-    }
+<!-- ══ MODAL: IMPORTUJ Z PROGRAMU ══ -->
+<div class="overlay" id="overlay-import">
+  <div class="modal" style="width:540px;">
+    <div class="modal-head">
+      <div class="modal-title">Wciągnij z <span style="color:var(--lime)">programu</span></div>
+      <button class="modal-close" onclick="closeOverlay('import')">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Wybierz program i tydzień który chcesz wciągnąć do kalendarza</div>
 
-    // ── STATE ──────────────────────────────────────────────────────
-    let role = 'trainer'; // 'trainer' | 'client'
-    let currentView = 'week';
-    let today = new Date(2026, 2, 14); // 14 marca 2026
-    let currentWeekStart = getWeekStart(today);
-    let currentMonth = new Date(2026, 2, 1);
-    let miniMonth = new Date(2026, 2, 1);
-    let movingWorkoutId = null;
-    let editingWorkoutId = null;
-    let selectedImportProgram = null;
-    let selectedImportWeek = null;
+      <div class="form-group">
+        <label class="form-label">Program</label>
+        <div class="program-list" id="programList"></div>
+      </div>
 
-    // ── DEMO DATA ──────────────────────────────────────────────────
-    let workouts = [
-    {
-        id: 1,
-        date: '2026-03-09',
-        name: 'Gorna partia - Pchanie',
-        type: 'Sila',
-        duration: '60 min',
-        status: 'done',
-        byTrainer: true,
-        exercises: [{
-            name: 'Wyciskanie sztangi',
-            sets: '4x8'
-        }, {
-            name: 'Overhead Press',
-            sets: '4x8'
-        }, {
-            name: 'Wyciskanie na skosie',
-            sets: '3x10'
-        }],
-        note: 'Swietna robota! Technika wyciskania bardzo dobra.'
-    },
-    {
-        id: 2,
-        date: '2026-03-11',
-        name: 'Dolna partia - Nogi',
-        type: 'Sila',
-        duration: '75 min',
-        status: 'done',
-        byTrainer: true,
-        exercises: [{
-            name: 'Przysiad ze sztanga',
-            sets: '4x8'
-        }, {
-            name: 'Leg Press',
-            sets: '3x12'
-        }, {
-            name: 'Wykroki',
-            sets: '3x10'
-        }],
-        note: ''
-    },
-    {
-        id: 3,
-        date: '2026-03-13',
-        name: 'Ciagniecie - Plecy/Biceps',
-        type: 'Sila',
-        duration: '60 min',
-        status: 'missed',
-        byTrainer: true,
-        exercises: [{
-            name: 'Martwy ciag',
-            sets: '4x5'
-        }, {
-            name: 'Podciaganie',
-            sets: '4x8'
-        }, {
-            name: 'Wioslowanie',
-            sets: '3x10'
-        }],
-        note: 'Pamietaj o rozgrzewce baركow przed martwym ciagiem.'
-    },
-    {
-        id: 4,
-        date: '2026-03-16',
-        name: 'Gorna partia - Pchanie',
-        type: 'Sila',
-        duration: '60 min',
-        status: 'planned',
-        byTrainer: true,
-        exercises: [{
-            name: 'Wyciskanie sztangi',
-            sets: '4x8'
-        }, {
-            name: 'Overhead Press',
-            sets: '4x8'
-        }, {
-            name: 'Rozpietki',
-            sets: '3x12'
-        }],
-        note: 'Dzis probujemy 72.5 kg na wyciskaniu - powinnies dac rade!'
-    },
-    {
-        id: 5,
-        date: '2026-03-18',
-        name: 'Dolna partia',
-        type: 'Sila',
-        duration: '75 min',
-        status: 'planned',
-        byTrainer: true,
-        exercises: [{
-            name: 'Przysiad ze sztanga',
-            sets: '4x8'
-        }, {
-            name: 'Rumunski martwy ciag',
-            sets: '3x10'
-        }, {
-            name: 'Leg Curl',
-            sets: '3x12'
-        }],
-        note: ''
-    },
-    {
-        id: 6,
-        date: '2026-03-20',
-        name: 'Cardio + Core',
-        type: 'Cardio',
-        duration: '45 min',
-        status: 'planned',
-        byTrainer: false,
-        exercises: [{
-            name: 'Bieg na biezni',
-            sets: '20 min'
-        }, {
-            name: 'Deska',
-            sets: '3x60s'
-        }, {
-            name: 'Brzuszki',
-            sets: '3x20'
-        }],
-        note: 'Klient zaproponowal sam - cardio w piątek.'
-    },
-    {
-        id: 7,
-        date: '2026-03-23',
-        name: 'Ciagniecie - Plecy/Biceps',
-        type: 'Sila',
-        duration: '60 min',
-        status: 'planned',
-        byTrainer: true,
-        exercises: [{
-            name: 'Martwy ciag',
-            sets: '4x5'
-        }, {
-            name: 'Podciaganie',
-            sets: '4x8'
-        }],
-        note: ''
-    },
-    {
-        id: 8,
-        date: '2026-03-25',
-        name: 'Gorna partia',
-        type: 'Sila',
-        duration: '60 min',
-        status: 'planned',
-        byTrainer: true,
-        exercises: [{
-            name: 'Wyciskanie sztangi',
-            sets: '4x8'
-        }, {
-            name: 'Overhead Press',
-            sets: '4x8'
-        }],
-        note: ''
-    },
-    {
-        id: 9,
-        date: '2026-03-27',
-        name: 'Mobilnosc + Stretching',
-        type: 'Mobilnosc',
-        duration: '30 min',
-        status: 'planned',
-        byTrainer: true,
-        exercises: [{
-            name: 'Rozciaganie bioder',
-            sets: '10 min'
-        }, {
-            name: 'Foam rolling',
-            sets: '10 min'
-        }, {
-            name: 'Yoga flow',
-            sets: '10 min'
-        }],
-        note: 'Powolny tydzien - skupiamy sie na regeneracji.'
-    },
-    ];
+      <div id="weekSelector" style="display:none;">
+        <div class="form-group">
+          <label class="form-label">Tydzień programu</label>
+          <div class="prog-weeks" id="progWeeks"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">Wciągnij od daty</label>
+            <input class="form-input" type="date" id="importStartDate">
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">Rozkład dni</label>
+            <select class="form-input form-select" id="importSpread">
+              <option>Pon / Śr / Pt</option>
+              <option>Wt / Czw / Sob</option>
+              <option>Pon / Śr / Sob</option>
+              <option>Pon / Czw / Sob</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="closeOverlay('import')">Anuluj</button>
+      <button class="btn btn-lime" style="flex:1" id="importConfirmBtn" onclick="confirmImport()" disabled>↓ Wciągnij do kalendarza →</button>
+    </div>
+  </div>
+</div>
 
-    const PROGRAMS = [
-    {
-        id: 1,
-        name: 'Power Hypertrophy 12W',
-        weeks: 12,
-        days: 3,
-        weekTemplate: [
-        {
-            day: 'Pon',
-            name: 'Gorna partia - Pchanie',
-            exercises: [{
-                name: 'Wyciskanie sztangi',
-                sets: '4x8'
-            }, {
-                name: 'Overhead Press',
-                sets: '4x8'
-            }, {
-                name: 'Wyciskanie na skosie',
-                sets: '3x10'
-            }]
-        },
-        {
-            day: 'Sr',
-            name: 'Dolna partia',
-            exercises: [{
-                name: 'Przysiad ze sztanga',
-                sets: '4x8'
-            }, {
-                name: 'Leg Press',
-                sets: '3x12'
-            }, {
-                name: 'Wykroki',
-                sets: '3x10'
-            }]
-        },
-        {
-            day: 'Pt',
-            name: 'Ciagniecie - Plecy',
-            exercises: [{
-                name: 'Martwy ciag',
-                sets: '4x5'
-            }, {
-                name: 'Podciaganie',
-                sets: '4x8'
-            }, {
-                name: 'Wioslowanie',
-                sets: '3x10'
-            }]
-        },
-        ]
-    },
-    {
-        id: 2,
-        name: 'Beginner Strength Foundation',
-        weeks: 12,
-        days: 3,
-        weekTemplate: [
-        {
-            day: 'Pon',
-            name: 'Full Body A',
-            exercises: [{
-                name: 'Przysiady',
-                sets: '3x10'
-            }, {
-                name: 'Wyciskanie',
-                sets: '3x10'
-            }, {
-                name: 'Wioslowanie',
-                sets: '3x10'
-            }]
-        },
-        {
-            day: 'Sr',
-            name: 'Full Body B',
-            exercises: [{
-                name: 'Martwy ciag',
-                sets: '3x8'
-            }, {
-                name: 'OHP',
-                sets: '3x10'
-            }, {
-                name: 'Podciaganie',
-                sets: '3x8'
-            }]
-        },
-        {
-            day: 'Pt',
-            name: 'Full Body C',
-            exercises: [{
-                name: 'Wykroki',
-                sets: '3x12'
-            }, {
-                name: 'Pompki',
-                sets: '3x15'
-            }, {
-                name: 'Plank',
-                sets: '3x45s'
-            }]
-        },
-        ]
-    },
-    ];
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
-    let nextId = 10;
+<script>
+// ── YOUTUBE HELPERS ───────────────────────────────────────────
+function getYTEmbed(url) {
+  if (!url) return '';
+  const patterns = [
+    /youtube\.com\/watch\?v=([^&]+)/,
+    /youtu\.be\/([^?]+)/,
+    /youtube\.com\/shorts\/([^?]+)/,
+    /youtube\.com\/embed\/([^?]+)/,
+  ];
+  for (const p of patterns) {
+    const m = url.match(p);
+    if (m) return 'https://www.youtube.com/embed/' + m[1];
+  }
+  return url;
+}
 
-    // ── HELPERS ───────────────────────────────────────────────────
-    function getWeekStart(d) {
-        const date = new Date(d);
-        const day = date.getDay();
-        const diff = day === 0 ? -6 : 1 - day; // Monday start
-        date.setDate(date.getDate() + diff);
-        date.setHours(0, 0, 0, 0);
-        return date;
-    }
+function toggleCalVideo(idx, url) {
+  const vidEl = document.getElementById('cal-vid-' + idx);
+  const btn = document.getElementById('cal-vid-btn-' + idx);
+  if (!vidEl) return;
+  const isVisible = vidEl.style.display !== 'none';
+  vidEl.style.display = isVisible ? 'none' : 'block';
+  if (btn) btn.textContent = isVisible ? '▶ Obejrzyj filmik' : '✕ Ukryj filmik';
+}
 
-    function dateStr(d) {
-        return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-    }
+// ── STATE ──────────────────────────────────────────────────────
+let role = 'trainer'; // 'trainer' | 'client'
+let currentView = 'week';
+let today = new Date(2026, 2, 14); // 14 marca 2026
+let currentWeekStart = getWeekStart(today);
+let currentMonth = new Date(2026, 2, 1);
+let miniMonth = new Date(2026, 2, 1);
+let movingWorkoutId = null;
+let editingWorkoutId = null;
+let selectedImportProgram = null;
+let selectedImportWeek = null;
 
-    function parseDate(str) {
-        const [y, m, d] = str.split('-').map(Number);
-        return new Date(y, m - 1, d);
-    }
+// ── DEMO DATA ──────────────────────────────────────────────────
+let workouts = [
+  {id:1, date:'2026-03-09', name:'Gorna partia - Pchanie', type:'Sila', duration:'60 min', status:'done', byTrainer:true,
+   exercises:[{name:'Wyciskanie sztangi', sets:'4x8'},{name:'Overhead Press', sets:'4x8'},{name:'Wyciskanie na skosie', sets:'3x10'}],
+   note:'Swietna robota! Technika wyciskania bardzo dobra.'},
+  {id:2, date:'2026-03-11', name:'Dolna partia - Nogi', type:'Sila', duration:'75 min', status:'done', byTrainer:true,
+   exercises:[{name:'Przysiad ze sztanga', sets:'4x8'},{name:'Leg Press', sets:'3x12'},{name:'Wykroki', sets:'3x10'}],
+   note:''},
+  {id:3, date:'2026-03-13', name:'Ciagniecie - Plecy/Biceps', type:'Sila', duration:'60 min', status:'missed', byTrainer:true,
+   exercises:[{name:'Martwy ciag', sets:'4x5'},{name:'Podciaganie', sets:'4x8'},{name:'Wioslowanie', sets:'3x10'}],
+   note:'Pamietaj o rozgrzewce baركow przed martwym ciagiem.'},
+  {id:4, date:'2026-03-16', name:'Gorna partia - Pchanie', type:'Sila', duration:'60 min', status:'planned', byTrainer:true,
+   exercises:[{name:'Wyciskanie sztangi', sets:'4x8'},{name:'Overhead Press', sets:'4x8'},{name:'Rozpietki', sets:'3x12'}],
+   note:'Dzis probujemy 72.5 kg na wyciskaniu - powinnies dac rade!'},
+  {id:5, date:'2026-03-18', name:'Dolna partia', type:'Sila', duration:'75 min', status:'planned', byTrainer:true,
+   exercises:[{name:'Przysiad ze sztanga', sets:'4x8'},{name:'Rumunski martwy ciag', sets:'3x10'},{name:'Leg Curl', sets:'3x12'}],
+   note:''},
+  {id:6, date:'2026-03-20', name:'Cardio + Core', type:'Cardio', duration:'45 min', status:'planned', byTrainer:false,
+   exercises:[{name:'Bieg na biezni', sets:'20 min'},{name:'Deska', sets:'3x60s'},{name:'Brzuszki', sets:'3x20'}],
+   note:'Klient zaproponowal sam - cardio w piątek.'},
+  {id:7, date:'2026-03-23', name:'Ciagniecie - Plecy/Biceps', type:'Sila', duration:'60 min', status:'planned', byTrainer:true,
+   exercises:[{name:'Martwy ciag', sets:'4x5'},{name:'Podciaganie', sets:'4x8'}],
+   note:''},
+  {id:8, date:'2026-03-25', name:'Gorna partia', type:'Sila', duration:'60 min', status:'planned', byTrainer:true,
+   exercises:[{name:'Wyciskanie sztangi', sets:'4x8'},{name:'Overhead Press', sets:'4x8'}],
+   note:''},
+  {id:9, date:'2026-03-27', name:'Mobilnosc + Stretching', type:'Mobilnosc', duration:'30 min', status:'planned', byTrainer:true,
+   exercises:[{name:'Rozciaganie bioder', sets:'10 min'},{name:'Foam rolling', sets:'10 min'},{name:'Yoga flow', sets:'10 min'}],
+   note:'Powolny tydzien - skupiamy sie na regeneracji.'},
+];
 
-    function formatDateShort(d) {
-        const days = ['Ndz', 'Pon', 'Wt', 'Sr', 'Czw', 'Pt', 'Sob'];
-        const months = ['sty', 'lut', 'mar', 'kwi', 'maj', 'cze', 'lip', 'sie', 'wrz', 'paz', 'lis', 'gru'];
-        return days[d.getDay()] + ' ' + d.getDate() + ' ' + months[d.getMonth()];
-    }
+const PROGRAMS = [
+  {id:1, name:'Power Hypertrophy 12W', weeks:12, days:3,
+   weekTemplate:[
+     {day:'Pon', name:'Gorna partia - Pchanie', exercises:[{name:'Wyciskanie sztangi',sets:'4x8'},{name:'Overhead Press',sets:'4x8'},{name:'Wyciskanie na skosie',sets:'3x10'}]},
+     {day:'Sr', name:'Dolna partia', exercises:[{name:'Przysiad ze sztanga',sets:'4x8'},{name:'Leg Press',sets:'3x12'},{name:'Wykroki',sets:'3x10'}]},
+     {day:'Pt', name:'Ciagniecie - Plecy', exercises:[{name:'Martwy ciag',sets:'4x5'},{name:'Podciaganie',sets:'4x8'},{name:'Wioslowanie',sets:'3x10'}]},
+   ]},
+  {id:2, name:'Beginner Strength Foundation', weeks:12, days:3,
+   weekTemplate:[
+     {day:'Pon', name:'Full Body A', exercises:[{name:'Przysiady',sets:'3x10'},{name:'Wyciskanie',sets:'3x10'},{name:'Wioslowanie',sets:'3x10'}]},
+     {day:'Sr', name:'Full Body B', exercises:[{name:'Martwy ciag',sets:'3x8'},{name:'OHP',sets:'3x10'},{name:'Podciaganie',sets:'3x8'}]},
+     {day:'Pt', name:'Full Body C', exercises:[{name:'Wykroki',sets:'3x12'},{name:'Pompki',sets:'3x15'},{name:'Plank',sets:'3x45s'}]},
+   ]},
+];
 
-    function formatDateFull(d) {
-        const days = ['Niedziela', 'Poniedzialek', 'Wtorek', 'Sroda', 'Czwartek', 'Piatek', 'Sobota'];
-        const months = ['stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca', 'lipca', 'sierpnia', 'wrzesnia', 'pazdziernika', 'listopada', 'grudnia'];
-        return days[d.getDay()] + ', ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
-    }
+let nextId = 10;
 
-    function getWorkoutsForDate(dateString) {
-        return workouts.filter(w => w.date === dateString);
-    }
+// ── HELPERS ───────────────────────────────────────────────────
+function getWeekStart(d) {
+  const date = new Date(d);
+  const day = date.getDay();
+  const diff = day === 0 ? -6 : 1 - day; // Monday start
+  date.setDate(date.getDate() + diff);
+  date.setHours(0,0,0,0);
+  return date;
+}
 
-    function statusColor(status, byTrainer) {
-        if (byTrainer && status === 'planned')
-            return 'trainer';
-        return status;
-    }
+function dateStr(d) {
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
 
-    function chipClass(w) {
-        const s = statusColor(w.status, w.byTrainer);
-        return 'workout-chip chip-' + s;
-    }
+function parseDate(str) {
+  const [y,m,d] = str.split('-').map(Number);
+  return new Date(y, m-1, d);
+}
 
-    function blockClass(w) {
-        const s = statusColor(w.status, w.byTrainer);
-        return 'workout-block wb-' + s;
-    }
+function formatDateShort(d) {
+  const days = ['Ndz','Pon','Wt','Sr','Czw','Pt','Sob'];
+  const months = ['sty','lut','mar','kwi','maj','cze','lip','sie','wrz','paz','lis','gru'];
+  return days[d.getDay()] + ' ' + d.getDate() + ' ' + months[d.getMonth()];
+}
 
-    function statusLabel(status) {
-        return {
-                planned: 'Zaplanowany',
-                done: 'Wykonany',
-                missed: 'Pominiety',
-                moved: 'Przesuniety'
-            }[status] || status;
-    }
+function formatDateFull(d) {
+  const days = ['Niedziela','Poniedzialek','Wtorek','Sroda','Czwartek','Piatek','Sobota'];
+  const months = ['stycznia','lutego','marca','kwietnia','maja','czerwca','lipca','sierpnia','wrzesnia','pazdziernika','listopada','grudnia'];
+  return days[d.getDay()] + ', ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+}
 
-    // ── ROLE ──────────────────────────────────────────────────────
-    function setRole(r) {
-        role = r;
-        document.getElementById('btn-trainer').classList.toggle('active', r === 'trainer');
-        document.getElementById('btn-client').classList.toggle('active', r === 'client');
+function getWorkoutsForDate(dateString) {
+  return workouts.filter(w => w.date === dateString);
+}
 
-        if (r === 'client') {
-            document.getElementById('ctxLabel').textContent = 'Twoj trening';
-            document.getElementById('ctxAv').style.background = 'linear-gradient(135deg,#3a7aaa,#4ab0ff)';
-            document.getElementById('ctxAv').textContent = 'PK';
-            document.getElementById('ctxName').textContent = 'Piotr Kwiatkowski';
-            document.getElementById('ctxSub').textContent = 'Power Hypertrophy · Tydz. 8';
-            document.getElementById('addBtn').textContent = '+ Moj trening';
-            document.getElementById('importBtn').style.display = 'none';
-        } else {
-            document.getElementById('ctxLabel').textContent = 'Kalendarz klienta';
-            document.getElementById('ctxAv').style.background = 'linear-gradient(135deg,#7aaa22,#b4f03a)';
-            document.getElementById('ctxAv').textContent = 'PK';
-            document.getElementById('ctxName').textContent = 'Piotr Kwiatkowski';
-            document.getElementById('ctxSub').textContent = 'Power Hypertrophy 12W';
-            document.getElementById('addBtn').textContent = '+ Dodaj trening';
-            document.getElementById('importBtn').style.display = '';
-        }
-        render();
-    }
+function statusColor(status, byTrainer) {
+  if (byTrainer && status === 'planned') return 'trainer';
+  return status;
+}
 
-    // ── VIEW ──────────────────────────────────────────────────────
-    function setView(v) {
-        currentView = v;
-        document.getElementById('vt-week').classList.toggle('active', v === 'week');
-        document.getElementById('vt-month').classList.toggle('active', v === 'month');
-        render();
-    }
+function chipClass(w) {
+  const s = statusColor(w.status, w.byTrainer);
+  return 'workout-chip chip-' + s;
+}
 
-    function render() {
-        renderMiniCalendar();
-        renderUpcoming();
-        if (currentView === 'week')
-            renderWeek();
-        else
-            renderMonth();
-    }
+function blockClass(w) {
+  const s = statusColor(w.status, w.byTrainer);
+  return 'workout-block wb-' + s;
+}
 
-    // ── WEEK VIEW ─────────────────────────────────────────────────
-    function renderWeek() {
-        const days = [];
-        for (let i = 0; i < 7; i++) {
-            const d = new Date(currentWeekStart);
-            d.setDate(d.getDate() + i);
-            days.push(d);
-        }
+function statusLabel(status) {
+  return {planned:'Zaplanowany', done:'Wykonany', missed:'Pominiety', moved:'Przesuniety'}[status] || status;
+}
 
-        // Update period label
-        const dayNames = ['Pon', 'Wt', 'Sr', 'Czw', 'Pt', 'Sob', 'Ndz'];
-        const months = ['STY', 'LUT', 'MAR', 'KWI', 'MAJ', 'CZE', 'LIP', 'SIE', 'WRZ', 'PAZ', 'LIS', 'GRU'];
-        const start = days[0],
-            end = days[6];
-        let period = start.getDate() + '–' + end.getDate() + ' ' + months[start.getMonth()] + ' ' + start.getFullYear();
-        document.getElementById('currentPeriod').textContent = period;
+// ── ROLE ──────────────────────────────────────────────────────
+function setRole(r) {
+  role = r;
+  document.getElementById('btn-trainer').classList.toggle('active', r === 'trainer');
+  document.getElementById('btn-client').classList.toggle('active', r === 'client');
 
-        const todayStr = dateStr(today);
-        const hours = [];
-        for (let h = 6; h <= 22; h++)
-            hours.push(h);
+  if (r === 'client') {
+    document.getElementById('ctxLabel').textContent = 'Twoj trening';
+    document.getElementById('ctxAv').style.background = 'linear-gradient(135deg,#3a7aaa,#4ab0ff)';
+    document.getElementById('ctxAv').textContent = 'PK';
+    document.getElementById('ctxName').textContent = 'Piotr Kwiatkowski';
+    document.getElementById('ctxSub').textContent = 'Power Hypertrophy · Tydz. 8';
+    document.getElementById('addBtn').textContent = '+ Moj trening';
+    document.getElementById('importBtn').style.display = 'none';
+  } else {
+    document.getElementById('ctxLabel').textContent = 'Kalendarz klienta';
+    document.getElementById('ctxAv').style.background = 'linear-gradient(135deg,#7aaa22,#b4f03a)';
+    document.getElementById('ctxAv').textContent = 'PK';
+    document.getElementById('ctxName').textContent = 'Piotr Kwiatkowski';
+    document.getElementById('ctxSub').textContent = 'Power Hypertrophy 12W';
+    document.getElementById('addBtn').textContent = '+ Dodaj trening';
+    document.getElementById('importBtn').style.display = '';
+  }
+  render();
+}
 
-        let html = '<div class="week-view">';
+// ── VIEW ──────────────────────────────────────────────────────
+function setView(v) {
+  currentView = v;
+  document.getElementById('vt-week').classList.toggle('active', v === 'week');
+  document.getElementById('vt-month').classList.toggle('active', v === 'month');
+  render();
+}
 
-        // Header
-        html += '<div class="week-header"><div class="week-hdr-spacer"></div>';
-        days.forEach((d, i) => {
-            const isToday = dateStr(d) === todayStr;
-            const ws = getWorkoutsForDate(dateStr(d));
-            html += `<div class="week-hdr-day${isToday ? ' today' : ''}">
+function render() {
+  renderMiniCalendar();
+  renderUpcoming();
+  if (currentView === 'week') renderWeek();
+  else renderMonth();
+}
+
+// ── WEEK VIEW ─────────────────────────────────────────────────
+function renderWeek() {
+  const days = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(currentWeekStart);
+    d.setDate(d.getDate() + i);
+    days.push(d);
+  }
+
+  // Update period label
+  const dayNames = ['Pon','Wt','Sr','Czw','Pt','Sob','Ndz'];
+  const months = ['STY','LUT','MAR','KWI','MAJ','CZE','LIP','SIE','WRZ','PAZ','LIS','GRU'];
+  const start = days[0], end = days[6];
+  let period = start.getDate() + '–' + end.getDate() + ' ' + months[start.getMonth()] + ' ' + start.getFullYear();
+  document.getElementById('currentPeriod').textContent = period;
+
+  const todayStr = dateStr(today);
+  const hours = [];
+  for (let h = 6; h <= 22; h++) hours.push(h);
+
+  let html = '<div class="week-view">';
+
+  // Header
+  html += '<div class="week-header"><div class="week-hdr-spacer"></div>';
+  days.forEach((d, i) => {
+    const isToday = dateStr(d) === todayStr;
+    const ws = getWorkoutsForDate(dateStr(d));
+    html += `<div class="week-hdr-day${isToday ? ' today' : ''}">
       <div class="wh-name">${dayNames[i]}</div>
       <div class="wh-num">${d.getDate()}</div>
-      ${ws.length ? `<div style="display:flex;gap:2px;justify-content:center;margin-top:3px;">${ws.map(w => `<div style="width:5px;height:5px;border-radius:50%;background:${w.status === 'done' ? 'var(--green)' : w.byTrainer && w.status === 'planned' ? 'var(--cyan)' : w.status === 'missed' ? 'var(--red)' : 'var(--lime)'}"></div>`).join('')}</div>` : ''}
-    </div>`
-            ;
-        });
-        html += '</div>';
+      ${ws.length ? `<div style="display:flex;gap:2px;justify-content:center;margin-top:3px;">${ws.map(w=>`<div style="width:5px;height:5px;border-radius:50%;background:${w.status==='done'?'var(--green)':w.byTrainer&&w.status==='planned'?'var(--cyan)':w.status==='missed'?'var(--red)':'var(--lime)'}"></div>`).join('')}</div>` : ''}
+    </div>`;
+  });
+  html += '</div>';
 
-        // Body
-        html += '<div class="week-body" id="weekBody"><div class="time-col">';
-        hours.forEach(h => {
-            html += `<div class="time-slot">${h}:00</div>`;
-        });
-        html += '</div>';
+  // Body
+  html += '<div class="week-body" id="weekBody"><div class="time-col">';
+  hours.forEach(h => {
+    html += `<div class="time-slot">${h}:00</div>`;
+  });
+  html += '</div>';
 
-        days.forEach((d, i) => {
-            const isToday = dateStr(d) === todayStr;
-            const ds = dateStr(d);
-            const dayWorkouts = getWorkoutsForDate(ds);
-            html += `<div class="day-col${isToday ? ' today-col' : ''}" data-date="${ds}" ondblclick="openAddModal('${ds}')">`;
-            hours.forEach(h => {
-                html += `<div class="hour-line" data-date="${ds}" data-hour="${h}" ondrop="dropWorkout(event,'${ds}')" ondragover="dragOver(event)"></div>`;
-            });
+  days.forEach((d, i) => {
+    const isToday = dateStr(d) === todayStr;
+    const ds = dateStr(d);
+    const dayWorkouts = getWorkoutsForDate(ds);
+    html += `<div class="day-col${isToday ? ' today-col' : ''}" data-date="${ds}" ondblclick="openAddModal('${ds}')">`;
+    hours.forEach(h => {
+      html += `<div class="hour-line" data-date="${ds}" data-hour="${h}" ondrop="dropWorkout(event,'${ds}')" ondragover="dragOver(event)"></div>`;
+    });
 
-            // Place workouts
-            dayWorkouts.forEach((w, wi) => {
-                const topPx = (8 * 60) * (1 / 60); // default position 8am
-                const startHour = 8 + wi * 1.5;
-                const topPercent = ((startHour - 6) / 17) * 100;
-                const durMins = parseInt(w.duration) || 60;
-                const heightPx = (durMins / 60) * 60;
-                html += `<div class="${blockClass(w)}" 
+    // Place workouts
+    dayWorkouts.forEach((w, wi) => {
+      const topPx = (8 * 60) * (1/60); // default position 8am
+      const startHour = 8 + wi * 1.5;
+      const topPercent = ((startHour - 6) / 17) * 100;
+      const durMins = parseInt(w.duration) || 60;
+      const heightPx = (durMins / 60) * 60;
+      html += `<div class="${blockClass(w)}" 
         style="top:${topPercent}%;height:${heightPx}px;"
         draggable="true"
-        ondragstart="dragStart(event,${
-                w.id})"
+        ondragstart="dragStart(event,${w.id})"
         onclick="openDetail(${w.id})">
         <div class="wb-title">${w.name}</div>
         <div class="wb-meta">${w.duration} · ${w.exercises.length} cwiczen</div>
-        <div class="wb-status" style="color:${w.status === 'done' ? 'var(--green)' : w.byTrainer && w.status === 'planned' ? 'var(--cyan)' : w.status === 'missed' ? 'var(--red)' : w.status === 'moved' ? 'var(--orange)' : 'var(--lime)'}">${w.byTrainer && w.status === 'planned' ? 'Od trenera' : statusLabel(w.status)}</div>
-      </div>`
-                ;
-            });
+        <div class="wb-status" style="color:${w.status==='done'?'var(--green)':w.byTrainer&&w.status==='planned'?'var(--cyan)':w.status==='missed'?'var(--red)':w.status==='moved'?'var(--orange)':'var(--lime)'}">${w.byTrainer && w.status==='planned' ? 'Od trenera' : statusLabel(w.status)}</div>
+      </div>`;
+    });
 
-            html += '</div>';
-        });
+    html += '</div>';
+  });
 
-        html += '</div></div>';
-        document.getElementById('calArea').innerHTML = html;
-    }
+  html += '</div></div>';
+  document.getElementById('calArea').innerHTML = html;
+}
 
-    // ── MONTH VIEW ────────────────────────────────────────────────
-    function renderMonth() {
-        const year = currentMonth.getFullYear();
-        const month = currentMonth.getMonth();
-        const months = ['STYCZEN', 'LUTY', 'MARZEC', 'KWIECIEN', 'MAJ', 'CZERWIEC', 'LIPIEC', 'SIERPIEN', 'WRZESIEN', 'PAZDZIERNIK', 'LISTOPAD', 'GRUDZIEN'];
-        document.getElementById('currentPeriod').textContent = months[month] + ' ' + year;
+// ── MONTH VIEW ────────────────────────────────────────────────
+function renderMonth() {
+  const year = currentMonth.getFullYear();
+  const month = currentMonth.getMonth();
+  const months = ['STYCZEN','LUTY','MARZEC','KWIECIEN','MAJ','CZERWIEC','LIPIEC','SIERPIEN','WRZESIEN','PAZDZIERNIK','LISTOPAD','GRUDZIEN'];
+  document.getElementById('currentPeriod').textContent = months[month] + ' ' + year;
 
-        const firstDay = new Date(year, month, 1);
-        const startOffset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        const todayStr = dateStr(today);
-        const dayNames = ['Pon', 'Wt', 'Sr', 'Czw', 'Pt', 'Sob', 'Ndz'];
+  const firstDay = new Date(year, month, 1);
+  const startOffset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+  const todayStr = dateStr(today);
+  const dayNames = ['Pon','Wt','Sr','Czw','Pt','Sob','Ndz'];
 
-        let html = '<div class="month-view">';
-        html += '<div class="month-header">' + dayNames.map(d => `<div class="month-hdr-day">${d}</div>`).join('') + '</div>';
-        html += '<div class="month-grid">';
+  let html = '<div class="month-view">';
+  html += '<div class="month-header">' + dayNames.map(d => `<div class="month-hdr-day">${d}</div>`).join('') + '</div>';
+  html += '<div class="month-grid">';
 
-        // Prev month days
-        const prevMonthDays = new Date(year, month, 0).getDate();
-        for (let i = startOffset - 1; i >= 0; i--) {
-            const d = new Date(year, month - 1, prevMonthDays - i);
-            html += `<div class="month-cell other-month-cell"><div class="mc-num"><span>${d.getDate()}</span></div></div>`;
-        }
+  // Prev month days
+  const prevMonthDays = new Date(year, month, 0).getDate();
+  for (let i = startOffset - 1; i >= 0; i--) {
+    const d = new Date(year, month-1, prevMonthDays - i);
+    html += `<div class="month-cell other-month-cell"><div class="mc-num"><span>${d.getDate()}</span></div></div>`;
+  }
 
-        // Current month
-        for (let day = 1; day <= daysInMonth; day++) {
-            const d = new Date(year, month, day);
-            const ds = dateStr(d);
-            const isToday = ds === todayStr;
-            const dayWorkouts = getWorkoutsForDate(ds);
-            html += `<div class="month-cell${isToday ? ' today-cell' : ''}" ondblclick="openAddModal('${ds}')" ondrop="dropWorkout(event,'${ds}')" ondragover="dragOver(event)">
+  // Current month
+  for (let day = 1; day <= daysInMonth; day++) {
+    const d = new Date(year, month, day);
+    const ds = dateStr(d);
+    const isToday = ds === todayStr;
+    const dayWorkouts = getWorkoutsForDate(ds);
+    html += `<div class="month-cell${isToday ? ' today-cell' : ''}" ondblclick="openAddModal('${ds}')" ondrop="dropWorkout(event,'${ds}')" ondragover="dragOver(event)">
       <div class="mc-num"><span>${day}</span></div>
-      ${dayWorkouts.slice(0, 3).map(w => `
+      ${dayWorkouts.slice(0,3).map(w => `
         <div class="${chipClass(w)}" onclick="openDetail(${w.id})" draggable="true" ondragstart="dragStart(event,${w.id})">
           <span style="width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0;display:inline-block;"></span>
-          ${
-            w.name}
+          ${w.name}
         </div>`).join('')}
-      ${dayWorkouts.length > 3 ? `<div style="font-size:9px;color:var(--muted);margin-top:2px;">+${dayWorkouts.length - 3} wiecej</div>` : ''}
-    </div>`
-            ;
-        }
+      ${dayWorkouts.length > 3 ? `<div style="font-size:9px;color:var(--muted);margin-top:2px;">+${dayWorkouts.length-3} wiecej</div>` : ''}
+    </div>`;
+  }
 
-        // Next month
-        const totalCells = 42;
-        const filledCells = startOffset + daysInMonth;
-        const remaining = totalCells - filledCells;
-        for (let i = 1; i <= remaining; i++) {
-            html += `<div class="month-cell other-month-cell"><div class="mc-num"><span>${i}</span></div></div>`;
-        }
+  // Next month
+  const totalCells = 42;
+  const filledCells = startOffset + daysInMonth;
+  const remaining = totalCells - filledCells;
+  for (let i = 1; i <= remaining; i++) {
+    html += `<div class="month-cell other-month-cell"><div class="mc-num"><span>${i}</span></div></div>`;
+  }
 
-        html += '</div></div>';
-        document.getElementById('calArea').innerHTML = html;
-    }
+  html += '</div></div>';
+  document.getElementById('calArea').innerHTML = html;
+}
 
-    // ── MINI CALENDAR ─────────────────────────────────────────────
-    function renderMiniCalendar() {
-        const months = ['STY', 'LUT', 'MAR', 'KWI', 'MAJ', 'CZE', 'LIP', 'SIE', 'WRZ', 'PAZ', 'LIS', 'GRU'];
-        document.getElementById('miniMonth').textContent = months[miniMonth.getMonth()] + ' ' + miniMonth.getFullYear();
+// ── MINI CALENDAR ─────────────────────────────────────────────
+function renderMiniCalendar() {
+  const months = ['STY','LUT','MAR','KWI','MAJ','CZE','LIP','SIE','WRZ','PAZ','LIS','GRU'];
+  document.getElementById('miniMonth').textContent = months[miniMonth.getMonth()] + ' ' + miniMonth.getFullYear();
 
-        const year = miniMonth.getFullYear();
-        const month = miniMonth.getMonth();
-        const firstDay = new Date(year, month, 1);
-        const startOffset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        const todayStr = dateStr(today);
-        const dayNames = ['P', 'W', 'S', 'C', 'P', 'S', 'N'];
+  const year = miniMonth.getFullYear();
+  const month = miniMonth.getMonth();
+  const firstDay = new Date(year, month, 1);
+  const startOffset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+  const todayStr = dateStr(today);
+  const dayNames = ['P','W','S','C','P','S','N'];
 
-        let html = dayNames.map(d => `<div class="mini-day-hdr">${d}</div>`).join('');
+  let html = dayNames.map(d => `<div class="mini-day-hdr">${d}</div>`).join('');
 
-        // Prev month padding
-        for (let i = 0; i < startOffset; i++)
-            html += '<div class="mini-day other-month"></div>';
+  // Prev month padding
+  for (let i = 0; i < startOffset; i++) html += '<div class="mini-day other-month"></div>';
 
-        for (let day = 1; day <= daysInMonth; day++) {
-            const d = new Date(year, month, day);
-            const ds = dateStr(d);
-            const isToday = ds === todayStr;
-            const hasWorkout = workouts.some(w => w.date === ds);
-            html += `<div class="mini-day${isToday ? ' today' : ''}${hasWorkout ? ' has-workout' : ''}" onclick="miniSelectDay('${ds}')">${day}</div>`;
-        }
+  for (let day = 1; day <= daysInMonth; day++) {
+    const d = new Date(year, month, day);
+    const ds = dateStr(d);
+    const isToday = ds === todayStr;
+    const hasWorkout = workouts.some(w => w.date === ds);
+    html += `<div class="mini-day${isToday ? ' today' : ''}${hasWorkout ? ' has-workout' : ''}" onclick="miniSelectDay('${ds}')">${day}</div>`;
+  }
 
-        document.getElementById('miniGrid').innerHTML = html;
-    }
+  document.getElementById('miniGrid').innerHTML = html;
+}
 
-    function miniSelectDay(ds) {
-        const d = parseDate(ds);
-        if (currentView === 'week') {
-            currentWeekStart = getWeekStart(d);
-        } else {
-            currentMonth = new Date(d.getFullYear(), d.getMonth(), 1);
-        }
-        render();
-    }
+function miniSelectDay(ds) {
+  const d = parseDate(ds);
+  if (currentView === 'week') {
+    currentWeekStart = getWeekStart(d);
+  } else {
+    currentMonth = new Date(d.getFullYear(), d.getMonth(), 1);
+  }
+  render();
+}
 
-    function miniPrev() {
-        miniMonth.setMonth(miniMonth.getMonth() - 1);
-        renderMiniCalendar();
-    }
+function miniPrev() {
+  miniMonth.setMonth(miniMonth.getMonth() - 1);
+  renderMiniCalendar();
+}
 
-    function miniNext() {
-        miniMonth.setMonth(miniMonth.getMonth() + 1);
-        renderMiniCalendar();
-    }
+function miniNext() {
+  miniMonth.setMonth(miniMonth.getMonth() + 1);
+  renderMiniCalendar();
+}
 
-    // ── UPCOMING LIST ─────────────────────────────────────────────
-    function renderUpcoming() {
-        const todayStr = dateStr(today);
-        const upcoming = workouts
-        .filter(w => w.date >= todayStr && w.status === 'planned')
-        .sort((a, b) => a.date.localeCompare(b.date))
-        .slice(0, 5);
+// ── UPCOMING LIST ─────────────────────────────────────────────
+function renderUpcoming() {
+  const todayStr = dateStr(today);
+  const upcoming = workouts
+    .filter(w => w.date >= todayStr && w.status === 'planned')
+    .sort((a,b) => a.date.localeCompare(b.date))
+    .slice(0, 5);
 
-        const html = upcoming.map(w => {
-            const d = parseDate(w.date);
-            return `<div class="upcoming-item" onclick="openDetail(${w.id})">
+  const html = upcoming.map(w => {
+    const d = parseDate(w.date);
+    return `<div class="upcoming-item" onclick="openDetail(${w.id})">
       <div class="upcoming-date">${formatDateShort(d)}</div>
       <div class="upcoming-name">${w.name}</div>
       <div class="upcoming-meta">${w.duration} · ${w.exercises.length} cwiczen</div>
-    </div>`
-            ;
-        }).join('');
+    </div>`;
+  }).join('');
 
-        document.getElementById('upcomingList').innerHTML = html || '<div style="font-size:11px;color:var(--muted2);">Brak zaplanowanych treningow</div>';
-    }
+  document.getElementById('upcomingList').innerHTML = html || '<div style="font-size:11px;color:var(--muted2);">Brak zaplanowanych treningow</div>';
+}
 
-    // ── NAVIGATION ────────────────────────────────────────────────
-    function prevPeriod() {
-        if (currentView === 'week') {
-            currentWeekStart.setDate(currentWeekStart.getDate() - 7);
-        }
-        else {
-            currentMonth.setMonth(currentMonth.getMonth() - 1);
-        }
-        render();
-    }
+// ── NAVIGATION ────────────────────────────────────────────────
+function prevPeriod() {
+  if (currentView === 'week') { currentWeekStart.setDate(currentWeekStart.getDate() - 7); }
+  else { currentMonth.setMonth(currentMonth.getMonth() - 1); }
+  render();
+}
 
-    function nextPeriod() {
-        if (currentView === 'week') {
-            currentWeekStart.setDate(currentWeekStart.getDate() + 7);
-        }
-        else {
-            currentMonth.setMonth(currentMonth.getMonth() + 1);
-        }
-        render();
-    }
+function nextPeriod() {
+  if (currentView === 'week') { currentWeekStart.setDate(currentWeekStart.getDate() + 7); }
+  else { currentMonth.setMonth(currentMonth.getMonth() + 1); }
+  render();
+}
 
-    function goToToday() {
-        currentWeekStart = getWeekStart(today);
-        currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-        render();
-    }
+function goToToday() {
+  currentWeekStart = getWeekStart(today);
+  currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  render();
+}
 
-    // ── ADD MODAL ─────────────────────────────────────────────────
-    function openAddModal(dateString) {
-        editingWorkoutId = null;
-        document.getElementById('addModalTitle').innerHTML = 'Dodaj <span style="color:var(--cyan)">trening</span>';
-        document.getElementById('addName').value = '';
-        document.getElementById('addNote').value = '';
-        document.getElementById('saveWorkoutBtn').textContent = 'Zapisz trening →';
+// ── ADD MODAL ─────────────────────────────────────────────────
+function openAddModal(dateString) {
+  editingWorkoutId = null;
+  document.getElementById('addModalTitle').innerHTML = 'Dodaj <span style="color:var(--cyan)">trening</span>';
+  document.getElementById('addName').value = '';
+  document.getElementById('addNote').value = '';
+  document.getElementById('saveWorkoutBtn').textContent = 'Zapisz trening →';
 
-        const d = dateString ? parseDate(dateString) : today;
-        document.getElementById('addDate').value = dateString || dateStr(today);
+  const d = dateString ? parseDate(dateString) : today;
+  document.getElementById('addDate').value = dateString || dateStr(today);
 
-        document.getElementById('exList').innerHTML = '';
-        closeExSearch();
+  document.getElementById('exList').innerHTML = '';
+  closeExSearch();
 
-        openOverlay('add');
-    }
+  openOverlay('add');
+}
 
-    // ── BAZA CWICZEN ──────────────────────────────────────────────
-    const GLOBAL_EXERCISES = [
-    {
-        name: 'Wyciskanie sztangi leżąc',
-        cat: 'Klatka'
-    },
-    {
-        name: 'Wyciskanie hantelkami',
-        cat: 'Klatka'
-    },
-    {
-        name: 'Wyciskanie na skosie',
-        cat: 'Klatka'
-    },
-    {
-        name: 'Rozpietki',
-        cat: 'Klatka'
-    },
-    {
-        name: 'Pompki',
-        cat: 'Klatka'
-    },
-    {
-        name: 'Overhead Press',
-        cat: 'Barki'
-    },
-    {
-        name: 'Unoszenie boczne',
-        cat: 'Barki'
-    },
-    {
-        name: 'Unoszenie przodem',
-        cat: 'Barki'
-    },
-    {
-        name: 'Martwy ciag',
-        cat: 'Plecy'
-    },
-    {
-        name: 'Wioslowanie sztanga',
-        cat: 'Plecy'
-    },
-    {
-        name: 'Wioslowanie hantelkiem',
-        cat: 'Plecy'
-    },
-    {
-        name: 'Podciaganie na drazku',
-        cat: 'Plecy'
-    },
-    {
-        name: 'Sciaganie linki',
-        cat: 'Plecy'
-    },
-    {
-        name: 'Przysiad ze sztanga',
-        cat: 'Nogi'
-    },
-    {
-        name: 'Leg Press',
-        cat: 'Nogi'
-    },
-    {
-        name: 'Wykroki',
-        cat: 'Nogi'
-    },
-    {
-        name: 'Rumunski martwy ciag',
-        cat: 'Nogi'
-    },
-    {
-        name: 'Leg Curl',
-        cat: 'Nogi'
-    },
-    {
-        name: 'Leg Extension',
-        cat: 'Nogi'
-    },
-    {
-        name: 'Wspinanie na palce',
-        cat: 'Nogi'
-    },
-    {
-        name: 'Biceps curl sztanga',
-        cat: 'Rece'
-    },
-    {
-        name: 'Biceps curl hantelki',
-        cat: 'Rece'
-    },
-    {
-        name: 'Triceps pushdown',
-        cat: 'Rece'
-    },
-    {
-        name: 'Pompki na porecach',
-        cat: 'Rece'
-    },
-    {
-        name: 'Deska',
-        cat: 'Core'
-    },
-    {
-        name: 'Brzuszki',
-        cat: 'Core'
-    },
-    {
-        name: 'Russian twist',
-        cat: 'Core'
-    },
-    {
-        name: 'Wheel rollout',
-        cat: 'Core'
-    },
-    {
-        name: 'Bieg na biezni',
-        cat: 'Cardio'
-    },
-    {
-        name: 'Rower stacjonarny',
-        cat: 'Cardio'
-    },
-    {
-        name: 'Skakanka',
-        cat: 'Cardio'
-    },
-    {
-        name: 'Burpees',
-        cat: 'Cardio'
-    },
-    {
-        name: 'Jumping jacks',
-        cat: 'Cardio'
-    },
-    ];
+// ── BAZA CWICZEN ──────────────────────────────────────────────
+const GLOBAL_EXERCISES = [
+  {name:'Wyciskanie sztangi leżąc', cat:'Klatka'},
+  {name:'Wyciskanie hantelkami', cat:'Klatka'},
+  {name:'Wyciskanie na skosie', cat:'Klatka'},
+  {name:'Rozpietki', cat:'Klatka'},
+  {name:'Pompki', cat:'Klatka'},
+  {name:'Overhead Press', cat:'Barki'},
+  {name:'Unoszenie boczne', cat:'Barki'},
+  {name:'Unoszenie przodem', cat:'Barki'},
+  {name:'Martwy ciag', cat:'Plecy'},
+  {name:'Wioslowanie sztanga', cat:'Plecy'},
+  {name:'Wioslowanie hantelkiem', cat:'Plecy'},
+  {name:'Podciaganie na drazku', cat:'Plecy'},
+  {name:'Sciaganie linki', cat:'Plecy'},
+  {name:'Przysiad ze sztanga', cat:'Nogi'},
+  {name:'Leg Press', cat:'Nogi'},
+  {name:'Wykroki', cat:'Nogi'},
+  {name:'Rumunski martwy ciag', cat:'Nogi'},
+  {name:'Leg Curl', cat:'Nogi'},
+  {name:'Leg Extension', cat:'Nogi'},
+  {name:'Wspinanie na palce', cat:'Nogi'},
+  {name:'Biceps curl sztanga', cat:'Rece'},
+  {name:'Biceps curl hantelki', cat:'Rece'},
+  {name:'Triceps pushdown', cat:'Rece'},
+  {name:'Pompki na porecach', cat:'Rece'},
+  {name:'Deska', cat:'Core'},
+  {name:'Brzuszki', cat:'Core'},
+  {name:'Russian twist', cat:'Core'},
+  {name:'Wheel rollout', cat:'Core'},
+  {name:'Bieg na biezni', cat:'Cardio'},
+  {name:'Rower stacjonarny', cat:'Cardio'},
+  {name:'Skakanka', cat:'Cardio'},
+  {name:'Burpees', cat:'Cardio'},
+  {name:'Jumping jacks', cat:'Cardio'},
+];
 
-    // Prywatna baza trenera (zapisywana w pamieci sesji)
-    let myExercises = [
-    {
-        name: 'Circuit siłowy Marcina',
-        cat: 'Moje',
-        mine: true
-    },
-    {
-        name: 'Protokol rozgrzewki RTG',
-        cat: 'Moje',
-        mine: true
-    },
-    ];
+// Prywatna baza trenera (zapisywana w pamieci sesji)
+let myExercises = [
+  {name:'Circuit siłowy Marcina', cat:'Moje', mine:true},
+  {name:'Protokol rozgrzewki RTG', cat:'Moje', mine:true},
+];
 
-    let currentCatFilter = '';
-    let exSearchOpen = false;
+let currentCatFilter = '';
+let exSearchOpen = false;
 
-    function getAllExercises() {
-        return [...GLOBAL_EXERCISES, ...myExercises];
-    }
+function getAllExercises() {
+  return [...GLOBAL_EXERCISES, ...myExercises];
+}
 
-    // ── EXERCISE SEARCH ───────────────────────────────────────────
-    function openExSearch() {
-        exSearchOpen = true;
-        document.getElementById('exSearchPanel').style.display = 'block';
-        document.getElementById('exSearchInput').value = '';
-        document.getElementById('exAddToDb').style.display = 'none';
-        filterExercises('');
-        document.getElementById('exSearchInput').focus();
-    }
+// ── EXERCISE SEARCH ───────────────────────────────────────────
+function openExSearch() {
+  exSearchOpen = true;
+  document.getElementById('exSearchPanel').style.display = 'block';
+  document.getElementById('exSearchInput').value = '';
+  document.getElementById('exAddToDb').style.display = 'none';
+  filterExercises('');
+  document.getElementById('exSearchInput').focus();
+}
 
-    function closeExSearch() {
-        exSearchOpen = false;
-        document.getElementById('exSearchPanel').style.display = 'none';
-    }
+function closeExSearch() {
+  exSearchOpen = false;
+  document.getElementById('exSearchPanel').style.display = 'none';
+}
 
-    function filterByCat(cat, btn) {
-        currentCatFilter = cat;
-        document.querySelectorAll('.ex-cat-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        filterExercises(document.getElementById('exSearchInput').value);
-    }
+function filterByCat(cat, btn) {
+  currentCatFilter = cat;
+  document.querySelectorAll('.ex-cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterExercises(document.getElementById('exSearchInput').value);
+}
 
-    function filterExercises(query) {
-        const q = query.toLowerCase().trim();
-        let results = getAllExercises().filter(e => {
-            const matchCat = !currentCatFilter || e.cat === currentCatFilter;
-            const matchQ = !q || e.name.toLowerCase().includes(q);
-            return matchCat && matchQ;
-        });
+function filterExercises(query) {
+  const q = query.toLowerCase().trim();
+  let results = getAllExercises().filter(e => {
+    const matchCat = !currentCatFilter || e.cat === currentCatFilter;
+    const matchQ = !q || e.name.toLowerCase().includes(q);
+    return matchCat && matchQ;
+  });
 
-        const html = results.slice(0, 12).map(e => `
-    <div class="ex-result" onclick="addExFromDb('${e.name.replace(/'/g, "\\'")}','${e.cat}')">
+  const html = results.slice(0,12).map(e => `
+    <div class="ex-result" onclick="addExFromDb('${e.name.replace(/'/g,"\\'")}','${e.cat}')">
       <div class="ex-result-name">${e.name}</div>
       ${e.mine ? '<span class="ex-result-mine">Moje</span>' : `<span class="ex-result-cat">${e.cat}</span>`}
-    </div>`
-        ).join('');
+    </div>`).join('');
 
-        document.getElementById('exSearchResults').innerHTML = html || `<div style="font-size:11px;color:var(--muted);padding:8px;">Brak wynikow. Mozesz zapisac to cwiczenie do swojej bazy.</div>`;
+  document.getElementById('exSearchResults').innerHTML = html || `<div style="font-size:11px;color:var(--muted);padding:8px;">Brak wynikow. Mozesz zapisac to cwiczenie do swojej bazy.</div>`;
 
-        // Pokaz opcje "Zapisz do bazy" gdy nie znaleziono i cos wpisano
-        const addEl = document.getElementById('exAddToDb');
-        if (q && results.length === 0) {
-            addEl.style.display = 'block';
-            document.getElementById('exAddName').textContent = query;
-        } else {
-            addEl.style.display = 'none';
-        }
-    }
+  // Pokaz opcje "Zapisz do bazy" gdy nie znaleziono i cos wpisano
+  const addEl = document.getElementById('exAddToDb');
+  if (q && results.length === 0) {
+    addEl.style.display = 'block';
+    document.getElementById('exAddName').textContent = query;
+  } else {
+    addEl.style.display = 'none';
+  }
+}
 
-    function addExFromDb(name, cat, video) {
-        const row = document.createElement('div');
-        row.className = 'ex-add-item';
-        row.dataset.type = 'exercise';
-        row.innerHTML = `
+function addExFromDb(name, cat, video) {
+  const row = document.createElement('div');
+  row.className = 'ex-add-item';
+  row.dataset.type = 'exercise';
+  row.innerHTML = `
     <span style="font-size:11px;background:var(--border2);color:var(--muted);padding:2px 6px;border-radius:4px;flex-shrink:0;">${cat}</span>
     <input class="form-input" style="flex:2;padding:6px 9px;font-size:12px;" value="${name}" placeholder="Nazwa cwiczenia...">
     <input class="form-input" style="flex:1;padding:6px 9px;font-size:12px;" placeholder="Serie×powt." value="">
-    <input class="form-input" style="flex:2;padding:6px 9px;font-size:11px;" placeholder="Link YT (opcjonalnie)" value="${
-        video || ''}">
-    <button class="ex-remove" onclick="this.parentElement.remove()">×</button>`
-        ;
-        document.getElementById('exList').appendChild(row);
-        closeExSearch();
-    }
+    <input class="form-input" style="flex:2;padding:6px 9px;font-size:11px;" placeholder="Link YT (opcjonalnie)" value="${video||''}">
+    <button class="ex-remove" onclick="this.parentElement.remove()">×</button>`;
+  document.getElementById('exList').appendChild(row);
+  closeExSearch();
+}
 
-    function saveNewExercise() {
-        const name = document.getElementById('exSearchInput').value.trim();
-        if (!name)
-            return;
-        myExercises.push({
-            name,
-            cat: 'Moje',
-            mine: true
-        });
-        showToast(`"${name}" zapisano do Twojej bazy cwiczen!`);
-        addExFromDb(name, 'Moje');
-        closeExSearch();
-    }
+function saveNewExercise() {
+  const name = document.getElementById('exSearchInput').value.trim();
+  if (!name) return;
+  myExercises.push({name, cat:'Moje', mine:true});
+  showToast(`"${name}" zapisano do Twojej bazy cwiczen!`);
+  addExFromDb(name, 'Moje');
+  closeExSearch();
+}
 
-    // ── FREEFORM BLOCK ────────────────────────────────────────────
-    function addFreeformRow() {
-        const row = document.createElement('div');
-        row.className = 'ex-freeform';
-        row.dataset.type = 'freeform';
-        row.innerHTML = `
+// ── FREEFORM BLOCK ────────────────────────────────────────────
+function addFreeformRow() {
+  const row = document.createElement('div');
+  row.className = 'ex-freeform';
+  row.dataset.type = 'freeform';
+  row.innerHTML = `
     <div class="ex-freeform-label">Blok tekstowy / workout kondycyjny</div>
     <textarea class="form-input" style="min-height:72px;resize:vertical;font-size:12px;line-height:1.6;background:transparent;border-color:rgba(180,240,58,.15);" placeholder="np. Rozgrzewka kondycyjna:\n5 min skip, 3x (10 burpees + 10 jumping jacks + 30s deska)\nPrzerwa 90s miedzy rundami"></textarea>
-    <button onclick="this.parentElement.remove()" style="position:absolute;top:8px;right:8px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;">×</button>`
+    <button onclick="this.parentElement.remove()" style="position:absolute;top:8px;right:8px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;">×</button>`;
+  document.getElementById('exList').appendChild(row);
+}
 
-
-        ;
-        document.getElementById('exList').appendChild(row);
+// ── SAVE/LOAD EXERCISES ───────────────────────────────────────
+function getExercisesFromList() {
+  const items = [];
+  document.querySelectorAll('#exList > *').forEach(row => {
+    if (row.dataset.type === 'freeform') {
+      const text = row.querySelector('textarea')?.value?.trim();
+      if (text) items.push({name: text, sets: '', freeform: true});
+    } else {
+      const inputs = row.querySelectorAll('input');
+      const name = inputs[0]?.value?.trim() || inputs[1]?.value?.trim() || '';
+      const sets = inputs.length >= 3 ? inputs[inputs.length-2]?.value?.trim() : inputs[inputs.length-1]?.value?.trim();
+      const video = inputs.length >= 4 ? inputs[inputs.length-2]?.value?.trim() : '';
+      if (name) items.push({name, sets: sets||'', video: video||'', freeform: false});
     }
+  });
+  return items;
+}
 
-    // ── SAVE/LOAD EXERCISES ───────────────────────────────────────
-    function getExercisesFromList() {
-        const items = [];
-        document.querySelectorAll('#exList > *').forEach(row => {
-            if (row.dataset.type === 'freeform') {
-                const text = row.querySelector('textarea')?.value?.trim();
-                if (text)
-                    items.push({
-                        name: text,
-                        sets: '',
-                        freeform: true
-                    });
-            } else {
-                const inputs = row.querySelectorAll('input');
-                const name = inputs[0]?.value?.trim() || inputs[1]?.value?.trim() || '';
-                const sets = inputs.length >= 3 ? inputs[inputs.length - 2]?.value?.trim() : inputs[inputs.length - 1]?.value?.trim();
-                const video = inputs.length >= 4 ? inputs[inputs.length - 2]?.value?.trim() : '';
-                if (name)
-                    items.push({
-                        name,
-                        sets: sets || '',
-                        video: video || '',
-                        freeform: false
-                    });
-            }
-        });
-        return items;
-    }
-
-    function renderExercisesInList(exercises) {
-        document.getElementById('exList').innerHTML = exercises.map(e => {
-            if (e.freeform) {
-                return `<div class="ex-freeform" data-type="freeform">
+function renderExercisesInList(exercises) {
+  document.getElementById('exList').innerHTML = exercises.map(e => {
+    if (e.freeform) {
+      return `<div class="ex-freeform" data-type="freeform">
         <div class="ex-freeform-label">Blok tekstowy</div>
-        <textarea class="form-input" style="min-height:72px;resize:vertical;font-size:12px;line-height:1.6;background:transparent;border-color:rgba(180,240,58,.15);">${
-                e.name}</textarea>
+        <textarea class="form-input" style="min-height:72px;resize:vertical;font-size:12px;line-height:1.6;background:transparent;border-color:rgba(180,240,58,.15);">${e.name}</textarea>
         <button onclick="this.parentElement.remove()" style="position:absolute;top:8px;right:8px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;">×</button>
-      </div>`
-
-                ;
-            } else {
-                return `<div class="ex-add-item" data-type="exercise">
+      </div>`;
+    } else {
+      return `<div class="ex-add-item" data-type="exercise">
         <input class="form-input" style="flex:2;padding:6px 9px;font-size:12px;" value="${e.name}">
-        <input class="form-input" style="flex:1;padding:6px 9px;font-size:12px;" value="${e.sets || ''}">
-        <input class="form-input" style="flex:2;padding:6px 9px;font-size:11px;" placeholder="Link YT (opcjonalnie)" value="${e.video || ''}">
+        <input class="form-input" style="flex:1;padding:6px 9px;font-size:12px;" value="${e.sets||''}">
+        <input class="form-input" style="flex:2;padding:6px 9px;font-size:11px;" placeholder="Link YT (opcjonalnie)" value="${e.video||''}">
         <button class="ex-remove" onclick="this.parentElement.remove()">×</button>
-      </div>`
-
-                ;
-            }
-        }).join('');
+      </div>`;
     }
+  }).join('');
+}
 
-    function saveWorkout() {
-        const name = document.getElementById('addName').value.trim();
-        if (!name) {
-            document.getElementById('addName').style.borderColor = 'var(--red)';
-            return;
-        }
-        document.getElementById('addName').style.borderColor = '';
+function saveWorkout() {
+  const name = document.getElementById('addName').value.trim();
+  if (!name) { document.getElementById('addName').style.borderColor = 'var(--red)'; return; }
+  document.getElementById('addName').style.borderColor = '';
 
-        const exercises = getExercisesFromList();
+  const exercises = getExercisesFromList();
 
-        if (editingWorkoutId) {
-            const w = workouts.find(w => w.id === editingWorkoutId);
-            if (w) {
-                w.name = name;
-                w.type = document.getElementById('addType').value;
-                w.date = document.getElementById('addDate').value;
-                w.duration = document.getElementById('addDuration').value;
-                w.exercises = exercises;
-                w.note = document.getElementById('addNote').value;
-            }
-            showToast('Trening zaktualizowany!');
-
-        } else {
-            workouts.push({
-                id: nextId++,
-                date: document.getElementById('addDate').value,
-                name,
-                type: document.getElementById('addType').value,
-                duration: document.getElementById('addDuration').value,
-                status: 'planned',
-                byTrainer: role === 'trainer',
-                exercises,
-                note: document.getElementById('addNote').value,
-            });
-            showToast(role === 'trainer' ? 'Trening dodany — klient zobaczy natychmiast!' : 'Trening dodany do kalendarza!');
-        }
-
-        closeOverlay('add');
-        render();
+  if (editingWorkoutId) {
+    const w = workouts.find(w => w.id === editingWorkoutId);
+    if (w) {
+      w.name = name;
+      w.type = document.getElementById('addType').value;
+      w.date = document.getElementById('addDate').value;
+      w.duration = document.getElementById('addDuration').value;
+      w.exercises = exercises;
+      w.note = document.getElementById('addNote').value;
     }
+    showToast('Trening zaktualizowany!');
 
-    // ── DETAIL MODAL ──────────────────────────────────────────────
-    function openDetail(id) {
-        const w = workouts.find(w => w.id === id);
-        if (!w)
-            return;
+  } else {
+    workouts.push({
+      id: nextId++,
+      date: document.getElementById('addDate').value,
+      name,
+      type: document.getElementById('addType').value,
+      duration: document.getElementById('addDuration').value,
+      status: 'planned',
+      byTrainer: role === 'trainer',
+      exercises,
+      note: document.getElementById('addNote').value,
+    });
+    showToast(role === 'trainer' ? 'Trening dodany — klient zobaczy natychmiast!' : 'Trening dodany do kalendarza!');
+  }
 
-        document.getElementById('detailTitle').textContent = w.name;
-        document.getElementById('detailMeta').textContent = formatDateFull(parseDate(w.date)) + ' · ' + w.duration;
+  closeOverlay('add');
+  render();
+}
 
-        // Status row
-        const statusColors = {
-            planned: 'var(--lime)',
-            done: 'var(--green)',
-            missed: 'var(--red)',
-            moved: 'var(--orange)'
-        };
-        const sc = w.byTrainer && w.status === 'planned' ? 'var(--cyan)' : statusColors[w.status] || 'var(--lime)';
-        const sl = w.byTrainer && w.status === 'planned' ? 'Od trenera' : statusLabel(w.status);
-        document.getElementById('detailStatusRow').innerHTML = `
+// ── DETAIL MODAL ──────────────────────────────────────────────
+function openDetail(id) {
+  const w = workouts.find(w => w.id === id);
+  if (!w) return;
+
+  document.getElementById('detailTitle').textContent = w.name;
+  document.getElementById('detailMeta').textContent = formatDateFull(parseDate(w.date)) + ' · ' + w.duration;
+
+  // Status row
+  const statusColors = {planned:'var(--lime)', done:'var(--green)', missed:'var(--red)', moved:'var(--orange)'};
+  const sc = w.byTrainer && w.status === 'planned' ? 'var(--cyan)' : statusColors[w.status] || 'var(--lime)';
+  const sl = w.byTrainer && w.status === 'planned' ? 'Od trenera' : statusLabel(w.status);
+  document.getElementById('detailStatusRow').innerHTML = `
     <span style="background:${sc}22;border:1px solid ${sc}44;color:${sc};border-radius:6px;padding:4px 10px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">${sl}</span>
     <span style="background:var(--card2);border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:4px 10px;font-size:10px;">⏱ ${w.duration}</span>
     <span style="background:var(--card2);border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:4px 10px;font-size:10px;">💪 ${w.exercises.length} cwiczen</span>
     ${w.byTrainer ? '<span style="background:var(--cyan-ghost);border:1px solid rgba(58,240,212,.2);color:var(--cyan);border-radius:6px;padding:4px 10px;font-size:10px;">Od trenera</span>' : ''}
-  `
-        ;
+  `;
 
-        // Exercises
-        document.getElementById('detailExercises').innerHTML = w.exercises.length ? `
+  // Exercises
+  document.getElementById('detailExercises').innerHTML = w.exercises.length ? `
     <div style="font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">Cwiczenia</div>
     <div style="display:flex;flex-direction:column;gap:8px;">
-      ${
-
-        w.exercises.map((e, i) => {if (e.freeform) {return `<div style="background:var(--card2);border:1px solid rgba(180,240,58,.15);border-left:3px solid var(--lime);border-radius:8px;padding:10px 12px;">
+      ${w.exercises.map((e,i) => {
+        if (e.freeform) {
+          return `<div style="background:var(--card2);border:1px solid rgba(180,240,58,.15);border-left:3px solid var(--lime);border-radius:8px;padding:10px 12px;">
             <div style="font-size:9px;color:var(--lime);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;">Blok tekstowy</div>
-            <div style="font-size:12px;color:var(--off);line-height:1.7;white-space:pre-line;">${
-                e.name}</div>
-          </div>`;}const videoHtml = e.video ? `
+            <div style="font-size:12px;color:var(--off);line-height:1.7;white-space:pre-line;">${e.name}</div>
+          </div>`;
+        }
+        const videoHtml = e.video ? `
           <div style="margin-top:8px;">
-            <button onclick="toggleCalVideo(${
-            i},'${e.video.replace(/'/g, "\\'")}')" id="cal-vid-btn-${i}" style="background:rgba(255,85,85,.1);border:1px solid rgba(255,85,85,.2);color:#ff5555;border-radius:6px;padding:4px 10px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;">▶ Obejrzyj filmik</button>
+            <button onclick="toggleCalVideo(${i},'${e.video.replace(/'/g,"\\'")}')" id="cal-vid-btn-${i}" style="background:rgba(255,85,85,.1);border:1px solid rgba(255,85,85,.2);color:#ff5555;border-radius:6px;padding:4px 10px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;">▶ Obejrzyj filmik</button>
             <div id="cal-vid-${i}" style="display:none;margin-top:8px;border-radius:8px;overflow:hidden;background:#000;">
               <div style="position:relative;padding-bottom:56.25%;height:0;">
-                <iframe src="${
-            getYTEmbed(e.video)}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allowfullscreen loading="lazy"></iframe>
+                <iframe src="${getYTEmbed(e.video)}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allowfullscreen loading="lazy"></iframe>
               </div>
             </div>
-          </div>`
-
-            : '';return `<div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;">
+          </div>` : '';
+        return `<div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;">
           <div style="display:flex;align-items:center;gap:10px;">
-            <div style="width:20px;height:20px;border-radius:50%;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--muted);flex-shrink:0;">${
-            i + 1}</div>
+            <div style="width:20px;height:20px;border-radius:50%;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--muted);flex-shrink:0;">${i+1}</div>
             <div style="flex:1;font-size:12px;font-weight:600;">${e.name}</div>
             <div style="font-size:11px;color:var(--muted);">${e.sets || ''}</div>
             ${e.video ? '<span style="font-size:9px;background:rgba(255,85,85,.1);border:1px solid rgba(255,85,85,.2);color:#ff5555;padding:2px 6px;border-radius:4px;font-weight:700;">▶</span>' : ''}
           </div>
-          ${
-            videoHtml}
-        </div>`;}).join('')}
-    </div>`
-        : '';
+          ${videoHtml}
+        </div>`;
+      }).join('')}
+    </div>` : '';
 
-        // Note
-        const noteEl = document.getElementById('detailNote');
-        if (w.note) {
-            noteEl.style.display = 'block';
-            noteEl.innerHTML = `<div style="font-size:9px;color:var(--cyan);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;">Notatka trenera</div>${w.note}`;
-        } else {
-            noteEl.style.display = 'none';
-        }
+  // Note
+  const noteEl = document.getElementById('detailNote');
+  if (w.note) {
+    noteEl.style.display = 'block';
+    noteEl.innerHTML = `<div style="font-size:9px;color:var(--cyan);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;">Notatka trenera</div>${w.note}`;
+  } else {
+    noteEl.style.display = 'none';
+  }
 
-        // Footer buttons
-        const foot = document.getElementById('detailFoot');
-        const canEdit = role === 'trainer' || !w.byTrainer;
-        const canMove = w.status === 'planned';
-        const canMarkDone = w.status === 'planned';
+  // Footer buttons
+  const foot = document.getElementById('detailFoot');
+  const canEdit = role === 'trainer' || !w.byTrainer;
+  const canMove = w.status === 'planned';
+  const canMarkDone = w.status === 'planned';
 
-        foot.innerHTML = `
+  foot.innerHTML = `
     <button class="btn btn-outline" onclick="closeOverlay('detail')">Zamknij</button>
-    ${
-        canMove ? `<button class="btn" style="background:var(--orange-ghost);border:1px solid rgba(255,140,66,.2);color:var(--orange);" onclick="closeOverlay('detail');openMoveModal(${id})">→ Przesun</button>` : ''}
+    ${canMove ? `<button class="btn" style="background:var(--orange-ghost);border:1px solid rgba(255,140,66,.2);color:var(--orange);" onclick="closeOverlay('detail');openMoveModal(${id})">→ Przesun</button>` : ''}
     ${canEdit ? `<button class="btn btn-outline" onclick="closeOverlay('detail');openEdit(${id})">✏️ Edytuj</button>` : ''}
     ${canMarkDone ? `<button class="btn btn-lime" style="flex:1" onclick="markDone(${id})">✓ Oznacz jako wykonany</button>` : ''}
     ${w.status === 'done' ? `<span style="color:var(--green);font-size:13px;font-weight:700;padding:10px;">✓ Wykonany</span>` : ''}
     ${canEdit ? `<button class="btn btn-danger" onclick="deleteWorkout(${id})">🗑</button>` : ''}
-  `
-        ;
+  `;
 
-        openOverlay('detail');
-    }
+  openOverlay('detail');
+}
 
-    function openEdit(id) {
-        const w = workouts.find(w => w.id === id);
-        if (!w)
-            return;
-        editingWorkoutId = id;
-        document.getElementById('addModalTitle').innerHTML = 'Edytuj <span style="color:var(--cyan)">trening</span>';
-        document.getElementById('addName').value = w.name;
-        document.getElementById('addDate').value = w.date;
-        document.getElementById('addNote').value = w.note || '';
-        document.getElementById('saveWorkoutBtn').textContent = 'Zapisz zmiany →';
-        renderExercisesInList(w.exercises);
-        closeExSearch();
-        openOverlay('add');
-    }
+function openEdit(id) {
+  const w = workouts.find(w => w.id === id);
+  if (!w) return;
+  editingWorkoutId = id;
+  document.getElementById('addModalTitle').innerHTML = 'Edytuj <span style="color:var(--cyan)">trening</span>';
+  document.getElementById('addName').value = w.name;
+  document.getElementById('addDate').value = w.date;
+  document.getElementById('addNote').value = w.note || '';
+  document.getElementById('saveWorkoutBtn').textContent = 'Zapisz zmiany →';
+  renderExercisesInList(w.exercises);
+  closeExSearch();
+  openOverlay('add');
+}
 
-    function markDone(id) {
-        const w = workouts.find(w => w.id === id);
-        if (w) {
-            w.status = 'done';
-        }
-        closeOverlay('detail');
-        render();
-        showToast('Swietna robota! Trening oznaczony jako wykonany!');
-    }
+function markDone(id) {
+  const w = workouts.find(w => w.id === id);
+  if (w) { w.status = 'done'; }
+  closeOverlay('detail');
+  render();
+  showToast('Swietna robota! Trening oznaczony jako wykonany!');
+}
 
-    function deleteWorkout(id) {
-        if (!confirm('Usunac ten trening?'))
-            return;
-        workouts = workouts.filter(w => w.id !== id);
-        closeOverlay('detail');
-        render();
-        showToast('Trening usuniety.');
-    }
+function deleteWorkout(id) {
+  if (!confirm('Usunac ten trening?')) return;
+  workouts = workouts.filter(w => w.id !== id);
+  closeOverlay('detail');
+  render();
+  showToast('Trening usuniety.');
+}
 
-    // ── MOVE MODAL ────────────────────────────────────────────────
-    function openMoveModal(id) {
-        movingWorkoutId = id;
-        const w = workouts.find(w => w.id === id);
-        document.getElementById('movingWorkoutName').textContent = w?.name || '';
+// ── MOVE MODAL ────────────────────────────────────────────────
+function openMoveModal(id) {
+  movingWorkoutId = id;
+  const w = workouts.find(w => w.id === id);
+  document.getElementById('movingWorkoutName').textContent = w?.name || '';
 
-        // Generuj 14 dni do przodu
-        const days = ['Pon', 'Wt', 'Sr', 'Czw', 'Pt', 'Sob', 'Ndz'];
-        let html = '';
-        for (let i = 0; i < 14; i++) {
-            const d = new Date(today);
-            d.setDate(d.getDate() + i);
-            const ds = dateStr(d);
-            const hasOther = workouts.some(ww => ww.date === ds && ww.id !== id);
-            html += `<div class="move-day${hasOther ? ' has-conflict' : ''}" data-date="${ds}" onclick="selectMoveDay(this,'${ds}')">
-      <div class="md-name">${days[d.getDay() === 0 ? 6 : d.getDay() - 1]}</div>
+  // Generuj 14 dni do przodu
+  const days = ['Pon','Wt','Sr','Czw','Pt','Sob','Ndz'];
+  let html = '';
+  for (let i = 0; i < 14; i++) {
+    const d = new Date(today);
+    d.setDate(d.getDate() + i);
+    const ds = dateStr(d);
+    const hasOther = workouts.some(ww => ww.date === ds && ww.id !== id);
+    html += `<div class="move-day${hasOther ? ' has-conflict' : ''}" data-date="${ds}" onclick="selectMoveDay(this,'${ds}')">
+      <div class="md-name">${days[d.getDay() === 0 ? 6 : d.getDay()-1]}</div>
       <div class="md-num">${d.getDate()}</div>
       <div class="md-dot">${hasOther ? '<span style="background:var(--orange)"></span>' : ''}</div>
-    </div>`
-            ;
-        }
-        document.getElementById('moveDateGrid').innerHTML = html;
+    </div>`;
+  }
+  document.getElementById('moveDateGrid').innerHTML = html;
 
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        document.getElementById('moveCustomDate').value = dateStr(tomorrow);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  document.getElementById('moveCustomDate').value = dateStr(tomorrow);
 
-        openOverlay('move');
-    }
+  openOverlay('move');
+}
 
-    function selectMoveDay(el, ds) {
-        document.querySelectorAll('.move-day').forEach(d => d.classList.remove('selected-day'));
-        el.classList.add('selected-day');
-        document.getElementById('moveCustomDate').value = ds;
-    }
+function selectMoveDay(el, ds) {
+  document.querySelectorAll('.move-day').forEach(d => d.classList.remove('selected-day'));
+  el.classList.add('selected-day');
+  document.getElementById('moveCustomDate').value = ds;
+}
 
-    function confirmMove() {
-        const newDate = document.getElementById('moveCustomDate').value;
-        if (!newDate)
-            return;
-        const w = workouts.find(w => w.id === movingWorkoutId);
-        if (w) {
-            w.date = newDate;
-            w.status = 'moved';
-            setTimeout(() => {
-                w.status = 'planned';
-            }, 100); // reset to planned after move
-            w.status = 'planned';
-        }
-        closeOverlay('move');
-        render();
-        showToast(role === 'client' ? 'Trening przesuniety! Trener zostal powiadomiony.' : 'Trening przesuniety!');
-    }
+function confirmMove() {
+  const newDate = document.getElementById('moveCustomDate').value;
+  if (!newDate) return;
+  const w = workouts.find(w => w.id === movingWorkoutId);
+  if (w) {
+    w.date = newDate;
+    w.status = 'moved';
+    setTimeout(() => { w.status = 'planned'; }, 100); // reset to planned after move
+    w.status = 'planned';
+  }
+  closeOverlay('move');
+  render();
+  showToast(role === 'client' ? 'Trening przesuniety! Trener zostal powiadomiony.' : 'Trening przesuniety!');
+}
 
-    // ── DRAG & DROP ───────────────────────────────────────────────
-    let draggingId = null;
-    function dragStart(e, id) {
-        draggingId = id;
-        e.dataTransfer.effectAllowed = 'move';
-        setTimeout(() => {
-            if (e.target)
-                e.target.style.opacity = '0.4';
-        }, 0);
-    }
-    function dragOver(e) {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-        e.currentTarget.classList.add('drag-over');
-        setTimeout(() => e.currentTarget.classList.remove('drag-over'), 500);
-    }
-    function dropWorkout(e, newDate) {
-        e.preventDefault();
-        if (!draggingId)
-            return;
-        const w = workouts.find(w => w.id === draggingId);
-        if (w && w.date !== newDate) {
-            const oldDate = w.date;
-            w.date = newDate;
-            render();
-            showToast(role === 'client'
-            ? `Trening przesuniety na ${formatDateShort(parseDate(newDate))}! Trener powiadomiony.`
-            : `Trening przesuniety na ${formatDateShort(parseDate(newDate))}!`);
-        }
-        draggingId = null;
-    }
+// ── DRAG & DROP ───────────────────────────────────────────────
+let draggingId = null;
+function dragStart(e, id) {
+  draggingId = id;
+  e.dataTransfer.effectAllowed = 'move';
+  setTimeout(() => { if (e.target) e.target.style.opacity = '0.4'; }, 0);
+}
+function dragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  e.currentTarget.classList.add('drag-over');
+  setTimeout(() => e.currentTarget.classList.remove('drag-over'), 500);
+}
+function dropWorkout(e, newDate) {
+  e.preventDefault();
+  if (!draggingId) return;
+  const w = workouts.find(w => w.id === draggingId);
+  if (w && w.date !== newDate) {
+    const oldDate = w.date;
+    w.date = newDate;
+    render();
+    showToast(role === 'client'
+      ? `Trening przesuniety na ${formatDateShort(parseDate(newDate))}! Trener powiadomiony.`
+      : `Trening przesuniety na ${formatDateShort(parseDate(newDate))}!`);
+  }
+  draggingId = null;
+}
 
-    // ── IMPORT FROM PROGRAM ───────────────────────────────────────
-    function openImport() {
-        selectedImportProgram = null;
-        selectedImportWeek = null;
-        document.getElementById('importConfirmBtn').disabled = true;
-        document.getElementById('weekSelector').style.display = 'none';
+// ── IMPORT FROM PROGRAM ───────────────────────────────────────
+function openImport() {
+  selectedImportProgram = null;
+  selectedImportWeek = null;
+  document.getElementById('importConfirmBtn').disabled = true;
+  document.getElementById('weekSelector').style.display = 'none';
 
-        const html = PROGRAMS.map(p => `
+  const html = PROGRAMS.map(p => `
     <div class="prog-item" id="prog-${p.id}" onclick="selectImportProgram(${p.id})">
       <div class="prog-item-name">${p.name}</div>
       <div class="prog-item-meta">${p.weeks} tygodni · ${p.days}x/tydz.</div>
-    </div>`
-        ).join('');
-        document.getElementById('programList').innerHTML = html;
+    </div>`).join('');
+  document.getElementById('programList').innerHTML = html;
 
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        document.getElementById('importStartDate').value = dateStr(tomorrow);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  document.getElementById('importStartDate').value = dateStr(tomorrow);
 
-        openOverlay('import');
-    }
+  openOverlay('import');
+}
 
-    function selectImportProgram(id) {
-        selectedImportProgram = id;
-        document.querySelectorAll('.prog-item').forEach(el => el.classList.remove('selected'));
-        document.getElementById('prog-' + id).classList.add('selected');
+function selectImportProgram(id) {
+  selectedImportProgram = id;
+  document.querySelectorAll('.prog-item').forEach(el => el.classList.remove('selected'));
+  document.getElementById('prog-' + id).classList.add('selected');
 
-        const prog = PROGRAMS.find(p => p.id === id);
-        if (!prog)
-            return;
+  const prog = PROGRAMS.find(p => p.id === id);
+  if (!prog) return;
 
-        document.getElementById('weekSelector').style.display = 'block';
+  document.getElementById('weekSelector').style.display = 'block';
 
-        const weeksHtml = Array.from({
-            length: Math.min(prog.weeks, 12)
-        }, (_, i) => `
-    <div class="prog-week-row" id="pw-${i + 1}" onclick="selectImportWeek(${i + 1})">
-      <div style="font-size:12px;font-weight:700;color:var(--muted);width:60px;">Tydz. ${i + 1}</div>
+  const weeksHtml = Array.from({length: Math.min(prog.weeks, 12)}, (_, i) => `
+    <div class="prog-week-row" id="pw-${i+1}" onclick="selectImportWeek(${i+1})">
+      <div style="font-size:12px;font-weight:700;color:var(--muted);width:60px;">Tydz. ${i+1}</div>
       <div style="flex:1;font-size:11px;color:var(--off);">${prog.weekTemplate.map(d => d.name).join(' · ')}</div>
-    </div>`
-        ).join('');
-        document.getElementById('progWeeks').innerHTML = weeksHtml;
-    }
+    </div>`).join('');
+  document.getElementById('progWeeks').innerHTML = weeksHtml;
+}
 
-    function selectImportWeek(week) {
-        selectedImportWeek = week;
-        document.querySelectorAll('.prog-week-row').forEach(el => el.classList.remove('selected'));
-        document.getElementById('pw-' + week).classList.add('selected');
-        document.getElementById('importConfirmBtn').disabled = false;
-    }
+function selectImportWeek(week) {
+  selectedImportWeek = week;
+  document.querySelectorAll('.prog-week-row').forEach(el => el.classList.remove('selected'));
+  document.getElementById('pw-' + week).classList.add('selected');
+  document.getElementById('importConfirmBtn').disabled = false;
+}
 
-    function confirmImport() {
-        if (!selectedImportProgram || !selectedImportWeek)
-            return;
-        const prog = PROGRAMS.find(p => p.id === selectedImportProgram);
-        if (!prog)
-            return;
+function confirmImport() {
+  if (!selectedImportProgram || !selectedImportWeek) return;
+  const prog = PROGRAMS.find(p => p.id === selectedImportProgram);
+  if (!prog) return;
 
-        const startDate = parseDate(document.getElementById('importStartDate').value);
-        const spread = document.getElementById('importSpread').value;
-        const spreadDays = {
-            'Pon / Sr / Pt': [0, 2, 4],
-            'Wt / Czw / Sob': [1, 3, 5],
-            'Pon / Sr / Sob': [0, 2, 5],
-            'Pon / Czw / Sob': [0, 3, 5],
-        }[spread] || [0, 2, 4];
+  const startDate = parseDate(document.getElementById('importStartDate').value);
+  const spread = document.getElementById('importSpread').value;
+  const spreadDays = {
+    'Pon / Sr / Pt': [0, 2, 4],
+    'Wt / Czw / Sob': [1, 3, 5],
+    'Pon / Sr / Sob': [0, 2, 5],
+    'Pon / Czw / Sob': [0, 3, 5],
+  }[spread] || [0, 2, 4];
 
-        prog.weekTemplate.forEach((t, i) => {
-            const d = new Date(startDate);
-            d.setDate(d.getDate() + (spreadDays[i] || i * 2));
-            workouts.push({
-                id: nextId++,
-                date: dateStr(d),
-                name: t.name,
-                type: 'Sila',
-                duration: '60 min',
-                status: 'planned',
-                byTrainer: true,
-                exercises: t.exercises,
-                note: '',
-            });
-        });
-
-        closeOverlay('import');
-        render();
-        showToast(`Wciagniety Tydzien ${selectedImportWeek} z programu "${prog.name}"!`);
-    }
-
-    // ── OVERLAY HELPERS ───────────────────────────────────────────
-    function openOverlay(id) {
-        document.getElementById('overlay-' + id).classList.add('open');
-    }
-    function closeOverlay(id) {
-        document.getElementById('overlay-' + id).classList.remove('open');
-    }
-
-    document.querySelectorAll('.overlay').forEach(o => {
-        o.addEventListener('click', e => {
-            if (e.target === o)
-                o.classList.remove('open');
-        });
+  prog.weekTemplate.forEach((t, i) => {
+    const d = new Date(startDate);
+    d.setDate(d.getDate() + (spreadDays[i] || i * 2));
+    workouts.push({
+      id: nextId++,
+      date: dateStr(d),
+      name: t.name,
+      type: 'Sila',
+      duration: '60 min',
+      status: 'planned',
+      byTrainer: true,
+      exercises: t.exercises,
+      note: '',
     });
+  });
 
-    // ── TOAST ─────────────────────────────────────────────────────
-    function showToast(msg) {
-        const t = document.getElementById('toast');
-        t.textContent = msg;
-        t.style.display = 'block';
-        setTimeout(() => {
-            t.style.display = 'none';
-        }, 3500);
-    }
+  closeOverlay('import');
+  render();
+  showToast(`Wciagniety Tydzien ${selectedImportWeek} z programu "${prog.name}"!`);
+}
 
-    // ── INIT ──────────────────────────────────────────────────────
-    render();
-    </script>
+// ── OVERLAY HELPERS ───────────────────────────────────────────
+function openOverlay(id) { document.getElementById('overlay-' + id).classList.add('open'); }
+function closeOverlay(id) { document.getElementById('overlay-' + id).classList.remove('open'); }
+
+document.querySelectorAll('.overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+});
+
+// ── TOAST ─────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 3500);
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+render();
+</script>
 </body>
 </html>

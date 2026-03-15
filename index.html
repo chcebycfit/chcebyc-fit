@@ -1,1361 +1,551 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>chceByc.fit — Centrum deweloperskie</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-    :root {
-        --black: #070b07;
-        --forest: #0c1a0c;
-        --card: #101810;
-        --card2: #141f14;
-        --border: #1c2e1c;
-        --border2: #243824;
-        --border3: #2d4a2d;
-        --lime: #b4f03a;
-        --lime-dim: #7aaa22;
-        --lime-ghost: rgba(180, 240, 58, .08);
-        --lime-soft: rgba(180, 240, 58, .15);
-        --white: #eef8e8;
-        --off: #c8ddb8;
-        --muted: #5a7850;
-        --muted2: #3a5230;
-        --red: #ff5555;
-        --gold: #f0c840;
-        --blue: #4ab0ff;
-        --orange: #ff8c42;
-        --green: #44ff88;
-        --purple: #c46eff;
-        --cyan: #3af0d4;
-    }
-
-    *, *::before, *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-
-    html {
-        scroll-behavior: smooth;
-    }
-
-    body {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        background: var(--black);
-        color: var(--white);
-        min-height: 100vh;
-    }
-
-    body::before {
-        content: '';
-        position: fixed;
-        inset: 0;
-        background:
-        radial-gradient(ellipse 60% 50% at 15% 20%, rgba(180, 240, 58, .04), transparent), radial-gradient(ellipse 40% 40% at 85% 75%, rgba(58, 240, 212, .03), transparent);
-        pointer-events: none;
-        z-index: 0;
-    }
-
-    .grid-bg {
-        position: fixed;
-        inset: 0;
-        z-index: 0;
-        background-image: linear-gradient(rgba(180, 240, 58, .02) 1px, transparent 1px), linear-gradient(90deg, rgba(180, 240, 58, .02) 1px, transparent 1px);
-        background-size: 80px 80px;
-        pointer-events: none;
-    }/* HEADER */
-    header {
-        position: relative;
-        z-index: 10;
-        padding: 52px 40px 0;
-        max-width: 1140px;
-        margin: 0 auto;
-    }
-
-    .logo-row {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        margin-bottom: 10px;
-    }
-
-    .logo-icon-wrap {
-        width: 54px;
-        height: 54px;
-        border-radius: 14px;
-        background: #0f1f0f;
-        border: 1px solid var(--border2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        box-shadow: 0 0 30px rgba(180, 240, 58, .08);
-    }
-
-    .logo-text {
-        font-family: 'Barlow Condensed', sans-serif;
-        font-size: 52px;
-        font-weight: 900;
-        letter-spacing: -1px;
-        line-height: 1;
-    }
-
-    .logo-text span {
-        color: var(--lime);
-    }
-
-    .tagline {
-        font-size: 14px;
-        color: var(--muted);
-        font-weight: 300;
-        margin-bottom: 24px;
-        padding-left: 70px;
-    }
-
-    .header-meta {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-bottom: 44px;
-        padding-left: 70px;
-    }
-
-    .meta-pill {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 5px 12px;
-        font-size: 11px;
-        font-weight: 600;
-        color: var(--muted);
-    }
-
-    .meta-pill span {
-        color: var(--lime);
-    }
-
-    .status-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: var(--green);
-        animation: blink 2s infinite;
-        flex-shrink: 0;
-    }
-
-    @keyframes blink {
-        0%, 100% {
-            opacity:1
-        }
-
-        50% {
-            opacity: .3
-        }
-    }
-
-    .divider {
-        height: 1px;
-        background: var(--border);
-        max-width: 1140px;
-        margin: 0 auto;
-    }/* MAIN */
-    main {
-        position: relative;
-        z-index: 10;
-        max-width: 1140px;
-        margin: 0 auto;
-        padding: 48px 40px 80px;
-    }/* SECTION LABEL */
-    .sec {
-        font-size: 10px;
-        font-weight: 700;
-        letter-spacing: 3px;
-        text-transform: uppercase;
-        color: var(--muted);
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .sec::after {
-        content: '';
-        flex: 1;
-        height: 1px;
-        background: var(--border);
-    }/* FLOW BAR */
-    .flow-bar {
-        display: flex;
-        align-items: center;
-        gap: 0;
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 14px 20px;
-        margin-bottom: 48px;
-        overflow-x: auto;
-        scrollbar-width: none;
-    }
-
-    .flow-bar::-webkit-scrollbar {
-        display: none;
-    }
-
-    .flow-step {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex-shrink: 0;
-    }
-
-    .flow-node {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 4px;
-        padding: 8px 14px;
-        border-radius: 10px;
-        cursor: pointer;
-        text-decoration: none;
-        color: inherit;
-        transition: all .2s;
-        border: 1px solid transparent;
-    }
-
-    .flow-node:hover {
-        background: var(--lime-ghost);
-        border-color: rgba(180, 240, 58, .2);
-    }
-
-    .flow-node.primary {
-        background: var(--lime-ghost);
-        border-color: rgba(180, 240, 58, .25);
-    }
-
-    .flow-node-icon {
-        font-size: 20px;
-    }
-
-    .flow-node-label {
-        font-size: 9px;
-        font-weight: 700;
-        letter-spacing: .5px;
-        text-transform: uppercase;
-        color: var(--muted);
-        white-space: nowrap;
-    }
-
-    .flow-node.primary .flow-node-label {
-        color: var(--lime);
-    }
-
-    .flow-arrow {
-        color: var(--muted2);
-        font-size: 14px;
-        margin: 0 2px;
-        flex-shrink: 0;
-    }/* MODULES GRID */
-    .modules {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-        gap: 14px;
-        margin-bottom: 48px;
-    }/* MODULE CARD */
-    .module {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 20px;
-        overflow: hidden;
-        text-decoration: none;
-        color: inherit;
-        display: flex;
-        flex-direction: column;
-        transition: all .25s;
-        position: relative;
-    }
-
-    .module:hover {
-        border-color: var(--border2);
-        transform: translateY(-3px);
-        box-shadow: 0 16px 40px rgba(0, 0, 0, .4);
-    }
-
-    .module.hl:hover {
-        border-color: rgba(180, 240, 58, .3);
-        box-shadow: 0 16px 40px rgba(0, 0, 0, .4), 0 0 30px rgba(180, 240, 58, .06);
-    }
-
-    .mod-thumb {
-        height: 120px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 48px;
-        position: relative;
-        overflow: hidden;
-        flex-shrink: 0;
-    }
-
-    .mod-thumb-grid {
-        position: absolute;
-        inset: 0;
-        background-image: linear-gradient(rgba(255, 255, 255, .025) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .025) 1px, transparent 1px);
-        background-size: 24px 24px;
-    }
-
-    .mod-badge {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        font-size: 9px;
-        font-weight: 700;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        padding: 3px 8px;
-        border-radius: 5px;
-    }
-
-    .mod-new {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        font-size: 9px;
-        font-weight: 700;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        padding: 3px 8px;
-        border-radius: 5px;
-        background: rgba(180, 240, 58, .15);
-        color: var(--lime);
-        border: 1px solid rgba(180, 240, 58, .25);
-    }
-
-    .mod-body {
-        padding: 16px 18px 18px;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .mod-num {
-        font-size: 9px;
-        font-weight: 700;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        color: var(--muted);
-        margin-bottom: 5px;
-    }
-
-    .mod-title {
-        font-family: 'Barlow Condensed', sans-serif;
-        font-size: 22px;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: .5px;
-        line-height: 1;
-        margin-bottom: 6px;
-    }
-
-    .mod-desc {
-        font-size: 11px;
-        color: var(--muted);
-        line-height: 1.65;
-        font-weight: 300;
-        flex: 1;
-        margin-bottom: 12px;
-    }
-
-    .mod-tags {
-        display: flex;
-        gap: 5px;
-        flex-wrap: wrap;
-        margin-bottom: 12px;
-    }
-
-    .tag {
-        font-size: 9px;
-        font-weight: 600;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        padding: 2px 7px;
-        border-radius: 5px;
-        background: var(--border2);
-        color: var(--muted);
-    }
-
-    .tag.new {
-        background: rgba(180, 240, 58, .1);
-        color: var(--lime-dim);
-        border: 1px solid rgba(180, 240, 58, .15);
-    }
-
-    .mod-link {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 9px 13px;
-        background: var(--card2);
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        font-size: 12px;
-        font-weight: 600;
-        color: var(--muted);
-        transition: all .2s;
-    }
-
-    .module:hover .mod-link {
-        border-color: var(--border2);
-        color: var(--off);
-    }
-
-    .module.hl .mod-link {
-        background: var(--lime-ghost);
-        border-color: rgba(180, 240, 58, .2);
-        color: var(--lime);
-    }/* GROUP HEADER */
-    .group-header {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 14px;
-        margin-top: 4px;
-    }
-
-    .gh-label {
-        font-family: 'Barlow Condensed', sans-serif;
-        font-size: 18px;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: .5px;
-    }
-
-    .gh-count {
-        background: var(--border2);
-        color: var(--muted);
-        border-radius: 5px;
-        padding: 2px 8px;
-        font-size: 10px;
-        font-weight: 700;
-    }/* PROGRESS TABLE */
-    .prog-table {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        overflow: hidden;
-        margin-bottom: 48px;
-    }
-
-    .pt-row {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        padding: 12px 20px;
-        border-bottom: 1px solid var(--border);
-        font-size: 12px;
-    }
-
-    .pt-row:last-child {
-        border-bottom: none;
-    }
-
-    .pt-row:hover {
-        background: rgba(255, 255, 255, .015);
-    }
-
-    .pt-num {
-        font-size: 10px;
-        color: var(--muted);
-        width: 24px;
-        flex-shrink: 0;
-        text-align: right;
-    }
-
-    .pt-icon {
-        font-size: 16px;
-        width: 20px;
-        text-align: center;
-        flex-shrink: 0;
-    }
-
-    .pt-name {
-        font-weight: 600;
-        flex: 1;
-    }
-
-    .pt-status {
-        font-size: 9px;
-        font-weight: 700;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        padding: 3px 9px;
-        border-radius: 5px;
-        flex-shrink: 0;
-    }
-
-    .pt-link {
-        font-size: 10px;
-        color: var(--muted);
-        text-decoration: none;
-        transition: color .2s;
-        flex-shrink: 0;
-    }
-
-    .pt-link:hover {
-        color: var(--lime);
-    }
-
-    .done {
-        background: rgba(68, 255, 136, .1);
-        color: var(--green);
-    }
-
-    .live {
-        background: rgba(58, 240, 212, .1);
-        color: var(--cyan);
-    }
-
-    .pub {
-        background: rgba(180, 240, 58, .1);
-        color: var(--lime);
-    }
-
-    .mock {
-        background: rgba(196, 110, 255, .1);
-        color: var(--purple);
-    }/* ARCH */
-    .arch {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 20px;
-        padding: 26px;
-        margin-bottom: 48px;
-    }
-
-    .arch-title {
-        font-family: 'Barlow Condensed', sans-serif;
-        font-size: 20px;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: .5px;
-        margin-bottom: 18px;
-    }
-
-    .arch-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 14px;
-    }
-
-    .arch-col-title {
-        font-size: 9px;
-        font-weight: 700;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        margin-bottom: 10px;
-        padding-bottom: 8px;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .arch-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 7px 0;
-        border-bottom: 1px solid var(--border);
-        font-size: 12px;
-        color: var(--off);
-    }
-
-    .arch-item:last-child {
-        border-bottom: none;
-    }
-
-    .arch-item-icon {
-        font-size: 14px;
-        width: 18px;
-        text-align: center;
-        flex-shrink: 0;
-    }
-
-    .arch-item-val {
-        margin-left: auto;
-        font-size: 10px;
-        font-weight: 600;
-    }/* BIZ */
-    .biz-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 14px;
-        margin-bottom: 48px;
-    }
-
-    .biz-card {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 18px;
-    }
-
-    .biz-title {
-        font-size: 10px;
-        color: var(--muted);
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        margin-bottom: 12px;
-        font-weight: 700;
-    }
-
-    .biz-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 8px 12px;
-        border-radius: 9px;
-        font-size: 12px;
-        margin-bottom: 6px;
-        border: 1px solid var(--border);
-        background: var(--card2);
-    }
-
-    .biz-row:last-child {
-        margin-bottom: 0;
-    }
-
-    .biz-row.hi {
-        background: var(--lime-ghost);
-        border-color: rgba(180, 240, 58, .2);
-    }
-
-    .biz-row.hi span:first-child {
-        color: var(--lime);
-        font-weight: 600;
-    }/* ROADMAP */
-    .roadmap {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        margin-bottom: 48px;
-    }
-
-    .rm-item {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        padding: 11px 14px;
-        font-size: 12px;
-    }
-
-    .rm-icon {
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 13px;
-        flex-shrink: 0;
-    }/* FOOTER */
-    footer {
-        position: relative;
-        z-index: 10;
-        border-top: 1px solid var(--border);
-        padding: 20px 40px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        max-width: 1140px;
-        margin: 0 auto;
-        font-size: 11px;
-        color: var(--muted);
-    }
-
-    footer a {
-        color: var(--muted);
-        text-decoration: none;
-        transition: color .2s;
-    }
-
-    footer a:hover {
-        color: var(--lime);
-    }
-
-    ::-webkit-scrollbar {
-        width: 3px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: var(--border2);
-    }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>chceByc.fit — Centrum deweloperskie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#070b07;--forest:#0c1a0c;--card:#101810;--card2:#141f14;
+  --border:#1c2e1c;--border2:#243824;--border3:#2d4a2d;
+  --lime:#b4f03a;--lime-dim:#7aaa22;--lime-ghost:rgba(180,240,58,.08);--lime-soft:rgba(180,240,58,.15);
+  --white:#eef8e8;--off:#c8ddb8;--muted:#5a7850;--muted2:#3a5230;
+  --red:#ff5555;--gold:#f0c840;--blue:#4ab0ff;--orange:#ff8c42;
+  --green:#44ff88;--purple:#c46eff;--cyan:#3af0d4;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--black);color:var(--white);min-height:100vh;}
+
+body::before{
+  content:'';position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 20%,rgba(180,240,58,.04),transparent),
+    radial-gradient(ellipse 40% 40% at 85% 75%,rgba(58,240,212,.03),transparent);
+  pointer-events:none;z-index:0;
+}
+.grid-bg{
+  position:fixed;inset:0;z-index:0;
+  background-image:linear-gradient(rgba(180,240,58,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(180,240,58,.02) 1px,transparent 1px);
+  background-size:80px 80px;pointer-events:none;
+}
+
+/* HEADER */
+header{position:relative;z-index:10;padding:52px 40px 0;max-width:1140px;margin:0 auto;}
+.logo-row{display:flex;align-items:center;gap:16px;margin-bottom:10px;}
+.logo-icon-wrap{width:54px;height:54px;border-radius:14px;background:#0f1f0f;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 30px rgba(180,240,58,.08);}
+.logo-text{font-family:'Barlow Condensed',sans-serif;font-size:52px;font-weight:900;letter-spacing:-1px;line-height:1;}
+.logo-text span{color:var(--lime);}
+.tagline{font-size:14px;color:var(--muted);font-weight:300;margin-bottom:24px;padding-left:70px;}
+.header-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:44px;padding-left:70px;}
+.meta-pill{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-size:11px;font-weight:600;color:var(--muted);}
+.meta-pill span{color:var(--lime);}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite;flex-shrink:0;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.divider{height:1px;background:var(--border);max-width:1140px;margin:0 auto;}
+
+/* MAIN */
+main{position:relative;z-index:10;max-width:1140px;margin:0 auto;padding:48px 40px 80px;}
+
+/* SECTION LABEL */
+.sec{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.sec::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* FLOW BAR */
+.flow-bar{
+  display:flex;align-items:center;gap:0;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:14px 20px;
+  margin-bottom:48px;overflow-x:auto;scrollbar-width:none;
+}
+.flow-bar::-webkit-scrollbar{display:none;}
+.flow-step{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.flow-node{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:8px 14px;border-radius:10px;cursor:pointer;
+  text-decoration:none;color:inherit;transition:all .2s;
+  border:1px solid transparent;
+}
+.flow-node:hover{background:var(--lime-ghost);border-color:rgba(180,240,58,.2);}
+.flow-node.primary{background:var(--lime-ghost);border-color:rgba(180,240,58,.25);}
+.flow-node-icon{font-size:20px;}
+.flow-node-label{font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+.flow-node.primary .flow-node-label{color:var(--lime);}
+.flow-arrow{color:var(--muted2);font-size:14px;margin:0 2px;flex-shrink:0;}
+
+/* MODULES GRID */
+.modules{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px;margin-bottom:48px;}
+
+/* MODULE CARD */
+.module{
+  background:var(--card);border:1px solid var(--border);border-radius:20px;
+  overflow:hidden;text-decoration:none;color:inherit;
+  display:flex;flex-direction:column;transition:all .25s;position:relative;
+}
+.module:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.4);}
+.module.hl:hover{border-color:rgba(180,240,58,.3);box-shadow:0 16px 40px rgba(0,0,0,.4),0 0 30px rgba(180,240,58,.06);}
+.mod-thumb{height:120px;display:flex;align-items:center;justify-content:center;font-size:48px;position:relative;overflow:hidden;flex-shrink:0;}
+.mod-thumb-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:24px 24px;}
+.mod-badge{position:absolute;top:10px;right:10px;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:5px;}
+.mod-new{position:absolute;top:10px;left:10px;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:5px;background:rgba(180,240,58,.15);color:var(--lime);border:1px solid rgba(180,240,58,.25);}
+.mod-body{padding:16px 18px 18px;flex:1;display:flex;flex-direction:column;}
+.mod-num{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.mod-title{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;line-height:1;margin-bottom:6px;}
+.mod-desc{font-size:11px;color:var(--muted);line-height:1.65;font-weight:300;flex:1;margin-bottom:12px;}
+.mod-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;}
+.tag{font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:5px;background:var(--border2);color:var(--muted);}
+.tag.new{background:rgba(180,240,58,.1);color:var(--lime-dim);border:1px solid rgba(180,240,58,.15);}
+.mod-link{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:9px 13px;background:var(--card2);border:1px solid var(--border);
+  border-radius:10px;font-size:12px;font-weight:600;color:var(--muted);transition:all .2s;
+}
+.module:hover .mod-link{border-color:var(--border2);color:var(--off);}
+.module.hl .mod-link{background:var(--lime-ghost);border-color:rgba(180,240,58,.2);color:var(--lime);}
+
+/* GROUP HEADER */
+.group-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;margin-top:4px;}
+.gh-label{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;}
+.gh-count{background:var(--border2);color:var(--muted);border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700;}
+
+/* PROGRESS TABLE */
+.prog-table{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:48px;}
+.pt-row{display:flex;align-items:center;gap:14px;padding:12px 20px;border-bottom:1px solid var(--border);font-size:12px;}
+.pt-row:last-child{border-bottom:none;}
+.pt-row:hover{background:rgba(255,255,255,.015);}
+.pt-num{font-size:10px;color:var(--muted);width:24px;flex-shrink:0;text-align:right;}
+.pt-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0;}
+.pt-name{font-weight:600;flex:1;}
+.pt-status{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:5px;flex-shrink:0;}
+.pt-link{font-size:10px;color:var(--muted);text-decoration:none;transition:color .2s;flex-shrink:0;}
+.pt-link:hover{color:var(--lime);}
+.done{background:rgba(68,255,136,.1);color:var(--green);}
+.live{background:rgba(58,240,212,.1);color:var(--cyan);}
+.pub{background:rgba(180,240,58,.1);color:var(--lime);}
+.mock{background:rgba(196,110,255,.1);color:var(--purple);}
+
+/* ARCH */
+.arch{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:26px;margin-bottom:48px;}
+.arch-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;margin-bottom:18px;}
+.arch-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.arch-col-title{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.arch-item{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;color:var(--off);}
+.arch-item:last-child{border-bottom:none;}
+.arch-item-icon{font-size:14px;width:18px;text-align:center;flex-shrink:0;}
+.arch-item-val{margin-left:auto;font-size:10px;font-weight:600;}
+
+/* BIZ */
+.biz-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:48px;}
+.biz-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;}
+.biz-title{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;font-weight:700;}
+.biz-row{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-radius:9px;font-size:12px;margin-bottom:6px;border:1px solid var(--border);background:var(--card2);}
+.biz-row:last-child{margin-bottom:0;}
+.biz-row.hi{background:var(--lime-ghost);border-color:rgba(180,240,58,.2);}
+.biz-row.hi span:first-child{color:var(--lime);font-weight:600;}
+
+/* ROADMAP */
+.roadmap{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:48px;}
+.rm-item{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 14px;font-size:12px;}
+.rm-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+
+/* FOOTER */
+footer{
+  position:relative;z-index:10;border-top:1px solid var(--border);
+  padding:20px 40px;display:flex;align-items:center;justify-content:space-between;
+  max-width:1140px;margin:0 auto;font-size:11px;color:var(--muted);
+}
+footer a{color:var(--muted);text-decoration:none;transition:color .2s;}
+footer a:hover{color:var(--lime);}
+
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-thumb{background:var(--border2);}
+</style>
 </head>
 <body>
-    <div class="grid-bg"></div>
+<div class="grid-bg"></div>
 
-    <header>
-        <div class="logo-row">
-            <div class="logo-icon-wrap">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                    <circle cx="12" cy="5.5" r="3" fill="#b4f03a"/>
-                    <rect x="10" y="9.5" width="4" height="7" rx="2" fill="#b4f03a"/>
-                    <line x1="10" y1="11" x2="5.5" y2="15" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
-                    <line x1="14" y1="10.5" x2="18.5" y2="6" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
-                    <line x1="10.5" y1="16.5" x2="7.5" y2="22" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
-                    <line x1="13.5" y1="16.5" x2="16.5" y2="22" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
-                </svg>
-            </div>
-            <div class="logo-text">
-                chceByc
-                <span>.fit</span>
-            </div>
-        </div>
-        <div class="tagline">Pierwsza polska platforma fitness z AI — szkielet produktu · wersja deweloperska</div>
-        <div class="header-meta">
-            <div class="meta-pill">
-                <div class="status-dot"></div>
-                Status: 
-                <span>Aktywny prototyp</span>
-            </div>
-            <div class="meta-pill">
-                Wersja: 
-                <span>0.2.0-alpha</span>
-            </div>
-            <div class="meta-pill">
-                Moduly: 
-                <span>11 / 11</span>
-            </div>
-            <div class="meta-pill">
-                Ostatnia aktualizacja: 
-                <span>15 mar 2026</span>
-            </div>
-            <div class="meta-pill">
-                Stack: 
-                <span>HTML · CSS · JS · Claude API</span>
-            </div>
-        </div>
-    </header>
+<header>
+  <div class="logo-row">
+    <div class="logo-icon-wrap">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="5.5" r="3" fill="#b4f03a"/>
+        <rect x="10" y="9.5" width="4" height="7" rx="2" fill="#b4f03a"/>
+        <line x1="10" y1="11" x2="5.5" y2="15" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="14" y1="10.5" x2="18.5" y2="6" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="10.5" y1="16.5" x2="7.5" y2="22" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="13.5" y1="16.5" x2="16.5" y2="22" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="logo-text">chceByc<span>.fit</span></div>
+  </div>
+  <div class="tagline">Pierwsza polska platforma fitness z AI — szkielet produktu · wersja deweloperska</div>
+  <div class="header-meta">
+    <div class="meta-pill"><div class="status-dot"></div>Status: <span>Aktywny prototyp</span></div>
+    <div class="meta-pill">Wersja: <span>0.2.0-alpha</span></div>
+    <div class="meta-pill">Moduly: <span>11 / 11</span></div>
+    <div class="meta-pill">Ostatnia aktualizacja: <span>15 mar 2026</span></div>
+    <div class="meta-pill">Stack: <span>HTML · CSS · JS · Claude API</span></div>
+  </div>
+</header>
 
-    <div class="divider"></div>
+<div class="divider"></div>
 
-    <main>
+<main>
 
-        <!-- FLOW USER JOURNEY -->
-        <div class="sec">Przepływ użytkownika</div>
-        <div class="flow-bar">
-            <div class="flow-step">
-                <a class="flow-node" href="chcebyc-landing.html" target="_blank">
-                    <div class="flow-node-icon">🌐</div>
-                    <div class="flow-node-label">Landing</div>
-                </a>
-            </div>
-            <div class="flow-arrow">→</div>
-            <div class="flow-step">
-                <a class="flow-node primary" href="chcebyc-auth.html" target="_blank">
-                    <div class="flow-node-icon">🔐</div>
-                    <div class="flow-node-label">Rejestracja</div>
-                </a>
-            </div>
-            <div class="flow-arrow">→</div>
-            <div class="flow-step">
-                <a class="flow-node" href="chcebyc-onboarding.html" target="_blank">
-                    <div class="flow-node-icon">🧬</div>
-                    <div class="flow-node-label">Quiz AI</div>
-                </a>
-            </div>
-            <div class="flow-arrow">→</div>
-            <div class="flow-step">
-                <a class="flow-node primary" href="chcebyc-dashboard.html" target="_blank">
-                    <div class="flow-node-icon">🏠</div>
-                    <div class="flow-node-label">Dashboard</div>
-                </a>
-            </div>
-            <div class="flow-arrow">→</div>
-            <div class="flow-step">
-                <a class="flow-node" href="chcebyc-calendar.html" target="_blank">
-                    <div class="flow-node-icon">📅</div>
-                    <div class="flow-node-label">Kalendarz</div>
-                </a>
-            </div>
-            <div class="flow-arrow">→</div>
-            <div class="flow-step">
-                <a class="flow-node" href="chcebyc-measurements.html" target="_blank">
-                    <div class="flow-node-icon">📐</div>
-                    <div class="flow-node-label">Pomiary</div>
-                </a>
-            </div>
-            <div class="flow-arrow">→</div>
-            <div class="flow-step">
-                <a class="flow-node" href="chcebyc-profile.html" target="_blank">
-                    <div class="flow-node-icon">👤</div>
-                    <div class="flow-node-label">Profil / XP</div>
-                </a>
-            </div>
-            <div class="flow-arrow" style="opacity:.3;">│</div>
-            <div class="flow-step">
-                <a class="flow-node" href="chcebyc-marketplace.html" target="_blank">
-                    <div class="flow-node-icon">🏪</div>
-                    <div class="flow-node-label">Marketplace</div>
-                </a>
-            </div>
-        </div>
+  <!-- FLOW USER JOURNEY -->
+  <div class="sec">Przepływ użytkownika</div>
+  <div class="flow-bar">
+    <div class="flow-step">
+      <a class="flow-node" href="chcebyc-landing.html" target="_blank">
+        <div class="flow-node-icon">🌐</div>
+        <div class="flow-node-label">Landing</div>
+      </a>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <a class="flow-node primary" href="chcebyc-auth.html" target="_blank">
+        <div class="flow-node-icon">🔐</div>
+        <div class="flow-node-label">Rejestracja</div>
+      </a>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <a class="flow-node" href="chcebyc-onboarding.html" target="_blank">
+        <div class="flow-node-icon">🧬</div>
+        <div class="flow-node-label">Quiz AI</div>
+      </a>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <a class="flow-node primary" href="chcebyc-dashboard.html" target="_blank">
+        <div class="flow-node-icon">🏠</div>
+        <div class="flow-node-label">Dashboard</div>
+      </a>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <a class="flow-node" href="chcebyc-calendar.html" target="_blank">
+        <div class="flow-node-icon">📅</div>
+        <div class="flow-node-label">Kalendarz</div>
+      </a>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <a class="flow-node" href="chcebyc-measurements.html" target="_blank">
+        <div class="flow-node-icon">📐</div>
+        <div class="flow-node-label">Pomiary</div>
+      </a>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <a class="flow-node" href="chcebyc-profile.html" target="_blank">
+        <div class="flow-node-icon">👤</div>
+        <div class="flow-node-label">Profil / XP</div>
+      </a>
+    </div>
+    <div class="flow-arrow" style="opacity:.3;">│</div>
+    <div class="flow-step">
+      <a class="flow-node" href="chcebyc-marketplace.html" target="_blank">
+        <div class="flow-node-icon">🏪</div>
+        <div class="flow-node-label">Marketplace</div>
+      </a>
+    </div>
+  </div>
 
-        <!-- MODULES -->
-        <div class="sec">Wszystkie moduły</div>
+  <!-- MODULES -->
+  <div class="sec">Wszystkie moduły</div>
 
-        <!-- PUBLICZNE / KLIENT -->
-        <div class="group-header">
-            <div class="gh-label">Publiczne & Klient</div>
-            <div class="gh-count">6 modułów</div>
-        </div>
-        <div class="modules" style="margin-bottom:32px;">
+  <!-- PUBLICZNE / KLIENT -->
+  <div class="group-header">
+    <div class="gh-label">Publiczne & Klient</div>
+    <div class="gh-count">6 modułów</div>
+  </div>
+  <div class="modules" style="margin-bottom:32px;">
 
-            <a class="module hl" href="chcebyc-landing.html" target="_blank">
-                <div class="mod-thumb" style="background:linear-gradient(135deg,#1a3a1a,#0d2008)">
-                    <div class="mod-thumb-grid"></div>
-                    <span>🌐</span>
-                    <div class="mod-badge" style="background:rgba(180,240,58,.15);color:var(--lime);border:1px solid rgba(180,240,58,.2)">Publiczny</div>
-                </div>
-                <div class="mod-body">
-                    <div class="mod-num">Modul 01</div>
-                    <div class="mod-title">Landing Page</div>
-                    <div class="mod-desc">Strona glowna z sekcjami hero, jak to dziala, AI coach, cennik klientow i trenerow, FAQ i CTA do rejestracji.</div>
-                    <div class="mod-tags">
-                        <span class="tag">Marketing</span>
-                        <span class="tag">Cennik</span>
-                        <span class="tag">SEO</span>
-                    </div>
-                    <div class="mod-link">
-                        chcebyc-landing.html 
-                        <span>→</span>
-                    </div>
-                </div>
-            </a>
+    <a class="module hl" href="chcebyc-landing.html" target="_blank">
+      <div class="mod-thumb" style="background:linear-gradient(135deg,#1a3a1a,#0d2008)">
+        <div class="mod-thumb-grid"></div>
+        <span>🌐</span>
+        <div class="mod-badge" style="background:rgba(180,240,58,.15);color:var(--lime);border:1px solid rgba(180,240,58,.2)">Publiczny</div>
+      </div>
+      <div class="mod-body">
+        <div class="mod-num">Modul 01</div>
+        <div class="mod-title">Landing Page</div>
+        <div class="mod-desc">Strona glowna z sekcjami hero, jak to dziala, AI coach, cennik klientow i trenerow, FAQ i CTA do rejestracji.</div>
+        <div class="mod-tags"><span class="tag">Marketing</span><span class="tag">Cennik</span><span class="tag">SEO</span></div>
+        <div class="mod-link">chcebyc-landing.html <span>→</span></div>
+      </div>
+    </a>
 
-            <a class="module" href="chcebyc-auth.html" target="_blank">
-                <div class="mod-thumb" style="background:linear-gradient(135deg,#0f1f0f,#070f07)">
-                    <div class="mod-thumb-grid"></div>
-                    <span>🔐</span>
-                    <div class="mod-badge" style="background:rgba(180,240,58,.1);color:var(--lime);border:1px solid rgba(180,240,58,.15)">Rejestracja</div>
-                    <div class="mod-new">Nowy</div>
-                </div>
-                <div class="mod-body">
-                    <div class="mod-num">Modul 02</div>
-                    <div class="mod-title">Rejestracja & Logowanie</div>
-                    <div class="mod-desc">Responsywny ekran auth. Lewa kolumna z social proof, prawa z formularzem. Toast po sukcesie, redirect do onboardingu lub dashboardu. Logowanie przez Google.</div>
-                    <div class="mod-tags">
-                        <span class="tag">Auth</span>
-                        <span class="tag">Toast</span>
-                        <span class="tag">Responsive</span>
-                        <span class="tag new">Nowy</span>
-                    </div>
-                    <div class="mod-link">
-                        chcebyc-auth.html 
-                        <span>→</span>
-                    </div>
-                </div>
-            </a>
+    <a class="module" href="chcebyc-auth.html" target="_blank">
+      <div class="mod-thumb" style="background:linear-gradient(135deg,#0f1f0f,#070f07)">
+        <div class="mod-thumb-grid"></div>
+        <span>🔐</span>
+        <div class="mod-badge" style="background:rgba(180,240,58,.1);color:var(--lime);border:1px solid rgba(180,240,58,.15)">Rejestracja</div>
+        <div class="mod-new">Nowy</div>
+      </div>
+      <div class="mod-body">
+        <div class="mod-num">Modul 02</div>
+        <div class="mod-title">Rejestracja & Logowanie</div>
+        <div class="mod-desc">Responsywny ekran auth. Lewa kolumna z social proof, prawa z formularzem. Toast po sukcesie, redirect do onboardingu lub dashboardu. Logowanie przez Google.</div>
+        <div class="mod-tags"><span class="tag">Auth</span><span class="tag">Toast</span><span class="tag">Responsive</span><span class="tag new">Nowy</span></div>
+        <div class="mod-link">chcebyc-auth.html <span>→</span></div>
+      </div>
+    </a>
 
-            <a class="module" href="chcebyc-onboarding.html" target="_blank">
-                <div class="mod-thumb" style="background:linear-gradient(135deg,#0d1f0d,#070f07)">
-                    <div class="mod-thumb-grid"></div>
-                    <span>🧬</span>
-                    <div class="mod-badge" style="background:rgba(58,240,212,.1);color:var(--cyan);border:1px solid rgba(58,240,212,.2)">AI Live</div>
-                </div>
-                <div class="mod-body">
-                    <div class="mod-num">Modul 03</div>
-                    <div class="mod-title">Onboarding + Quiz AI</div>
-                    <div class="mod-desc">8-krokowy quiz zbierajacy dane uzytkownika. AI generuje spersonalizowany plan treningowy na zywo przez Claude API. Animowany ekran generowania.</div>
-                    <div class="mod-tags">
-                        <span class="tag">Quiz</span>
-                        <span class="tag">Claude API</span>
-                        <span class="tag">3 sciezki</span>
-                    </div>
-                    <div class="mod-link">
-                        chcebyc-onboarding.html 
-                        <span>→</span>
-                    </div>
-                </div>
-            </a>
+    <a class="module" href="chcebyc-onboarding.html" target="_blank">
+      <div class="mod-thumb" style="background:linear-gradient(135deg,#0d1f0d,#070f07)">
+        <div class="mod-thumb-grid"></div>
+        <span>🧬</span>
+        <div class="mod-badge" style="background:rgba(58,240,212,.1);color:var(--cyan);border:1px solid rgba(58,240,212,.2)">AI Live</div>
+      </div>
+      <div class="mod-body">
+        <div class="mod-num">Modul 03</div>
+        <div class="mod-title">Onboarding + Quiz AI</div>
+        <div class="mod-desc">8-krokowy quiz zbierajacy dane uzytkownika. AI generuje spersonalizowany plan treningowy na zywo przez Claude API. Animowany ekran generowania.</div>
+        <div class="mod-tags"><span class="tag">Quiz</span><span class="tag">Claude API</span><span class="tag">3 sciezki</span></div>
+        <div class="mod-link">chcebyc-onboarding.html <span>→</span></div>
+      </div>
+    </a>
 
-            <a class="module hl" href="chcebyc-dashboard.html" target="_blank">
-                <div class="mod-thumb" style="background:linear-gradient(135deg,#1a2a10,#0d1808)">
-                    <div class="mod-thumb-grid"></div>
-                    <span>🏠</span>
-                    <div class="mod-badge" style="background:rgba(180,240,58,.1);color:var(--lime);border:1px solid rgba(180,240,58,.2)">AI Live</div>
-                </div>
-                <div class="mod-body">
-                    <div class="mod-num">Modul 04</div>
-                    <div class="mod-title">Dashboard Uzytkownika</div>
-                    <div class="mod-desc">3 tryby: Klient Pro, Klient Trenera Free, Klient Trenera+Pro. Timer treningu, AI Coach, spolecznosc, wyzwania, kafelek postegow plec x cel z kolorowymi delta.</div>
-                    <div class="mod-tags">
-                        <span class="tag">Dashboard</span>
-                        <span class="tag">Timer</span>
-                        <span class="tag">AI Coach</span>
-                        <span class="tag new">Postepy</span>
-                    </div>
-                    <div class="mod-link">
-                        chcebyc-dashboard.html 
-                        <span>→</span>
-                    </div>
-                </div>
-            </a>
+    <a class="module hl" href="chcebyc-dashboard.html" target="_blank">
+      <div class="mod-thumb" style="background:linear-gradient(135deg,#1a2a10,#0d1808)">
+        <div class="mod-thumb-grid"></div>
+        <span>🏠</span>
+        <div class="mod-badge" style="background:rgba(180,240,58,.1);color:var(--lime);border:1px solid rgba(180,240,58,.2)">AI Live</div>
+      </div>
+      <div class="mod-body">
+        <div class="mod-num">Modul 04</div>
+        <div class="mod-title">Dashboard Uzytkownika</div>
+        <div class="mod-desc">3 tryby: Klient Pro, Klient Trenera Free, Klient Trenera+Pro. Timer treningu, AI Coach, spolecznosc, wyzwania, kafelek postegow plec x cel z kolorowymi delta.</div>
+        <div class="mod-tags"><span class="tag">Dashboard</span><span class="tag">Timer</span><span class="tag">AI Coach</span><span class="tag new">Postepy</span></div>
+        <div class="mod-link">chcebyc-dashboard.html <span>→</span></div>
+      </div>
+    </a>
 
-            <a class="module" href="chcebyc-calendar.html" target="_blank">
-                <div class="mod-thumb" style="background:linear-gradient(135deg,#1a1a0a,#0d0d08)">
-                    <div class="mod-thumb-grid"></div>
-                    <span>📅</span>
-                    <div class="mod-badge" style="background:rgba(240,200,64,.1);color:var(--gold);border:1px solid rgba(240,200,64,.2)">Interaktywny</div>
-                </div>
-                <div class="mod-body">
-                    <div class="mod-num">Modul 05</div>
-                    <div class="mod-title">Kalendarz Treningowy</div>
-                    <div class="mod-desc">Widok tygodnia i miesiaca. Drag&drop treningow. Import z programu. Tryb trenera (edycja) i klienta (oznaczanie). Filmy YouTube inline. Punkty kontrolne.</div>
-                    <div class="mod-tags">
-                        <span class="tag">Drag&Drop</span>
-                        <span class="tag">Import</span>
-                        <span class="tag">YouTube</span>
-                    </div>
-                    <div class="mod-link">
-                        chcebyc-calendar.html 
-                        <span>→</span>
-                    </div>
-                </div>
-            </a>
+    <a class="module" href="chcebyc-calendar.html" target="_blank">
+      <div class="mod-thumb" style="background:linear-gradient(135deg,#1a1a0a,#0d0d08)">
+        <div class="mod-thumb-grid"></div>
+        <span>📅</span>
+        <div class="mod-badge" style="background:rgba(240,200,64,.1);color:var(--gold);border:1px solid rgba(240,200,64,.2)">Interaktywny</div>
+      </div>
+      <div class="mod-body">
+        <div class="mod-num">Modul 05</div>
+        <div class="mod-title">Kalendarz Treningowy</div>
+        <div class="mod-desc">Widok tygodnia i miesiaca. Drag&drop treningow. Import z programu. Tryb trenera (edycja) i klienta (oznaczanie). Filmy YouTube inline. Punkty kontrolne.</div>
+        <div class="mod-tags"><span class="tag">Drag&Drop</span><span class="tag">Import</span><span class="tag">YouTube</span></div>
+        <div class="mod-link">chcebyc-calendar.html <span>→</span></div>
+      </div>
+    </a>
 
-            <a class="module" href="chcebyc-marketplace.html" target="_blank">
-                <div class="mod-thumb" style="background:linear-gradient(135deg,#1a1a0a,#101008)">
-                    <div class="mod-thumb-grid"></div>
-                    <span>🏪</span>
-                    <div class="mod-badge" style="background:rgba(240,200,64,.1);color:var(--gold);border:1px solid rgba(240,200,64,.2)">Publiczny</div>
-                </div>
-                <div class="mod-body">
-                    <div class="mod-num">Modul 06</div>
-                    <div class="mod-title">Marketplace Planow</div>
-                    <div class="mod-desc">Przegladanie i zakup planow treningowych. Filtry, sortowanie, karty planow, strona szczegolowa, profil trenera, modal zakupu z upsell AI Coach.</div>
-                    <div class="mod-tags">
-                        <span class="tag">Marketplace</span>
-                        <span class="tag">Filtry</span>
-                        <span class="tag">Zakup</span>
-                    </div>
-                    <div class="mod-link">
-                        chcebyc-marketplace.html 
-                        <span>→</span>
-                    </div>
-                </div>
-            </a>
+    <a class="module" href="chcebyc-marketplace.html" target="_blank">
+      <div class="mod-thumb" style="background:linear-gradient(135deg,#1a1a0a,#101008)">
+        <div class="mod-thumb-grid"></div>
+        <span>🏪</span>
+        <div class="mod-badge" style="background:rgba(240,200,64,.1);color:var(--gold);border:1px solid rgba(240,200,64,.2)">Publiczny</div>
+      </div>
+      <div class="mod-body">
+        <div class="mod-num">Modul 06</div>
+        <div class="mod-title">Marketplace Planow</div>
+        <div class="mod-desc">Przegladanie i zakup planow treningowych. Filtry, sortowanie, karty planow, strona szczegolowa, profil trenera, modal zakupu z upsell AI Coach.</div>
+        <div class="mod-tags"><span class="tag">Marketplace</span><span class="tag">Filtry</span><span class="tag">Zakup</span></div>
+        <div class="mod-link">chcebyc-marketplace.html <span>→</span></div>
+      </div>
+    </a>
 
-        </div>
+  </div>
 
-        <!-- PROFIL / POMIARY -->
-        <div class="group-header">
-            <div class="gh-label">Profil & Postępy</div>
-            <div class="gh-count">2 moduły — nowe</div>
-        </div>
-        <div class="modules" style="margin-bottom:32px;">
+  <!-- PROFIL / POMIARY -->
+  <div class="group-header">
+    <div class="gh-label">Profil & Postępy</div>
+    <div class="gh-count">2 moduły — nowe</div>
+  </div>
+  <div class="modules" style="margin-bottom:32px;">
 
-            <a class="module" href="chcebyc-profile.html" target="_blank">
-                <div class="mod-thumb" style="background:linear-gradient(135deg,#0a1a0a,#070f07)">
-                    <div class="mod-thumb-grid"></div>
-                    <span>👤</span>
-                    <div class="mod-badge" style="background:rgba(74,176,255,.1);color:var(--blue);border:1px solid rgba(74,176,255,.2)">Klient</div>
-                    <div class="mod-new">Nowy</div>
-                </div>
-                <div class="mod-body">
-                    <div class="mod-num">Modul 07</div>
-                    <div class="mod-title">Profil Klienta</div>
-                    <div class="mod-desc">Edycja danych osobowych, dane fizyczne z historia i wykresem, cele z quizu, kontuzje, system XP z historią, poziomy (Nowicjusz→Legenda), powiadomienia, konto.</div>
-                    <div class="mod-tags">
-                        <span class="tag">Profil</span>
-                        <span class="tag">XP</span>
-                        <span class="tag">Poziomy</span>
-                        <span class="tag new">Nowy</span>
-                    </div>
-                    <div class="mod-link">
-                        chcebyc-profile.html 
-                        <span>→</span>
-                    </div>
-                </div>
-            </a>
+    <a class="module" href="chcebyc-profile.html" target="_blank">
+      <div class="mod-thumb" style="background:linear-gradient(135deg,#0a1a0a,#070f07)">
+        <div class="mod-thumb-grid"></div>
+        <span>👤</span>
+        <div class="mod-badge" style="background:rgba(74,176,255,.1);color:var(--blue);border:1px solid rgba(74,176,255,.2)">Klient</div>
+        <div class="mod-new">Nowy</div>
+      </div>
+      <div class="mod-body">
+        <div class="mod-num">Modul 07</div>
+        <div class="mod-title">Profil Klienta</div>
+        <div class="mod-desc">Edycja danych osobowych, dane fizyczne z historia i wykresem, cele z quizu, kontuzje, system XP z historią, poziomy (Nowicjusz→Legenda), powiadomienia, konto.</div>
+        <div class="mod-tags"><span class="tag">Profil</span><span class="tag">XP</span><span class="tag">Poziomy</span><span class="tag new">Nowy</span></div>
+        <div class="mod-link">chcebyc-profile.html <span>→</span></div>
+      </div>
+    </a>
 
-            <a class="module hl" href="chcebyc-measurements.html" target="_blank">
-                <div class="mod-thumb" style="background:linear-gradient(135deg,#0a1a14,#070f0a)">
-                    <div class="mod-thumb-grid"></div>
-                    <span>📐</span>
-                    <div class="mod-badge" style="background:rgba(180,240,58,.12);color:var(--lime);border:1px solid rgba(180,240,58,.2)">Sylwetka AI</div>
-                    <div class="mod-new">Nowy</div>
-                </div>
-                <div class="mod-body">
-                    <div class="mod-num">Modul 08</div>
-                    <div class="mod-title">Pomiary Ciala</div>
-                    <div class="mod-desc">Formularz 10 pol z modelem SVG sylwetki na zywo (2 style: parametryczny i designerski). Historia z datami. Porownanie dwoch pomiarow z delta dla kazdego wymiaru.</div>
-                    <div class="mod-tags">
-                        <span class="tag">SVG 3D</span>
-                        <span class="tag">Historia</span>
-                        <span class="tag">Porownaj</span>
-                        <span class="tag new">Nowy</span>
-                    </div>
-                    <div class="mod-link">
-                        chcebyc-measurements.html 
-                        <span>→</span>
-                    </div>
-                </div>
-            </a>
+    <a class="module hl" href="chcebyc-measurements.html" target="_blank">
+      <div class="mod-thumb" style="background:linear-gradient(135deg,#0a1a14,#070f0a)">
+        <div class="mod-thumb-grid"></div>
+        <span>📐</span>
+        <div class="mod-badge" style="background:rgba(180,240,58,.12);color:var(--lime);border:1px solid rgba(180,240,58,.2)">Sylwetka AI</div>
+        <div class="mod-new">Nowy</div>
+      </div>
+      <div class="mod-body">
+        <div class="mod-num">Modul 08</div>
+        <div class="mod-title">Pomiary Ciala</div>
+        <div class="mod-desc">Formularz 10 pol z modelem SVG sylwetki na zywo (2 style: parametryczny i designerski). Historia z datami. Porownanie dwoch pomiarow z delta dla kazdego wymiaru.</div>
+        <div class="mod-tags"><span class="tag">SVG 3D</span><span class="tag">Historia</span><span class="tag">Porownaj</span><span class="tag new">Nowy</span></div>
+        <div class="mod-link">chcebyc-measurements.html <span>→</span></div>
+      </div>
+    </a>
 
-        </div>
+  </div>
 
-        <!-- TRENER / ADMIN -->
-        <div class="group-header">
-            <div class="gh-label">Panel Trenera & Admin</div>
-            <div class="gh-count">3 moduły</div>
-        </div>
-        <div class="modules" style="margin-bottom:48px;">
+  <!-- TRENER / ADMIN -->
+  <div class="group-header">
+    <div class="gh-label">Panel Trenera & Admin</div>
+    <div class="gh-count">3 moduły</div>
+  </div>
+  <div class="modules" style="margin-bottom:48px;">
 
-            <a class="module" href="chcebyc-coach.html" target="_blank">
-                <div class="mod-thumb" style="background:linear-gradient(135deg,#07131a,#040c12)">
-                    <div class="mod-thumb-grid"></div>
-                    <span>🎓</span>
-                    <div class="mod-badge" style="background:rgba(58,240,212,.1);color:var(--cyan);border:1px solid rgba(58,240,212,.2)">AI Live</div>
-                </div>
-                <div class="mod-body">
-                    <div class="mod-num">Modul 09</div>
-                    <div class="mod-title">Panel Trenera</div>
-                    <div class="mod-desc">Dashboard z KPI, lista klientow, kreator planow z AI, wiadomosci z autodraftem, baza cwiczen (prywatna + globalna), przychody i analityki. Punkty kontrolne klientow.</div>
-                    <div class="mod-tags">
-                        <span class="tag">Coach</span>
-                        <span class="tag">Klienci</span>
-                        <span class="tag">Plany</span>
-                        <span class="tag new">Checkpoints</span>
-                    </div>
-                    <div class="mod-link">
-                        chcebyc-coach.html 
-                        <span>→</span>
-                    </div>
-                </div>
-            </a>
+    <a class="module" href="chcebyc-coach.html" target="_blank">
+      <div class="mod-thumb" style="background:linear-gradient(135deg,#07131a,#040c12)">
+        <div class="mod-thumb-grid"></div>
+        <span>🎓</span>
+        <div class="mod-badge" style="background:rgba(58,240,212,.1);color:var(--cyan);border:1px solid rgba(58,240,212,.2)">AI Live</div>
+      </div>
+      <div class="mod-body">
+        <div class="mod-num">Modul 09</div>
+        <div class="mod-title">Panel Trenera</div>
+        <div class="mod-desc">Dashboard z KPI, lista klientow, kreator planow z AI, wiadomosci z autodraftem, baza cwiczen (prywatna + globalna), przychody i analityki. Punkty kontrolne klientow.</div>
+        <div class="mod-tags"><span class="tag">Coach</span><span class="tag">Klienci</span><span class="tag">Plany</span><span class="tag new">Checkpoints</span></div>
+        <div class="mod-link">chcebyc-coach.html <span>→</span></div>
+      </div>
+    </a>
 
-            <a class="module" href="chcebyc-admin.html" target="_blank">
-                <div class="mod-thumb" style="background:linear-gradient(135deg,#0a0c1a,#060710)">
-                    <div class="mod-thumb-grid"></div>
-                    <span>⚙️</span>
-                    <div class="mod-badge" style="background:rgba(110,142,255,.1);color:#6e8eff;border:1px solid rgba(110,142,255,.2)">Admin only</div>
-                </div>
-                <div class="mod-body">
-                    <div class="mod-num">Modul 10</div>
-                    <div class="mod-title">Panel Admina</div>
-                    <div class="mod-desc">KPI, przychody, uzytkownicy, trenerzy, moderacja planow, wyplaty, monitoring AI, analityki, live activity feed. Globalna baza cwiczen z filmami YouTube.</div>
-                    <div class="mod-tags">
-                        <span class="tag">Admin</span>
-                        <span class="tag">Moderacja</span>
-                        <span class="tag">Wyplaty</span>
-                        <span class="tag">Analityki</span>
-                    </div>
-                    <div class="mod-link">
-                        chcebyc-admin.html 
-                        <span>→</span>
-                    </div>
-                </div>
-            </a>
+    <a class="module" href="chcebyc-admin.html" target="_blank">
+      <div class="mod-thumb" style="background:linear-gradient(135deg,#0a0c1a,#060710)">
+        <div class="mod-thumb-grid"></div>
+        <span>⚙️</span>
+        <div class="mod-badge" style="background:rgba(110,142,255,.1);color:#6e8eff;border:1px solid rgba(110,142,255,.2)">Admin only</div>
+      </div>
+      <div class="mod-body">
+        <div class="mod-num">Modul 10</div>
+        <div class="mod-title">Panel Admina</div>
+        <div class="mod-desc">KPI, przychody, uzytkownicy, trenerzy, moderacja planow, wyplaty, monitoring AI, analityki, live activity feed. Globalna baza cwiczen z filmami YouTube.</div>
+        <div class="mod-tags"><span class="tag">Admin</span><span class="tag">Moderacja</span><span class="tag">Wyplaty</span><span class="tag">Analityki</span></div>
+        <div class="mod-link">chcebyc-admin.html <span>→</span></div>
+      </div>
+    </a>
 
-            <a class="module" href="chcebyc-mobile.html" target="_blank">
-                <div class="mod-thumb" style="background:linear-gradient(135deg,#1a0a1a,#100810)">
-                    <div class="mod-thumb-grid"></div>
-                    <span>📱</span>
-                    <div class="mod-badge" style="background:rgba(196,110,255,.1);color:var(--purple);border:1px solid rgba(196,110,255,.2)">Mockup</div>
-                </div>
-                <div class="mod-body">
-                    <div class="mod-num">Modul 11</div>
-                    <div class="mod-title">Aplikacja Mobilna</div>
-                    <div class="mod-desc">Interaktywny mockup iOS/Android. 8 ekranow: onboarding, dashboard z kafelkiem postegow, trening z timerem, postepy, pomiary, AI Coach, marketplace, profil.</div>
-                    <div class="mod-tags">
-                        <span class="tag">Mobile</span>
-                        <span class="tag">iOS</span>
-                        <span class="tag">Android</span>
-                        <span class="tag new">Pomiary</span>
-                    </div>
-                    <div class="mod-link">
-                        chcebyc-mobile.html 
-                        <span>→</span>
-                    </div>
-                </div>
-            </a>
+    <a class="module" href="chcebyc-mobile.html" target="_blank">
+      <div class="mod-thumb" style="background:linear-gradient(135deg,#1a0a1a,#100810)">
+        <div class="mod-thumb-grid"></div>
+        <span>📱</span>
+        <div class="mod-badge" style="background:rgba(196,110,255,.1);color:var(--purple);border:1px solid rgba(196,110,255,.2)">Mockup</div>
+      </div>
+      <div class="mod-body">
+        <div class="mod-num">Modul 11</div>
+        <div class="mod-title">Aplikacja Mobilna</div>
+        <div class="mod-desc">Interaktywny mockup iOS/Android. 8 ekranow: onboarding, dashboard z kafelkiem postegow, trening z timerem, postepy, pomiary, AI Coach, marketplace, profil.</div>
+        <div class="mod-tags"><span class="tag">Mobile</span><span class="tag">iOS</span><span class="tag">Android</span><span class="tag new">Pomiary</span></div>
+        <div class="mod-link">chcebyc-mobile.html <span>→</span></div>
+      </div>
+    </a>
 
-        </div>
+  </div>
 
-        <!-- STATUS TABLE -->
-        <div class="sec">Status modułów</div>
-        <div class="prog-table">
-            <div class="pt-row" style="background:var(--card2);border-bottom:1px solid var(--border);">
-                <div class="pt-num">#</div>
-                <div class="pt-icon"></div>
-                <div class="pt-name" style="color:var(--muted);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;">Modul</div>
-                <div class="pt-status" style="background:none;color:var(--muted);font-size:9px;letter-spacing:1px;">Status</div>
-                <div class="pt-link" style="width:160px;"></div>
-            </div>
-            <div class="pt-row">
-                <div class="pt-num">01</div>
-                <div class="pt-icon">🌐</div>
-                <div class="pt-name">Landing Page</div>
-                <div class="pt-status pub">Publiczny</div>
-                <a class="pt-link" href="chcebyc-landing.html" target="_blank">chcebyc-landing.html →</a>
-            </div>
-            <div class="pt-row">
-                <div class="pt-num">02</div>
-                <div class="pt-icon">🔐</div>
-                <div class="pt-name">Rejestracja & Logowanie</div>
-                <div class="pt-status done">Gotowy</div>
-                <a class="pt-link" href="chcebyc-auth.html" target="_blank">chcebyc-auth.html →</a>
-            </div>
-            <div class="pt-row">
-                <div class="pt-num">03</div>
-                <div class="pt-icon">🧬</div>
-                <div class="pt-name">Onboarding + Quiz AI</div>
-                <div class="pt-status live">AI Live</div>
-                <a class="pt-link" href="chcebyc-onboarding.html" target="_blank">chcebyc-onboarding.html →</a>
-            </div>
-            <div class="pt-row">
-                <div class="pt-num">04</div>
-                <div class="pt-icon">🏠</div>
-                <div class="pt-name">Dashboard Uzytkownika (3 tryby)</div>
-                <div class="pt-status live">AI Live</div>
-                <a class="pt-link" href="chcebyc-dashboard.html" target="_blank">chcebyc-dashboard.html →</a>
-            </div>
-            <div class="pt-row">
-                <div class="pt-num">05</div>
-                <div class="pt-icon">📅</div>
-                <div class="pt-name">Kalendarz Treningowy</div>
-                <div class="pt-status done">Gotowy</div>
-                <a class="pt-link" href="chcebyc-calendar.html" target="_blank">chcebyc-calendar.html →</a>
-            </div>
-            <div class="pt-row">
-                <div class="pt-num">06</div>
-                <div class="pt-icon">🏪</div>
-                <div class="pt-name">Marketplace Planow</div>
-                <div class="pt-status pub">Publiczny</div>
-                <a class="pt-link" href="chcebyc-marketplace.html" target="_blank">chcebyc-marketplace.html →</a>
-            </div>
-            <div class="pt-row">
-                <div class="pt-num">07</div>
-                <div class="pt-icon">👤</div>
-                <div class="pt-name">Profil Klienta + XP</div>
-                <div class="pt-status done">Gotowy</div>
-                <a class="pt-link" href="chcebyc-profile.html" target="_blank">chcebyc-profile.html →</a>
-            </div>
-            <div class="pt-row">
-                <div class="pt-num">08</div>
-                <div class="pt-icon">📐</div>
-                <div class="pt-name">Pomiary Ciala + Model Sylwetki</div>
-                <div class="pt-status done">Gotowy</div>
-                <a class="pt-link" href="chcebyc-measurements.html" target="_blank">chcebyc-measurements.html →</a>
-            </div>
-            <div class="pt-row">
-                <div class="pt-num">09</div>
-                <div class="pt-icon">🎓</div>
-                <div class="pt-name">Panel Trenera + Punkty Kontrolne</div>
-                <div class="pt-status live">AI Live</div>
-                <a class="pt-link" href="chcebyc-coach.html" target="_blank">chcebyc-coach.html →</a>
-            </div>
-            <div class="pt-row">
-                <div class="pt-num">10</div>
-                <div class="pt-icon">⚙️</div>
-                <div class="pt-name">Panel Admina</div>
-                <div class="pt-status done">Gotowy</div>
-                <a class="pt-link" href="chcebyc-admin.html" target="_blank">chcebyc-admin.html →</a>
-            </div>
-            <div class="pt-row">
-                <div class="pt-num">11</div>
-                <div class="pt-icon">📱</div>
-                <div class="pt-name">Aplikacja Mobilna (mockup)</div>
-                <div class="pt-status mock">Mockup</div>
-                <a class="pt-link" href="chcebyc-mobile.html" target="_blank">chcebyc-mobile.html →</a>
-            </div>
-        </div>
+  <!-- STATUS TABLE -->
+  <div class="sec">Status modułów</div>
+  <div class="prog-table">
+    <div class="pt-row" style="background:var(--card2);border-bottom:1px solid var(--border);">
+      <div class="pt-num">#</div>
+      <div class="pt-icon"></div>
+      <div class="pt-name" style="color:var(--muted);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;">Modul</div>
+      <div class="pt-status" style="background:none;color:var(--muted);font-size:9px;letter-spacing:1px;">Status</div>
+      <div class="pt-link" style="width:160px;"></div>
+    </div>
+    <div class="pt-row"><div class="pt-num">01</div><div class="pt-icon">🌐</div><div class="pt-name">Landing Page</div><div class="pt-status pub">Publiczny</div><a class="pt-link" href="chcebyc-landing.html" target="_blank">chcebyc-landing.html →</a></div>
+    <div class="pt-row"><div class="pt-num">02</div><div class="pt-icon">🔐</div><div class="pt-name">Rejestracja & Logowanie</div><div class="pt-status done">Gotowy</div><a class="pt-link" href="chcebyc-auth.html" target="_blank">chcebyc-auth.html →</a></div>
+    <div class="pt-row"><div class="pt-num">03</div><div class="pt-icon">🧬</div><div class="pt-name">Onboarding + Quiz AI</div><div class="pt-status live">AI Live</div><a class="pt-link" href="chcebyc-onboarding.html" target="_blank">chcebyc-onboarding.html →</a></div>
+    <div class="pt-row"><div class="pt-num">04</div><div class="pt-icon">🏠</div><div class="pt-name">Dashboard Uzytkownika (3 tryby)</div><div class="pt-status live">AI Live</div><a class="pt-link" href="chcebyc-dashboard.html" target="_blank">chcebyc-dashboard.html →</a></div>
+    <div class="pt-row"><div class="pt-num">05</div><div class="pt-icon">📅</div><div class="pt-name">Kalendarz Treningowy</div><div class="pt-status done">Gotowy</div><a class="pt-link" href="chcebyc-calendar.html" target="_blank">chcebyc-calendar.html →</a></div>
+    <div class="pt-row"><div class="pt-num">06</div><div class="pt-icon">🏪</div><div class="pt-name">Marketplace Planow</div><div class="pt-status pub">Publiczny</div><a class="pt-link" href="chcebyc-marketplace.html" target="_blank">chcebyc-marketplace.html →</a></div>
+    <div class="pt-row"><div class="pt-num">07</div><div class="pt-icon">👤</div><div class="pt-name">Profil Klienta + XP</div><div class="pt-status done">Gotowy</div><a class="pt-link" href="chcebyc-profile.html" target="_blank">chcebyc-profile.html →</a></div>
+    <div class="pt-row"><div class="pt-num">08</div><div class="pt-icon">📐</div><div class="pt-name">Pomiary Ciala + Model Sylwetki</div><div class="pt-status done">Gotowy</div><a class="pt-link" href="chcebyc-measurements.html" target="_blank">chcebyc-measurements.html →</a></div>
+    <div class="pt-row"><div class="pt-num">09</div><div class="pt-icon">🎓</div><div class="pt-name">Panel Trenera + Punkty Kontrolne</div><div class="pt-status live">AI Live</div><a class="pt-link" href="chcebyc-coach.html" target="_blank">chcebyc-coach.html →</a></div>
+    <div class="pt-row"><div class="pt-num">10</div><div class="pt-icon">⚙️</div><div class="pt-name">Panel Admina</div><div class="pt-status done">Gotowy</div><a class="pt-link" href="chcebyc-admin.html" target="_blank">chcebyc-admin.html →</a></div>
+    <div class="pt-row"><div class="pt-num">11</div><div class="pt-icon">📱</div><div class="pt-name">Aplikacja Mobilna (mockup)</div><div class="pt-status mock">Mockup</div><a class="pt-link" href="chcebyc-mobile.html" target="_blank">chcebyc-mobile.html →</a></div>
+  </div>
 
-        <!-- ARCH -->
-        <div class="sec">Stack technologiczny</div>
-        <div class="arch">
-            <div class="arch-title">Produkcja — planowany stack</div>
-            <div class="arch-grid">
-                <div>
-                    <div class="arch-col-title" style="color:var(--lime)">Frontend</div>
-                    <div class="arch-item">
-                        <span class="arch-item-icon">⚛️</span>
-                        Next.js 14 (Web)
-                        <span class="arch-item-val" style="color:var(--lime)">React</span>
-                    </div>
-                    <div class="arch-item">
-                        <span class="arch-item-icon">📱</span>
-                        React Native + Expo
-                        <span class="arch-item-val" style="color:var(--lime)">Mobile</span>
-                    </div>
-                    <div class="arch-item">
-                        <span class="arch-item-icon">🎨</span>
-                        Tailwind CSS
-                        <span class="arch-item-val" style="color:var(--muted)">Styling</span>
-                    </div>
-                    <div class="arch-item">
-                        <span class="arch-item-icon">🔄</span>
-                        Zustand
-                        <span class="arch-item-val" style="color:var(--muted)">State</span>
-                    </div>
-                </div>
-                <div>
-                    <div class="arch-col-title" style="color:var(--cyan)">Backend + AI</div>
-                    <div class="arch-item">
-                        <span class="arch-item-icon">🗄️</span>
-                        Supabase
-                        <span class="arch-item-val" style="color:var(--cyan)">DB + Auth</span>
-                    </div>
-                    <div class="arch-item">
-                        <span class="arch-item-icon">🤖</span>
-                        Claude API (Sonnet)
-                        <span class="arch-item-val" style="color:var(--cyan)">AI Coach</span>
-                    </div>
-                    <div class="arch-item">
-                        <span class="arch-item-icon">⚡</span>
-                        Edge Functions
-                        <span class="arch-item-val" style="color:var(--muted)">API keys</span>
-                    </div>
-                    <div class="arch-item">
-                        <span class="arch-item-icon">🎬</span>
-                        Cloudflare Stream
-                        <span class="arch-item-val" style="color:var(--muted)">Video</span>
-                    </div>
-                </div>
-                <div>
-                    <div class="arch-col-title" style="color:var(--gold)">Biznes + Infra</div>
-                    <div class="arch-item">
-                        <span class="arch-item-icon">💳</span>
-                        Stripe + RevenueCat
-                        <span class="arch-item-val" style="color:var(--gold)">Platnosci</span>
-                    </div>
-                    <div class="arch-item">
-                        <span class="arch-item-icon">🔔</span>
-                        OneSignal
-                        <span class="arch-item-val" style="color:var(--muted)">Push</span>
-                    </div>
-                    <div class="arch-item">
-                        <span class="arch-item-icon">📊</span>
-                        Mixpanel
-                        <span class="arch-item-val" style="color:var(--muted)">Analityki</span>
-                    </div>
-                    <div class="arch-item">
-                        <span class="arch-item-icon">🛡️</span>
-                        Sentry
-                        <span class="arch-item-val" style="color:var(--muted)">Monitoring</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <!-- ARCH -->
+  <div class="sec">Stack technologiczny</div>
+  <div class="arch">
+    <div class="arch-title">Produkcja — planowany stack</div>
+    <div class="arch-grid">
+      <div>
+        <div class="arch-col-title" style="color:var(--lime)">Frontend</div>
+        <div class="arch-item"><span class="arch-item-icon">⚛️</span>Next.js 14 (Web)<span class="arch-item-val" style="color:var(--lime)">React</span></div>
+        <div class="arch-item"><span class="arch-item-icon">📱</span>React Native + Expo<span class="arch-item-val" style="color:var(--lime)">Mobile</span></div>
+        <div class="arch-item"><span class="arch-item-icon">🎨</span>Tailwind CSS<span class="arch-item-val" style="color:var(--muted)">Styling</span></div>
+        <div class="arch-item"><span class="arch-item-icon">🔄</span>Zustand<span class="arch-item-val" style="color:var(--muted)">State</span></div>
+      </div>
+      <div>
+        <div class="arch-col-title" style="color:var(--cyan)">Backend + AI</div>
+        <div class="arch-item"><span class="arch-item-icon">🗄️</span>Supabase<span class="arch-item-val" style="color:var(--cyan)">DB + Auth</span></div>
+        <div class="arch-item"><span class="arch-item-icon">🤖</span>Claude API (Sonnet)<span class="arch-item-val" style="color:var(--cyan)">AI Coach</span></div>
+        <div class="arch-item"><span class="arch-item-icon">⚡</span>Edge Functions<span class="arch-item-val" style="color:var(--muted)">API keys</span></div>
+        <div class="arch-item"><span class="arch-item-icon">🎬</span>Cloudflare Stream<span class="arch-item-val" style="color:var(--muted)">Video</span></div>
+      </div>
+      <div>
+        <div class="arch-col-title" style="color:var(--gold)">Biznes + Infra</div>
+        <div class="arch-item"><span class="arch-item-icon">💳</span>Stripe + RevenueCat<span class="arch-item-val" style="color:var(--gold)">Platnosci</span></div>
+        <div class="arch-item"><span class="arch-item-icon">🔔</span>OneSignal<span class="arch-item-val" style="color:var(--muted)">Push</span></div>
+        <div class="arch-item"><span class="arch-item-icon">📊</span>Mixpanel<span class="arch-item-val" style="color:var(--muted)">Analityki</span></div>
+        <div class="arch-item"><span class="arch-item-icon">🛡️</span>Sentry<span class="arch-item-val" style="color:var(--muted)">Monitoring</span></div>
+      </div>
+    </div>
+  </div>
 
-        <!-- BIZ -->
-        <div class="sec">Model biznesowy</div>
-        <div class="biz-grid">
-            <div class="biz-card">
-                <div class="biz-title">Klienci cwiczacy</div>
-                <div class="biz-row">
-                    <span>Free</span>
-                    <span style="color:var(--muted);font-weight:700;">0 zl</span>
-                </div>
-                <div class="biz-row hi">
-                    <span>Pro — AI Coach + marketplace</span>
-                    <span style="color:var(--lime);font-weight:700;">49 zl/mies</span>
-                </div>
-                <div class="biz-row">
-                    <span>Klient trenera (zaproszony)</span>
-                    <span style="color:var(--green);font-weight:700;">GRATIS</span>
-                </div>
-            </div>
-            <div class="biz-card">
-                <div class="biz-title">Trenerzy</div>
-                <div class="biz-row">
-                    <span>Starter — do 5 klientow</span>
-                    <span style="color:var(--muted);font-weight:700;">49 zl/mies</span>
-                </div>
-                <div class="biz-row hi">
-                    <span>Pro — do 20 + marketplace 80%</span>
-                    <span style="color:var(--lime);font-weight:700;">149 zl/mies</span>
-                </div>
-                <div class="biz-row">
-                    <span>Business — nielimitowany + white-label</span>
-                    <span style="color:var(--muted);font-weight:700;">299 zl/mies</span>
-                </div>
-                <div class="biz-row">
-                    <span>Prowizja marketplace</span>
-                    <span style="color:var(--gold);font-weight:700;">80% dla trenera</span>
-                </div>
-            </div>
-        </div>
+  <!-- BIZ -->
+  <div class="sec">Model biznesowy</div>
+  <div class="biz-grid">
+    <div class="biz-card">
+      <div class="biz-title">Klienci cwiczacy</div>
+      <div class="biz-row"><span>Free</span><span style="color:var(--muted);font-weight:700;">0 zl</span></div>
+      <div class="biz-row hi"><span>Pro — AI Coach + marketplace</span><span style="color:var(--lime);font-weight:700;">49 zl/mies</span></div>
+      <div class="biz-row"><span>Klient trenera (zaproszony)</span><span style="color:var(--green);font-weight:700;">GRATIS</span></div>
+    </div>
+    <div class="biz-card">
+      <div class="biz-title">Trenerzy</div>
+      <div class="biz-row"><span>Starter — do 5 klientow</span><span style="color:var(--muted);font-weight:700;">49 zl/mies</span></div>
+      <div class="biz-row hi"><span>Pro — do 20 + marketplace 80%</span><span style="color:var(--lime);font-weight:700;">149 zl/mies</span></div>
+      <div class="biz-row"><span>Business — nielimitowany + white-label</span><span style="color:var(--muted);font-weight:700;">299 zl/mies</span></div>
+      <div class="biz-row"><span>Prowizja marketplace</span><span style="color:var(--gold);font-weight:700;">80% dla trenera</span></div>
+    </div>
+  </div>
 
-        <!-- ROADMAP -->
-        <div class="sec">Roadmap</div>
-        <div class="roadmap">
-            <div class="rm-item">
-                <div class="rm-icon" style="background:rgba(68,255,136,.1)">✅</div>
-                <div>
-                    <div style="font-size:12px;font-weight:600;">Faza 1 — Prototyp UI v0.2</div>
-                    <div style="font-size:11px;color:var(--muted);">11 modulow HTML · auth · pomiary · punkty kontrolne</div>
-                </div>
-            </div>
-            <div class="rm-item">
-                <div class="rm-icon" style="background:rgba(180,240,58,.1)">🔜</div>
-                <div>
-                    <div style="font-size:12px;font-weight:600;">Faza 2 — MVP Web</div>
-                    <div style="font-size:11px;color:var(--muted);">Next.js + Supabase + Stripe · 3 miesiace</div>
-                </div>
-            </div>
-            <div class="rm-item">
-                <div class="rm-icon" style="background:rgba(74,176,255,.1)">⏳</div>
-                <div>
-                    <div style="font-size:12px;font-weight:600;">Faza 3 — Marketplace live</div>
-                    <div style="font-size:11px;color:var(--muted);">Trenerzy + plany + prowizje · mies. 4-6</div>
-                </div>
-            </div>
-            <div class="rm-item">
-                <div class="rm-icon" style="background:rgba(74,176,255,.1)">⏳</div>
-                <div>
-                    <div style="font-size:12px;font-weight:600;">Faza 4 — Aplikacja Mobile</div>
-                    <div style="font-size:11px;color:var(--muted);">React Native iOS + Android · mies. 7</div>
-                </div>
-            </div>
-            <div class="rm-item">
-                <div class="rm-icon" style="background:rgba(196,110,255,.1)">🔮</div>
-                <div>
-                    <div style="font-size:12px;font-weight:600;">Faza 5 — Skala</div>
-                    <div style="font-size:11px;color:var(--muted);">B2B silownie + English version · rok 2</div>
-                </div>
-            </div>
-            <div class="rm-item">
-                <div class="rm-icon" style="background:rgba(196,110,255,.1)">🔮</div>
-                <div>
-                    <div style="font-size:12px;font-weight:600;">Faza 6 — Wearables</div>
-                    <div style="font-size:11px;color:var(--muted);">Apple Watch + Widget + notyfikacje · rok 2</div>
-                </div>
-            </div>
-        </div>
+  <!-- ROADMAP -->
+  <div class="sec">Roadmap</div>
+  <div class="roadmap">
+    <div class="rm-item"><div class="rm-icon" style="background:rgba(68,255,136,.1)">✅</div><div><div style="font-size:12px;font-weight:600;">Faza 1 — Prototyp UI v0.2</div><div style="font-size:11px;color:var(--muted);">11 modulow HTML · auth · pomiary · punkty kontrolne</div></div></div>
+    <div class="rm-item"><div class="rm-icon" style="background:rgba(180,240,58,.1)">🔜</div><div><div style="font-size:12px;font-weight:600;">Faza 2 — MVP Web</div><div style="font-size:11px;color:var(--muted);">Next.js + Supabase + Stripe · 3 miesiace</div></div></div>
+    <div class="rm-item"><div class="rm-icon" style="background:rgba(74,176,255,.1)">⏳</div><div><div style="font-size:12px;font-weight:600;">Faza 3 — Marketplace live</div><div style="font-size:11px;color:var(--muted);">Trenerzy + plany + prowizje · mies. 4-6</div></div></div>
+    <div class="rm-item"><div class="rm-icon" style="background:rgba(74,176,255,.1)">⏳</div><div><div style="font-size:12px;font-weight:600;">Faza 4 — Aplikacja Mobile</div><div style="font-size:11px;color:var(--muted);">React Native iOS + Android · mies. 7</div></div></div>
+    <div class="rm-item"><div class="rm-icon" style="background:rgba(196,110,255,.1)">🔮</div><div><div style="font-size:12px;font-weight:600;">Faza 5 — Skala</div><div style="font-size:11px;color:var(--muted);">B2B silownie + English version · rok 2</div></div></div>
+    <div class="rm-item"><div class="rm-icon" style="background:rgba(196,110,255,.1)">🔮</div><div><div style="font-size:12px;font-weight:600;">Faza 6 — Wearables</div><div style="font-size:11px;color:var(--muted);">Apple Watch + Widget + notyfikacje · rok 2</div></div></div>
+  </div>
 
-    </main>
+</main>
 
-    <footer>
-        <div>chceByc.fit · Prototyp v0.2.0 · Marzec 2026 · 11 modulow</div>
-        <div style="display:flex;gap:16px;">
-            <a href="chcebyc-landing.html" target="_blank">Landing</a>
-            <a href="chcebyc-auth.html" target="_blank">Auth</a>
-            <a href="chcebyc-dashboard.html" target="_blank">Dashboard</a>
-            <a href="chcebyc-measurements.html" target="_blank">Pomiary</a>
-            <a href="chcebyc-coach.html" target="_blank">Trener</a>
-            <a href="chcebyc-admin.html" target="_blank">Admin</a>
-            <a href="chcebyc-mobile.html" target="_blank">Mobile</a>
-        </div>
-    </footer>
+<footer>
+  <div>chceByc.fit · Prototyp v0.2.0 · Marzec 2026 · 11 modulow</div>
+  <div style="display:flex;gap:16px;">
+    <a href="chcebyc-landing.html" target="_blank">Landing</a>
+    <a href="chcebyc-auth.html" target="_blank">Auth</a>
+    <a href="chcebyc-dashboard.html" target="_blank">Dashboard</a>
+    <a href="chcebyc-measurements.html" target="_blank">Pomiary</a>
+    <a href="chcebyc-coach.html" target="_blank">Trener</a>
+    <a href="chcebyc-admin.html" target="_blank">Admin</a>
+    <a href="chcebyc-mobile.html" target="_blank">Mobile</a>
+  </div>
+</footer>
 
 </body>
 </html>

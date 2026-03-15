@@ -1,1076 +1,471 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>chceByc.fit — Dolacz lub zaloguj sie</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-    :root {
-        --black: #070b07;
-        --forest: #0c1a0c;
-        --card: #0f170f;
-        --card2: #131e13;
-        --border: #1a2e1a;
-        --border2: #243824;
-        --border3: #2d4a2d;
-        --lime: #b4f03a;
-        --lime-dim: #7aaa22;
-        --lime-ghost: rgba(180, 240, 58, .07);
-        --lime-soft: rgba(180, 240, 58, .15);
-        --white: #eef8e8;
-        --off: #c8ddb8;
-        --muted: #5a7850;
-        --muted2: #3a5230;
-        --red: #ff5555;
-        --orange: #ff8c42;
-        --gold: #f0c840;
-    }
-
-    *, *::before, *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-
-    html, body {
-        height: 100%;
-    }
-
-    body {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        background: var(--black);
-        color: var(--white);
-        display: flex;
-        min-height: 100vh;
-    }/* TOAST */
-    .toast {
-        position: fixed;
-        top: 24px;
-        left: 50%;
-        transform: translateX(-50%) translateY(-90px);
-        background: var(--card);
-        border: 1px solid var(--border3);
-        border-radius: 16px;
-        padding: 14px 20px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-size: 14px;
-        color: var(--white);
-        box-shadow: 0 12px 40px rgba(0, 0, 0, .6);
-        z-index: 9999;
-        transition: transform .45s cubic-bezier(.34, 1.56, .64, 1), opacity .35s;
-        opacity: 0;
-        min-width: 260px;
-        max-width: 340px;
-        pointer-events: none;
-    }
-
-    .toast.show {
-        transform: translateX(-50%) translateY(0);
-        opacity: 1;
-    }
-
-    .toast-icon {
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
-        background: rgba(180, 240, 58, .12);
-        border: 1px solid rgba(180, 240, 58, .2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 16px;
-        flex-shrink: 0;
-    }
-
-    .toast-body {
-    }
-
-    .toast-title {
-        font-weight: 700;
-        font-size: 13px;
-        margin-bottom: 2px;
-    }
-
-    .toast-sub {
-        font-size: 11px;
-        color: var(--muted);
-    }
-
-    .toast-progress {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        height: 3px;
-        background: var(--lime);
-        border-radius: 0 0 16px 16px;
-        animation: tprog 2.4s linear forwards;
-    }
-
-    @keyframes tprog {
-        from {
-            width:100%
-        }
-
-        to {
-            width: 0
-        }
-    }/* LEFT */
-    .side-left {
-        flex: 1;
-        position: relative;
-        overflow: hidden;
-        background: radial-gradient(ellipse 80% 70% at 30% 40%, rgba(26, 58, 26, .9), var(--black));
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 60px 52px;
-    }
-
-    .bg-grid {
-        position: absolute;
-        inset: 0;
-        background-image: linear-gradient(rgba(180, 240, 58, .03) 1px, transparent 1px), linear-gradient(90deg, rgba(180, 240, 58, .03) 1px, transparent 1px);
-        background-size: 60px 60px;
-    }
-
-    .glow {
-        position: absolute;
-        border-radius: 50%;
-        filter: blur(120px);
-        pointer-events: none;
-    }
-
-    .g1 {
-        width: 500px;
-        height: 500px;
-        background: rgba(180, 240, 58, .05);
-        top: -120px;
-        left: -80px;
-    }
-
-    .g2 {
-        width: 300px;
-        height: 300px;
-        background: rgba(180, 240, 58, .04);
-        bottom: -60px;
-        right: 0;
-    }
-
-    .brand {
-        position: relative;
-        z-index: 1;
-        max-width: 460px;
-        width: 100%;
-    }
-
-    .logo-row {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 40px;
-    }
-
-    .logo-icon {
-        width: 46px;
-        height: 46px;
-        border-radius: 12px;
-        background: #0f1f0f;
-        border: 1px solid var(--border2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-    }
-
-    .logo-name {
-        font-family: 'Barlow Condensed', sans-serif;
-        font-size: 30px;
-        font-weight: 900;
-    }
-
-    .logo-name span {
-        color: var(--lime);
-    }
-
-    .headline {
-        font-family: 'Barlow Condensed', sans-serif;
-        font-size: clamp(38px, 3.8vw, 60px);
-        font-weight: 900;
-        text-transform: uppercase;
-        line-height: .95;
-        letter-spacing: -1px;
-        margin-bottom: 18px;
-    }
-
-    .headline span {
-        color: var(--lime);
-    }
-
-    .subline {
-        font-size: 15px;
-        color: var(--muted);
-        font-weight: 300;
-        line-height: 1.75;
-        margin-bottom: 40px;
-        max-width: 380px;
-    }
-
-    .stats {
-        display: flex;
-        gap: 28px;
-        flex-wrap: wrap;
-        margin-bottom: 36px;
-    }
-
-    .stat-val {
-        font-family: 'Barlow Condensed', sans-serif;
-        font-size: 30px;
-        font-weight: 900;
-        color: var(--lime);
-        line-height: 1;
-    }
-
-    .stat-lbl {
-        font-size: 10px;
-        color: var(--muted);
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        margin-top: 3px;
-    }
-
-    .testimonial {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 20px;
-        padding: 20px 22px;
-    }
-
-    .test-quote {
-        font-size: 13px;
-        color: var(--off);
-        line-height: 1.75;
-        font-weight: 300;
-        font-style: italic;
-        margin-bottom: 12px;
-    }
-
-    .test-who {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .test-av {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--lime-dim), var(--lime));
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Barlow Condensed', sans-serif;
-        font-size: 11px;
-        font-weight: 900;
-        color: #000;
-    }
-
-    .test-n {
-        font-size: 12px;
-        font-weight: 600;
-    }
-
-    .test-m {
-        font-size: 11px;
-        color: var(--lime);
-    }
-
-    .badges {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-        margin-top: 28px;
-    }
-
-    .badge {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        background: var(--lime-ghost);
-        border: 1px solid rgba(180, 240, 58, .1);
-        border-radius: 20px;
-        padding: 5px 12px;
-        font-size: 11px;
-        color: var(--off);
-    }/* RIGHT */
-    .side-right {
-        width: 480px;
-        flex-shrink: 0;
-        background: var(--forest);
-        border-left: 1px solid var(--border);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 48px 44px;
-        overflow-y: auto;
-    }
-
-    .form-wrap {
-        width: 100%;
-        max-width: 380px;
-    }
-
-    .tabs {
-        display: flex;
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 4px;
-        gap: 4px;
-        margin-bottom: 32px;
-    }
-
-    .tab {
-        flex: 1;
-        padding: 10px;
-        border-radius: 10px;
-        font-family: inherit;
-        font-size: 13px;
-        font-weight: 600;
-        cursor: pointer;
-        border: none;
-        background: none;
-        color: var(--muted);
-        transition: all .2s;
-    }
-
-    .tab.active {
-        background: var(--lime);
-        color: #000;
-    }
-
-    .panel {
-        display: none;
-    }
-
-    .panel.active {
-        display: block;
-    }
-
-    .f-title {
-        font-family: 'Barlow Condensed', sans-serif;
-        font-size: 34px;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: .5px;
-        line-height: 1;
-        margin-bottom: 7px;
-    }
-
-    .f-sub {
-        font-size: 13px;
-        color: var(--muted);
-        font-weight: 300;
-        line-height: 1.65;
-        margin-bottom: 28px;
-    }
-
-    .fgrp {
-        margin-bottom: 16px;
-    }
-
-    .flbl {
-        display: block;
-        font-size: 10px;
-        color: var(--muted);
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        font-weight: 600;
-        margin-bottom: 6px;
-    }
-
-    .finp {
-        width: 100%;
-        background: var(--card);
-        border: 1.5px solid var(--border2);
-        border-radius: 12px;
-        padding: 13px 15px;
-        color: var(--white);
-        font-size: 14px;
-        font-family: inherit;
-        outline: none;
-        transition: border-color .2s, box-shadow .2s;
-    }
-
-    .finp:focus {
-        border-color: var(--lime);
-        box-shadow: 0 0 0 3px rgba(180, 240, 58, .08);
-    }
-
-    .finp::placeholder {
-        color: var(--muted2);
-    }
-
-    .finp.err {
-        border-color: var(--red);
-        box-shadow: 0 0 0 3px rgba(255, 85, 85, .07);
-    }
-
-    .ferr {
-        font-size: 11px;
-        color: var(--red);
-        margin-top: 5px;
-        display: none;
-    }
-
-    .ferr.on {
-        display: block;
-    }
-
-    .frow2 {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-    }
-
-    .pwd-bar-row {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-top: 7px;
-    }
-
-    .pwd-bar {
-        flex: 1;
-        height: 4px;
-        border-radius: 3px;
-        background: var(--border2);
-        overflow: hidden;
-    }
-
-    .pwd-fill {
-        height: 100%;
-        border-radius: 3px;
-        transition: all .4s;
-        width: 0;
-    }
-
-    .pwd-lbl {
-        font-size: 11px;
-        color: var(--muted);
-        white-space: nowrap;
-    }
-
-    .check-row {
-        display: flex;
-        align-items: flex-start;
-        gap: 10px;
-        font-size: 12px;
-        color: var(--muted);
-        line-height: 1.6;
-    }
-
-    .check-row input {
-        width: 16px;
-        height: 16px;
-        margin-top: 2px;
-        accent-color: var(--lime);
-        cursor: pointer;
-        flex-shrink: 0;
-    }
-
-    .check-row a {
-        color: var(--lime);
-        text-decoration: none;
-    }
-
-    .btn-main {
-        width: 100%;
-        background: var(--lime);
-        border: none;
-        border-radius: 12px;
-        padding: 15px;
-        font-family: 'Barlow Condensed', sans-serif;
-        font-weight: 700;
-        font-size: 18px;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        cursor: pointer;
-        color: #000;
-        margin-top: 8px;
-        transition: all .2s;
-        box-shadow: 0 0 30px rgba(180, 240, 58, .2);
-    }
-
-    .btn-main:hover {
-        filter: brightness(1.08);
-        transform: translateY(-1px);
-        box-shadow: 0 6px 30px rgba(180, 240, 58, .3);
-    }
-
-    .btn-main:active {
-        transform: none;
-    }
-
-    .btn-main:disabled {
-        opacity: .5;
-        cursor: not-allowed;
-        transform: none;
-        filter: none;
-    }
-
-    .divider {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin: 20px 0;
-        font-size: 11px;
-        color: var(--muted);
-    }
-
-    .divider::before, .divider::after {
-        content: '';
-        flex: 1;
-        height: 1px;
-        background: var(--border);
-    }
-
-    .social {
-        width: 100%;
-        background: var(--card);
-        border: 1.5px solid var(--border2);
-        border-radius: 12px;
-        padding: 12px;
-        font-family: inherit;
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--off);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        transition: all .2s;
-    }
-
-    .social:hover {
-        border-color: var(--border3);
-        background: var(--card2);
-    }
-
-    .switch-line {
-        text-align: center;
-        font-size: 12px;
-        color: var(--muted);
-        margin-top: 22px;
-    }
-
-    .switch-line a {
-        color: var(--lime);
-        font-weight: 600;
-        cursor: pointer;
-        text-decoration: none;
-    }
-
-    .forgot {
-        text-align: right;
-        margin-top: 6px;
-    }
-
-    .forgot a {
-        font-size: 11px;
-        color: var(--lime);
-        text-decoration: none;
-        opacity: .75;
-    }
-
-    .forgot a:hover {
-        opacity: 1;
-    }/* MOBILE */
-    .mob-header {
-        display: none;
-        padding: 20px 24px 0;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .mob-logo-icon {
-        width: 38px;
-        height: 38px;
-        border-radius: 10px;
-        background: #0f1f0f;
-        border: 1px solid var(--border2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .mob-logo-name {
-        font-family: 'Barlow Condensed', sans-serif;
-        font-size: 22px;
-        font-weight: 900;
-    }
-
-    .mob-logo-name span {
-        color: var(--lime);
-    }
-
-    @media (max-width: 800px) {
-        body {
-            flex-direction: column;
-        }
-
-        .side-left {
-            display: none;
-        }
-
-        .mob-header {
-            display: flex;
-        }
-
-        .side-right {
-            width: 100%;
-            border-left: none;
-            padding: 28px 24px 56px;
-            justify-content: flex-start;
-            align-items: stretch;
-            min-height: calc(100vh - 72px);
-        }
-
-        .form-wrap {
-            max-width: 100%;
-        }
-
-        .frow2 {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    @media (max-width: 400px) {
-        .side-right {
-            padding: 20px 16px 48px;
-        }
-    }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>chceByc.fit — Dolacz lub zaloguj sie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#070b07;--forest:#0c1a0c;--card:#0f170f;--card2:#131e13;
+  --border:#1a2e1a;--border2:#243824;--border3:#2d4a2d;
+  --lime:#b4f03a;--lime-dim:#7aaa22;--lime-ghost:rgba(180,240,58,.07);--lime-soft:rgba(180,240,58,.15);
+  --white:#eef8e8;--off:#c8ddb8;--muted:#5a7850;--muted2:#3a5230;
+  --red:#ff5555;--orange:#ff8c42;--gold:#f0c840;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--black);color:var(--white);display:flex;min-height:100vh;}
+
+/* TOAST */
+.toast{
+  position:fixed;top:24px;left:50%;
+  transform:translateX(-50%) translateY(-90px);
+  background:var(--card);border:1px solid var(--border3);border-radius:16px;
+  padding:14px 20px;display:flex;align-items:center;gap:12px;
+  font-size:14px;color:var(--white);
+  box-shadow:0 12px 40px rgba(0,0,0,.6);z-index:9999;
+  transition:transform .45s cubic-bezier(.34,1.56,.64,1),opacity .35s;opacity:0;
+  min-width:260px;max-width:340px;pointer-events:none;
+}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+.toast-icon{width:34px;height:34px;border-radius:50%;background:rgba(180,240,58,.12);border:1px solid rgba(180,240,58,.2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.toast-body{}
+.toast-title{font-weight:700;font-size:13px;margin-bottom:2px;}
+.toast-sub{font-size:11px;color:var(--muted);}
+.toast-progress{position:absolute;bottom:0;left:0;height:3px;background:var(--lime);border-radius:0 0 16px 16px;animation:tprog 2.4s linear forwards;}
+@keyframes tprog{from{width:100%}to{width:0}}
+
+/* LEFT */
+.side-left{
+  flex:1;position:relative;overflow:hidden;
+  background:radial-gradient(ellipse 80% 70% at 30% 40%,rgba(26,58,26,.9),var(--black));
+  display:flex;align-items:center;justify-content:center;
+  padding:60px 52px;
+}
+.bg-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(180,240,58,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(180,240,58,.03) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+.glow{position:absolute;border-radius:50%;filter:blur(120px);pointer-events:none;}
+.g1{width:500px;height:500px;background:rgba(180,240,58,.05);top:-120px;left:-80px;}
+.g2{width:300px;height:300px;background:rgba(180,240,58,.04);bottom:-60px;right:0;}
+
+.brand{position:relative;z-index:1;max-width:460px;width:100%;}
+.logo-row{display:flex;align-items:center;gap:12px;margin-bottom:40px;}
+.logo-icon{width:46px;height:46px;border-radius:12px;background:#0f1f0f;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.logo-name{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;}
+.logo-name span{color:var(--lime);}
+.headline{font-family:'Barlow Condensed',sans-serif;font-size:clamp(38px,3.8vw,60px);font-weight:900;text-transform:uppercase;line-height:.95;letter-spacing:-1px;margin-bottom:18px;}
+.headline span{color:var(--lime);}
+.subline{font-size:15px;color:var(--muted);font-weight:300;line-height:1.75;margin-bottom:40px;max-width:380px;}
+
+.stats{display:flex;gap:28px;flex-wrap:wrap;margin-bottom:36px;}
+.stat-val{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;color:var(--lime);line-height:1;}
+.stat-lbl{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:3px;}
+
+.testimonial{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px 22px;}
+.test-quote{font-size:13px;color:var(--off);line-height:1.75;font-weight:300;font-style:italic;margin-bottom:12px;}
+.test-who{display:flex;align-items:center;gap:10px;}
+.test-av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--lime-dim),var(--lime));display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:900;color:#000;}
+.test-n{font-size:12px;font-weight:600;}
+.test-m{font-size:11px;color:var(--lime);}
+
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px;}
+.badge{display:flex;align-items:center;gap:6px;background:var(--lime-ghost);border:1px solid rgba(180,240,58,.1);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--off);}
+
+/* RIGHT */
+.side-right{
+  width:480px;flex-shrink:0;
+  background:var(--forest);border-left:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  padding:48px 44px;overflow-y:auto;
+}
+.form-wrap{width:100%;max-width:380px;}
+
+.tabs{display:flex;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:4px;gap:4px;margin-bottom:32px;}
+.tab{flex:1;padding:10px;border-radius:10px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--muted);transition:all .2s;}
+.tab.active{background:var(--lime);color:#000;}
+
+.panel{display:none;}
+.panel.active{display:block;}
+
+.f-title{font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;line-height:1;margin-bottom:7px;}
+.f-sub{font-size:13px;color:var(--muted);font-weight:300;line-height:1.65;margin-bottom:28px;}
+
+.fgrp{margin-bottom:16px;}
+.flbl{display:block;font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;font-weight:600;margin-bottom:6px;}
+.finp{
+  width:100%;background:var(--card);
+  border:1.5px solid var(--border2);border-radius:12px;
+  padding:13px 15px;color:var(--white);font-size:14px;font-family:inherit;
+  outline:none;transition:border-color .2s,box-shadow .2s;
+}
+.finp:focus{border-color:var(--lime);box-shadow:0 0 0 3px rgba(180,240,58,.08);}
+.finp::placeholder{color:var(--muted2);}
+.finp.err{border-color:var(--red);box-shadow:0 0 0 3px rgba(255,85,85,.07);}
+.ferr{font-size:11px;color:var(--red);margin-top:5px;display:none;}
+.ferr.on{display:block;}
+.frow2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+.pwd-bar-row{display:flex;align-items:center;gap:8px;margin-top:7px;}
+.pwd-bar{flex:1;height:4px;border-radius:3px;background:var(--border2);overflow:hidden;}
+.pwd-fill{height:100%;border-radius:3px;transition:all .4s;width:0;}
+.pwd-lbl{font-size:11px;color:var(--muted);white-space:nowrap;}
+
+.check-row{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--muted);line-height:1.6;}
+.check-row input{width:16px;height:16px;margin-top:2px;accent-color:var(--lime);cursor:pointer;flex-shrink:0;}
+.check-row a{color:var(--lime);text-decoration:none;}
+
+.btn-main{
+  width:100%;background:var(--lime);border:none;border-radius:12px;
+  padding:15px;font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:18px;letter-spacing:1.5px;text-transform:uppercase;
+  cursor:pointer;color:#000;margin-top:8px;
+  transition:all .2s;box-shadow:0 0 30px rgba(180,240,58,.2);
+}
+.btn-main:hover{filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 6px 30px rgba(180,240,58,.3);}
+.btn-main:active{transform:none;}
+.btn-main:disabled{opacity:.5;cursor:not-allowed;transform:none;filter:none;}
+
+.divider{display:flex;align-items:center;gap:10px;margin:20px 0;font-size:11px;color:var(--muted);}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+
+.social{
+  width:100%;background:var(--card);border:1.5px solid var(--border2);
+  border-radius:12px;padding:12px;font-family:inherit;font-size:13px;
+  font-weight:600;color:var(--off);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;
+}
+.social:hover{border-color:var(--border3);background:var(--card2);}
+
+.switch-line{text-align:center;font-size:12px;color:var(--muted);margin-top:22px;}
+.switch-line a{color:var(--lime);font-weight:600;cursor:pointer;text-decoration:none;}
+
+.forgot{text-align:right;margin-top:6px;}
+.forgot a{font-size:11px;color:var(--lime);text-decoration:none;opacity:.75;}
+.forgot a:hover{opacity:1;}
+
+/* MOBILE */
+.mob-header{display:none;padding:20px 24px 0;align-items:center;gap:10px;}
+.mob-logo-icon{width:38px;height:38px;border-radius:10px;background:#0f1f0f;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;}
+.mob-logo-name{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;}
+.mob-logo-name span{color:var(--lime);}
+
+@media(max-width:800px){
+  body{flex-direction:column;}
+  .side-left{display:none;}
+  .mob-header{display:flex;}
+  .side-right{
+    width:100%;border-left:none;
+    padding:28px 24px 56px;
+    justify-content:flex-start;
+    align-items:stretch;
+    min-height:calc(100vh - 72px);
+  }
+  .form-wrap{max-width:100%;}
+  .frow2{grid-template-columns:1fr;}
+}
+@media(max-width:400px){
+  .side-right{padding:20px 16px 48px;}
+}
+</style>
 </head>
 <body>
 
-    <!-- TOAST -->
-    <div class="toast" id="toast">
-        <div class="toast-icon" id="t-icon"></div>
-        <div class="toast-body">
-            <div class="toast-title" id="t-title"></div>
-            <div class="toast-sub" id="t-sub"></div>
-        </div>
-        <div class="toast-progress" id="t-bar"></div>
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-icon" id="t-icon"></div>
+  <div class="toast-body">
+    <div class="toast-title" id="t-title"></div>
+    <div class="toast-sub" id="t-sub"></div>
+  </div>
+  <div class="toast-progress" id="t-bar"></div>
+</div>
+
+<!-- MOBILE HEADER -->
+<div class="mob-header">
+  <div class="mob-logo-icon">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="5.5" r="3" fill="#b4f03a"/>
+      <rect x="10" y="9.5" width="4" height="7" rx="2" fill="#b4f03a"/>
+      <line x1="10" y1="11" x2="5.5" y2="15" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
+      <line x1="14" y1="10.5" x2="18.5" y2="6" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
+      <line x1="10.5" y1="16.5" x2="7.5" y2="22" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
+      <line x1="13.5" y1="16.5" x2="16.5" y2="22" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="mob-logo-name">chceByc<span>.fit</span></div>
+</div>
+
+<!-- LEFT PANEL -->
+<div class="side-left">
+  <div class="bg-grid"></div>
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
+  <div class="brand">
+    <div class="logo-row">
+      <div class="logo-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="5.5" r="3" fill="#b4f03a"/>
+          <rect x="10" y="9.5" width="4" height="7" rx="2" fill="#b4f03a"/>
+          <line x1="10" y1="11" x2="5.5" y2="15" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
+          <line x1="14" y1="10.5" x2="18.5" y2="6" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
+          <line x1="10.5" y1="16.5" x2="7.5" y2="22" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
+          <line x1="13.5" y1="16.5" x2="16.5" y2="22" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="logo-name">chceByc<span>.fit</span></div>
     </div>
 
-    <!-- MOBILE HEADER -->
-    <div class="mob-header">
-        <div class="mob-logo-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="5.5" r="3" fill="#b4f03a"/>
-                <rect x="10" y="9.5" width="4" height="7" rx="2" fill="#b4f03a"/>
-                <line x1="10" y1="11" x2="5.5" y2="15" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
-                <line x1="14" y1="10.5" x2="18.5" y2="6" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
-                <line x1="10.5" y1="16.5" x2="7.5" y2="22" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
-                <line x1="13.5" y1="16.5" x2="16.5" y2="22" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
-            </svg>
-        </div>
-        <div class="mob-logo-name">
-            chceByc
-            <span>.fit</span>
-        </div>
+    <h1 class="headline">Twoje wyniki<br><span>zaczynaja sie</span><br>tutaj.</h1>
+    <p class="subline">Pierwsza polska platforma fitness z AI coachem, planami od prawdziwych trenerow i spolecznoscia, ktora nie pozwoli Ci odpuscic.</p>
+
+    <div class="stats">
+      <div><div class="stat-val">12k+</div><div class="stat-lbl">Uzytkownikow</div></div>
+      <div><div class="stat-val">340+</div><div class="stat-lbl">Planow</div></div>
+      <div><div class="stat-val">87</div><div class="stat-lbl">Trenerow</div></div>
+      <div><div class="stat-val">4.9</div><div class="stat-lbl">Ocena</div></div>
     </div>
 
-    <!-- LEFT PANEL -->
-    <div class="side-left">
-        <div class="bg-grid"></div>
-        <div class="glow g1"></div>
-        <div class="glow g2"></div>
-        <div class="brand">
-            <div class="logo-row">
-                <div class="logo-icon">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                        <circle cx="12" cy="5.5" r="3" fill="#b4f03a"/>
-                        <rect x="10" y="9.5" width="4" height="7" rx="2" fill="#b4f03a"/>
-                        <line x1="10" y1="11" x2="5.5" y2="15" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
-                        <line x1="14" y1="10.5" x2="18.5" y2="6" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
-                        <line x1="10.5" y1="16.5" x2="7.5" y2="22" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
-                        <line x1="13.5" y1="16.5" x2="16.5" y2="22" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round"/>
-                    </svg>
-                </div>
-                <div class="logo-name">
-                    chceByc
-                    <span>.fit</span>
-                </div>
-            </div>
-
-            <h1 class="headline">
-                Twoje wyniki
-                <br>
-                <span>zaczynaja sie</span>
-                <br>
-                tutaj.
-            </h1>
-            <p class="subline">Pierwsza polska platforma fitness z AI coachem, planami od prawdziwych trenerow i spolecznoscia, ktora nie pozwoli Ci odpuscic.</p>
-
-            <div class="stats">
-                <div>
-                    <div class="stat-val">12k+</div>
-                    <div class="stat-lbl">Uzytkownikow</div>
-                </div>
-                <div>
-                    <div class="stat-val">340+</div>
-                    <div class="stat-lbl">Planow</div>
-                </div>
-                <div>
-                    <div class="stat-val">87</div>
-                    <div class="stat-lbl">Trenerow</div>
-                </div>
-                <div>
-                    <div class="stat-val">4.9</div>
-                    <div class="stat-lbl">Ocena</div>
-                </div>
-            </div>
-
-            <div class="testimonial">
-                <div class="test-quote">"W 3 miesiace schudlam 8 kg i nie czulam, ze jestem na diecie. AI coach naprawde rozumie, kiedy jestes zmeczona i kiedy mozesz dac z siebie wiecej."</div>
-                <div class="test-who">
-                    <div class="test-av">KM</div>
-                    <div>
-                        <div class="test-n">Kasia M.</div>
-                        <div class="test-m">-8 kg w 90 dni</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="badges">
-                <div class="badge">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
-                        <path d="M9 12L11 14L15 10M21 12C21 16.97 17.49 21 12 21C6.51 21 3 16.97 3 12C3 7.03 6.51 3 12 3C17.49 3 21 7.03 21 12Z" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-
-                            Rejestracja za darmo
-                          
-                </div>
-                <div class="badge">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
-                        <rect x="5" y="11" width="14" height="10" rx="2" stroke="#b4f03a" stroke-width="2"/>
-                        <path d="M8 11V7C8 4.79 9.79 3 12 3C14.21 3 16 4.79 16 7V11" stroke="#b4f03a" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-
-                            Bezpieczna platforma
-                          
-                </div>
-                <div class="badge">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#b4f03a"/>
-                    </svg>
-
-                            RODO compliant
-                          
-                </div>
-            </div>
+    <div class="testimonial">
+      <div class="test-quote">"W 3 miesiace schudlam 8 kg i nie czulam, ze jestem na diecie. AI coach naprawde rozumie, kiedy jestes zmeczona i kiedy mozesz dac z siebie wiecej."</div>
+      <div class="test-who">
+        <div class="test-av">KM</div>
+        <div>
+          <div class="test-n">Kasia M.</div>
+          <div class="test-m">-8 kg w 90 dni</div>
         </div>
+      </div>
     </div>
 
-    <!-- RIGHT PANEL -->
-    <div class="side-right">
-        <div class="form-wrap">
+    <div class="badges">
+      <div class="badge">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M9 12L11 14L15 10M21 12C21 16.97 17.49 21 12 21C6.51 21 3 16.97 3 12C3 7.03 6.51 3 12 3C17.49 3 21 7.03 21 12Z" stroke="#b4f03a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Rejestracja za darmo
+      </div>
+      <div class="badge">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="10" rx="2" stroke="#b4f03a" stroke-width="2"/><path d="M8 11V7C8 4.79 9.79 3 12 3C14.21 3 16 4.79 16 7V11" stroke="#b4f03a" stroke-width="2" stroke-linecap="round"/></svg>
+        Bezpieczna platforma
+      </div>
+      <div class="badge">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#b4f03a"/></svg>
+        RODO compliant
+      </div>
+    </div>
+  </div>
+</div>
 
-            <div class="tabs">
-                <button class="tab active" id="tab-reg" onclick="switchTab('reg')">Rejestracja</button>
-                <button class="tab" id="tab-log" onclick="switchTab('log')">Logowanie</button>
-            </div>
+<!-- RIGHT PANEL -->
+<div class="side-right">
+  <div class="form-wrap">
 
-            <!-- REGISTER -->
-            <div class="panel active" id="panel-reg">
-                <div class="f-title">
-                    Dolacz 
-                    <span style="color:var(--lime)">za darmo</span>
-                </div>
-                <div class="f-sub">Stwurz konto i zacznij z AI coachem — zero zobowiazan.</div>
-
-                <div class="frow2">
-                    <div class="fgrp">
-                        <label class="flbl">Imie</label>
-                        <input class="finp" type="text" id="r-fname" placeholder="Jan" oninput="clrE(this,'e-fname')">
-                        <div class="ferr" id="e-fname">Podaj imie</div>
-                    </div>
-                    <div class="fgrp">
-                        <label class="flbl">Nazwisko</label>
-                        <input class="finp" type="text" id="r-lname" placeholder="Kowalski" oninput="clrE(this,'e-lname')">
-                        <div class="ferr" id="e-lname">Podaj nazwisko</div>
-                    </div>
-                </div>
-
-                <div class="fgrp">
-                    <label class="flbl">Adres email</label>
-                    <input class="finp" type="email" id="r-email" placeholder="jan@email.pl" oninput="clrE(this,'e-email')">
-                    <div class="ferr" id="e-email">Podaj poprawny email</div>
-                </div>
-
-                <div class="fgrp">
-                    <label class="flbl">Haslo</label>
-                    <input class="finp" type="password" id="r-pwd" placeholder="Min. 8 znakow" oninput="chkPwd(this);clrE(this,'e-pwd')">
-                    <div class="pwd-bar-row">
-                        <div class="pwd-bar">
-                            <div class="pwd-fill" id="pwdFill"></div>
-                        </div>
-                        <div class="pwd-lbl" id="pwdLbl">Wpisz haslo</div>
-                    </div>
-                    <div class="ferr" id="e-pwd">Haslo min. 8 znakow</div>
-                </div>
-
-                <div class="fgrp" style="margin-bottom:22px;">
-                    <div class="check-row">
-                        <input type="checkbox" id="r-terms">
-                        <label for="r-terms">
-                            Akceptuje 
-                            <a href="#">Regulamin</a>
-                             i 
-                            <a href="#">Polityke prywatnosci</a>
-                             serwisu chceByc.fit
-                        </label>
-                    </div>
-                </div>
-
-                <button class="btn-main" id="btn-reg" onclick="doRegister()">Stworz konto</button>
-
-                <div class="divider">lub</div>
-                <button class="social" onclick="doSocialReg()">
-                    <svg width="18" height="18" viewBox="0 0 48 48">
-                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.29-8.16 2.29-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-                    </svg>
-
-                            Kontynuuj z Google
-                          
-                </button>
-
-                <div class="switch-line">
-                    Masz juz konto? 
-                    <a onclick="switchTab('log')">Zaloguj sie</a>
-                </div>
-            </div>
-
-            <!-- LOGIN -->
-            <div class="panel" id="panel-log">
-                <div class="f-title">
-                    Witaj 
-                    <span style="color:var(--lime)">z powrotem</span>
-                </div>
-                <div class="f-sub">Zaloguj sie i wróc do swoich treningow.</div>
-
-                <div class="fgrp">
-                    <label class="flbl">Adres email</label>
-                    <input class="finp" type="email" id="l-email" placeholder="jan@email.pl" oninput="clrE(this,'e-lemail')">
-                    <div class="ferr" id="e-lemail">Podaj poprawny email</div>
-                </div>
-
-                <div class="fgrp">
-                    <label class="flbl">Haslo</label>
-                    <input class="finp" type="password" id="l-pwd" placeholder="Twoje haslo" oninput="clrE(this,'e-lpwd')">
-                    <div class="ferr" id="e-lpwd">Podaj haslo</div>
-                    <div class="forgot">
-                        <a href="#">Nie pamietam hasla</a>
-                    </div>
-                </div>
-
-                <div class="fgrp" style="margin-bottom:22px;">
-                    <div class="check-row">
-                        <input type="checkbox" id="l-rem" checked>
-                        <label for="l-rem">Zapamietaj mnie na tym urzadzeniu</label>
-                    </div>
-                </div>
-
-                <button class="btn-main" id="btn-log" onclick="doLogin()">Zaloguj sie</button>
-
-                <div class="divider">lub</div>
-                <button class="social" onclick="doSocialLog()">
-                    <svg width="18" height="18" viewBox="0 0 48 48">
-                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.29-8.16 2.29-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-                    </svg>
-
-                            Kontynuuj z Google
-                          
-                </button>
-
-                <div class="switch-line">
-                    Nie masz konta? 
-                    <a onclick="switchTab('reg')">Zarejestruj sie za darmo</a>
-                </div>
-            </div>
-
-        </div>
+    <div class="tabs">
+      <button class="tab active" id="tab-reg" onclick="switchTab('reg')">Rejestracja</button>
+      <button class="tab" id="tab-log" onclick="switchTab('log')">Logowanie</button>
     </div>
 
-    <script>
-    var toastTmr = null;
+    <!-- REGISTER -->
+    <div class="panel active" id="panel-reg">
+      <div class="f-title">Dolacz <span style="color:var(--lime)">za darmo</span></div>
+      <div class="f-sub">Stwurz konto i zacznij z AI coachem — zero zobowiazan.</div>
 
-    function toast(icon, title, sub) {
-        var el = document.getElementById('toast');
-        var bar = document.getElementById('t-bar');
-        document.getElementById('t-icon').textContent = icon;
-        document.getElementById('t-title').textContent = title;
-        document.getElementById('t-sub').textContent = sub;
-        bar.style.animation = 'none';
-        void bar.offsetWidth;
-        bar.style.animation = 'tprog 2.4s linear forwards';
-        el.classList.add('show');
-        if (toastTmr)
-            clearTimeout(toastTmr);
-        toastTmr = setTimeout(function() {
-            el.classList.remove('show');
-        }, 2600);
-    }
+      <div class="frow2">
+        <div class="fgrp">
+          <label class="flbl">Imie</label>
+          <input class="finp" type="text" id="r-fname" placeholder="Jan" oninput="clrE(this,'e-fname')">
+          <div class="ferr" id="e-fname">Podaj imie</div>
+        </div>
+        <div class="fgrp">
+          <label class="flbl">Nazwisko</label>
+          <input class="finp" type="text" id="r-lname" placeholder="Kowalski" oninput="clrE(this,'e-lname')">
+          <div class="ferr" id="e-lname">Podaj nazwisko</div>
+        </div>
+      </div>
 
-    function switchTab(t) {
-        document.querySelectorAll('.tab').forEach(function(b) {
-            b.classList.remove('active');
-        });
-        document.querySelectorAll('.panel').forEach(function(p) {
-            p.classList.remove('active');
-        });
-        document.getElementById('tab-' + t).classList.add('active');
-        document.getElementById('panel-' + t).classList.add('active');
-    }
+      <div class="fgrp">
+        <label class="flbl">Adres email</label>
+        <input class="finp" type="email" id="r-email" placeholder="jan@email.pl" oninput="clrE(this,'e-email')">
+        <div class="ferr" id="e-email">Podaj poprawny email</div>
+      </div>
 
-    function clrE(el, eid) {
-        el.classList.remove('err');
-        var e = document.getElementById(eid);
-        if (e)
-            e.classList.remove('on');
-    }
+      <div class="fgrp">
+        <label class="flbl">Haslo</label>
+        <input class="finp" type="password" id="r-pwd" placeholder="Min. 8 znakow" oninput="chkPwd(this);clrE(this,'e-pwd')">
+        <div class="pwd-bar-row">
+          <div class="pwd-bar"><div class="pwd-fill" id="pwdFill"></div></div>
+          <div class="pwd-lbl" id="pwdLbl">Wpisz haslo</div>
+        </div>
+        <div class="ferr" id="e-pwd">Haslo min. 8 znakow</div>
+      </div>
 
-    function chkPwd(el) {
-        var v = el.value;
-        var fill = document.getElementById('pwdFill');
-        var lbl = document.getElementById('pwdLbl');
-        var s = 0;
-        if (v.length >= 8)
-            s++;
-        if (/[A-Z]/.test(v))
-            s++;
-        if (/[0-9]/.test(v))
-            s++;
-        if (/[^A-Za-z0-9]/.test(v))
-            s++;
-        var cols = ['', 'var(--red)', 'var(--orange)', 'var(--gold)', 'var(--lime)'];
-        var labs = ['Wpisz haslo', 'Slabe', 'Slabe', 'Dobre', 'Silne'];
-        var pcts = ['0%', '25%', '50%', '75%', '100%'];
-        fill.style.width = pcts[s];
-        fill.style.background = cols[s] || 'var(--border2)';
-        lbl.textContent = labs[s];
-        lbl.style.color = cols[s] || 'var(--muted)';
-    }
+      <div class="fgrp" style="margin-bottom:22px;">
+        <div class="check-row">
+          <input type="checkbox" id="r-terms">
+          <label for="r-terms">Akceptuje <a href="#">Regulamin</a> i <a href="#">Polityke prywatnosci</a> serwisu chceByc.fit</label>
+        </div>
+      </div>
 
-    function setBtn(id, loading, label) {
-        var b = document.getElementById(id);
-        b.disabled = loading;
-        if (label)
-            b.textContent = loading ? '...' : label;
-    }
+      <button class="btn-main" id="btn-reg" onclick="doRegister()">Stworz konto</button>
 
-    function doRegister() {
-        var fn = document.getElementById('r-fname').value.trim();
-        var ln = document.getElementById('r-lname').value.trim();
-        var em = document.getElementById('r-email').value.trim();
-        var pw = document.getElementById('r-pwd').value;
-        var tr = document.getElementById('r-terms').checked;
-        var ok = true;
+      <div class="divider">lub</div>
+      <button class="social" onclick="doSocialReg()">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.29-8.16 2.29-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Kontynuuj z Google
+      </button>
 
-        if (!fn) {
-            document.getElementById('r-fname').classList.add('err');
-            document.getElementById('e-fname').classList.add('on');
-            ok = false;
-        }
-        if (!ln) {
-            document.getElementById('r-lname').classList.add('err');
-            document.getElementById('e-lname').classList.add('on');
-            ok = false;
-        }
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) {
-            document.getElementById('r-email').classList.add('err');
-            document.getElementById('e-email').classList.add('on');
-            ok = false;
-        }
-        if (pw.length < 8) {
-            document.getElementById('r-pwd').classList.add('err');
-            document.getElementById('e-pwd').classList.add('on');
-            ok = false;
-        }
-        if (!tr) {
-            toast('!', 'Wymagana zgoda', 'Zaakceptuj regulamin aby kontynuowac.');
-            ok = false;
-        }
-        if (!ok)
-            return;
+      <div class="switch-line">Masz juz konto? <a onclick="switchTab('log')">Zaloguj sie</a></div>
+    </div>
 
-        setBtn('btn-reg', true, 'Stworz konto');
-        setTimeout(function() {
-            toast('OK', 'Konto utworzone!', 'Przekierowanie do quizu...');
-            setTimeout(function() {
-                window.location.href = 'chcebyc-onboarding.html';
-            }, 2000);
-        }, 900);
-    }
+    <!-- LOGIN -->
+    <div class="panel" id="panel-log">
+      <div class="f-title">Witaj <span style="color:var(--lime)">z powrotem</span></div>
+      <div class="f-sub">Zaloguj sie i wróc do swoich treningow.</div>
 
-    function doLogin() {
-        var em = document.getElementById('l-email').value.trim();
-        var pw = document.getElementById('l-pwd').value;
-        var ok = true;
+      <div class="fgrp">
+        <label class="flbl">Adres email</label>
+        <input class="finp" type="email" id="l-email" placeholder="jan@email.pl" oninput="clrE(this,'e-lemail')">
+        <div class="ferr" id="e-lemail">Podaj poprawny email</div>
+      </div>
 
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) {
-            document.getElementById('l-email').classList.add('err');
-            document.getElementById('e-lemail').classList.add('on');
-            ok = false;
-        }
-        if (!pw) {
-            document.getElementById('l-pwd').classList.add('err');
-            document.getElementById('e-lpwd').classList.add('on');
-            ok = false;
-        }
-        if (!ok)
-            return;
+      <div class="fgrp">
+        <label class="flbl">Haslo</label>
+        <input class="finp" type="password" id="l-pwd" placeholder="Twoje haslo" oninput="clrE(this,'e-lpwd')">
+        <div class="ferr" id="e-lpwd">Podaj haslo</div>
+        <div class="forgot"><a href="#">Nie pamietam hasla</a></div>
+      </div>
 
-        setBtn('btn-log', true, 'Zaloguj sie');
-        setTimeout(function() {
-            toast('OK', 'Zalogowano!', 'Witaj z powrotem. Przekierowanie...');
-            setTimeout(function() {
-                window.location.href = 'chcebyc-dashboard.html';
-            }, 2000);
-        }, 900);
-    }
+      <div class="fgrp" style="margin-bottom:22px;">
+        <div class="check-row">
+          <input type="checkbox" id="l-rem" checked>
+          <label for="l-rem">Zapamietaj mnie na tym urzadzeniu</label>
+        </div>
+      </div>
 
-    function doSocialReg() {
-        setBtn('btn-reg', true, 'Stworz konto');
-        setTimeout(function() {
-            toast('OK', 'Konto utworzone!', 'Przekierowanie do quizu...');
-            setTimeout(function() {
-                window.location.href = 'chcebyc-onboarding.html';
-            }, 2000);
-        }, 800);
-    }
+      <button class="btn-main" id="btn-log" onclick="doLogin()">Zaloguj sie</button>
 
-    function doSocialLog() {
-        setBtn('btn-log', true, 'Zaloguj sie');
-        setTimeout(function() {
-            toast('OK', 'Zalogowano!', 'Witaj z powrotem. Przekierowanie...');
-            setTimeout(function() {
-                window.location.href = 'chcebyc-dashboard.html';
-            }, 2000);
-        }, 800);
-    }
-    </script>
+      <div class="divider">lub</div>
+      <button class="social" onclick="doSocialLog()">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.29-8.16 2.29-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Kontynuuj z Google
+      </button>
+
+      <div class="switch-line">Nie masz konta? <a onclick="switchTab('reg')">Zarejestruj sie za darmo</a></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+var toastTmr = null;
+
+function toast(icon, title, sub) {
+  var el = document.getElementById('toast');
+  var bar = document.getElementById('t-bar');
+  document.getElementById('t-icon').textContent = icon;
+  document.getElementById('t-title').textContent = title;
+  document.getElementById('t-sub').textContent = sub;
+  bar.style.animation = 'none';
+  void bar.offsetWidth;
+  bar.style.animation = 'tprog 2.4s linear forwards';
+  el.classList.add('show');
+  if (toastTmr) clearTimeout(toastTmr);
+  toastTmr = setTimeout(function(){ el.classList.remove('show'); }, 2600);
+}
+
+function switchTab(t) {
+  document.querySelectorAll('.tab').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  document.getElementById('tab-' + t).classList.add('active');
+  document.getElementById('panel-' + t).classList.add('active');
+}
+
+function clrE(el, eid) {
+  el.classList.remove('err');
+  var e = document.getElementById(eid);
+  if (e) e.classList.remove('on');
+}
+
+function chkPwd(el) {
+  var v = el.value;
+  var fill = document.getElementById('pwdFill');
+  var lbl = document.getElementById('pwdLbl');
+  var s = 0;
+  if (v.length >= 8) s++;
+  if (/[A-Z]/.test(v)) s++;
+  if (/[0-9]/.test(v)) s++;
+  if (/[^A-Za-z0-9]/.test(v)) s++;
+  var cols = ['','var(--red)','var(--orange)','var(--gold)','var(--lime)'];
+  var labs = ['Wpisz haslo','Slabe','Slabe','Dobre','Silne'];
+  var pcts = ['0%','25%','50%','75%','100%'];
+  fill.style.width = pcts[s];
+  fill.style.background = cols[s] || 'var(--border2)';
+  lbl.textContent = labs[s];
+  lbl.style.color = cols[s] || 'var(--muted)';
+}
+
+function setBtn(id, loading, label) {
+  var b = document.getElementById(id);
+  b.disabled = loading;
+  if (label) b.textContent = loading ? '...' : label;
+}
+
+function doRegister() {
+  var fn = document.getElementById('r-fname').value.trim();
+  var ln = document.getElementById('r-lname').value.trim();
+  var em = document.getElementById('r-email').value.trim();
+  var pw = document.getElementById('r-pwd').value;
+  var tr = document.getElementById('r-terms').checked;
+  var ok = true;
+
+  if (!fn){ document.getElementById('r-fname').classList.add('err'); document.getElementById('e-fname').classList.add('on'); ok=false; }
+  if (!ln){ document.getElementById('r-lname').classList.add('err'); document.getElementById('e-lname').classList.add('on'); ok=false; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){ document.getElementById('r-email').classList.add('err'); document.getElementById('e-email').classList.add('on'); ok=false; }
+  if (pw.length < 8){ document.getElementById('r-pwd').classList.add('err'); document.getElementById('e-pwd').classList.add('on'); ok=false; }
+  if (!tr){ toast('!', 'Wymagana zgoda', 'Zaakceptuj regulamin aby kontynuowac.'); ok=false; }
+  if (!ok) return;
+
+  setBtn('btn-reg', true, 'Stworz konto');
+  setTimeout(function(){
+    toast('OK', 'Konto utworzone!', 'Przekierowanie do quizu...');
+    setTimeout(function(){ window.location.href = 'chcebyc-onboarding.html'; }, 2000);
+  }, 900);
+}
+
+function doLogin() {
+  var em = document.getElementById('l-email').value.trim();
+  var pw = document.getElementById('l-pwd').value;
+  var ok = true;
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){ document.getElementById('l-email').classList.add('err'); document.getElementById('e-lemail').classList.add('on'); ok=false; }
+  if (!pw){ document.getElementById('l-pwd').classList.add('err'); document.getElementById('e-lpwd').classList.add('on'); ok=false; }
+  if (!ok) return;
+
+  setBtn('btn-log', true, 'Zaloguj sie');
+  setTimeout(function(){
+    toast('OK', 'Zalogowano!', 'Witaj z powrotem. Przekierowanie...');
+    setTimeout(function(){ window.location.href = 'chcebyc-dashboard.html'; }, 2000);
+  }, 900);
+}
+
+function doSocialReg() {
+  setBtn('btn-reg', true, 'Stworz konto');
+  setTimeout(function(){
+    toast('OK', 'Konto utworzone!', 'Przekierowanie do quizu...');
+    setTimeout(function(){ window.location.href = 'chcebyc-onboarding.html'; }, 2000);
+  }, 800);
+}
+
+function doSocialLog() {
+  setBtn('btn-log', true, 'Zaloguj sie');
+  setTimeout(function(){
+    toast('OK', 'Zalogowano!', 'Witaj z powrotem. Przekierowanie...');
+    setTimeout(function(){ window.location.href = 'chcebyc-dashboard.html'; }, 2000);
+  }, 800);
+}
+</script>
 </body>
 </html>
