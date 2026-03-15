@@ -385,6 +385,90 @@ body{
 .spec-icon{font-size:16px;width:20px;text-align:center;}
 .spec-text{font-size:12px;color:var(--off);flex:1;}
 .spec-val{font-size:11px;color:var(--lime);font-weight:600;}
+/* ── MEASUREMENTS SCREEN ── */
+.meas-goal-bar{
+  display:flex;gap:6px;padding:0 20px 14px;overflow-x:auto;scrollbar-width:none;
+}
+.meas-goal-bar::-webkit-scrollbar{display:none;}
+.goal-chip{
+  padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;
+  white-space:nowrap;cursor:pointer;flex-shrink:0;border:1px solid var(--border2);
+  background:var(--card);color:var(--muted);transition:all .2s;
+}
+.goal-chip.active{background:var(--lime-ghost);border-color:rgba(180,240,58,.3);color:var(--lime);}
+
+/* progress tile — mobile */
+.mob-prog-tile{
+  margin:0 20px 14px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:18px;padding:14px;
+  position:relative;overflow:hidden;cursor:pointer;
+}
+.mob-prog-tile::before{
+  content:'';position:absolute;top:0;right:0;
+  width:140px;height:140px;
+  background:radial-gradient(ellipse at top right,rgba(180,240,58,.07),transparent 70%);
+  pointer-events:none;
+}
+.mpt-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.mpt-title{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:5px;}
+.mpt-dot{width:5px;height:5px;border-radius:50%;background:var(--lime);}
+.mpt-dates{font-size:9px;color:var(--muted2);}
+.mpt-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px;}
+.mpt-metric{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center;}
+.mpt-metric.hi{border-color:rgba(180,240,58,.2);background:rgba(180,240,58,.04);}
+.mptm-icon{font-size:14px;margin-bottom:3px;}
+.mptm-val{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;line-height:1;}
+.mptm-val.good{color:#44ff88;}
+.mptm-val.bad{color:var(--red);}
+.mptm-val.neutral{color:var(--lime);}
+.mptm-lbl{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+.mptm-base{font-size:8px;color:var(--muted2);margin-top:1px;}
+.mpt-bars{display:flex;flex-direction:column;gap:5px;margin-bottom:10px;}
+.mpt-bar-row{display:flex;align-items:center;gap:7px;font-size:10px;}
+.mpt-bar-lbl{color:var(--muted);width:48px;flex-shrink:0;font-size:9px;}
+.mpt-bar-track{flex:1;height:4px;background:var(--border2);border-radius:2px;overflow:hidden;}
+.mpt-bar-fill{height:100%;border-radius:2px;}
+.mpt-bar-diff{width:44px;text-align:right;font-weight:700;font-size:10px;font-family:'Barlow Condensed',sans-serif;flex-shrink:0;}
+.mpt-cta{background:var(--lime-ghost);border:1px solid rgba(180,240,58,.1);border-radius:10px;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;font-size:11px;}
+.mpt-cta-txt{color:var(--off);}
+.mpt-cta-arr{color:var(--lime);font-weight:700;}
+
+/* new measurement form */
+.meas-form{margin:0 20px 14px;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px;}
+.mf-title{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.mf-sub{font-size:11px;color:var(--muted);margin-bottom:12px;}
+.mf-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.mf-field{display:flex;flex-direction:column;gap:3px;}
+.mf-label{font-size:8px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;font-weight:700;}
+.mf-inp-wrap{position:relative;}
+.mf-input{width:100%;background:var(--card2);border:1.5px solid var(--border2);border-radius:10px;padding:9px 28px 9px 10px;color:var(--white);font-size:14px;font-family:'Barlow Condensed',sans-serif;font-weight:700;outline:none;}
+.mf-input:focus{border-color:var(--lime);}
+.mf-input::placeholder{color:var(--muted2);font-weight:400;font-size:11px;}
+.mf-unit{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:9px;color:var(--muted);pointer-events:none;}
+.mf-save{width:100%;background:var(--lime);border:none;border-radius:12px;padding:13px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;color:#000;}
+
+/* dashboard progress tile inline */
+.dash-prog{
+  margin:0 20px 14px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:12px 14px;
+  cursor:pointer;position:relative;overflow:hidden;
+}
+.dash-prog::before{
+  content:'';position:absolute;top:0;right:0;
+  width:100px;height:100px;
+  background:radial-gradient(ellipse at top right,rgba(180,240,58,.06),transparent 70%);
+  pointer-events:none;
+}
+.dp-label{font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:5px;}
+.dp-dot{width:5px;height:5px;border-radius:50%;background:var(--lime);}
+.dp-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px;}
+.dp-m{text-align:center;}
+.dp-m-val{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;line-height:1;}
+.dp-m-lbl{font-size:7px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:1px;}
+.dp-footer{font-size:10px;color:var(--muted);display:flex;align-items:center;justify-content:space-between;}
+.dp-link{color:var(--lime);font-weight:700;font-size:10px;}
 </style>
 </head>
 <body>
@@ -398,6 +482,7 @@ body{
     <button class="stab" onclick="switchScreen('dashboard',this)">🏠 Dashboard</button>
     <button class="stab" onclick="switchScreen('workout',this)">💪 Trening</button>
     <button class="stab" onclick="switchScreen('progress',this)">📊 Postępy</button>
+    <button class="stab" onclick="switchScreen('measurements',this)">📐 Pomiary</button>
     <button class="stab" onclick="switchScreen('ai',this)">🤖 AI Coach</button>
     <button class="stab" onclick="switchScreen('marketplace',this)">🏪 Marketplace</button>
     <button class="stab" onclick="switchScreen('profile',this)">👤 Profil</button>
@@ -498,6 +583,9 @@ body{
               </div>
             </div>
 
+            <!-- KAFELEK POSTEPOW (kompaktowy) -->
+            <div class="dash-prog" id="mob-dash-prog" onclick="switchScreen('measurements',null)"></div>
+
             <div class="xp-card">
               <div class="xp-row">
                 <div class="xp-level">⚡ Atleta · Poziom 14</div>
@@ -523,7 +611,7 @@ body{
           <div class="bottom-nav">
             <button class="nav-btn active"><div class="nav-icon">🏠</div><div class="nav-txt">Home</div></button>
             <button class="nav-btn" onclick="switchScreen('workout',null)"><div class="nav-icon">💪</div><div class="nav-txt">Trening</div></button>
-            <button class="nav-btn" onclick="switchScreen('marketplace',null)"><div class="nav-icon">🏪</div><div class="nav-txt">Plany</div></button>
+            <button class="nav-btn" onclick="switchScreen('measurements',null)"><div class="nav-icon">📐</div><div class="nav-txt">Pomiary</div></button>
             <button class="nav-btn" onclick="switchScreen('ai',null)"><div class="nav-icon">🤖</div><div class="nav-txt">AI Coach</div></button>
             <button class="nav-btn" onclick="switchScreen('profile',null)"><div class="nav-icon">👤</div><div class="nav-txt">Profil</div></button>
           </div>
@@ -611,7 +699,7 @@ body{
           <div class="bottom-nav">
             <button class="nav-btn" onclick="switchScreen('dashboard',null)"><div class="nav-icon">🏠</div><div class="nav-txt">Home</div></button>
             <button class="nav-btn active"><div class="nav-icon">💪</div><div class="nav-txt">Trening</div></button>
-            <button class="nav-btn" onclick="switchScreen('marketplace',null)"><div class="nav-icon">🏪</div><div class="nav-txt">Plany</div></button>
+            <button class="nav-btn" onclick="switchScreen('measurements',null)"><div class="nav-icon">📐</div><div class="nav-txt">Pomiary</div></button>
             <button class="nav-btn" onclick="switchScreen('ai',null)"><div class="nav-icon">🤖</div><div class="nav-txt">AI Coach</div></button>
             <button class="nav-btn" onclick="switchScreen('profile',null)"><div class="nav-icon">👤</div><div class="nav-txt">Profil</div></button>
           </div>
@@ -684,7 +772,7 @@ body{
           <div class="bottom-nav">
             <button class="nav-btn" onclick="switchScreen('dashboard',null)"><div class="nav-icon">🏠</div><div class="nav-txt">Home</div></button>
             <button class="nav-btn active"><div class="nav-icon">💪</div><div class="nav-txt">Trening</div></button>
-            <button class="nav-btn" onclick="switchScreen('marketplace',null)"><div class="nav-icon">🏪</div><div class="nav-txt">Plany</div></button>
+            <button class="nav-btn" onclick="switchScreen('measurements',null)"><div class="nav-icon">📐</div><div class="nav-txt">Pomiary</div></button>
             <button class="nav-btn" onclick="switchScreen('ai',null)"><div class="nav-icon">🤖</div><div class="nav-txt">AI Coach</div></button>
             <button class="nav-btn" onclick="switchScreen('profile',null)"><div class="nav-icon">👤</div><div class="nav-txt">Profil</div></button>
           </div>
@@ -720,7 +808,7 @@ body{
           <div class="bottom-nav">
             <button class="nav-btn" onclick="switchScreen('dashboard',null)"><div class="nav-icon">🏠</div><div class="nav-txt">Home</div></button>
             <button class="nav-btn" onclick="switchScreen('workout',null)"><div class="nav-icon">💪</div><div class="nav-txt">Trening</div></button>
-            <button class="nav-btn" onclick="switchScreen('marketplace',null)"><div class="nav-icon">🏪</div><div class="nav-txt">Plany</div></button>
+            <button class="nav-btn" onclick="switchScreen('measurements',null)"><div class="nav-icon">📐</div><div class="nav-txt">Pomiary</div></button>
             <button class="nav-btn active"><div class="nav-icon">🤖</div><div class="nav-txt">AI Coach</div></button>
             <button class="nav-btn" onclick="switchScreen('profile',null)"><div class="nav-icon">👤</div><div class="nav-txt">Profil</div></button>
           </div>
@@ -807,7 +895,7 @@ body{
           <div class="bottom-nav">
             <button class="nav-btn" onclick="switchScreen('dashboard',null)"><div class="nav-icon">🏠</div><div class="nav-txt">Home</div></button>
             <button class="nav-btn" onclick="switchScreen('workout',null)"><div class="nav-icon">💪</div><div class="nav-txt">Trening</div></button>
-            <button class="nav-btn active"><div class="nav-icon">🏪</div><div class="nav-txt">Plany</div></button>
+            <button class="nav-btn" onclick="switchScreen('marketplace',null)"><div class="nav-icon">📐</div><div class="nav-txt">Pomiary</div></button>
             <button class="nav-btn" onclick="switchScreen('ai',null)"><div class="nav-icon">🤖</div><div class="nav-txt">AI Coach</div></button>
             <button class="nav-btn" onclick="switchScreen('profile',null)"><div class="nav-icon">👤</div><div class="nav-txt">Profil</div></button>
           </div>
@@ -871,9 +959,112 @@ body{
           <div class="bottom-nav">
             <button class="nav-btn" onclick="switchScreen('dashboard',null)"><div class="nav-icon">🏠</div><div class="nav-txt">Home</div></button>
             <button class="nav-btn" onclick="switchScreen('workout',null)"><div class="nav-icon">💪</div><div class="nav-txt">Trening</div></button>
-            <button class="nav-btn" onclick="switchScreen('marketplace',null)"><div class="nav-icon">🏪</div><div class="nav-txt">Plany</div></button>
+            <button class="nav-btn" onclick="switchScreen('measurements',null)"><div class="nav-icon">📐</div><div class="nav-txt">Pomiary</div></button>
             <button class="nav-btn" onclick="switchScreen('ai',null)"><div class="nav-icon">🤖</div><div class="nav-txt">AI Coach</div></button>
             <button class="nav-btn active"><div class="nav-icon">👤</div><div class="nav-txt">Profil</div></button>
+          </div>
+        </div>
+
+        <!-- MEASUREMENTS -->
+        <div class="screen" id="screen-measurements">
+          <div class="status-bar"><div class="status-time">9:41</div><div class="status-icons">📶 🔋</div></div>
+          <div class="screen-header">
+            <div class="sh-title">Pomiary</div>
+            <div class="sh-icon">📐</div>
+          </div>
+
+          <!-- cel + plec switcher -->
+          <div class="meas-goal-bar" id="mob-goal-bar">
+            <div class="goal-chip active" onclick="mobSwitchGoal('masa',this)">💪 Masa</div>
+            <div class="goal-chip" onclick="mobSwitchGoal('redukcja',this)">🔥 Redukcja</div>
+            <div class="goal-chip" onclick="mobSwitchGoal('sprawnosc',this)">⚡ Sprawnosc</div>
+            <div class="goal-chip" onclick="mobSwitchGender('m',this)" id="mob-gbtn-m" style="border-color:rgba(180,240,58,.3);color:var(--lime);background:var(--lime-ghost);">M</div>
+            <div class="goal-chip" onclick="mobSwitchGender('f',this)" id="mob-gbtn-f">K</div>
+          </div>
+
+          <div class="scroll">
+            <!-- kafelek postepow pelny -->
+            <div class="mob-prog-tile" id="mob-full-prog"></div>
+
+            <!-- nowy pomiar -->
+            <div class="section-label">Nowy pomiar</div>
+            <div class="meas-form">
+              <div class="mf-title">Wprowadz dane</div>
+              <div class="mf-sub">Model sylwetki dostepny w wersji web</div>
+              <div class="mf-grid">
+                <div class="mf-field">
+                  <div class="mf-label">Waga</div>
+                  <div class="mf-inp-wrap"><input class="mf-input" type="number" placeholder="76.0"><span class="mf-unit">kg</span></div>
+                </div>
+                <div class="mf-field">
+                  <div class="mf-label">Tkanka tl.</div>
+                  <div class="mf-inp-wrap"><input class="mf-input" type="number" placeholder="16"><span class="mf-unit">%</span></div>
+                </div>
+                <div class="mf-field">
+                  <div class="mf-label">Klatka</div>
+                  <div class="mf-inp-wrap"><input class="mf-input" type="number" placeholder="98"><span class="mf-unit">cm</span></div>
+                </div>
+                <div class="mf-field">
+                  <div class="mf-label">Biceps</div>
+                  <div class="mf-inp-wrap"><input class="mf-input" type="number" placeholder="37"><span class="mf-unit">cm</span></div>
+                </div>
+                <div class="mf-field">
+                  <div class="mf-label">Talia</div>
+                  <div class="mf-inp-wrap"><input class="mf-input" type="number" placeholder="80"><span class="mf-unit">cm</span></div>
+                </div>
+                <div class="mf-field">
+                  <div class="mf-label">Biodra</div>
+                  <div class="mf-inp-wrap"><input class="mf-input" type="number" placeholder="94"><span class="mf-unit">cm</span></div>
+                </div>
+                <div class="mf-field">
+                  <div class="mf-label">Udo</div>
+                  <div class="mf-inp-wrap"><input class="mf-input" type="number" placeholder="56"><span class="mf-unit">cm</span></div>
+                </div>
+                <div class="mf-field">
+                  <div class="mf-label">Lydka</div>
+                  <div class="mf-inp-wrap"><input class="mf-input" type="number" placeholder="37"><span class="mf-unit">cm</span></div>
+                </div>
+              </div>
+              <button class="mf-save" onclick="this.textContent='Zapisano! +50 XP';setTimeout(()=>this.textContent='Zapisz pomiar',2000)">Zapisz pomiar</button>
+            </div>
+
+            <!-- historia skrotowa -->
+            <div class="section-label">Poprzednie pomiary</div>
+            <div style="padding:0 20px 20px;display:flex;flex-direction:column;gap:8px;">
+              <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;">
+                <div style="background:var(--lime-ghost);border:1px solid rgba(180,240,58,.2);border-radius:9px;padding:6px 10px;text-align:center;flex-shrink:0;">
+                  <div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--lime);line-height:1;">10</div>
+                  <div style="font-size:8px;color:var(--muted);text-transform:uppercase;">lut</div>
+                </div>
+                <div style="flex:1;">
+                  <div style="font-size:12px;font-weight:700;margin-bottom:3px;">Kontrola #1</div>
+                  <div style="display:flex;gap:5px;flex-wrap:wrap;">
+                    <span style="font-size:9px;padding:1px 6px;border-radius:3px;background:rgba(68,255,136,.1);color:#44ff88;font-weight:700;">Waga -3.2 kg</span>
+                    <span style="font-size:9px;padding:1px 6px;border-radius:3px;background:rgba(68,255,136,.1);color:#44ff88;font-weight:700;">Talia -4 cm</span>
+                  </div>
+                </div>
+                <div style="font-size:18px;color:var(--muted);">›</div>
+              </div>
+              <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;">
+                <div style="background:var(--lime-ghost);border:1px solid rgba(180,240,58,.2);border-radius:9px;padding:6px 10px;text-align:center;flex-shrink:0;">
+                  <div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--lime);line-height:1;">10</div>
+                  <div style="font-size:8px;color:var(--muted);text-transform:uppercase;">sty</div>
+                </div>
+                <div style="flex:1;">
+                  <div style="font-size:12px;font-weight:700;margin-bottom:3px;">Pomiar startowy</div>
+                  <div style="font-size:9px;color:var(--muted);">Baza do porownania</div>
+                </div>
+                <div style="font-size:18px;color:var(--muted);">›</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bottom-nav">
+            <button class="nav-btn" onclick="switchScreen('dashboard',null)"><div class="nav-icon">🏠</div><div class="nav-txt">Home</div></button>
+            <button class="nav-btn" onclick="switchScreen('workout',null)"><div class="nav-icon">💪</div><div class="nav-txt">Trening</div></button>
+            <button class="nav-btn active"><div class="nav-icon">📐</div><div class="nav-txt">Pomiary</div></button>
+            <button class="nav-btn" onclick="switchScreen('ai',null)"><div class="nav-icon">🤖</div><div class="nav-txt">AI Coach</div></button>
+            <button class="nav-btn" onclick="switchScreen('profile',null)"><div class="nav-icon">👤</div><div class="nav-txt">Profil</div></button>
           </div>
         </div>
 
@@ -903,15 +1094,16 @@ body{
     <div style="height:1px;background:var(--border)"></div>
 
     <div>
-      <div style="font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;font-weight:700">7 ekranów aplikacji</div>
+      <div style="font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;font-weight:700">8 ekranów aplikacji</div>
       <div style="display:flex;flex-direction:column;gap:10px">
         <div class="flow-step"><div class="flow-num">1</div><div class="flow-text"><strong>Onboarding</strong> — hero screen, rejestracja lub logowanie, quiz AI do wyboru planu</div></div>
-        <div class="flow-step"><div class="flow-num">2</div><div class="flow-text"><strong>Dashboard</strong> — dzienny trening, streak, aktywność znajomych, szybki dostęp do AI</div></div>
-        <div class="flow-step"><div class="flow-num">3</div><div class="flow-text"><strong>Aktywny trening</strong> — timer, logger serii, timer odpoczynku, podgląd następnego ćwiczenia</div></div>
-        <div class="flow-step"><div class="flow-num">4</div><div class="flow-text"><strong>Postępy</strong> — wykresy siły, aktywność tygodniowa, rekordy osobiste, masa ciała</div></div>
-        <div class="flow-step"><div class="flow-num">5</div><div class="flow-text"><strong>AI Coach</strong> — czat z Claude, kontekst profilu, szybkie pytania, adaptacja planu</div></div>
-        <div class="flow-step"><div class="flow-num">6</div><div class="flow-text"><strong>Marketplace</strong> — przeglądanie i zakup planów, filtrowanie, profile trenerów</div></div>
-        <div class="flow-step"><div class="flow-num">7</div><div class="flow-text"><strong>Profil</strong> — XP, odznaki, subskrypcja, zdjęcia, ustawienia konta</div></div>
+        <div class="flow-step"><div class="flow-num">2</div><div class="flow-text"><strong>Dashboard</strong> — dzienny trening, streak, kafelek postepow (plec+cel), aktywnosc znajomych</div></div>
+        <div class="flow-step"><div class="flow-num">3</div><div class="flow-text"><strong>Aktywny trening</strong> — timer, logger serii, timer odpoczynku, podglad nastepnego cwiczenia</div></div>
+        <div class="flow-step"><div class="flow-num">4</div><div class="flow-text"><strong>Postepy</strong> — wykresy sily, aktywnosc tygodniowa, rekordy osobiste, masa ciala</div></div>
+        <div class="flow-step"><div class="flow-num">5</div><div class="flow-text"><strong>Pomiary</strong> — kafelek postepow (plec+cel), nowy pomiar obwodow, historia punktow kontrolnych</div></div>
+        <div class="flow-step"><div class="flow-num">6</div><div class="flow-text"><strong>AI Coach</strong> — czat z Claude, kontekst profilu, szybkie pytania, adaptacja planu</div></div>
+        <div class="flow-step"><div class="flow-num">7</div><div class="flow-text"><strong>Marketplace</strong> — przegladanie i zakup planow, filtrowanie, profile trenerow</div></div>
+        <div class="flow-step"><div class="flow-num">8</div><div class="flow-text"><strong>Profil</strong> — XP, odznaki, subskrypcja, zdjecja, ustawienia konta</div></div>
       </div>
     </div>
 
@@ -942,6 +1134,8 @@ body{
 </div><!-- /phone-scene -->
 
 <script>
+// ── Screen switcher ──────────────────────────────────────
+const screenMap = {onboarding:0,dashboard:1,workout:2,progress:3,measurements:4,ai:5,marketplace:6,profile:7};
 function switchScreen(id, tabEl) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + id)?.classList.add('active');
@@ -949,13 +1143,13 @@ function switchScreen(id, tabEl) {
     document.querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
     tabEl.classList.add('active');
   } else {
-    // Update tabs
-    const map = {onboarding:0,dashboard:1,workout:2,progress:3,ai:4,marketplace:5,profile:6};
-    document.querySelectorAll('.stab').forEach((t,i) => t.classList.toggle('active', i === map[id]));
+    document.querySelectorAll('.stab').forEach((t,i) => t.classList.toggle('active', i === (screenMap[id]??-1)));
   }
+  if (id === 'measurements') renderMobTiles();
+  if (id === 'dashboard') renderDashTile();
 }
 
-// Workout timer
+// ── Workout timer ────────────────────────────────────────
 let workoutSecs = 34*60 + 22;
 setInterval(() => {
   workoutSecs++;
@@ -965,7 +1159,7 @@ setInterval(() => {
   if(el) el.textContent = m+':'+s;
 }, 1000);
 
-// Rest timer
+// ── Rest timer ───────────────────────────────────────────
 let restSecs = 0, restInterval;
 function startRestTimer(btn) {
   btn.classList.add('done');
@@ -978,12 +1172,144 @@ function startRestTimer(btn) {
   restInterval = setInterval(() => {
     restSecs--;
     if(time) time.textContent = restSecs + 's';
-    if(restSecs <= 0) {
-      clearInterval(restInterval);
-      if(banner) banner.style.display = 'none';
-    }
+    if(restSecs <= 0) { clearInterval(restInterval); if(banner) banner.style.display = 'none'; }
   }, 1000);
 }
+
+// ── Progress tile engine ─────────────────────────────────
+let mobGender = 'm';
+let mobGoal   = 'masa';
+
+const GC = '#44ff88', RC = 'var(--red)', NC = 'var(--muted)';
+
+function evalMob(key, delta) {
+  const up = delta > 0;
+  if (key === 'bf')    return up ? 'bad' : 'good';
+  if (key === 'waga') {
+    if (mobGoal === 'masa')     return up ? 'good' : 'bad';
+    if (mobGoal === 'redukcja') return up ? 'bad'  : 'good';
+    return 'neutral';
+  }
+  if (key === 'klatka' || key === 'biceps') {
+    if (mobGoal === 'masa')     return up ? 'good' : 'neutral';
+    return 'neutral';
+  }
+  if (['talia','biodra','udo','lydka','szyja'].includes(key)) {
+    if (mobGoal === 'redukcja') return up ? 'bad' : 'good';
+    if (mobGoal === 'masa')     return 'neutral';
+    return up ? 'bad' : 'good';
+  }
+  return 'neutral';
+}
+function evalColor(key, delta) {
+  const r = evalMob(key, delta);
+  return r === 'good' ? GC : r === 'bad' ? RC : NC;
+}
+function evalClass(key, delta) {
+  const r = evalMob(key, delta);
+  return r === 'good' ? 'good' : r === 'bad' ? 'bad' : 'neutral';
+}
+
+const mobData = {
+  m: {
+    masa:     { metrics:[{key:'klatka',icon:'🫁',lbl:'Klatka',val:'+4 cm',delta:4,base:'98→102'},{key:'biceps',icon:'💪',lbl:'Biceps',val:'+2 cm',delta:2,base:'35→37'},{key:'waga',icon:'⚖️',lbl:'Waga',val:'+3.2 kg',delta:3.2,base:'76→79.2'},{key:'bf',icon:'📊',lbl:'Tkanka',val:'-2%',delta:-2,base:'16%→14%'}], bars:[{key:'talia',lbl:'Talia',pct:45,diff:'+1 cm',delta:1,col:'var(--orange)'},{key:'udo',lbl:'Udo',pct:70,diff:'+3 cm',delta:3,col:'var(--blue)'}] },
+    redukcja: { metrics:[{key:'waga',icon:'⚖️',lbl:'Waga',val:'-6.2 kg',delta:-6.2,base:'82→75.8'},{key:'klatka',icon:'🫁',lbl:'Klatka',val:'-4 cm',delta:-4,base:'102→98'},{key:'biceps',icon:'💪',lbl:'Biceps',val:'+1 cm',delta:1,base:'35→36'},{key:'bf',icon:'📊',lbl:'Tkanka',val:'-6%',delta:-6,base:'22%→16%'}], bars:[{key:'talia',lbl:'Talia',pct:82,diff:'-8 cm',delta:-8,col:'var(--lime)'},{key:'udo',lbl:'Udo',pct:64,diff:'-2 cm',delta:-2,col:'var(--orange)'}] },
+    sprawnosc:{ metrics:[{key:'bf',icon:'📊',lbl:'Tkanka',val:'-4%',delta:-4,base:'20%→16%'},{key:'klatka',icon:'🫁',lbl:'Klatka',val:'+2 cm',delta:2,base:'98→100'},{key:'biceps',icon:'💪',lbl:'Biceps',val:'+1 cm',delta:1,base:'35→36'},{key:'waga',icon:'⚖️',lbl:'Waga',val:'-2 kg',delta:-2,base:'80→78'}], bars:[{key:'talia',lbl:'Talia',pct:60,diff:'-4 cm',delta:-4,col:'var(--lime)'},{key:'udo',lbl:'Udo',pct:50,diff:'-1 cm',delta:-1,col:'var(--orange)'}] },
+  },
+  f: {
+    masa:     { metrics:[{key:'waga',icon:'⚖️',lbl:'Waga',val:'+2.8 kg',delta:2.8,base:'58→60.8'},{key:'talia',icon:'📐',lbl:'Talia',val:'+1 cm',delta:1,base:'65→66'},{key:'biodra',icon:'🍑',lbl:'Biodra',val:'+3 cm',delta:3,base:'88→91'},{key:'bf',icon:'📊',lbl:'Tkanka',val:'-2%',delta:-2,base:'22%→20%'}], bars:[{key:'udo',lbl:'Udo',pct:65,diff:'+3 cm',delta:3,col:'#c46eff'},{key:'klatka',lbl:'Klatka',pct:55,diff:'+2 cm',delta:2,col:'var(--blue)'}] },
+    redukcja: { metrics:[{key:'waga',icon:'⚖️',lbl:'Waga',val:'-5.4 kg',delta:-5.4,base:'68→62.6'},{key:'talia',icon:'📐',lbl:'Talia',val:'-9 cm',delta:-9,base:'76→67'},{key:'biodra',icon:'🍑',lbl:'Biodra',val:'-6 cm',delta:-6,base:'98→92'},{key:'bf',icon:'📊',lbl:'Tkanka',val:'-5%',delta:-5,base:'28%→23%'}], bars:[{key:'udo',lbl:'Udo',pct:78,diff:'-5 cm',delta:-5,col:'#c46eff'},{key:'klatka',lbl:'Klatka',pct:50,diff:'-3 cm',delta:-3,col:'var(--blue)'}] },
+    sprawnosc:{ metrics:[{key:'bf',icon:'📊',lbl:'Tkanka',val:'-4%',delta:-4,base:'26%→22%'},{key:'waga',icon:'⚖️',lbl:'Waga',val:'-2.5 kg',delta:-2.5,base:'65→62.5'},{key:'talia',icon:'📐',lbl:'Talia',val:'-4 cm',delta:-4,base:'72→68'},{key:'biodra',icon:'🍑',lbl:'Biodra',val:'-2 cm',delta:-2,base:'94→92'}], bars:[{key:'udo',lbl:'Udo',pct:55,diff:'-3 cm',delta:-3,col:'#c46eff'},{key:'klatka',lbl:'Klatka',pct:40,diff:'-2 cm',delta:-2,col:'var(--blue)'}] },
+  }
+};
+
+const goalNames = { masa:'Budowanie masy', redukcja:'Redukcja', sprawnosc:'Sprawnosc' };
+
+function buildFullTile(g, goal) {
+  const d = mobData[g][goal];
+  const metricsHTML = d.metrics.map((m,i) =>
+    `<div class="mpt-metric${i===0?' hi':''}">
+      <div class="mptm-icon">${m.icon}</div>
+      <div class="mptm-val ${evalClass(m.key,m.delta)}">${m.val}</div>
+      <div class="mptm-lbl">${m.lbl}</div>
+      <div class="mptm-base">${m.base}</div>
+    </div>`
+  ).join('');
+  const barsHTML = d.bars.map(b =>
+    `<div class="mpt-bar-row">
+      <div class="mpt-bar-lbl">${b.lbl}</div>
+      <div class="mpt-bar-track"><div class="mpt-bar-fill" style="width:${b.pct}%;background:${b.col};"></div></div>
+      <div class="mpt-bar-diff" style="color:${evalColor(b.key,b.delta)};">${b.diff}</div>
+    </div>`
+  ).join('');
+  return `<div class="mob-prog-tile" id="mob-full-prog">
+    <div class="mpt-header">
+      <div class="mpt-title"><div class="mpt-dot"></div>Postepy od startu</div>
+      <div class="mpt-dates">10 sty → 15 mar 2026</div>
+    </div>
+    <div class="mpt-metrics">${metricsHTML}</div>
+    <div class="mpt-bars">${barsHTML}</div>
+    <div class="mpt-cta">
+      <div class="mpt-cta-txt">Nast. punkt kontrolny: <strong style="color:var(--cyan)">10 kwi 2026</strong></div>
+      <div class="mpt-cta-arr">Dodaj →</div>
+    </div>
+  </div>`;
+}
+
+function buildDashTile(g, goal) {
+  const d = mobData[g][goal];
+  const cols = ['#44ff88','var(--blue)','var(--orange)','#c46eff'];
+  const ms = d.metrics.map((m,i) =>
+    `<div class="dp-m">
+      <div class="dp-m-val" style="color:${evalColor(m.key,m.delta)};">${m.val}</div>
+      <div class="dp-m-lbl">${m.lbl}</div>
+    </div>`
+  ).join('');
+  return `<div class="dp-label"><div class="dp-dot"></div>Postepy od startu · ${goalNames[goal]}</div>
+    <div class="dp-metrics">${ms}</div>
+    <div class="dp-footer">
+      <span>10 sty → 15 mar 2026</span>
+      <span class="dp-link">Szczegoly →</span>
+    </div>`;
+}
+
+function renderMobTiles() {
+  const fp = document.getElementById('mob-full-prog');
+  if(fp) fp.outerHTML = buildFullTile(mobGender, mobGoal);
+}
+
+function renderDashTile() {
+  const dp = document.getElementById('mob-dash-prog');
+  if(dp) dp.innerHTML = buildDashTile(mobGender, mobGoal);
+}
+
+function mobSwitchGoal(goal, el) {
+  mobGoal = goal;
+  document.querySelectorAll('.goal-chip').forEach(c => {
+    if(c.textContent.includes('Masa')||c.textContent.includes('Redukcja')||c.textContent.includes('Sprawnosc'))
+      c.classList.remove('active');
+  });
+  el.classList.add('active');
+  renderMobTiles();
+  renderDashTile();
+}
+
+function mobSwitchGender(g, el) {
+  mobGender = g;
+  const bm = document.getElementById('mob-gbtn-m');
+  const bf = document.getElementById('mob-gbtn-f');
+  if(bm && bf) {
+    const activeStyle = 'border-color:rgba(180,240,58,.3);color:var(--lime);background:var(--lime-ghost);';
+    const inactiveStyle = 'border-color:var(--border2);color:var(--muted);background:var(--card);';
+    bm.style.cssText = g==='m' ? activeStyle : inactiveStyle;
+    bf.style.cssText = g==='f' ? activeStyle : inactiveStyle;
+  }
+  renderMobTiles();
+  renderDashTile();
+}
+
+// init
+renderDashTile();
 </script>
 </body>
 </html>
