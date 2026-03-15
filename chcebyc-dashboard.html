@@ -1004,6 +1004,210 @@
     ::-webkit-scrollbar-thumb {
         background: var(--border2);
         border-radius: 2px;
+    }/* ── KAFELEK POSTEPOW POMIARÓW ── */
+    .prog-tile {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 16px 18px;
+        margin-bottom: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        transition: border-color .2s;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .prog-tile:hover {
+        border-color: var(--border3);
+    }
+
+    .prog-tile::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 180px;
+        height: 180px;
+        background: radial-gradient(ellipse at top right, rgba(180, 240, 58, .06), transparent 70%);
+        pointer-events: none;
+    }
+
+    .pt-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .pt-title {
+        font-size: 9px;
+        color: var(--muted);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .pt-title-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--lime);
+    }
+
+    .pt-link {
+        font-size: 10px;
+        color: var(--lime);
+        font-weight: 600;
+        text-decoration: none;
+        opacity: .7;
+        transition: opacity .2s;
+    }
+
+    .pt-link:hover {
+        opacity: 1;
+    }
+
+    .pt-dates {
+        font-size: 10px;
+        color: var(--muted);
+    }
+
+    .pt-dates strong {
+        color: var(--off);
+    }
+
+    .pt-metrics {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+
+    .pt-metric {
+        text-align: center;
+        background: var(--card2);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 10px 6px;
+        position: relative;
+    }
+
+    .pt-metric.highlight {
+        border-color: rgba(180, 240, 58, .25);
+        background: rgba(180, 240, 58, .04);
+    }
+
+    .ptm-icon {
+        font-size: 15px;
+        margin-bottom: 4px;
+    }
+
+    .ptm-val {
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: 22px;
+        font-weight: 900;
+        line-height: 1;
+    }
+
+    .ptm-val.good {
+        color: #44ff88;
+    }
+
+    .ptm-val.bad {
+        color: var(--red);
+    }
+
+    .ptm-val.neutral {
+        color: var(--lime);
+    }
+
+    .ptm-lbl {
+        font-size: 9px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-top: 2px;
+    }
+
+    .ptm-base {
+        font-size: 9px;
+        color: var(--muted2);
+        margin-top: 2px;
+    }
+
+    .pt-bar-row {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .pt-bar-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 11px;
+    }
+
+    .pt-bar-label {
+        color: var(--muted);
+        width: 60px;
+        flex-shrink: 0;
+        font-size: 10px;
+    }
+
+    .pt-bar-track {
+        flex: 1;
+        height: 5px;
+        background: var(--border2);
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .pt-bar-fill {
+        height: 100%;
+        border-radius: 3px;
+        transition: width 1s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .pt-bar-diff {
+        width: 54px;
+        text-align: right;
+        font-weight: 700;
+        font-size: 10px;
+        font-family: 'Barlow Condensed', sans-serif;
+        flex-shrink: 0;
+    }
+
+    .pt-cta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 9px 12px;
+        background: var(--lime-ghost);
+        border: 1px solid rgba(180, 240, 58, .12);
+        border-radius: 10px;
+        font-size: 11px;
+        cursor: pointer;
+        transition: background .2s;
+    }
+
+    .pt-cta:hover {
+        background: var(--lime-soft);
+    }
+
+    .pt-cta-txt {
+        color: var(--off);
+    }
+
+    .pt-cta-arr {
+        color: var(--lime);
+        font-weight: 700;
     }
     </style>
 </head>
@@ -1041,10 +1245,13 @@
 
             <div class="sb-user">
                 <div class="user-row">
-                    <div class="user-av" id="userAv" style="background:linear-gradient(135deg,#7aaa22,#b4f03a);color:#000">MK</div>
+                    <a href="chcebyc-profile.html" style="text-decoration:none;flex-shrink:0;" title="Edytuj profil">
+                        <div class="user-av" id="userAv" style="background:linear-gradient(135deg,#7aaa22,#b4f03a);color:#000;cursor:pointer;transition:box-shadow .2s;" onmouseover="this.style.boxShadow='0 0 16px rgba(180,240,58,.3)'" onmouseout="this.style.boxShadow=''">MK</div>
+                    </a>
                     <div>
                         <div class="user-name" id="userName">Maciej K.</div>
                         <div class="user-tag" id="userTag" style="background:rgba(180,240,58,.08);color:var(--lime);border:1px solid rgba(180,240,58,.15)">Atleta Lvl 14</div>
+                        <a href="chcebyc-profile.html" style="font-size:9px;color:var(--muted);text-decoration:none;display:block;margin-top:2px;transition:color .2s;" onmouseover="this.style.color='var(--lime)'" onmouseout="this.style.color='var(--muted)'">✏️ Edytuj profil</a>
                     </div>
                 </div>
             </div>
@@ -1159,6 +1366,82 @@
                             <div class="stat-lbl">Rekordy PR</div>
                         </div>
                     </div>
+
+                    <!-- KAFELEK POSTEPOW -->
+                    <div class="prog-tile" onclick="window.location.href='chcebyc-measurements.html'">
+                        <div class="pt-header">
+                            <div class="pt-title">
+                                <div class="pt-title-dot"></div>
+                                Postepy od poczatku programu
+                            </div>
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <div class="pt-dates">
+                                    10 sty 2026 
+                                    <strong>→</strong>
+                                     15 mar 2026
+                                </div>
+                                <span class="pt-link">Zobacz pomiary →</span>
+                            </div>
+                        </div>
+                        <div class="pt-metrics">
+                            <div class="pt-metric highlight">
+                                <div class="ptm-icon">⚖️</div>
+                                <div class="ptm-val good">-6.2 kg</div>
+                                <div class="ptm-lbl">Waga</div>
+                                <div class="ptm-base">82.0 → 75.8 kg</div>
+                            </div>
+                            <div class="pt-metric">
+                                <div class="ptm-icon">📐</div>
+                                <div class="ptm-val good">-8 cm</div>
+                                <div class="ptm-lbl">Talia</div>
+                                <div class="ptm-base">88 → 80 cm</div>
+                            </div>
+                            <div class="pt-metric">
+                                <div class="ptm-icon">💪</div>
+                                <div class="ptm-val good">+2 cm</div>
+                                <div class="ptm-lbl">Biceps</div>
+                                <div class="ptm-base">35 → 37 cm</div>
+                            </div>
+                            <div class="pt-metric">
+                                <div class="ptm-icon">📊</div>
+                                <div class="ptm-val good">-6%</div>
+                                <div class="ptm-lbl">Tkanka tl.</div>
+                                <div class="ptm-base">22% → 16%</div>
+                            </div>
+                        </div>
+                        <div class="pt-bar-row">
+                            <div class="pt-bar-item">
+                                <div class="pt-bar-label">Klatka</div>
+                                <div class="pt-bar-track">
+                                    <div class="pt-bar-fill" style="width:78%;background:var(--blue);"></div>
+                                </div>
+                                <div class="pt-bar-diff" style="color:#44ff88;">-4 cm</div>
+                            </div>
+                            <div class="pt-bar-item">
+                                <div class="pt-bar-label">Biodra</div>
+                                <div class="pt-bar-track">
+                                    <div class="pt-bar-fill" style="width:72%;background:var(--purple,#c46eff);"></div>
+                                </div>
+                                <div class="pt-bar-diff" style="color:#44ff88;">-4 cm</div>
+                            </div>
+                            <div class="pt-bar-item">
+                                <div class="pt-bar-label">Udo</div>
+                                <div class="pt-bar-track">
+                                    <div class="pt-bar-fill" style="width:68%;background:var(--orange);"></div>
+                                </div>
+                                <div class="pt-bar-diff" style="color:#44ff88;">-2 cm</div>
+                            </div>
+                        </div>
+                        <div class="pt-cta">
+                            <div class="pt-cta-txt">
+                                Nastepny punkt kontrolny za 
+                                <strong style="color:var(--white)">26 dni</strong>
+                                 — ustalony przez trenera
+                            </div>
+                            <div class="pt-cta-arr">Dodaj pomiar →</div>
+                        </div>
+                    </div>
+
                     <div class="gmain">
                         <div style="display:flex;flex-direction:column;gap:12px">
                             <div class="wc">
@@ -1330,6 +1613,58 @@
                         <button onclick="showPage('messages')" style="background:var(--cyan);border:none;border-radius:8px;padding:8px 14px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;color:var(--black);flex-shrink:0">💬 Odpisz</button>
                     </div>
 
+                    <!-- KAFELEK POSTEPOW — FREE -->
+                    <div class="prog-tile" onclick="window.location.href='chcebyc-measurements.html'">
+                        <div class="pt-header">
+                            <div class="pt-title">
+                                <div class="pt-title-dot"></div>
+                                Twoje postepy od startu
+                            </div>
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <div class="pt-dates">
+                                    10 sty 2026 
+                                    <strong>→</strong>
+                                     15 mar 2026
+                                </div>
+                                <span class="pt-link">Wszystkie pomiary →</span>
+                            </div>
+                        </div>
+                        <div class="pt-metrics">
+                            <div class="pt-metric highlight">
+                                <div class="ptm-icon">⚖️</div>
+                                <div class="ptm-val good">-6.2 kg</div>
+                                <div class="ptm-lbl">Waga</div>
+                                <div class="ptm-base">82.0 → 75.8 kg</div>
+                            </div>
+                            <div class="pt-metric">
+                                <div class="ptm-icon">📐</div>
+                                <div class="ptm-val good">-8 cm</div>
+                                <div class="ptm-lbl">Talia</div>
+                                <div class="ptm-base">88 → 80 cm</div>
+                            </div>
+                            <div class="pt-metric">
+                                <div class="ptm-icon">💪</div>
+                                <div class="ptm-val good">+2 cm</div>
+                                <div class="ptm-lbl">Biceps</div>
+                                <div class="ptm-base">35 → 37 cm</div>
+                            </div>
+                            <div class="pt-metric">
+                                <div class="ptm-icon">📊</div>
+                                <div class="ptm-val good">-6%</div>
+                                <div class="ptm-lbl">Tkanka tl.</div>
+                                <div class="ptm-base">22% → 16%</div>
+                            </div>
+                        </div>
+                        <div class="pt-cta">
+                            <div class="pt-cta-txt">
+                                Nastepny punkt kontrolny: 
+                                <strong style="color:var(--cyan)">10 kwi 2026</strong>
+                                 — ustalony przez Marcina
+                            </div>
+                            <div class="pt-cta-arr">Dodaj pomiar →</div>
+                        </div>
+                    </div>
+
                     <div class="gmain">
                         <div style="display:flex;flex-direction:column;gap:12px">
                             <div class="wc">
@@ -1478,6 +1813,81 @@
                         </div>
                         <button onclick="showPage('messages')" style="background:rgba(58,240,212,.1);border:1px solid rgba(58,240,212,.2);color:var(--cyan);border-radius:6px;padding:5px 10px;font-family:inherit;font-size:10px;font-weight:600;cursor:pointer;flex-shrink:0">💬 Odpisz</button>
                         <span class="badge" style="background:var(--lime-ghost);color:var(--lime);border:1px solid rgba(180,240,58,.2);flex-shrink:0">✨ Pro</span>
+                    </div>
+
+                    <!-- KAFELEK POSTEPOW — CLIENT PRO -->
+                    <div class="prog-tile" onclick="window.location.href='chcebyc-measurements.html'" style="margin-bottom:13px;">
+                        <div class="pt-header">
+                            <div class="pt-title">
+                                <div class="pt-title-dot"></div>
+                                Twoje postepy od startu
+                            </div>
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <div class="pt-dates">
+                                    10 sty 2026 
+                                    <strong>→</strong>
+                                     15 mar 2026
+                                </div>
+                                <span class="pt-link">Wszystkie pomiary →</span>
+                            </div>
+                        </div>
+                        <div class="pt-metrics">
+                            <div class="pt-metric highlight">
+                                <div class="ptm-icon">⚖️</div>
+                                <div class="ptm-val good">-6.2 kg</div>
+                                <div class="ptm-lbl">Waga</div>
+                                <div class="ptm-base">82.0 → 75.8 kg</div>
+                            </div>
+                            <div class="pt-metric">
+                                <div class="ptm-icon">📐</div>
+                                <div class="ptm-val good">-8 cm</div>
+                                <div class="ptm-lbl">Talia</div>
+                                <div class="ptm-base">88 → 80 cm</div>
+                            </div>
+                            <div class="pt-metric">
+                                <div class="ptm-icon">💪</div>
+                                <div class="ptm-val good">+2 cm</div>
+                                <div class="ptm-lbl">Biceps</div>
+                                <div class="ptm-base">35 → 37 cm</div>
+                            </div>
+                            <div class="pt-metric">
+                                <div class="ptm-icon">📊</div>
+                                <div class="ptm-val good">-6%</div>
+                                <div class="ptm-lbl">Tkanka tl.</div>
+                                <div class="ptm-base">22% → 16%</div>
+                            </div>
+                        </div>
+                        <div class="pt-bar-row">
+                            <div class="pt-bar-item">
+                                <div class="pt-bar-label">Klatka</div>
+                                <div class="pt-bar-track">
+                                    <div class="pt-bar-fill" style="width:78%;background:var(--blue);"></div>
+                                </div>
+                                <div class="pt-bar-diff" style="color:#44ff88;">-4 cm</div>
+                            </div>
+                            <div class="pt-bar-item">
+                                <div class="pt-bar-label">Biodra</div>
+                                <div class="pt-bar-track">
+                                    <div class="pt-bar-fill" style="width:72%;background:#c46eff;"></div>
+                                </div>
+                                <div class="pt-bar-diff" style="color:#44ff88;">-4 cm</div>
+                            </div>
+                            <div class="pt-bar-item">
+                                <div class="pt-bar-label">Udo</div>
+                                <div class="pt-bar-track">
+                                    <div class="pt-bar-fill" style="width:68%;background:var(--orange);"></div>
+                                </div>
+                                <div class="pt-bar-diff" style="color:#44ff88;">-2 cm</div>
+                            </div>
+                        </div>
+                        <div class="pt-cta">
+                            <div class="pt-cta-txt">
+                                Nastepny punkt kontrolny: 
+                                <strong style="color:var(--cyan)">10 kwi 2026</strong>
+                                 — ustalony przez Marcina
+                            </div>
+                            <div class="pt-cta-arr">Dodaj pomiar →</div>
+                        </div>
                     </div>
 
                     <div class="g4" style="margin-bottom:13px">
